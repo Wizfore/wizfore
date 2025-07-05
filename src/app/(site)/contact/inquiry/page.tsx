@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { getInquiryHeroMessage, getInquiryAboutMessage, getInquiryCategories } from '@/lib/services/dataService'
-import InquiryHeroSection from '@/components/contact/InquiryHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import OnlineInquirySection from '@/components/contact/OnlineInquirySection'
 
 export default function OnlineInquiryPage() {
@@ -55,7 +55,10 @@ export default function OnlineInquiryPage() {
   return (
     <div className="min-h-screen">
       {/* 히어로 섹션 */}
-      <InquiryHeroSection heroMessage={heroMessage || undefined} />
+      <CommonHeroSection 
+        title={heroMessage?.title || "온라인 문의"}
+        description={heroMessage?.description || "궁금한 사항이나 문의사항을 언제든지 남겨주세요"}
+      />
       
       {/* 온라인 문의 폼 섹션 */}
       <OnlineInquirySection 

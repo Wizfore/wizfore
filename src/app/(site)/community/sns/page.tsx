@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getCommunity } from '@/lib/services/dataService'
-import SNSHeroSection from '@/components/community/sns/SNSHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import SNSYouTubeSection from '@/components/community/sns/SNSYouTubeSection'
 
 export default function SNSPage() {
@@ -75,7 +75,10 @@ export default function SNSPage() {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <SNSHeroSection heroMessage={snsData.heroMessage} />
+      <CommonHeroSection 
+        title={snsData.heroMessage?.title || "SNS"}
+        description={snsData.heroMessage?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
+      />
       <SNSYouTubeSection 
         aboutMessage={snsData.aboutMessage} 
         youtube={snsData.youtube} 

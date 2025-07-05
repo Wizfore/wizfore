@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getAboutSectionData } from '@/lib/services/dataService'
 import type { DirectorInfo } from '@/types'
-import DirectorHeroSection from '@/components/about/director/DirectorHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import DirectorMessageSection from '@/components/about/director/DirectorMessageSection'
 import DirectorProfileSection from '@/components/about/director/DirectorProfileSection'
 
@@ -69,7 +69,10 @@ const DirectorPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 overflow-hidden">
       {/* 히어로 섹션 */}
-      <DirectorHeroSection director={director} />
+      <CommonHeroSection 
+        title="센터장 소개"
+        description="상시와 사회서비스센터를 이끄어가는 센터장을 소개합니다"
+      />
       
       {/* 센터장 메시지 섹션 */}
       <DirectorMessageSection director={director} />

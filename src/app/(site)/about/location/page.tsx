@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getLocationData, getLocationHeroMessage } from '@/lib/services/dataService'
 import type { ContactInfo, TransportationInfo } from '@/types'
-import LocationHeroSection from '@/components/about/location/LocationHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import TransportationSection from '@/components/about/location/TransportationSection'
 
 interface LocationData {
@@ -99,7 +99,10 @@ export default function LocationPage() {
 
   return (
     <div className="bg-gray-50">
-      <LocationHeroSection heroMessage={heroMessage || undefined} />
+      <CommonHeroSection 
+        title={heroMessage?.title || "오시는길"}
+        description={heroMessage?.description || "상시와 사회서비스센터로 오시는 길을 안내해드립니다"}
+      />
       <TransportationSection 
         contact={data.contact}
         transportation={data.transportation}

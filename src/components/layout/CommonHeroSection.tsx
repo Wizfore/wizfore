@@ -2,19 +2,24 @@
 
 import { motion } from 'framer-motion'
 
-interface HistoryHeroSectionProps {
-  heroMessage?: {
-    title: string
-    description: string
-  }
+interface CommonHeroSectionProps {
+  title: string
+  description: string
+  backgroundImage?: string
+  className?: string
 }
 
-const HistoryHeroSection: React.FC<HistoryHeroSectionProps> = ({ heroMessage }) => {
+const CommonHeroSection: React.FC<CommonHeroSectionProps> = ({ 
+  title, 
+  description, 
+  backgroundImage = '/images/hero/defaultHero.jpg',
+  className = ''
+}) => {
   return (
     <section 
-      className="relative h-96 bg-cover bg-center flex items-center justify-center"
+      className={`relative h-96 bg-cover bg-center flex items-center justify-center ${className}`}
       style={{
-        backgroundImage: `url('/images/hero/defaultHero.jpg')`
+        backgroundImage: `url('${backgroundImage}')`
       }}
     >
       <div className="absolute inset-0 bg-black/30" />
@@ -25,7 +30,7 @@ const HistoryHeroSection: React.FC<HistoryHeroSectionProps> = ({ heroMessage }) 
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          {heroMessage?.title || "센터 발자취"}
+          {title}
         </motion.h1>
         <motion.p 
           className="text-xl"
@@ -33,11 +38,11 @@ const HistoryHeroSection: React.FC<HistoryHeroSectionProps> = ({ heroMessage }) 
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          {heroMessage?.description || "센터의 성장과 발전 과정을 시간순으로 소개합니다"}
+          {description}
         </motion.p>
       </div>
     </section>
   )
 }
 
-export default HistoryHeroSection
+export default CommonHeroSection

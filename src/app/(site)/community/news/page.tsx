@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getCommunity } from '@/lib/services/dataService'
-import NewsHeroSection from '@/components/community/news/NewsHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import NewsContentSection from '@/components/community/news/NewsContentSection'
 import { getAllNewsWithCategory, getNewsByCategory, separateNoticeAndNews, getEnglishCategory } from '@/lib/utils/newsUtils'
 import type { NewsItem, CategoryItem } from '@/types'
@@ -108,7 +108,10 @@ export default function NewsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NewsHeroSection heroMessage={newsMessages.heroMessage} />
+      <CommonHeroSection 
+        title={newsMessages.heroMessage?.title || "뉴스"}
+        description={newsMessages.heroMessage?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
+      />
       <NewsContentSection 
         aboutMessage={newsMessages.aboutMessage}
         newsData={newsData}

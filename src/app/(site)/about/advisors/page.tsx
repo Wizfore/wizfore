@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getAdvisors, getAdvisorsAboutMessage, getAdvisorsHeroMessage } from '@/lib/services/dataService'
 import type { AdvisorInfo } from '@/types'
-import AdvisorsHeroSection from '@/components/about/advisors/AdvisorsHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import AdvisorsListSection from '@/components/about/advisors/AdvisorsListSection'
 
 export default function AdvisorsPage() {
@@ -85,7 +85,10 @@ export default function AdvisorsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 히어로 섹션 */}
-      <AdvisorsHeroSection heroMessage={heroMessage || undefined} />
+      <CommonHeroSection 
+        title={heroMessage?.title || "자문위원"}
+        description={heroMessage?.description || "상시와 사회서비스센터의 전문 자문위원들을 소개합니다"}
+      />
       
       {/* 자문위원 목록 섹션 */}
       <AdvisorsListSection 

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getHistoryData, getHistoryHeroMessage } from '@/lib/services/dataService'
 import type { Milestone } from '@/types'
-import HistoryHeroSection from '@/components/about/history/HistoryHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import StatsSection from '@/components/about/history/StatsSection'
 import TimelineSection from '@/components/about/history/TimelineSection'
 
@@ -94,7 +94,10 @@ export default function HistoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <HistoryHeroSection heroMessage={heroMessage || undefined} />
+      <CommonHeroSection 
+        title={heroMessage?.title || "센터 연혁"}
+        description={heroMessage?.description || "상시와 사회서비스센터의 역사와 발전 과정을 만나보세요"}
+      />
       <StatsSection milestones={data.milestones} />
       <TimelineSection milestones={data.milestones} />
     </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { getCommunity } from '@/lib/services/dataService'
 import { findNewsByGlobalId } from '@/lib/utils/newsUtils'
-import NewsHeroSection from '@/components/community/news/NewsHeroSection'
+import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
 import NewsDetailNavigationSection from '@/components/community/news/NewsDetailNavigationSection'
 import type { NewsItem, CategoryItem } from '@/types'
@@ -82,7 +82,10 @@ export default function NewsDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <NewsHeroSection heroMessage={newsMessages.heroMessage} />
+      <CommonHeroSection 
+        title={newsMessages.heroMessage?.title || "뉴스"}
+        description={newsMessages.heroMessage?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
+      />
       <NewsDetailMainSection 
         newsItem={newsItem}
         categories={categories}
