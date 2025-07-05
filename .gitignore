@@ -1,0 +1,55 @@
+# 1) 의존성 폴더
+/node_modules/
+
+# 2) Next.js 빌드 결과물
+/.next/
+/out/
+/build/
+
+# 3) 백업이나 레거시용 폴더 (자동 생성되는 파일이라면 무시)
+// 만약 legacy 코드를 커밋하지 않을 거면 켜두세요.
+/backup/
+/gitignore/
+/legacy/
+
+# 4) 환경 변수 파일
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 5) 에디터/IDE 설정
+.vscode/
+.idea/
+
+# 6) 로그 파일
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# 7) 운영체제별 쓰레기 파일
+.DS_Store
+Thumbs.db
+
+# 8) TypeScript 빌드 캐시
+*.tsbuildinfo
+
+# 9) Vercel CLI 로컬 설정 (생성된다면)
+/.vercel/
+
+# 10) ESLint 캐시
+.eslintcache
+
+# 11) 테스트 커버리지 보고서
+/coverage/
+
+# 12) 임시 파일들
+*.tmp
+*.temp
+*.log
+
+# 13) Claude AI 설정 파일
+CLAUDE.md
+CLAUDE.local.md
+.claude/
