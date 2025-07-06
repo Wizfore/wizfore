@@ -24,11 +24,6 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// 디버깅 정보 출력
-console.log('Firebase 초기화됨');
-console.log('Firebase 앱 이름:', app.name);
-console.log('Firestore 인스턴스 생성됨');
-
 // 오프라인 지속성 활성화 (선택 사항)
 if (typeof window !== 'undefined') {
   enableIndexedDbPersistence(db)

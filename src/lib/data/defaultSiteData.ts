@@ -495,8 +495,17 @@ export const defaultSiteData: DefaultSiteData = {
   team: [
     {
       id: "therapists",
-      title: "치료·상담사",
-      description: "전문 치료 및 상담 서비스를 제공하는 전문가들",
+      heroMessage: {
+        title: "치료·상담사",
+        description: "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다"
+      },
+      aboutMessage: {
+        title: "전문 치료진 소개",
+        messages: [
+          "위즈포레 사회서비스센터는 다양한 분야의 전문 자격을 갖춘 치료·상담사가 개인별 특성에 맞는 맞춤형 치료 서비스를 제공하고 있습니다.",
+          "각 분야의 전문성을 바탕으로 체계적이고 효과적인 치료를 통해 내담자의 발달과 성장을 지원합니다."
+        ]
+      },
       members: [
         {
           name: "마*문",
@@ -692,8 +701,17 @@ export const defaultSiteData: DefaultSiteData = {
     },
     {
       id: "teachers",
-      title: "주간·방과후 교사",
-      description: "주간활동 및 방과후 프로그램을 담당하는 교육 전문가들",
+      heroMessage: {
+        title: "주간·방과후 교사",
+        description: "발달장애인의 성장과 자립을 위해 헌신하는 교육 전문가들을 소개합니다"
+      },
+      aboutMessage: {
+        title: "교육 전문가팀",
+        messages: [
+          "위즈포레의 주간활동 및 방과후 프로그램을 담당하는 교육 전문가들이 있습니다.",
+          "각자의 전문 분야에서 발달장애인의 일상생활 훈련과 사회적응을 위한 다양한 프로그램을 제공합니다."
+        ]
+      },
       members: [
         {
           name: "마*문",

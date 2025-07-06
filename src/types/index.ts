@@ -358,8 +358,14 @@ export interface TeamMember {
 
 export interface TeamCategory {
   id: string
-  title: string
-  description: string
+  heroMessage?: {
+    title: string
+    description: string
+  }
+  aboutMessage?: {
+    title: string
+    messages: string[]
+  }
   members: TeamMember[]
   order: number
 }

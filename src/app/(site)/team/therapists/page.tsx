@@ -300,46 +300,6 @@ export default function TherapistsPage() {
         </div>
       </section>
 
-      {/* 문의 섹션 */}
-      <section className="py-16 bg-wizfore-warm-brown/5">
-        <div className="container-custom mx-auto px-4">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              치료 상담 문의
-            </h2>
-            <p className="text-lg text-wizfore-text-secondary leading-relaxed mb-8">
-              전문 치료진과의 상담이 필요하시다면 언제든지 연락주세요. 
-              각 분야 전문가와의 상담을 통해 최적의 치료 방향을 안내해드립니다.
-            </p>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-wizfore-warm-brown rounded-full flex items-center justify-center mr-4">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-wizfore-text-secondary">전화 상담</div>
-                  <div className="text-lg font-semibold text-wizfore-text-primary">051-324-0940</div>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-wizfore-warm-brown rounded-full flex items-center justify-center mr-4">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-wizfore-text-secondary">운영 시간</div>
-                  <div className="text-lg font-semibold text-wizfore-text-primary">평일 09:00 ~ 19:00</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
     </div>
   )
 }
