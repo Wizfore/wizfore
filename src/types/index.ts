@@ -280,7 +280,7 @@ export interface LocationImage {
 // 기본 사이트 데이터 구조를 위한 새로운 타입들
 export interface DirectorInfo {
   name: string
-  position: string
+  position: string[]
   education: string[]
   career: string[]
   committees: string[]
@@ -356,6 +356,14 @@ export interface TeamMember {
   order: number
 }
 
+export interface TeamFeature {
+  id: string
+  title: string
+  description: string
+  iconName: string
+  order: number
+}
+
 export interface TeamCategory {
   id: string
   heroMessage?: {
@@ -366,6 +374,7 @@ export interface TeamCategory {
     title: string
     description: string
   }
+  features?: TeamFeature[]
   members: TeamMember[]
   order: number
 }

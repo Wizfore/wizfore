@@ -84,7 +84,7 @@ export const defaultSiteData: DefaultSiteData = {
   aboutInfo: {
     director: {
       name: "마종문",
-      position: "감각통합 & 심리운동사",
+      position: ["감각통합", "심리운동사"],
       education: [
         "아동학/스포츠건강학 학사 졸업",
         "부산대학교 특수교육 석사 졸업",
@@ -496,8 +496,38 @@ export const defaultSiteData: DefaultSiteData = {
       },
       aboutMessage: {
         title: "전문 치료진 소개",
-        description: "위즈포레 사회서비스센터는 다양한 분야의 전문 자격을 갖춘 치료·상담사가 개인별 특성에 맞는 맞춤형 치료 서비스를 제공하고 있습니다.\n각 분야의 전문성을 바탕으로 체계적이고 효과적인 치료를 통해 내담자의 발달과 성장을 지원합니다."
+        description: "위즈포레 전문 자격을 갖춘 여러 명의 치료·상담사가 개인별 특성에 맞는 맞춤형 치료 서비스를 제공하고 있습니다.\n각 분야의 전문성을 바탕으로 체계적이고 효과적인 치료를 통해 내담자의 발달과 성장을 지원합니다."
       },
+      features: [
+        {
+          id: "national-certification",
+          title: "국가자격 보유",
+          description: "모든 치료사가 해당 분야의 국가공인 자격증을 보유하여 전문성을 보장합니다",
+          iconName: "Award",
+          order: 1
+        },
+        {
+          id: "continuous-education",
+          title: "지속적 교육",
+          description: "정기적인 교육과 연수를 통해 최신 치료 기법과 이론을 습득합니다",
+          iconName: "GraduationCap",
+          order: 2
+        },
+        {
+          id: "individualized-approach",
+          title: "개별화 접근",
+          description: "각 내담자의 특성과 필요에 맞춘 개별화된 치료 계획을 수립합니다",
+          iconName: "Target",
+          order: 3
+        },
+        {
+          id: "teamwork-collaboration",
+          title: "팀워크 협력",
+          description: "다학제적 팀 접근을 통해 종합적이고 효과적인 치료를 제공합니다",
+          iconName: "Users",
+          order: 4
+        }
+      ],
       members: [
         {
           name: "마*문",
@@ -701,6 +731,36 @@ export const defaultSiteData: DefaultSiteData = {
         title: "전문 교육진 소개",
         description: "위즈포레는 여러 명의 전문 교사진이 성인 발달장애인 주간활동 프로그램과 방과후 프로그램을 운영하고 있습니다.\n사회복지, 특수교육, 간호 등 다양한 전문 분야의 교사들이 개별 맞춤형 교육과 돌봄 서비스를 제공합니다."
       },
+      features: [
+        {
+          id: "social-welfare-expertise",
+          title: "사회복지 전문성",
+          description: "사회복지사 자격을 바탕으로 한 전문적인 사례관리와 서비스 제공",
+          iconName: "Heart",
+          order: 1
+        },
+        {
+          id: "individualized-education",
+          title: "개별화 교육",
+          description: "각 이용자의 발달 수준과 특성에 맞춘 개별화된 교육 프로그램 운영",
+          iconName: "Users",
+          order: 2
+        },
+        {
+          id: "safety-management",
+          title: "안전 관리",
+          description: "간호교사의 전문적인 건강관리와 안전한 프로그램 환경 조성",
+          iconName: "Shield",
+          order: 3
+        },
+        {
+          id: "continuous-development",
+          title: "지속적 발전",
+          description: "정기적인 교육과 연수를 통한 전문성 향상과 서비스 질 개선",
+          iconName: "GraduationCap",
+          order: 4
+        }
+      ],
       members: [
         {
           name: "마*문",

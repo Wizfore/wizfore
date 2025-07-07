@@ -377,3 +377,80 @@ export async function getLocationData() {
     throw error
   }
 }
+
+/**
+ * 특정 팀 카테고리 조회
+ */
+export async function getTeamCategory(categoryId: string) {
+  try {
+    const teamCategories = await getTeam()
+    const category = teamCategories.find((cat: any) => cat.id === categoryId)
+    
+    if (!category) {
+      throw new Error(`Team category '${categoryId}' not found`)
+    }
+    
+    return category
+  } catch (error) {
+    console.error(`Error fetching team category '${categoryId}':`, error)
+    throw error
+  }
+}
+
+/**
+ * 교사진 데이터 조회
+ */
+export async function getTeachers() {
+  try {
+    const teachersCategory = await getTeamCategory('teachers')
+    return {
+      members: teachersCategory.members || [],
+      heroMessage: teachersCategory.heroMessage,
+      aboutMessage: teachersCategory.aboutMessage,
+      features: teachersCategory.features || []
+    }
+  } catch (error) {
+    console.error('Error fetching teachers data:', error)
+    throw error
+  }
+}
+
+/**
+ * 치료사진 데이터 조회
+ */
+export async function getTherapists() {
+  try {
+    const therapistsCategory = await getTeamCategory('therapists')
+    return {
+      members: therapistsCategory.members || [],
+      heroMessage: therapistsCategory.heroMessage,
+      aboutMessage: therapistsCategory.aboutMessage,
+      features: therapistsCategory.features || []
+    }
+  } catch (error) {
+    console.error('Error fetching therapists data:', error)
+    throw error
+  }
+}
+
+/**
+ * Hero 섹션 데이터 조회
+ */
+export async function getHeroData() {
+  try {
+    const homeConfig = await getHomeConfig()
+    const slides = homeConfig.hero?.slides || []
+    
+    const enabledSlides = slides
+      .filter((slide: any) => slide.enabled)
+      .sort((a: any, b: any) => a.order - b.order)
+    
+    return {
+      slides: enabledSlides,
+      autoPlay: homeConfig.hero?.autoPlay ?? true
+    }
+  } catch (error) {
+    console.error('Error fetching hero data:', error)
+    throw error
+  }
+}
