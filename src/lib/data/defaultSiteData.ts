@@ -117,11 +117,7 @@ export const defaultSiteData: DefaultSiteData = {
       ],
       aboutMessage: {
         title: "함께 걷는 성장의 길",
-        messages: [
-          "영유아부터 성인까지 온 가족이 함께하는 종합사회서비스센터로 개인별 특성을 고려한 맞춤형 치료서비스를 제공하고 있습니다.",
-          "건강한 발달과 성장의 핵심은 전문가의 경험과 진심입니다. 각 치료영역의 깊은 전문성과 따뜻한 애정을 가진 선생님들이 동행합니다.",
-          "이렇게 아이와 가족 모두의 행복한 일상을 함께 만들어갑니다."
-        ]
+        description: "영유아부터 성인까지 온 가족이 함께하는 종합사회서비스센터로 개인별 특성을 고려한 맞춤형 치료서비스를 제공하고 있습니다.\n\n건강한 발달과 성장의 핵심은 전문가의 경험과 진심입니다. 각 치료영역의 깊은 전문성과 따뜻한 애정을 가진 선생님들이 동행합니다.\n\n이렇게 아이와 가족 모두의 행복한 일상을 함께 만들어갑니다."
       },
       heroMessage: {
         title: "센터장 소개",
@@ -167,10 +163,7 @@ export const defaultSiteData: DefaultSiteData = {
     advisors: {
       aboutMessage: {
         title: "전문 자문위원단",
-        messages: [
-          "위즈포레 사회서비스센터는 다양한 분야의 전문가들로 구성된 자문위원단을 운영하고 있습니다.",
-          "각 분야의 전문성을 바탕으로 센터의 서비스 질 향상과 운영 개선에 도움을 주고 계십니다."
-        ]
+        description: "위즈포레 사회서비스센터는 다양한 분야의 전문가들로 구성된 자문위원단을 운영하고 있습니다.\n각 분야의 전문성을 바탕으로 센터의 서비스 질 향상과 운영 개선에 도움을 주고 계십니다."
       },
       heroMessage: {
         title: "자문위원",
@@ -179,8 +172,8 @@ export const defaultSiteData: DefaultSiteData = {
       list: [
         {
           name: "윤치연",
-          position: "교수(사)한국심리협회)",
-          education: "특수교육학 박사",
+          position: ["(사)한국심리협회 교수"],
+          education: ["특수교육학 박사"],
           career: [
             "전)국립재활원 임상심리실장",
             "전)춘해보건대학교 언어치료학과 정교수"
@@ -190,8 +183,8 @@ export const defaultSiteData: DefaultSiteData = {
         },
         {
           name: "송영화",
-          position: "원장(사회복지법세림복지재단)",
-          education: "사회복지학 박사",
+          position: ["사회복지법인 세림복지재단 원장"],
+          education: ["사회복지학 박사"],
           career: [
             "현)사회복지법인 세림복지재단 이사",
             "현)세림어르신의집 원장"
@@ -201,8 +194,8 @@ export const defaultSiteData: DefaultSiteData = {
         },
         {
           name: "허명진",
-          position: "교수(부산가톨릭대학교)",
-          education: "특수교육학 박사",
+          position: ["부산가톨릭대학교 교수"],
+          education: ["특수교육학 박사"],
           career: [
             "현)부산가톨릭대학교 언어청각치료학과 정교수"
           ],
@@ -211,8 +204,8 @@ export const defaultSiteData: DefaultSiteData = {
         },
         {
           name: "정원철",
-          position: "교수(신라대학교)",
-          education: "사회복지학 박사",
+          position: ["신라대학교 교수"],
+          education: ["사회복지학 박사"],
           career: [
             "현)신라대학교 사회복지학과 정교수",
             "현)한국사회복지상담학회장"
@@ -222,8 +215,8 @@ export const defaultSiteData: DefaultSiteData = {
         },
         {
           name: "박소현",
-          position: "약사(한마음약국)",
-          education: "부산대학교 약학과 졸업",
+          position: ["한마음약국 약사"],
+          education: ["부산대학교 약학과 졸업"],
           career: [
             "현)한마음약국 대표"
           ],
@@ -232,8 +225,8 @@ export const defaultSiteData: DefaultSiteData = {
         },
         {
           name: "배제현",
-          position: "교수(창원대학교)",
-          education: "교육학 박사",
+          position: ["창원대학교 교수"],
+          education: ["교육학 박사"],
           career: [
             "전)창신대학교 유아교육학과 정교수",
             "창원시육아종합지원센터 인성교육 강사"
@@ -243,8 +236,8 @@ export const defaultSiteData: DefaultSiteData = {
         },
         {
           name: "공광석",
-          position: "경감(금정경찰서 경찰)",
-          education: "동의대 경찰행정학과 박사 수료",
+          position: ["금정경찰서 경감"],
+          education: ["동의대 경찰행정학과 박사 수료"],
           career: [
             "금정경찰서 부곡지구대",
             "중앙경찰학교 교수요원"
@@ -254,8 +247,8 @@ export const defaultSiteData: DefaultSiteData = {
         },
         {
           name: "박정숙",
-          position: "겸임교수(우석대학교)",
-          education: "특수교육학 박사",
+          position: ["우석대학교 겸임교수"],
+          education: ["특수교육학 박사"],
           career: [
             "한국심리운동연구소 전문강사",
             "심리운동사1급"
@@ -270,6 +263,10 @@ export const defaultSiteData: DefaultSiteData = {
       heroMessage: {
         title: "오시는길",
         description: "위즈포레 사회서비스센터 위치 및 교통 안내"
+      },
+      aboutMessage: {
+        title: "위즈포레로 오시는 길을 확인하세요",
+        description: ""
       },
       transportation: [
         {
@@ -294,9 +291,7 @@ export const defaultSiteData: DefaultSiteData = {
       },
       aboutMessage: {
         title: "문의하기",
-        messages: [
-          "궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 방문 시일 내에 답변드리겠습니다."
-        ]
+        description: "궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 방문 시일 내에 답변드리겠습니다."
       },
       categories: ["프로그램 문의", "상담 문의", "시설 이용 문의", "일반 문의", "기타"]
     },
@@ -501,198 +496,195 @@ export const defaultSiteData: DefaultSiteData = {
       },
       aboutMessage: {
         title: "전문 치료진 소개",
-        messages: [
-          "위즈포레 사회서비스센터는 다양한 분야의 전문 자격을 갖춘 치료·상담사가 개인별 특성에 맞는 맞춤형 치료 서비스를 제공하고 있습니다.",
-          "각 분야의 전문성을 바탕으로 체계적이고 효과적인 치료를 통해 내담자의 발달과 성장을 지원합니다."
-        ]
+        description: "위즈포레 사회서비스센터는 다양한 분야의 전문 자격을 갖춘 치료·상담사가 개인별 특성에 맞는 맞춤형 치료 서비스를 제공하고 있습니다.\n각 분야의 전문성을 바탕으로 체계적이고 효과적인 치료를 통해 내담자의 발달과 성장을 지원합니다."
       },
       members: [
         {
           name: "마*문",
           specialization: ["감각통합", "심리운동"],
-          education: "특수교육 석사/사회복지 박사과정",
+          education: ["특수교육 석사", "사회복지 박사과정"],
           certifications: ["감각통합/심리운동/행동재활(국가)"],
           order: 1
         },
         {
           name: "서*화",
           specialization: ["놀이치료", "미술치료"],
-          education: "특수재활/미술치료학과 졸업",
+          education: ["특수재활/미술치료학과 졸업"],
           certifications: ["놀이재활/미술재활사(국가)"],
           order: 2
         },
         {
           name: "심*연",
           specialization: ["언어치료", "놀이치료"],
-          education: "언어치료/놀이치료학과 졸업, 언어치료 석사과정",
+          education: ["언어치료/놀이치료학과 졸업", "언어치료 석사과정"],
           certifications: ["언어재활(1급)/놀이재활사(국가)"],
           order: 3
         },
         {
           name: "신*정",
           specialization: ["언어치료"],
-          education: "언어치료 학사",
+          education: ["언어치료 학사"],
           certifications: ["언어재활사(국가)"],
           order: 4
         },
         {
           name: "문*희",
           specialization: ["미술치료", "부모상담"],
-          education: "상담심리 석사/상담심리 박사수료",
+          education: ["상담심리 석사", "상담심리 박사수료"],
           certifications: ["미술재활/심리상담전문가"],
           order: 5
         },
         {
           name: "한*영",
           specialization: ["미술치료"],
-          education: "유아특수언어치료학과 졸업",
+          education: ["유아특수언어치료학과 졸업"],
           certifications: ["미술재활사/유아특수교사"],
           order: 6
         },
         {
           name: "정*정",
           specialization: ["감각통합", "작업치료"],
-          education: "작업치료 학사/작업치료 석사과정",
+          education: ["작업치료 학사", "작업치료 석사과정"],
           certifications: ["감각재활사/작업치료사"],
           order: 7
         },
         {
           name: "하*솔",
           specialization: ["감각통합", "작업치료"],
-          education: "작업치료 학사/작업치료 석사",
+          education: ["작업치료 학사", "작업치료 석사"],
           certifications: ["감각재활사/작업치료사"],
           order: 8
         },
         {
           name: "이*빈",
           specialization: ["음악치료"],
-          education: "음악치료 석사 졸업",
+          education: ["음악치료 석사 졸업"],
           certifications: ["음악재활사(국가)"],
           order: 9
         },
         {
           name: "박*혜",
           specialization: ["미술치료"],
-          education: "미술치료 석사 졸업",
+          education: ["미술치료 석사 졸업"],
           certifications: ["미술재활사/청소년상담사(국가)"],
           order: 10
         },
         {
           name: "강*진",
           specialization: ["심리검사", "임상심리"],
-          education: "심리학 석사/상담학 박사과정",
+          education: ["심리학 석사", "상담학 박사과정"],
           certifications: ["임상심리사/인지치료사"],
           order: 11
         },
         {
           name: "박*호",
           specialization: ["특수체육"],
-          education: "특수체육교육학과 졸업/심리운동학과",
+          education: ["특수체육교육학과 졸업", "심리운동학과"],
           certifications: ["특수체육교사/감각통합"],
           order: 12
         },
         {
           name: "주*희",
           specialization: ["특수체육"],
-          education: "운동처방학과 졸업",
+          education: ["운동처방학과 졸업"],
           certifications: ["장애인스포츠지도사/감각통합"],
           order: 13
         },
         {
           name: "이*은",
           specialization: ["언어치료"],
-          education: "언어치료학과 졸업",
+          education: ["언어치료학과 졸업"],
           certifications: ["언어재활사(국가)/미술치료사"],
           order: 14
         },
         {
           name: "박*현",
           specialization: ["언어치료", "미술치료"],
-          education: "언어치료학과 졸업",
+          education: ["언어치료학과 졸업"],
           certifications: ["언어재활사(국가)/미술치료사"],
           order: 15
         },
         {
           name: "이*미",
           specialization: ["음악치료"],
-          education: "음악치료 석사 졸업",
+          education: ["음악치료 석사 졸업"],
           certifications: ["음악재활사(국가)"],
           order: 16
         },
         {
           name: "김*숙",
           specialization: ["원예치료"],
-          education: "상담심리 석사 졸업",
+          education: ["상담심리 석사 졸업"],
           certifications: ["재활심리사(국가)"],
           order: 17
         },
         {
           name: "정*미",
           specialization: ["심리운동"],
-          education: "교육학과 졸업",
+          education: ["교육학과 졸업"],
           certifications: ["심리운동사"],
           order: 18
         },
         {
           name: "김*주",
           specialization: ["특수체육"],
-          education: "특수체육교육학과 졸업",
+          education: ["특수체육교육학과 졸업"],
           certifications: ["특수체육교사/감각통합"],
           order: 19
         },
         {
           name: "김*림",
           specialization: ["특수체육"],
-          education: "특수체육학과 졸업",
+          education: ["특수체육학과 졸업"],
           certifications: ["스포츠지도사/감각통합", "태권도 사범(4단)"],
           order: 20
         },
         {
           name: "지*채",
           specialization: ["언어치료"],
-          education: "언어치료학과 졸업",
+          education: ["언어치료학과 졸업"],
           certifications: ["언어재활사(국가)"],
           order: 21
         },
         {
           name: "엄*웅",
           specialization: ["감각통합", "작업치료"],
-          education: "작업치료학과 졸업",
+          education: ["작업치료학과 졸업"],
           certifications: ["감각재활사(국가)/작업치료사"],
           order: 22
         },
         {
           name: "이*훈",
           specialization: ["놀이체육"],
-          education: "사회복지학과 졸업",
+          education: ["사회복지학과 졸업"],
           certifications: ["사회복지사(국가)", "놀이체육지도사"],
           order: 23
         },
         {
           name: "남*주",
           specialization: ["감각통합", "작업치료"],
-          education: "작업치료 학사",
+          education: ["작업치료 학사"],
           certifications: ["감각재활사(국가)/작업치료사"],
           order: 24
         },
         {
           name: "안*정",
           specialization: ["특수체육"],
-          education: "특수체육학과 졸업",
+          education: ["특수체육학과 졸업"],
           certifications: ["유아체육/감각통합", "전)우슈 청소년 국가대표"],
           order: 25
         },
         {
           name: "강*성",
           specialization: ["특수체육"],
-          education: "특수체육학과 졸업",
+          education: ["특수체육학과 졸업"],
           certifications: ["특수체육/감각통합"],
           order: 26
         },
         {
           name: "김*은",
           specialization: ["음악치료"],
-          education: "음악치료학 석사 졸업",
+          education: ["음악치료학 석사 졸업"],
           certifications: ["음악치료/상담심리"],
           order: 27
         }
@@ -703,62 +695,59 @@ export const defaultSiteData: DefaultSiteData = {
       id: "teachers",
       heroMessage: {
         title: "주간·방과후 교사",
-        description: "발달장애인의 성장과 자립을 위해 헌신하는 교육 전문가들을 소개합니다"
+        description: "성인 주간활동과 방과후 프로그램을 전담하는 전문 교사진을 소개합니다"
       },
       aboutMessage: {
-        title: "교육 전문가팀",
-        messages: [
-          "위즈포레의 주간활동 및 방과후 프로그램을 담당하는 교육 전문가들이 있습니다.",
-          "각자의 전문 분야에서 발달장애인의 일상생활 훈련과 사회적응을 위한 다양한 프로그램을 제공합니다."
-        ]
+        title: "전문 교육진 소개",
+        description: "위즈포레는 여러 명의 전문 교사진이 성인 발달장애인 주간활동 프로그램과 방과후 프로그램을 운영하고 있습니다.\n사회복지, 특수교육, 간호 등 다양한 전문 분야의 교사들이 개별 맞춤형 교육과 돌봄 서비스를 제공합니다."
       },
       members: [
         {
           name: "마*문",
           specialization: ["시설장"],
-          education: "특수교육 석사졸업, 사회복지 박사과정",
-          certifications: ["감각재활/심리운동/행동재활사(국가)"],
+          education: ["특수교육 석사졸업", "사회복지 박사과정"],
+          certifications: ["감각재활", "심리운동", "행동재활사(국가)"],
           order: 1
         },
         {
           name: "서*화",
           specialization: ["전담인력", "실장"],
-          education: "특수재활/미술치료학사 졸업",
+          education: ["특수재활/미술치료학사 졸업"],
           certifications: ["놀이재활/미술재활사/사회복지사"],
           order: 2
         },
         {
           name: "조*은",
           specialization: ["사회복지사"],
-          education: "사회복지학사 졸업",
+          education: ["사회복지학사 졸업"],
           certifications: ["사회복지사"],
           order: 3
         },
         {
           name: "유*은",
           specialization: ["사회복지사", "팀장"],
-          education: "사회복지학과 졸업",
+          education: ["사회복지학과 졸업"],
           certifications: ["사회복지사/바리스타"],
           order: 4
         },
         {
           name: "안*혜",
           specialization: ["간호교사"],
-          education: "의무행정학과 졸업",
+          education: ["의무행정학과 졸업"],
           certifications: ["간호조무사/사회복지사(국가)", "놀이심리상담사"],
           order: 5
         },
         {
           name: "안*현",
           specialization: ["사회복지사"],
-          education: "사회복지학과 졸업",
+          education: ["사회복지학과 졸업"],
           certifications: ["사회복지사"],
           order: 6
         },
         {
           name: "강*영",
           specialization: ["인지학습교사"],
-          education: "특수교육학과 졸업, 사회복지학 석사 졸업",
+          education: ["특수교육학과 졸업", "사회복지학 석사 졸업"],
           certifications: ["인지학습치료사"],
           order: 7
         }

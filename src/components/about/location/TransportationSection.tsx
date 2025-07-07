@@ -8,12 +8,17 @@ interface TransportationSectionProps {
   contact?: ContactInfo
   transportation?: TransportationInfo[]
   siteName?: string
+  aboutMessage?: {
+    title: string
+    description: string
+  }
 }
 
 const TransportationSection: React.FC<TransportationSectionProps> = ({ 
   contact,
   transportation,
-  siteName = '센터'
+  siteName = '센터',
+  aboutMessage
 }) => {
 
   // 교통수단별 아이콘 가져오기
@@ -40,8 +45,15 @@ const TransportationSection: React.FC<TransportationSectionProps> = ({
         viewport={{ once: true }}
       >
         <h2 className="text-3xl font-bold text-wizfore-text-primary mb-4">
-          {siteName}로 오시는 길을 확인하세요
+          {aboutMessage?.title || `${siteName}로 오시는 길을 확인하세요`}
         </h2>
+        {aboutMessage?.description && (
+          <div className="text-lg text-wizfore-text-secondary leading-relaxed mb-8 max-w-4xl mx-auto">
+            <p className="whitespace-pre-line">
+              {aboutMessage.description}
+            </p>
+          </div>
+        )}
       </motion.div>
 
       <div className="max-w-6xl mx-auto px-4">

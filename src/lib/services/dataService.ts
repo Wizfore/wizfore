@@ -222,6 +222,19 @@ export async function getLocationHeroMessage() {
 }
 
 /**
+ * 위치 소개 메시지 조회
+ */
+export async function getLocationAboutMessage() {
+  try {
+    const aboutInfo = await getAboutInfo()
+    return aboutInfo.location?.aboutMessage
+  } catch (error) {
+    console.error('Error fetching location about message:', error)
+    throw error
+  }
+}
+
+/**
  * 문의 히어로 메시지 조회
  */
 export async function getInquiryHeroMessage() {

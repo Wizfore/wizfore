@@ -289,7 +289,7 @@ export interface DirectorInfo {
   heroImageUrl?: string
   aboutMessage?: {
     title: string
-    messages: string[]
+    description: string
   }
   heroMessage?: {
     title: string
@@ -299,8 +299,8 @@ export interface DirectorInfo {
 
 export interface AdvisorInfo {
   name: string
-  position: string
-  education: string
+  position: string[]
+  education: string[]
   career: string[]
   imageUrl?: string
   order: number
@@ -350,7 +350,7 @@ export interface ProgramDetail {
 export interface TeamMember {
   name: string
   specialization: string[]
-  education: string
+  education: string[]
   certifications: string[]
   imageUrl?: string
   order: number
@@ -364,7 +364,7 @@ export interface TeamCategory {
   }
   aboutMessage?: {
     title: string
-    messages: string[]
+    description: string
   }
   members: TeamMember[]
   order: number
@@ -440,7 +440,7 @@ export interface DefaultSiteData {
     advisors: {
       aboutMessage: {
         title: string
-        messages: string[]
+        description: string
       }
       heroMessage: {
         title: string
@@ -453,6 +453,10 @@ export interface DefaultSiteData {
         title: string
         description: string
       }
+      aboutMessage: {
+        title: string
+        description: string
+      }
       transportation: TransportationInfo[]
     }
     inquiry: {
@@ -462,7 +466,7 @@ export interface DefaultSiteData {
       }
       aboutMessage: {
         title: string
-        messages: string[]
+        description: string
       }
       categories: string[]
     }

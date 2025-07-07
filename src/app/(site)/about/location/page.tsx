@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getLocationData, getLocationHeroMessage } from '@/lib/services/dataService'
+import { getLocationData, getLocationHeroMessage, getLocationAboutMessage } from '@/lib/services/dataService'
 import type { ContactInfo, TransportationInfo } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import TransportationSection from '@/components/about/location/TransportationSection'
@@ -24,6 +24,10 @@ export default function LocationPage() {
     title: string
     description: string
   } | null>(null)
+  const [aboutMessage, setAboutMessage] = useState<{
+    title: string
+    description: string
+  } | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -31,12 +35,14 @@ export default function LocationPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [locationData, heroMessageData] = await Promise.all([
+        const [locationData, heroMessageData, aboutMessageData] = await Promise.all([
           getLocationData(),
-          getLocationHeroMessage()
+          getLocationHeroMessage(),
+          getLocationAboutMessage()
         ])
         setData(locationData)
         setHeroMessage(heroMessageData)
+        setAboutMessage(aboutMessageData)
         setError(null)
       } catch (err) {
         console.error('Error fetching location data:', err)
@@ -107,6 +113,7 @@ export default function LocationPage() {
         contact={data.contact}
         transportation={data.transportation}
         siteName={data.siteName}
+        aboutMessage={aboutMessage || undefined}
       />
     </div>
   )
