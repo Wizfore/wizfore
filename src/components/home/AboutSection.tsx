@@ -50,11 +50,8 @@ const AboutSection = () => {
   }
 
   const title = data?.director?.aboutMessage?.title || "함께 걷는 성장의 길"
-  const messages = data?.director?.aboutMessage?.messages || [
-    "영유아부터 성인까지 온 가족이 함께하는 종합사회서비스센터로 개인별 특성을 고려한 맞춤형 치료서비스를 제공하고 있습니다.",
-    "건강한 발달과 성장의 핵심은 전문가의 경험과 진심입니다. 각 치료영역의 깊은 전문성과 따뜻한 애정을 가진 선생님들이 동행합니다.",
-    "이렇게 아이와 가족 모두의 행복한 일상을 함께 만들어갑니다."
-  ]
+  const description = data?.director?.aboutMessage?.description || "영유아부터 성인까지 온 가족이 함께하는 종합사회서비스센터로 개인별 특성을 고려한 맞춤형 치료서비스를 제공하고 있습니다.\n\n건강한 발달과 성장의 핵심은 전문가의 경험과 진심입니다. 각 치료영역의 깊은 전문성과 따뜻한 애정을 가진 선생님들이 동행합니다.\n\n이렇게 아이와 가족 모두의 행복한 일상을 함께 만들어갑니다."
+  const messages = description.split('\n\n')
   const directorName = data?.director?.name || "원장"
   const siteName = data?.siteName || "위즈포레 사회서비스센터"
 

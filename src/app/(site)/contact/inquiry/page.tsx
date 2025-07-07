@@ -12,7 +12,7 @@ export default function OnlineInquiryPage() {
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
-    messages: string[]
+    description: string
   } | null>(null)
   const [categories, setCategories] = useState<string[] | null>(null)
   const [loading, setLoading] = useState(true)

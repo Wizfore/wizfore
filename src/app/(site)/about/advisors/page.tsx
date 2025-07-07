@@ -11,7 +11,7 @@ export default function AdvisorsPage() {
   const [advisors, setAdvisors] = useState<AdvisorInfo[]>([])
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
-    messages: string[]
+    description: string
   } | null>(null)
   const [heroMessage, setHeroMessage] = useState<{
     title: string

@@ -58,7 +58,7 @@ type InquiryFormData = z.infer<typeof inquirySchema>
 interface OnlineInquirySectionProps {
   aboutMessage?: {
     title: string
-    messages: string[]
+    description: string
   }
   categories?: string[]
 }
@@ -121,18 +121,9 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
             {aboutMessage?.title || "문의하기"}
           </h2>
           <div className="text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
-            {aboutMessage?.messages ? (
-              aboutMessage.messages.map((message, index) => (
-                <p key={index} className={index > 0 ? "mt-2" : ""}>
-                  {message}
-                </p>
-              ))
-            ) : (
-              <p>
-                궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 
-                빠른 시일 내에 답변드리겠습니다.
-              </p>
-            )}
+            <p className="whitespace-pre-line">
+              {aboutMessage?.description || "궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 빠른 시일 내에 답변드리겠습니다."}
+            </p>
           </div>
         </motion.div>
 

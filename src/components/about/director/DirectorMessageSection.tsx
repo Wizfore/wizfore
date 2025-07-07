@@ -37,7 +37,7 @@ const DirectorMessageSection: React.FC<DirectorMessageSectionProps> = ({ directo
           </h2>
           
           <div className="space-y-6">
-            {director.aboutMessage.messages.map((message, index) => (
+            {director.aboutMessage.description.split('\n\n').map((message, index) => (
               <motion.p
                 key={index}
                 className="text-lg md:text-xl text-wizfore-text-secondary leading-relaxed"
