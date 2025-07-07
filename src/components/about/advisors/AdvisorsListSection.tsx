@@ -7,33 +7,37 @@ interface AdvisorsListSectionProps {
   advisors: AdvisorInfo[]
   aboutMessage?: {
     title: string
-    messages: string[]
+    description: string
   }
   loading?: boolean
 }
 
 const AdvisorsListSection: React.FC<AdvisorsListSectionProps> = ({ advisors = [], aboutMessage, loading = false }) => {
   // 자문위원 전문분야별 기본 이미지 결정
-  const getDefaultImage = (position: string = '') => {
-    if (position.includes('교수')) {
+  const getDefaultImage = (position: string[] | string = []) => {
+    const positionArray = Array.isArray(position) ? position : [position].filter(Boolean)
+    const positionStr = positionArray.join(' ')
+    if (positionStr.includes('교수')) {
       return '/images/advisors/defaultProfessorM.png'
-    } else if (position.includes('원장') || position.includes('대표')) {
+    } else if (positionStr.includes('원장') || positionStr.includes('대표')) {
       return '/images/advisors/defaultDirectorW.png'
-    } else if (position.includes('경찰')) {
+    } else if (positionStr.includes('경찰') || positionStr.includes('경감')) {
       return '/images/advisors/defaultPoliceM.png'
-    } else if (position.includes('약사')) {
+    } else if (positionStr.includes('약사')) {
       return '/images/advisors/defaultPharmacistW.png'
     } else {
       return '/images/advisors/defaultProfessorM.png' // 기본값
     }
   }
 
-  const getAdvisorTitle = (position: string = '') => {
-    if (position.includes('교수')) return '교수'
-    if (position.includes('원장')) return '원장'
-    if (position.includes('대표')) return '대표'
-    if (position.includes('약사')) return '약사'
-    if (position.includes('경찰')) return '경찰'
+  const getAdvisorTitle = (position: string[] | string = []) => {
+    const positionArray = Array.isArray(position) ? position : [position].filter(Boolean)
+    const positionStr = positionArray.join(' ')
+    if (positionStr.includes('교수')) return '교수'
+    if (positionStr.includes('원장')) return '원장'
+    if (positionStr.includes('대표')) return '대표'
+    if (positionStr.includes('약사')) return '약사'
+    if (positionStr.includes('경찰') || positionStr.includes('경감')) return '경찰'
     return '전문가'
   }
 
@@ -53,13 +57,11 @@ const AdvisorsListSection: React.FC<AdvisorsListSectionProps> = ({ advisors = []
               {aboutMessage.title}
             </h2>
           )}
-          {aboutMessage?.messages && aboutMessage.messages.length > 0 && (
+          {aboutMessage?.description && (
             <div className="text-lg text-wizfore-text-secondary leading-relaxed mb-12">
-              {aboutMessage.messages.map((message, index) => (
-                <p key={index} className={index > 0 ? 'mt-4' : ''}>
-                  {message}
-                </p>
-              ))}
+              <p className="whitespace-pre-line">
+                {aboutMessage.description}
+              </p>
             </div>
           )}
         </motion.div>
@@ -151,37 +153,45 @@ const AdvisorsListSection: React.FC<AdvisorsListSectionProps> = ({ advisors = []
                       viewport={{ once: true }}
                     >
                       {/* 현재 직책 */}
-                      {advisor.position && (
+                      {advisor.position && Array.isArray(advisor.position) && advisor.position.length > 0 && (
                         <div>
                           <h4 className="text-xl font-bold text-wizfore-text-primary mb-4 pb-2 border-b border-wizfore-coral-primary/30">
                             현재 직책
                           </h4>
-                          <div className="flex items-center">
-                            <div className="w-1 h-1 bg-wizfore-coral-primary rounded-full mr-3 flex-shrink-0" />
-                            <p className="text-base text-wizfore-text-primary leading-relaxed break-words">
-                              {advisor.position}
-                            </p>
+                          <div className="space-y-1">
+                            {advisor.position.map((pos, posIndex) => (
+                              <div key={posIndex} className="flex items-center">
+                                <div className="w-1 h-1 bg-wizfore-coral-primary rounded-full mr-3 flex-shrink-0" />
+                                <p className="text-base text-wizfore-text-primary leading-relaxed break-words">
+                                  {pos}
+                                </p>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       )}
 
                       {/* 학력 */}
-                      {advisor.education && (
+                      {advisor.education && Array.isArray(advisor.education) && advisor.education.length > 0 && (
                         <div>
                           <h4 className="text-xl font-bold text-wizfore-text-primary mb-4 pb-2 border-b border-wizfore-coral-primary/30">
                             학력
                           </h4>
-                          <div className="flex items-center">
-                            <div className="w-1 h-1 bg-wizfore-coral-primary rounded-full mr-3 flex-shrink-0" />
-                            <p className="text-base text-wizfore-text-primary leading-relaxed break-words">
-                              {advisor.education}
-                            </p>
+                          <div className="space-y-1">
+                            {advisor.education.map((edu, eduIndex) => (
+                              <div key={eduIndex} className="flex items-center">
+                                <div className="w-1 h-1 bg-wizfore-coral-primary rounded-full mr-3 flex-shrink-0" />
+                                <p className="text-base text-wizfore-text-primary leading-relaxed break-words">
+                                  {edu}
+                                </p>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       )}
 
                       {/* 주요 경력 */}
-                      {advisor.career && advisor.career.length > 0 && (
+                      {advisor.career && Array.isArray(advisor.career) && advisor.career.length > 0 && (
                         <div>
                           <h4 className="text-xl font-bold text-wizfore-text-primary mb-4 pb-2 border-b border-wizfore-coral-primary/30">
                             주요 경력
