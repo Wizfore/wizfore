@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getPrograms } from '@/lib/services/dataService'
+import { defaultSiteData } from '@/lib/data/defaultSiteData'
 import type { ProgramCategory } from '@/types'
 
 // 각 카테고리별 fallback 그라데이션 매핑
@@ -69,24 +69,29 @@ const CategoryCards = () => {
   useEffect(() => {
     const fetchProgramCategories = async () => {
       try {
-        const docRef = doc(db, 'programs', 'main')
-        const docSnap = await getDoc(docRef)
+        const categories = await getPrograms()
+        const defaultImg = '/images/programs/defaultImage.jpg'
         
-        if (docSnap.exists()) {
-          const data = docSnap.data()
-          const categories = data.categories || []
-          const defaultImg = data.defaultImageUrl || '/images/programs/defaultImage.jpg'
-          
-          // 첫 4개 카테고리만 표시하고 순서대로 정렬
-          const sortedCategories = categories
-            .sort((a: ProgramCategory, b: ProgramCategory) => a.order - b.order)
-            .slice(0, 4)
-          
-          setProgramCategories(sortedCategories)
-          setDefaultImageUrl(defaultImg)
-        }
+        // 첫 4개 카테고리만 표시하고 순서대로 정렬
+        const sortedCategories = categories
+          .sort((a: ProgramCategory, b: ProgramCategory) => a.order - b.order)
+          .slice(0, 4)
+        
+        setProgramCategories(sortedCategories)
+        setDefaultImageUrl(defaultImg)
       } catch (error) {
-        console.error('Error fetching program categories:', error)
+        console.error('Error fetching program categories, using fallback:', error)
+        // DB 실패 시 기본 데이터 사용
+        const fallbackCategories = defaultSiteData.programs.slice(0, 4).map((program, index) => ({
+          id: program.id,
+          title: program.title,
+          description: program.description,
+          imageUrl: program.imageUrl || '',
+          programs: program.programs || [],
+          order: index + 1
+        }))
+        setProgramCategories(fallbackCategories)
+        setDefaultImageUrl('/images/programs/defaultImage.jpg')
       } finally {
         setLoading(false)
       }

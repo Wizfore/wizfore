@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getAboutSectionData } from '@/lib/services/dataService'
+import { defaultSiteData } from '@/lib/data/defaultSiteData'
 import type { DefaultSiteData } from '@/types'
 
 interface AboutSectionData {
@@ -10,24 +11,38 @@ interface AboutSectionData {
   director: DefaultSiteData['aboutInfo']['director']
 }
 
-const AboutSection = () => {
-  const [data, setData] = useState<AboutSectionData | null>(null)
-  const [loading, setLoading] = useState(true)
+interface AboutSectionProps {
+  aboutData?: AboutSectionData
+}
+
+const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
+  const [data, setData] = useState<AboutSectionData | null>(aboutData || null)
+  const [loading, setLoading] = useState(!aboutData)
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const aboutData = await getAboutSectionData()
+      if (aboutData) {
         setData(aboutData)
-      } catch (error) {
-        console.error('Error fetching AboutSection data:', error)
-      } finally {
         setLoading(false)
+      } else {
+        try {
+          const fetchedData = await getAboutSectionData()
+          setData(fetchedData)
+        } catch (error) {
+          console.error('Error fetching AboutSection data, using fallback:', error)
+          // DB 실패 시 기본 데이터 사용
+          setData({
+            siteName: defaultSiteData.siteInfo.name,
+            director: defaultSiteData.aboutInfo.director
+          })
+        } finally {
+          setLoading(false)
+        }
       }
     }
 
     fetchData()
-  }, [])
+  }, [aboutData])
 
   if (loading) {
     return (

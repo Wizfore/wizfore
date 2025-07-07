@@ -3,43 +3,54 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Play } from 'lucide-react'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getHomeConfig } from '@/lib/services/dataService'
+import { defaultHomeConfig } from '@/lib/data/defaultHomeConfig'
 import type { HeroSlide } from '@/types'
 
-const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  heroData?: {
+    slides: HeroSlide[]
+    autoPlay: boolean
+  }
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true)
   const [slides, setSlides] = useState<HeroSlide[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!heroData)
 
   useEffect(() => {
-    const fetchSlides = async () => {
-      try {
-        const docRef = doc(db, 'homeConfig', 'main')
-        const docSnap = await getDoc(docRef)
-
-        if (docSnap.exists()) {
-          const data = docSnap.data()
-          const heroSlides = data.hero?.slides || []
-
-          const enabledSlides = heroSlides
-            .filter((slide: HeroSlide) => slide.enabled)
-            .sort((a: HeroSlide, b: HeroSlide) => a.order - b.order)
-
-          setSlides(enabledSlides)
-          setIsAutoPlaying(data.hero?.autoPlay ?? true)
-        }
-      } catch (error) {
-        console.error('Error fetching hero slides:', error)
-        setSlides([])
-      } finally {
+    const initializeHero = async () => {
+      if (heroData) {
+        // Props로 받은 데이터 사용
+        setSlides(heroData.slides)
+        setIsAutoPlaying(heroData.autoPlay)
         setLoading(false)
+      } else {
+        // 클라이언트에서 데이터 가져오기 (폴백)
+        try {
+          const homeConfig = await getHomeConfig()
+          const slides = homeConfig.hero?.slides || []
+          const enabledSlides = slides
+            .filter((slide: any) => slide.enabled)
+            .sort((a: any, b: any) => a.order - b.order)
+          
+          setSlides(enabledSlides)
+          setIsAutoPlaying(homeConfig.hero?.autoPlay ?? true)
+        } catch (error) {
+          console.error('Error fetching hero data, using fallback:', error)
+          // DB 실패 시 기본 데이터 사용
+          setSlides(defaultHomeConfig.hero.slides)
+          setIsAutoPlaying(defaultHomeConfig.hero.autoPlay)
+        } finally {
+          setLoading(false)
+        }
       }
     }
 
-    fetchSlides()
-  }, [])
+    initializeHero()
+  }, [heroData])
 
   useEffect(() => {
     if (!isAutoPlaying || slides.length === 0) return

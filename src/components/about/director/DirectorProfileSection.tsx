@@ -49,10 +49,24 @@ const DirectorProfileSection: React.FC<DirectorProfileSectionProps> = ({ directo
                 <h3 className="text-3xl lg:text-4xl font-black text-wizfore-text-primary mb-3">
                   {director.name} 원장
                 </h3>
-                <p className="text-xl lg:text-2xl text-wizfore-coral-primary font-bold mb-2">
-                  {director.position}
-                </p>
-              </motion.div>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {Array.isArray(director.position) ? (
+                    director.position.map((pos, index) => (
+                      <span 
+                        key={index}
+                        className="text-xl lg:text-2xl text-wizfore-coral-primary font-bold"
+                      >
+                        {pos}
+                        {index < director.position.length - 1 && ' · '}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xl lg:text-2xl text-wizfore-coral-primary font-bold">
+                      {director.position}
+                    </span>
+                  )}
+                </div>
+                </motion.div>
 
               {/* 위 오른쪽: 학력, 경력, 자격증 */}
               <motion.div
