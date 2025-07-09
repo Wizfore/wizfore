@@ -6,7 +6,6 @@ import { BlurFade } from '@/components/ui/blur-fade'
 import type { TeamFeature } from '@/types'
 
 interface TherapistsOverviewSectionProps {
-  therapistCount: number
   aboutMessage?: {
     title: string
     description: string
@@ -15,7 +14,6 @@ interface TherapistsOverviewSectionProps {
 }
 
 const TherapistsOverviewSection: React.FC<TherapistsOverviewSectionProps> = ({ 
-  therapistCount,
   aboutMessage,
   features = []
 }) => {
@@ -35,7 +33,7 @@ const TherapistsOverviewSection: React.FC<TherapistsOverviewSectionProps> = ({
           </h2>
           <p className="text-lg text-wizfore-text-secondary leading-relaxed whitespace-pre-line">
             {aboutMessage?.description || 
-              `위즈포레 사회서비스센터는 ${therapistCount}명의 전문 치료·상담사가 개인별 특성에 맞는 맞춤형 치료 서비스를 제공하고 있습니다. 각 분야의 전문성을 바탕으로 체계적이고 효과적인 치료를 통해 내담자의 발달과 성장을 지원합니다.`
+              `위즈포레 사회서비스센터는 여러 명의 전문 치료·상담사가 개인별 특성에 맞는 맞춤형 치료 서비스를 제공하고 있습니다. 각 분야의 전문성을 바탕으로 체계적이고 효과적인 치료를 통해 내담자의 발달과 성장을 지원합니다.`
             }
           </p>
         </motion.div>
