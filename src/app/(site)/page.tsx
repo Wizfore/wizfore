@@ -1,3 +1,5 @@
+'use client'
+
 import HeroSection from '@/components/home/HeroSection'
 import CategoryCards from '@/components/home/CategoryCards'
 import AboutSection from '@/components/home/AboutSection'
