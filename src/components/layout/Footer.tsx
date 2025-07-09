@@ -164,8 +164,6 @@ const Footer = () => {
           <div className="text-xs text-wizfore-text-light space-x-4">
             <span>사업자등록번호: {contact.businessNumber}</span>
             <span>|</span>
-            <span>계좌정보: {contact.accountInfo}</span>
-            <span>|</span>
             <div className="inline-flex items-center space-x-1">
               <Mail size={12} />
               <span>{contact.email}</span>
