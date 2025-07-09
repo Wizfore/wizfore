@@ -19,7 +19,6 @@ export default function TeachersPage() {
 
       {/* 개요 섹션 */}
       <TeachersOverviewSection 
-        teacherCount={teachers.length}
         aboutMessage={teacherCategory?.aboutMessage}
       />
 
