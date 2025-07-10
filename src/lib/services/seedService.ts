@@ -298,8 +298,7 @@ export async function addAllDefaultData(onProgress?: (completed: number, total: 
       { id: 'programs', name: '프로그램 정보' },
       { id: 'team', name: '전문가 정보' },
       { id: 'community', name: '커뮤니티' },
-      { id: 'home-config', name: '홈페이지 설정' },
-      { id: 'site-assets', name: '사이트 에셋' }
+      { id: 'home-config', name: '홈페이지 설정' }
     ]
     
     for (let i = 0; i < categories.length; i++) {
