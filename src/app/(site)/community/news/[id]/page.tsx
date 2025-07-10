@@ -17,7 +17,7 @@ export default function NewsDetailPage() {
   const [newsItem, setNewsItem] = useState<(NewsItem & { category: string }) | null>(null)
   const [categories, setCategories] = useState<CategoryItem[]>([])
   const [newsMessages, setNewsMessages] = useState<{
-    heroMessage?: { title?: string; description?: string }
+    hero?: { title?: string; description?: string; imageUrl?: string }
     aboutMessage?: { title?: string; description?: string }
   }>({})
   const [loading, setLoading] = useState(true)
@@ -34,7 +34,7 @@ export default function NewsDetailPage() {
           setNewsItem(foundNews)
           setCategories(communityData.news.categories || [])
           setNewsMessages({
-            heroMessage: communityData.news.heroMessage,
+            hero: communityData.news.hero,
             aboutMessage: communityData.news.aboutMessage
           })
         } else {
@@ -83,8 +83,9 @@ export default function NewsDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <CommonHeroSection 
-        title={newsMessages.heroMessage?.title || "뉴스"}
-        description={newsMessages.heroMessage?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
+        title={newsMessages.hero?.title || "뉴스"}
+        description={newsMessages.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
+        backgroundImage={newsMessages.hero?.imageUrl}
       />
       <NewsDetailMainSection 
         newsItem={newsItem}

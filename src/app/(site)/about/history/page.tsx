@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getHistoryData, getHistoryHeroMessage } from '@/lib/services/dataService'
+import { getHistoryData, getHistoryHero } from '@/lib/services/dataService'
 import type { Milestone } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import StatsSection from '@/components/about/history/StatsSection'
@@ -15,9 +15,10 @@ interface HistoryData {
 
 export default function HistoryPage() {
   const [data, setData] = useState<HistoryData | null>(null)
-  const [heroMessage, setHeroMessage] = useState<{
+  const [hero, setHero] = useState<{
     title: string
     description: string
+    imageUrl?: string
   } | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -26,12 +27,12 @@ export default function HistoryPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [historyData, heroMessageData] = await Promise.all([
+        const [historyData, heroData] = await Promise.all([
           getHistoryData(),
-          getHistoryHeroMessage()
+          getHistoryHero()
         ])
         setData(historyData)
-        setHeroMessage(heroMessageData)
+        setHero(heroData)
         setError(null)
       } catch (err) {
         console.error('Error fetching history data:', err)
@@ -95,8 +96,9 @@ export default function HistoryPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <CommonHeroSection 
-        title={heroMessage?.title || "센터 연혁"}
-        description={heroMessage?.description || "상시와 사회서비스센터의 역사와 발전 과정을 만나보세요"}
+        title={hero?.title || "센터 연혁"}
+        description={hero?.description || "상시와 사회서비스센터의 역사와 발전 과정을 만나보세요"}
+        backgroundImage={hero?.imageUrl}
       />
       <StatsSection milestones={data.milestones} />
       <TimelineSection milestones={data.milestones} />

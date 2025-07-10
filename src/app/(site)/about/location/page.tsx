@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getLocationData, getLocationHeroMessage, getLocationAboutMessage } from '@/lib/services/dataService'
+import { getLocationData, getLocationHero, getLocationAboutMessage } from '@/lib/services/dataService'
 import type { ContactInfo, TransportationInfo } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import TransportationSection from '@/components/about/location/TransportationSection'
@@ -20,9 +20,10 @@ interface LocationData {
 
 export default function LocationPage() {
   const [data, setData] = useState<LocationData | null>(null)
-  const [heroMessage, setHeroMessage] = useState<{
+  const [hero, setHero] = useState<{
     title: string
     description: string
+    imageUrl?: string
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
@@ -35,13 +36,13 @@ export default function LocationPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [locationData, heroMessageData, aboutMessageData] = await Promise.all([
+        const [locationData, heroData, aboutMessageData] = await Promise.all([
           getLocationData(),
-          getLocationHeroMessage(),
+          getLocationHero(),
           getLocationAboutMessage()
         ])
         setData(locationData)
-        setHeroMessage(heroMessageData)
+        setHero(heroData)
         setAboutMessage(aboutMessageData)
         setError(null)
       } catch (err) {
@@ -106,8 +107,9 @@ export default function LocationPage() {
   return (
     <div className="bg-gray-50">
       <CommonHeroSection 
-        title={heroMessage?.title || "오시는길"}
-        description={heroMessage?.description || "상시와 사회서비스센터로 오시는 길을 안내해드립니다"}
+        title={hero?.title || "오시는길"}
+        description={hero?.description || "상시와 사회서비스센터로 오시는 길을 안내해드립니다"}
+        backgroundImage={hero?.imageUrl}
       />
       <TransportationSection 
         contact={data.contact}

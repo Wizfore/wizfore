@@ -7,9 +7,10 @@ import SNSYouTubeSection from '@/components/community/sns/SNSYouTubeSection'
 
 export default function SNSPage() {
   const [snsData, setSnsData] = useState<{
-    heroMessage?: {
+    hero?: {
       title?: string
       description?: string
+      imageUrl?: string
     }
     aboutMessage?: {
       title?: string
@@ -76,8 +77,9 @@ export default function SNSPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <CommonHeroSection 
-        title={snsData.heroMessage?.title || "SNS"}
-        description={snsData.heroMessage?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
+        title={snsData.hero?.title || "SNS"}
+        description={snsData.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
+        backgroundImage={snsData.hero?.imageUrl}
       />
       <SNSYouTubeSection 
         aboutMessage={snsData.aboutMessage} 

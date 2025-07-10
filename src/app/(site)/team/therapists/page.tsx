@@ -11,9 +11,10 @@ import type { TeamMember } from '@/types'
 
 export default function TherapistsPage() {
   const [therapists, setTherapists] = useState<TeamMember[]>([])
-  const [heroMessage, setHeroMessage] = useState<{
+  const [hero, setHero] = useState<{
     title: string
     description: string
+    imageUrl?: string
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
@@ -29,7 +30,7 @@ export default function TherapistsPage() {
         setLoading(true)
         const therapistsData = await getTherapists()
         setTherapists(therapistsData.members)
-        setHeroMessage(therapistsData.heroMessage)
+        setHero(therapistsData.hero)
         setAboutMessage(therapistsData.aboutMessage)
         setFeatures(therapistsData.features)
         setError(null)
@@ -40,7 +41,7 @@ export default function TherapistsPage() {
         // Fallback to default data
         const therapistCategory = defaultSiteData.team.find(category => category.id === 'therapists')
         setTherapists(therapistCategory?.members || [])
-        setHeroMessage(therapistCategory?.heroMessage || null)
+        setHero(therapistCategory?.hero || null)
         setAboutMessage(therapistCategory?.aboutMessage || null)
         setFeatures(therapistCategory?.features || [])
       } finally {
@@ -93,8 +94,9 @@ export default function TherapistsPage() {
     <div className="min-h-screen bg-gray-50">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
-        title={heroMessage?.title || "치료·상담사"}
-        description={heroMessage?.description || "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다"}
+        title={hero?.title || "치료·상담사"}
+        description={hero?.description || "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다"}
+        backgroundImage={hero?.imageUrl}
       />
 
       {/* 개요 섹션 */}

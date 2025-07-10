@@ -11,9 +11,10 @@ import type { TeamMember } from '@/types'
 
 export default function TeachersPage() {
   const [teachers, setTeachers] = useState<TeamMember[]>([])
-  const [heroMessage, setHeroMessage] = useState<{
+  const [hero, setHero] = useState<{
     title: string
     description: string
+    imageUrl?: string
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
@@ -29,7 +30,7 @@ export default function TeachersPage() {
         setLoading(true)
         const teachersData = await getTeachers()
         setTeachers(teachersData.members)
-        setHeroMessage(teachersData.heroMessage)
+        setHero(teachersData.hero)
         setAboutMessage(teachersData.aboutMessage)
         setFeatures(teachersData.features)
         setError(null)
@@ -40,7 +41,7 @@ export default function TeachersPage() {
         // Fallback to default data
         const teacherCategory = defaultSiteData.team.find(category => category.id === 'teachers')
         setTeachers(teacherCategory?.members || [])
-        setHeroMessage(teacherCategory?.heroMessage || null)
+        setHero(teacherCategory?.hero || null)
         setAboutMessage(teacherCategory?.aboutMessage || null)
         setFeatures(teacherCategory?.features || [])
       } finally {
@@ -93,8 +94,9 @@ export default function TeachersPage() {
     <div className="min-h-screen bg-gray-50">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
-        title={heroMessage?.title || "주간·방과후 교사"}
-        description={heroMessage?.description || "성인 주간활동과 방과후 프로그램을 전담하는 전문 교사진을 소개합니다"}
+        title={hero?.title || "주간·방과후 교사"}
+        description={hero?.description || "성인 주간활동과 방과후 프로그램을 전담하는 전문 교사진을 소개합니다"}
+        backgroundImage={hero?.imageUrl}
       />
 
       {/* 개요 섹션 */}

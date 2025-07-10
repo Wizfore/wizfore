@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getAdvisors, getAdvisorsAboutMessage, getAdvisorsHeroMessage } from '@/lib/services/dataService'
+import { getAdvisors, getAdvisorsAboutMessage, getAdvisorsHero } from '@/lib/services/dataService'
 import type { AdvisorInfo } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import AdvisorsListSection from '@/components/about/advisors/AdvisorsListSection'
@@ -13,9 +13,10 @@ export default function AdvisorsPage() {
     title: string
     description: string
   } | null>(null)
-  const [heroMessage, setHeroMessage] = useState<{
+  const [hero, setHero] = useState<{
     title: string
     description: string
+    imageUrl?: string
   } | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -24,14 +25,14 @@ export default function AdvisorsPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [advisorsData, aboutMessageData, heroMessageData] = await Promise.all([
+        const [advisorsData, aboutMessageData, heroData] = await Promise.all([
           getAdvisors(),
           getAdvisorsAboutMessage(),
-          getAdvisorsHeroMessage()
+          getAdvisorsHero()
         ])
         setAdvisors(advisorsData)
         setAboutMessage(aboutMessageData)
-        setHeroMessage(heroMessageData)
+        setHero(heroData)
         setError(null)
       } catch (err) {
         console.error('Error fetching advisors data:', err)
@@ -86,8 +87,9 @@ export default function AdvisorsPage() {
     <div className="min-h-screen bg-gray-50">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
-        title={heroMessage?.title || "자문위원"}
-        description={heroMessage?.description || "상시와 사회서비스센터의 전문 자문위원들을 소개합니다"}
+        title={hero?.title || "자문위원"}
+        description={hero?.description || "상시와 사회서비스센터의 전문 자문위원들을 소개합니다"}
+        backgroundImage={hero?.imageUrl}
       />
       
       {/* 자문위원 목록 섹션 */}
