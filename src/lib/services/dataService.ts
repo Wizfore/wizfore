@@ -185,10 +185,10 @@ export async function getAdvisorsAboutMessage() {
 /**
  * 자문위원 히어로 메시지 조회
  */
-export async function getAdvisorsHeroMessage() {
+export async function getAdvisorsHero() {
   try {
     const aboutInfo = await getAboutInfo()
-    return aboutInfo.advisors?.heroMessage
+    return aboutInfo.advisors?.hero
   } catch (error) {
     console.error('Error fetching advisors hero message:', error)
     throw error
@@ -198,10 +198,10 @@ export async function getAdvisorsHeroMessage() {
 /**
  * 히스토리 히어로 메시지 조회
  */
-export async function getHistoryHeroMessage() {
+export async function getHistoryHero() {
   try {
     const aboutInfo = await getAboutInfo()
-    return aboutInfo.history?.heroMessage
+    return aboutInfo.history?.hero
   } catch (error) {
     console.error('Error fetching history hero message:', error)
     throw error
@@ -211,10 +211,10 @@ export async function getHistoryHeroMessage() {
 /**
  * 위치 히어로 메시지 조회
  */
-export async function getLocationHeroMessage() {
+export async function getLocationHero() {
   try {
     const aboutInfo = await getAboutInfo()
-    return aboutInfo.location?.heroMessage
+    return aboutInfo.location?.hero
   } catch (error) {
     console.error('Error fetching location hero message:', error)
     throw error
@@ -237,10 +237,10 @@ export async function getLocationAboutMessage() {
 /**
  * 문의 히어로 메시지 조회
  */
-export async function getInquiryHeroMessage() {
+export async function getInquiryHero() {
   try {
     const aboutInfo = await getAboutInfo()
-    return aboutInfo.inquiry?.heroMessage
+    return aboutInfo.inquiry?.hero
   } catch (error) {
     console.error('Error fetching inquiry hero message:', error)
     throw error
@@ -405,7 +405,7 @@ export async function getTeachers() {
     const teachersCategory = await getTeamCategory('teachers')
     return {
       members: teachersCategory.members || [],
-      heroMessage: teachersCategory.heroMessage,
+      hero: teachersCategory.hero,
       aboutMessage: teachersCategory.aboutMessage,
       features: teachersCategory.features || []
     }
@@ -423,7 +423,7 @@ export async function getTherapists() {
     const therapistsCategory = await getTeamCategory('therapists')
     return {
       members: therapistsCategory.members || [],
-      heroMessage: therapistsCategory.heroMessage,
+      hero: therapistsCategory.hero,
       aboutMessage: therapistsCategory.aboutMessage,
       features: therapistsCategory.features || []
     }

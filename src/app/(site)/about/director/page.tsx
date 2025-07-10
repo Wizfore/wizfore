@@ -70,8 +70,9 @@ const DirectorPage = () => {
     <div className="min-h-screen bg-gray-50 overflow-hidden">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
-        title="센터장 소개"
-        description="상시와 사회서비스센터를 이끄어가는 센터장을 소개합니다"
+        title={director.hero?.title || "센터장 소개"}
+        description={director.hero?.description || "위즈포레를 이끌어가는 센터장을 소개합니다"}
+        backgroundImage={director.hero?.imageUrl}
       />
       
       {/* 센터장 메시지 섹션 */}

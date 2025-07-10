@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { getInquiryHeroMessage, getInquiryAboutMessage, getInquiryCategories } from '@/lib/services/dataService'
+import { getInquiryHero, getInquiryAboutMessage, getInquiryCategories } from '@/lib/services/dataService'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import OnlineInquirySection from '@/components/contact/OnlineInquirySection'
 
@@ -22,7 +22,7 @@ export default function OnlineInquiryPage() {
       try {
         setLoading(true)
         const [heroMessageData, aboutMessageData, categoriesData] = await Promise.all([
-          getInquiryHeroMessage(),
+          getInquiryHero(),
           getInquiryAboutMessage(),
           getInquiryCategories()
         ])

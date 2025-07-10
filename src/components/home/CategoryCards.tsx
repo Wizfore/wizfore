@@ -7,6 +7,12 @@ import { getPrograms } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
 import type { ProgramCategory } from '@/types'
 
+// CategoryCards에서 사용하는 확장된 타입 (fallback 데이터를 위해)
+interface CategoryWithFallback extends ProgramCategory {
+  title?: string
+  description?: string
+}
+
 // 각 카테고리별 fallback 그라데이션 매핑
 const fallbackGradients = {
   'therapy': 'bg-gradient-to-br from-wizfore-coral-primary to-wizfore-coral-secondary',
@@ -62,7 +68,7 @@ const CategoryImage = ({ categoryImageUrl, defaultImageUrl, alt }: CategoryImage
 }
 
 const CategoryCards = () => {
-  const [programCategories, setProgramCategories] = useState<ProgramCategory[]>([])
+  const [programCategories, setProgramCategories] = useState<CategoryWithFallback[]>([])
   const [defaultImageUrl, setDefaultImageUrl] = useState<string>('/images/programs/defaultImage.jpg')
   const [loading, setLoading] = useState(true)
 
@@ -84,8 +90,8 @@ const CategoryCards = () => {
         // DB 실패 시 기본 데이터 사용
         const fallbackCategories = defaultSiteData.programs.slice(0, 4).map((program, index) => ({
           id: program.id,
-          title: program.title,
-          description: program.description,
+          title: program.heroMessage?.title || '',
+          description: program.heroMessage?.description || '',
           imageUrl: program.imageUrl || '',
           programs: program.programs || [],
           order: index + 1
@@ -216,7 +222,7 @@ const CategoryCards = () => {
                     <CategoryImage 
                       categoryImageUrl={category.imageUrl}
                       defaultImageUrl={defaultImageUrl}
-                      alt={`${category.title} 프로그램`}
+                      alt={`${category.title || category.heroMessage?.title} 프로그램`}
                     />
                     {/* 어두운 필터 오버레이 */}
                     <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-all duration-300 z-5"></div>
@@ -224,10 +230,10 @@ const CategoryCards = () => {
                     {/* 왼쪽 하단 텍스트 오버레이 */}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 z-10">
                       <h2 className="text-white text-lg font-bold mb-2 drop-shadow-lg ml-2">
-                        {category.title}
+                        {category.title || category.heroMessage?.title}
                       </h2>
                       <p className="text-white/90 text-sm drop-shadow-md line-clamp-2 ml-2">
-                        {category.description}
+                        {category.description || category.heroMessage?.description}
                       </p>
                     </div>
                   </div>
