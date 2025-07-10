@@ -11,6 +11,7 @@ import type { ProgramCategory } from '@/types'
 interface CategoryWithFallback extends ProgramCategory {
   title?: string
   description?: string
+  imageUrl?: string
 }
 
 // 각 카테고리별 fallback 그라데이션 매핑
@@ -90,9 +91,9 @@ const CategoryCards = () => {
         // DB 실패 시 기본 데이터 사용
         const fallbackCategories = defaultSiteData.programs.slice(0, 4).map((program, index) => ({
           id: program.id,
-          title: program.heroMessage?.title || '',
-          description: program.heroMessage?.description || '',
-          imageUrl: program.imageUrl || '',
+          title: program.hero?.title || '',
+          description: program.hero?.description || '',
+          imageUrl: program.hero?.imageUrl || '',
           programs: program.programs || [],
           order: index + 1
         }))
@@ -220,9 +221,9 @@ const CategoryCards = () => {
                   <div className={`relative h-64 w-full shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient}`}>
                     {/* 배경 이미지 */}
                     <CategoryImage 
-                      categoryImageUrl={category.imageUrl}
+                      categoryImageUrl={category.hero?.imageUrl}
                       defaultImageUrl={defaultImageUrl}
-                      alt={`${category.title || category.heroMessage?.title} 프로그램`}
+                      alt={`${category.hero?.title} 프로그램`}
                     />
                     {/* 어두운 필터 오버레이 */}
                     <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-all duration-300 z-5"></div>
@@ -230,10 +231,10 @@ const CategoryCards = () => {
                     {/* 왼쪽 하단 텍스트 오버레이 */}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 z-10">
                       <h2 className="text-white text-lg font-bold mb-2 drop-shadow-lg ml-2">
-                        {category.title || category.heroMessage?.title}
+                        {category.hero?.title}
                       </h2>
                       <p className="text-white/90 text-sm drop-shadow-md line-clamp-2 ml-2">
-                        {category.description || category.heroMessage?.description}
+                        {category.hero?.description}
                       </p>
                     </div>
                   </div>
