@@ -454,3 +454,26 @@ export async function getHeroData() {
     throw error
   }
 }
+
+/**
+ * ProgramGrid 섹션 데이터 조회
+ */
+export async function getProgramsGridConfig() {
+  try {
+    const homeConfig = await getHomeConfig()
+    
+    return {
+      title: homeConfig.programs?.title || "세부 전문 프로그램",
+      description: homeConfig.programs?.description || "개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다",
+      enabled: homeConfig.programs?.enabled ?? true
+    }
+  } catch (error) {
+    console.error('Error fetching programs grid config:', error)
+    // DB 연결 실패 시 기본값 반환
+    return {
+      title: "세부 전문 프로그램",
+      description: "개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다",
+      enabled: true
+    }
+  }
+}

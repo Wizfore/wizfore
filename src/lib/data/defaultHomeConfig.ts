@@ -38,41 +38,8 @@ export const defaultHomeConfig: HomeConfig = {
     ]
   },
   programs: {
-    title: '전문 치료 프로그램',
-    subtitle: '개별 맞춤형 서비스',
-    description: '각 분야 전문가들이 제공하는 체계적인 치료 프로그램',
-    enabled: true
-  },
-  experts: {
-    title: '전문가 소개',
-    subtitle: '경험 많은 치료사들',
-    description: '풍부한 임상 경험과 전문성을 갖춘 치료사들',
-    enabled: false
-  },
-  about: {
-    title: '센터 소개',
-    subtitle: '함께 어우러지는 지혜의 숲',
-    description: '위즈포레 사회서비스센터를 소개합니다',
-    image: '/images/about/center.jpg',
-    enabled: true
-  },
-  news: {
-    title: '센터 소식',
-    subtitle: '최신 뉴스',
-    description: '센터의 최신 소식과 공지사항',
-    enabled: false
-  },
-  facilities: {
-    title: '시설 안내',
-    subtitle: '전문 치료 공간',
-    description: '체계적인 치료를 위한 전문 시설',
-    enabled: false
-  },
-  contact: {
-    title: '상담 문의',
-    subtitle: '언제든 연락주세요',
-    description: '전문가와의 상담 예약 및 문의',
-    image: '/images/contact/consultation.jpg',
+    title: "세부 전문 프로그램",
+    description: "개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다",
     enabled: true
   }
 }

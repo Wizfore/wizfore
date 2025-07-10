@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { getAllProgramsFlattened } from '@/lib/services/dataService'
+import { getAllProgramsFlattened, getProgramsGridConfig } from '@/lib/services/dataService'
 import Marquee from '@/components/ui/marquee'
 import { 
   Brain, 
@@ -37,6 +37,15 @@ interface Program {
 
 const ProgramGrid = () => {
   const [programs, setPrograms] = useState<Program[]>([])
+  const [gridConfig, setGridConfig] = useState<{
+    title: string
+    description: string
+    enabled: boolean
+  }>({
+    title: "세부 전문 프로그램",
+    description: "개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다",
+    enabled: true
+  })
   const [loading, setLoading] = useState(true)
   const [isDragging, setIsDragging] = useState({ row1: false, row2: false })
   const [startX, setStartX] = useState({ row1: 0, row2: 0 })
@@ -49,18 +58,22 @@ const ProgramGrid = () => {
   const row2Ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const fetchPrograms = async () => {
+    const fetchData = async () => {
       try {
-        const programData = await getAllProgramsFlattened()
+        const [programData, configData] = await Promise.all([
+          getAllProgramsFlattened(),
+          getProgramsGridConfig()
+        ])
         setPrograms(programData)
+        setGridConfig(configData)
       } catch (error) {
-        console.error('Error fetching programs:', error)
+        console.error('Error fetching programs data:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchPrograms()
+    fetchData()
   }, [])
 
   // 타이머 정리 함수
@@ -195,8 +208,8 @@ const ProgramGrid = () => {
       <section className="py-24 bg-wizfore-light-beige">
         <div className="container-custom mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="h-8 bg-gray-300 rounded w-64 mx-auto mb-4 animate-pulse"></div>
-            <div className="h-4 bg-gray-200 rounded w-96 mx-auto animate-pulse"></div>
+            <div className="h-10 bg-gray-300 rounded w-80 mx-auto mb-4 animate-pulse"></div>
+            <div className="h-6 bg-gray-200 rounded w-[32rem] mx-auto animate-pulse"></div>
           </div>
           <div className="w-full max-w-6xl mx-auto">
             <Marquee pauseOnHover className="[--duration:30s]">
@@ -213,6 +226,11 @@ const ProgramGrid = () => {
     )
   }
 
+  // enabled가 false면 섹션을 렌더링하지 않음
+  if (!gridConfig.enabled) {
+    return null
+  }
+
   return (
     <section className="py-24 md:py-32 lg:py-40 bg-wizfore-light-beige">
       <div className="container-custom mx-auto px-4">
@@ -224,10 +242,10 @@ const ProgramGrid = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-wizfore-text-primary mb-4">
-            세부 전문 프로그램
+            {gridConfig.title}
           </h2>
           <p className="text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
-            개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다
+            {gridConfig.description}
           </p>
         </motion.div>
 

@@ -42,40 +42,7 @@ export interface HomeConfig {
   }
   programs: {
     title: string
-    subtitle: string
     description: string
-    enabled: boolean
-  }
-  experts: {
-    title: string
-    subtitle: string
-    description: string
-    enabled: boolean
-  }
-  about: {
-    title: string
-    subtitle: string
-    description: string
-    image: string
-    enabled: boolean
-  }
-  news: {
-    title: string
-    subtitle: string
-    description: string
-    enabled: boolean
-  }
-  facilities: {
-    title: string
-    subtitle: string
-    description: string
-    enabled: boolean
-  }
-  contact: {
-    title: string
-    subtitle: string
-    description: string
-    image: string
     enabled: boolean
   }
 }
@@ -119,5 +86,4 @@ export interface DefaultSiteData {
     sns: SnsInfo
   }
   homeConfig: HomeConfig
-  siteAssets: SiteAsset[]
 }
