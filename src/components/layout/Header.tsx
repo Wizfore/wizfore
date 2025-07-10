@@ -1,12 +1,34 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
+import { getSiteInfo } from '@/lib/services/dataService'
+import { defaultSiteData } from '@/lib/data/defaultSiteData'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isNavExpanded, setIsNavExpanded] = useState(false)
+  const [headerLogoUrl, setHeaderLogoUrl] = useState('/icons/withoutBackground.png')
+
+  useEffect(() => {
+    const fetchHeaderLogoUrl = async () => {
+      try {
+        const siteInfo = await getSiteInfo()
+        // DB에서 헤더 로고 URL이 있고 빈 문자열이 아니면 사용, 그렇지 않으면 기본값 사용
+        const logoUrl = (siteInfo.headerLogoUrl && siteInfo.headerLogoUrl.trim() !== '') 
+          ? siteInfo.headerLogoUrl 
+          : '/icons/withoutBackground.png'
+        setHeaderLogoUrl(logoUrl)
+      } catch (error) {
+        console.error('Failed to fetch header logo URL:', error)
+        // 기본값 사용
+        setHeaderLogoUrl('/icons/withoutBackground.png')
+      }
+    }
+
+    fetchHeaderLogoUrl()
+  }, [])
 
   const navigation = [
     { 
@@ -57,12 +79,16 @@ const Header = () => {
 
   return (
     <header className="bg-white sticky top-0 z-50">
-      <div className="container-custom mx-auto px-4 pt-4">
-        <div className="relative flex items-center h-20">
+      <div className="mx-auto px-4 md:px-8 lg:px-16 pt-4">
+        <div className="relative flex items-center h-24 md:h-26 lg:h-28">
           {/* 로고 - 왼쪽 고정 */}
           <Link href="/" className="flex items-center space-x-3 flex-shrink-0">
             <div className="hidden md:block">
-              <div className="text-3xl font-bold text-wizfore-text-primary transform scale-x-110 tracking-wider">위즈포레</div>
+              <img 
+                src={headerLogoUrl} 
+                alt="위즈포레 로고" 
+                className="h-16 md:h-18 lg:h-20 w-auto object-contain"
+              />
             </div>
           </Link>
 
@@ -105,7 +131,7 @@ const Header = () => {
           onMouseEnter={() => setIsNavExpanded(true)}
           onMouseLeave={() => setIsNavExpanded(false)}
         >
-          <div className="container-custom mx-auto px-4">
+          <div className="mx-auto px-4 md:px-8 lg:px-16">
             <div className="grid grid-cols-5 gap-0 justify-items-center">
               {navigation.map((item) => (
                 <div key={item.name} className="space-y-1">
