@@ -117,22 +117,23 @@ export const defaultSiteData: DefaultSiteData = {
         "사회복지상담 수련감독",
         "발달장애인 공공후견인"
       ],
+      imageUrl: "",
       aboutMessage: {
         title: "함께 걷는 성장의 길",
         description: "영유아부터 성인까지 온 가족이 함께하는 종합사회서비스센터로 개인별 특성을 고려한 맞춤형 치료서비스를 제공하고 있습니다.\n\n건강한 발달과 성장의 핵심은 전문가의 경험과 진심입니다. 각 치료영역의 깊은 전문성과 따뜻한 애정을 가진 선생님들이 동행합니다.\n\n이렇게 아이와 가족 모두의 행복한 일상을 함께 만들어갑니다."
       },
-      heroMessage: {
+      hero: {
         title: "센터장 소개",
-        description: "위즈포레를 이끌어가는 센터장을 소개합니다"
-      },
-      imageUrl: "",
-      heroImageUrl: ""
+        description: "위즈포레를 이끌어가는 센터장을 소개합니다",
+        imageUrl: ""
+      }
     },
     
     history: {
-      heroMessage: {
+      hero: {
         title: "센터 발자취",
-        description: "위즈포레의 성장과 발전 과정을 시간순으로 소개합니다"
+        description: "위즈포레의 성장과 발전 과정을 시간순으로 소개합니다",
+        imageUrl: ""
       },
       milestones: [
         { year: "2016", month: "1", event: "위즈포레사회서비스센터 설립" },
@@ -167,9 +168,10 @@ export const defaultSiteData: DefaultSiteData = {
         title: "전문 자문위원단",
         description: "위즈포레 사회서비스센터는 다양한 분야의 전문가들로 구성된 자문위원단을 운영하고 있습니다.\n각 분야의 전문성을 바탕으로 센터의 서비스 질 향상과 운영 개선에 도움을 주고 계십니다."
       },
-      heroMessage: {
+      hero: {
         title: "자문위원",
-        description: "위즈포레의 전문성 향상을 위해 도움을 주시는 분들을 소개합니다"
+        description: "위즈포레의 전문성 향상을 위해 도움을 주시는 분들을 소개합니다",
+        imageUrl: ""
       },
       list: [
         {
@@ -262,9 +264,10 @@ export const defaultSiteData: DefaultSiteData = {
     },
 
     location: {
-      heroMessage: {
+      hero: {
         title: "오시는길",
-        description: "위즈포레 사회서비스센터 위치 및 교통 안내"
+        description: "위즈포레 사회서비스센터 위치 및 교통 안내",
+        imageUrl: ""
       },
       aboutMessage: {
         title: "위즈포레로 오시는 길을 확인하세요",
@@ -287,9 +290,10 @@ export const defaultSiteData: DefaultSiteData = {
     },
 
     inquiry: {
-      heroMessage: {
+      hero: {
         title: "온라인 문의",
-        description: "궁금한 사항이나 문의사항을 언제든지 남겨주세요"
+        description: "궁금한 사항이나 문의사항을 언제든지 남겨주세요",
+        imageUrl: ""
       },
       aboutMessage: {
         title: "문의하기",
@@ -315,9 +319,15 @@ export const defaultSiteData: DefaultSiteData = {
   programs: [
     {
       id: "therapy",
-      title: "치료 프로그램",
-      description: "개별적인 특성과 필요에 맞춘 전문적인 치료 서비스를 제공합니다.",
-      imageUrl: "",
+      hero: {
+        title: "치료 프로그램",
+        description: "개별적인 특성과 필요에 맞춘 전문적인 치료 서비스를 제공합니다.",
+        imageUrl: ""
+      },
+      aboutMessage: {
+        title: "개별화된 치료 접근",
+        description: "각 아동의 발달 단계와 특성을 고려하여 언어, 인지, 정서, 감각통합 등 다양한 영역의 전문적인 치료 서비스를 제공합니다"
+      },
       programs: [
         {
           title: "언어치료",
@@ -389,9 +399,15 @@ export const defaultSiteData: DefaultSiteData = {
 
     {
       id: "counseling",
-      title: "상담 프로그램",
-      description: "정확한 진단과 개별화된 상담을 통해 최적의 치료 계획을 제공합니다.",
-      imageUrl: "",
+      hero: {
+        title: "상담 프로그램",
+        description: "정확한 진단과 개별화된 상담을 통해 최적의 치료 계획을 제공합니다.",
+        imageUrl: ""
+      },
+      aboutMessage: {
+        title: "종합적인 평가와 지원",
+        description: "발달검사, 심리검사, 사회성 그룹치료, 부모상담 등을 통해 아동과 가족의 전반적인 발달과 적응을 지원합니다"
+      },
       programs: [
         {
           title: "발달/심리검사",
@@ -423,9 +439,15 @@ export const defaultSiteData: DefaultSiteData = {
 
     {
       id: "afterschool",
-      title: "방과후 프로그램",
-      description: "학령기 아동의 발달과 사회성 향상을 위한 집단 프로그램입니다.",
-      imageUrl: "",
+      hero: {
+        title: "방과후 프로그램",
+        description: "학령기 아동의 발달과 사회성 향상을 위한 집단 프로그램입니다.",
+        imageUrl: ""
+      },
+      aboutMessage: {
+        title: "사회성과 학습의 균형",
+        description: "토요일 사회성교실과 평일 기초학습교실을 통해 아동의 사회적 기술과 학습능력을 동시에 향상시키는 종합적인 방과후 프로그램입니다"
+      },
       programs: [
         {
           title: "토요방과후 (사회성교실)",
@@ -449,8 +471,15 @@ export const defaultSiteData: DefaultSiteData = {
 
     {
       id: "special-sports",
-      title: "특수 스포츠 프로그램",
-      description: "다양한 스포츠 활동을 통한 신체 기능 향상과 사회성 발달을 도모합니다.",
+      hero: {
+        title: "특수 스포츠 프로그램",
+        description: "다양한 스포츠 활동을 통한 신체 기능 향상과 사회성 발달을 도모합니다.",
+        imageUrl: ""
+      },
+      aboutMessage: {
+        title: "다양한 스포츠 경험",
+        description: "뉴스포츠와 운동재활 프로그램을 통해 신체 활동의 즐거움을 경험하고, 건강한 생활 습관과 사회성을 함께 기를 수 있습니다"
+      },
       programs: [
         {
           title: "장애인 뉴스포츠",
@@ -474,9 +503,15 @@ export const defaultSiteData: DefaultSiteData = {
 
     {
       id: "adult-day",
-      title: "성인 주간활동 프로그램",
-      description: "성인 발달장애인의 자립생활과 사회통합을 위한 종합적인 서비스를 제공합니다.",
-      imageUrl: "",
+      hero: {
+        title: "성인 주간활동 프로그램",
+        description: "성인 발달장애인의 자립생활과 사회통합을 위한 종합적인 서비스를 제공합니다.",
+        imageUrl: ""
+      },
+      aboutMessage: {
+        title: "종합적인 생활 지원",
+        description: "일상생활기술, 사회적응, 여가활동, 지역사회 참여, 건강관리 등 6개 영역의 체계적인 프로그램을 통해 성인 발달장애인의 삶의 질 향상을 지원합니다"
+      },
       programs: [
         {
           title: "일상생활기술훈련",
@@ -534,9 +569,10 @@ export const defaultSiteData: DefaultSiteData = {
   team: [
     {
       id: "therapists",
-      heroMessage: {
+      hero: {
         title: "치료·상담사",
-        description: "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다"
+        description: "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다",
+        imageUrl: ""
       },
       aboutMessage: {
         title: "전문 치료진 소개",
@@ -767,9 +803,10 @@ export const defaultSiteData: DefaultSiteData = {
     },
     {
       id: "teachers",
-      heroMessage: {
+      hero: {
         title: "주간·방과후 교사",
-        description: "성인 주간활동과 방과후 프로그램을 전담하는 전문 교사진을 소개합니다"
+        description: "성인 주간활동과 방과후 프로그램을 전담하는 전문 교사진을 소개합니다",
+        imageUrl: ""
       },
       aboutMessage: {
         title: "전문 교육진 소개",
@@ -869,9 +906,10 @@ export const defaultSiteData: DefaultSiteData = {
         { korean: "수상", english: "awards" },
         { korean: "공지사항", english: "notices" }
       ],
-      heroMessage: {
+      hero: {
         title: "공지사항",
-        description: "위즈포레의 다양한 활동과 성과를 확인해보세요"
+        description: "위즈포레의 다양한 활동과 성과를 확인해보세요",
+        imageUrl: ""
       },
       aboutMessage: {
         title: "전체 소식",
@@ -1126,9 +1164,10 @@ export const defaultSiteData: DefaultSiteData = {
       }
     },
     sns: {
-      heroMessage: {
+      hero: {
         title: "SNS",
-        description: "위즈포레의 생생한 활동 모습을 영상으로 만나보세요"
+        description: "위즈포레의 생생한 활동 모습을 영상으로 만나보세요",
+        imageUrl: ""
       },
       aboutMessage: {
         title: "위즈포레 YouTube",
