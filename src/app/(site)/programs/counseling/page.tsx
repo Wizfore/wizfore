@@ -43,7 +43,7 @@ export default function CounselingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {counselingProgram.title}
+            {counselingProgram.heroMessage?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -70,7 +70,7 @@ export default function CounselingPage() {
               상담 프로그램 소개
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {counselingProgram.description}
+              {counselingProgram.heroMessage?.description}
             </p>
           </motion.div>
         </div>
@@ -128,9 +128,19 @@ export default function CounselingPage() {
                         <Target className="w-4 h-4 text-wizfore-warm-brown mr-2" />
                         <span className="text-sm font-medium text-wizfore-text-primary">상담 목표</span>
                       </div>
-                      <p className="text-wizfore-text-secondary text-sm leading-relaxed pl-6">
-                        {program.goal}
-                      </p>
+                      <div className="pl-6 space-y-1">
+                        {Array.isArray(program.goal) ? (
+                          program.goal.map((item, itemIndex) => (
+                            <p key={itemIndex} className="text-wizfore-text-secondary text-sm leading-relaxed">
+                              • {item}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="text-wizfore-text-secondary text-sm leading-relaxed">
+                            {program.goal}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     {/* 내용 또는 유형 */}

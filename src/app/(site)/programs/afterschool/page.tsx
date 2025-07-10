@@ -41,7 +41,7 @@ export default function AfterschoolPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {afterschoolProgram.title}
+            {afterschoolProgram.heroMessage?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -68,7 +68,7 @@ export default function AfterschoolPage() {
               방과후 프로그램 소개
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {afterschoolProgram.description}
+              {afterschoolProgram.heroMessage?.description}
             </p>
           </motion.div>
         </div>
@@ -126,9 +126,19 @@ export default function AfterschoolPage() {
                         <Target className="w-4 h-4 text-wizfore-warm-brown mr-2" />
                         <span className="text-sm font-medium text-wizfore-text-primary">프로그램 목표</span>
                       </div>
-                      <p className="text-wizfore-text-secondary text-sm leading-relaxed pl-6">
-                        {program.goal}
-                      </p>
+                      <div className="pl-6 space-y-1">
+                        {Array.isArray(program.goal) ? (
+                          program.goal.map((item, itemIndex) => (
+                            <p key={itemIndex} className="text-wizfore-text-secondary text-sm leading-relaxed">
+                              • {item}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="text-wizfore-text-secondary text-sm leading-relaxed">
+                            {program.goal}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     {/* 내용 */}
@@ -312,46 +322,6 @@ export default function AfterschoolPage() {
         </div>
       </section>
 
-      {/* 문의 섹션 */}
-      <section className="py-16 bg-wizfore-warm-brown/5">
-        <div className="container-custom mx-auto px-4">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              방과후 프로그램 문의
-            </h2>
-            <p className="text-lg text-wizfore-text-secondary leading-relaxed mb-8">
-              아이의 사회성 발달과 학습능력 향상을 위한 방과후 프로그램에 관심이 있으시다면 
-              언제든지 연락주세요. 전문가와의 상담을 통해 적합한 프로그램을 안내해드립니다.
-            </p>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-wizfore-warm-brown rounded-full flex items-center justify-center mr-4">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-wizfore-text-secondary">전화 상담</div>
-                  <div className="text-lg font-semibold text-wizfore-text-primary">051-324-0940</div>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-wizfore-warm-brown rounded-full flex items-center justify-center mr-4">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-wizfore-text-secondary">운영 시간</div>
-                  <div className="text-lg font-semibold text-wizfore-text-primary">평일 09:00 ~ 19:00</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
     </div>
   )
 }

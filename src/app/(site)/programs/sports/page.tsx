@@ -68,7 +68,7 @@ export default function SportsPage() {
               특수 스포츠 프로그램 소개
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {sportsProgram.description}
+              {sportsProgram.heroMessage?.description}
             </p>
           </motion.div>
         </div>
@@ -126,9 +126,19 @@ export default function SportsPage() {
                         <Target className="w-4 h-4 text-wizfore-warm-brown mr-2" />
                         <span className="text-sm font-medium text-wizfore-text-primary">프로그램 목표</span>
                       </div>
-                      <p className="text-wizfore-text-secondary text-sm leading-relaxed pl-6">
-                        {program.goal}
-                      </p>
+                      <div className="pl-6 space-y-1">
+                        {Array.isArray(program.goal) ? (
+                          program.goal.map((item, itemIndex) => (
+                            <p key={itemIndex} className="text-wizfore-text-secondary text-sm leading-relaxed">
+                              • {item}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="text-wizfore-text-secondary text-sm leading-relaxed">
+                            {program.goal}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     {/* 내용 */}

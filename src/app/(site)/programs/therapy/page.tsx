@@ -53,7 +53,7 @@ export default function TherapyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {therapyProgram.title}
+            {therapyProgram.heroMessage?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -80,7 +80,7 @@ export default function TherapyPage() {
               치료 프로그램 소개
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {therapyProgram.description}
+              {therapyProgram.heroMessage?.description}
             </p>
           </motion.div>
         </div>
@@ -89,20 +89,6 @@ export default function TherapyPage() {
       {/* 치료 프로그램 목록 섹션 */}
       <section className="py-16 bg-gray-50">
         <div className="container-custom mx-auto px-4">
-          <motion.div 
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl font-bold text-wizfore-text-primary mb-4">
-              제공 프로그램
-            </h2>
-            <p className="text-wizfore-text-secondary">
-              총 {therapyProgram.programs.length}개의 전문 치료 프로그램을 제공합니다
-            </p>
-          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {therapyProgram.programs
@@ -139,9 +125,19 @@ export default function TherapyPage() {
                           <Users className="w-4 h-4 text-wizfore-warm-brown mr-2" />
                           <span className="text-sm font-medium text-wizfore-text-primary">치료 대상</span>
                         </div>
-                        <p className="text-wizfore-text-secondary text-sm leading-relaxed pl-6">
-                          {program.target}
-                        </p>
+                        <div className="pl-6 space-y-1">
+                          {Array.isArray(program.target) ? (
+                            program.target.map((item, itemIndex) => (
+                              <p key={itemIndex} className="text-wizfore-text-secondary text-sm leading-relaxed">
+                                • {item}
+                              </p>
+                            ))
+                          ) : (
+                            <p className="text-wizfore-text-secondary text-sm leading-relaxed">
+                              {program.target}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     )}
 
@@ -151,9 +147,19 @@ export default function TherapyPage() {
                         <Target className="w-4 h-4 text-wizfore-warm-brown mr-2" />
                         <span className="text-sm font-medium text-wizfore-text-primary">치료 목표</span>
                       </div>
-                      <p className="text-wizfore-text-secondary text-sm leading-relaxed pl-6">
-                        {program.goal}
-                      </p>
+                      <div className="pl-6 space-y-1">
+                        {Array.isArray(program.goal) ? (
+                          program.goal.map((item, itemIndex) => (
+                            <p key={itemIndex} className="text-wizfore-text-secondary text-sm leading-relaxed">
+                              • {item}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="text-wizfore-text-secondary text-sm leading-relaxed">
+                            {program.goal}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     {/* 내용 또는 유형 */}
@@ -256,46 +262,6 @@ export default function TherapyPage() {
         </div>
       </section>
 
-      {/* 문의 섹션 */}
-      <section className="py-16 bg-wizfore-warm-brown/5">
-        <div className="container-custom mx-auto px-4">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              치료 상담 문의
-            </h2>
-            <p className="text-lg text-wizfore-text-secondary leading-relaxed mb-8">
-              아이의 치료가 필요하시다면 언제든지 연락주세요. 
-              전문가와의 상담을 통해 최적의 치료 방향을 안내해드립니다.
-            </p>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-wizfore-warm-brown rounded-full flex items-center justify-center mr-4">
-                  <Target className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-wizfore-text-secondary">전화 상담</div>
-                  <div className="text-lg font-semibold text-wizfore-text-primary">051-324-0940</div>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-wizfore-warm-brown rounded-full flex items-center justify-center mr-4">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-wizfore-text-secondary">운영 시간</div>
-                  <div className="text-lg font-semibold text-wizfore-text-primary">평일 09:00 ~ 19:00</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
     </div>
   )
 }

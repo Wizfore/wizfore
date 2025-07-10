@@ -49,7 +49,7 @@ export default function AdultDayPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            성인 주간활동 프로그램
+            {adultDayProgram.hero?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -57,7 +57,7 @@ export default function AdultDayPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            성인 발달장애인의 자립생활과 사회통합을 위한 종합적인 서비스
+            {adultDayProgram.hero?.description}
           </motion.p>
         </div>
       </section>
@@ -73,10 +73,10 @@ export default function AdultDayPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              성인 주간활동 프로그램 소개
+              {adultDayProgram.aboutMessage?.title}
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {adultDayProgram.description}
+              {adultDayProgram.aboutMessage?.description}
             </p>
           </motion.div>
         </div>
@@ -134,9 +134,19 @@ export default function AdultDayPage() {
                         <Target className="w-4 h-4 text-wizfore-warm-brown mr-2" />
                         <span className="text-sm font-medium text-wizfore-text-primary">프로그램 목표</span>
                       </div>
-                      <p className="text-wizfore-text-secondary text-sm leading-relaxed pl-6">
-                        {program.goal}
-                      </p>
+                      <div className="pl-6 space-y-1">
+                        {Array.isArray(program.goal) ? (
+                          program.goal.map((item, itemIndex) => (
+                            <p key={itemIndex} className="text-wizfore-text-secondary text-sm leading-relaxed">
+                              • {item}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="text-wizfore-text-secondary text-sm leading-relaxed">
+                            {program.goal}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     {/* 내용 */}
