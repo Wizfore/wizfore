@@ -436,6 +436,8 @@ export interface DefaultSiteData {
     organization: OrganizationInfo
     contact: ContactInfo
     mainServices: MainService[]
+    faviconUrl?: string
+    headerLogoUrl?: string
   }
   aboutInfo: {
     director: DirectorInfo
