@@ -1183,6 +1183,5 @@ export const defaultSiteData: DefaultSiteData = {
     }
   },
 
-  homeConfig: defaultHomeConfig,
-  siteAssets: defaultSiteAssets
+  homeConfig: defaultHomeConfig
 }
