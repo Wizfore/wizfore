@@ -340,8 +340,8 @@ export interface ProgramCategory {
 
 export interface ProgramDetail {
   title: string
-  target?: string
-  goal: string
+  target?: string[]
+  goal: string[]
   content?: string[]
   types?: string[]
   order: number
