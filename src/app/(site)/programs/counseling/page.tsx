@@ -43,7 +43,7 @@ export default function CounselingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {counselingProgram.heroMessage?.title}
+            {counselingProgram.hero?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -51,7 +51,7 @@ export default function CounselingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            정확한 진단과 개별화된 상담을 통한 최적의 치료 계획
+            {counselingProgram.hero?.description}
           </motion.p>
         </div>
       </section>
@@ -67,10 +67,10 @@ export default function CounselingPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              상담 프로그램 소개
+              {counselingProgram.aboutMessage?.title}
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {counselingProgram.heroMessage?.description}
+              {counselingProgram.aboutMessage?.description}
             </p>
           </motion.div>
         </div>

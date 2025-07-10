@@ -41,7 +41,7 @@ export default function AfterschoolPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {afterschoolProgram.heroMessage?.title}
+            {afterschoolProgram.hero?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -49,7 +49,7 @@ export default function AfterschoolPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            학령기 아동의 발달과 사회성 향상을 위한 집단 프로그램
+            {afterschoolProgram.hero?.description}
           </motion.p>
         </div>
       </section>
@@ -65,10 +65,10 @@ export default function AfterschoolPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              방과후 프로그램 소개
+              {afterschoolProgram.aboutMessage?.title}
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {afterschoolProgram.heroMessage?.description}
+              {afterschoolProgram.aboutMessage?.description}
             </p>
           </motion.div>
         </div>

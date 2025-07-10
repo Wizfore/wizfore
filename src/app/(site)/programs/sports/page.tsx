@@ -41,7 +41,7 @@ export default function SportsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            특수 스포츠
+            {sportsProgram.hero?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -49,7 +49,7 @@ export default function SportsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            다양한 스포츠 활동을 통한 신체 기능 향상과 사회성 발달
+            {sportsProgram.hero?.description}
           </motion.p>
         </div>
       </section>
@@ -65,10 +65,10 @@ export default function SportsPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              특수 스포츠 프로그램 소개
+              {sportsProgram.aboutMessage?.title}
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {sportsProgram.heroMessage?.description}
+              {sportsProgram.aboutMessage?.description}
             </p>
           </motion.div>
         </div>

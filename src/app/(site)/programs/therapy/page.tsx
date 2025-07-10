@@ -53,7 +53,7 @@ export default function TherapyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {therapyProgram.heroMessage?.title}
+            {therapyProgram.hero?.title}
           </motion.h1>
           <motion.p 
             className="text-xl"
@@ -61,7 +61,7 @@ export default function TherapyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            개별적인 특성과 필요에 맞춘 전문적인 치료 서비스
+            {therapyProgram.hero?.description}
           </motion.p>
         </div>
       </section>
@@ -77,10 +77,10 @@ export default function TherapyPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
-              치료 프로그램 소개
+              {therapyProgram.aboutMessage?.title}
             </h2>
             <p className="text-lg text-wizfore-text-secondary leading-relaxed">
-              {therapyProgram.heroMessage?.description}
+              {therapyProgram.aboutMessage?.description}
             </p>
           </motion.div>
         </div>
