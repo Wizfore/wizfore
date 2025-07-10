@@ -9,6 +9,7 @@ import type { ContactInfo } from '@/types'
 interface FooterData {
   contact: ContactInfo
   siteName: string
+  footerLogoUrl: string
 }
 
 const Footer = () => {
@@ -20,9 +21,13 @@ const Footer = () => {
     const fetchData = async () => {
       try {
         const siteInfo = await getSiteInfo()
+        const logoUrl = (siteInfo.headerLogoUrl && siteInfo.headerLogoUrl.trim() !== '') 
+          ? siteInfo.headerLogoUrl 
+          : '/icons/withoutBackground.png'
         setData({
           contact: siteInfo.contact,
-          siteName: siteInfo.name
+          siteName: siteInfo.name,
+          footerLogoUrl: logoUrl
         })
       } catch (error) {
         console.error('Error fetching footer data:', error)
@@ -47,7 +52,7 @@ const Footer = () => {
             </div>
             <div className="lg:w-1/2 space-y-6 text-center lg:pl-8">
               <div className="animate-pulse space-y-4">
-                <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto"></div>
+                <div className="h-16 bg-gray-200 rounded w-32 mx-auto"></div>
                 <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
                 <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto"></div>
               </div>
@@ -63,7 +68,7 @@ const Footer = () => {
     )
   }
 
-  const { contact, siteName } = data
+  const { contact, siteName, footerLogoUrl } = data
 
   return (
     <footer className="bg-white text-wizfore-text-primary">
@@ -91,11 +96,13 @@ const Footer = () => {
 
           {/* 우측: 센터 정보 */}
           <div className="lg:w-1/2 space-y-6 text-center lg:pl-8">
-            {/* 센터명 */}
-            <div>
-              <h3 className="text-3xl font-bold text-wizfore-text-primary mb-2">
-                {siteName}
-              </h3>
+            {/* 센터 로고 */}
+            <div className="flex justify-center mb-4">
+              <img 
+                src={footerLogoUrl} 
+                alt={siteName}
+                className="h-16 w-auto object-contain"
+              />
             </div>
 
             {/* 주소 */}
