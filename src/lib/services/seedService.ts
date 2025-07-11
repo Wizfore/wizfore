@@ -159,20 +159,6 @@ async function addHomeConfigData() {
 }
 
 /**
- * 사이트 에셋 데이터 추가
- */
-// async function addSiteAssetsData() {
-//   const { siteAssets } = defaultSiteData
-  
-//   // 사이트 에셋 데이터 추가
-//   await setDoc(doc(db, 'siteAssets', 'main'), {
-//     assets: siteAssets,
-//     createdAt: new Date().toISOString(),
-//     updatedAt: new Date().toISOString()
-//   })
-// }
-
-/**
  * 카테고리별 기본 데이터 추가 메인 함수
  */
 export async function addDefaultDataByCategory(categoryId: string): Promise<void> {
@@ -198,9 +184,6 @@ export async function addDefaultDataByCategory(categoryId: string): Promise<void
       case 'home-config':
         await addHomeConfigData()
         break
-      // case 'site-assets':
-      //   await addSiteAssetsData()
-      //   break
       default:
         throw new Error(`Unknown category: ${categoryId}`)
     }

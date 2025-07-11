@@ -1,10 +1,10 @@
 import { DefaultSiteData } from '@/types'
 import { defaultHomeConfig } from './defaultHomeConfig'
-import { defaultSiteAssets } from './defaultSiteAssets'
 
 export const defaultSiteData: DefaultSiteData = {
   siteInfo: {
     name: "위즈포레",
+    enName: "Wizfore",
     establishedDate: "2016년 1월 1일",
     purpose: "위즈포레는 \"함께 어우러지는 지혜의 숲(WIZ FORE)\"라는 의미를 담고 있으며, 장애인을 포함한 모든 사람들이 어우러져 더불어 살아가는 힘을 키우는데 필요한 사회서비스를 제공하는 전문기관입니다.",
     faviconUrl: "",

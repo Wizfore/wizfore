@@ -47,21 +47,11 @@ export interface HomeConfig {
   }
 }
 
-export interface SiteAsset {
-  id: string
-  name: string
-  category: 'hero' | 'program' | 'icon' | 'background' | 'other'
-  url: string
-  alt: string
-  description?: string
-  order: number
-  enabled: boolean
-}
-
 // 전체 기본 사이트 데이터 구조
 export interface DefaultSiteData {
   siteInfo: {
     name: string
+    enName: string
     establishedDate: string
     purpose: string
     coreValues: CoreValues
