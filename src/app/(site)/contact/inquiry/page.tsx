@@ -6,9 +6,10 @@ import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import OnlineInquirySection from '@/components/contact/OnlineInquirySection'
 
 export default function OnlineInquiryPage() {
-  const [heroMessage, setHeroMessage] = useState<{
+  const [hero, setHero] = useState<{
     title: string
     description: string
+    imageUrl?: string
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
@@ -21,12 +22,12 @@ export default function OnlineInquiryPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [heroMessageData, aboutMessageData, categoriesData] = await Promise.all([
+        const [heroData, aboutMessageData, categoriesData] = await Promise.all([
           getInquiryHero(),
           getInquiryAboutMessage(),
           getInquiryCategories()
         ])
-        setHeroMessage(heroMessageData)
+        setHero(heroData)
         setAboutMessage(aboutMessageData)
         setCategories(categoriesData)
       } catch (err) {
@@ -56,8 +57,9 @@ export default function OnlineInquiryPage() {
     <div className="min-h-screen">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
-        title={heroMessage?.title || "온라인 문의"}
-        description={heroMessage?.description || "궁금한 사항이나 문의사항을 언제든지 남겨주세요"}
+        title={hero?.title || "온라인 문의"}
+        description={hero?.description || "궁금한 사항이나 문의사항을 언제든지 남겨주세요"}
+        backgroundImage={hero?.imageUrl || '/images/hero/defaultHero.jpg'}
       />
       
       {/* 온라인 문의 폼 섹션 */}
