@@ -12,7 +12,7 @@ interface CommonHeroSectionProps {
 const CommonHeroSection: React.FC<CommonHeroSectionProps> = ({ 
   title, 
   description, 
-  backgroundImage = '/images/hero/defaultHero.jpg',
+  backgroundImage,
   className = ''
 }) => {
   return (
