@@ -79,7 +79,7 @@ export default function SNSPage() {
       <CommonHeroSection 
         title={snsData.hero?.title || "SNS"}
         description={snsData.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
-        backgroundImage={snsData.hero?.imageUrl}
+        backgroundImage={snsData.hero?.imageUrl || '/images/hero/defaultHero.jpg'}
       />
       <SNSYouTubeSection 
         aboutMessage={snsData.aboutMessage} 

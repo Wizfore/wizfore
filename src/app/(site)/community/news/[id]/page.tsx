@@ -85,7 +85,7 @@ export default function NewsDetailPage() {
       <CommonHeroSection 
         title={newsMessages.hero?.title || "뉴스"}
         description={newsMessages.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
-        backgroundImage={newsMessages.hero?.imageUrl}
+        backgroundImage={newsMessages.hero?.imageUrl || '/images/hero/defaultHero.jpg'}
       />
       <NewsDetailMainSection 
         newsItem={newsItem}
