@@ -72,7 +72,7 @@ const DirectorPage = () => {
       <CommonHeroSection 
         title={director.hero?.title || "센터장 소개"}
         description={director.hero?.description || "위즈포레를 이끌어가는 센터장을 소개합니다"}
-        backgroundImage={director.hero?.imageUrl}
+        backgroundImage={director.hero?.imageUrl || '/images/hero/defaultHero.jpg'}
       />
       
       {/* 센터장 메시지 섹션 */}
