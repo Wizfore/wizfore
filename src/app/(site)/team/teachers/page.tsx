@@ -96,7 +96,7 @@ export default function TeachersPage() {
       <CommonHeroSection 
         title={hero?.title || "주간·방과후 교사"}
         description={hero?.description || "성인 주간활동과 방과후 프로그램을 전담하는 전문 교사진을 소개합니다"}
-        backgroundImage={hero?.imageUrl}
+        backgroundImage={hero?.imageUrl || '/images/hero/defaultHero.jpg'}
       />
 
       {/* 개요 섹션 */}
