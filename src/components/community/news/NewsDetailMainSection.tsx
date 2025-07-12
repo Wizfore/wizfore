@@ -25,7 +25,7 @@ const NewsDetailMainSection = ({ newsItem, categories }: NewsDetailMainSectionPr
   const categoryKorean = getCategoryByEnglish(categories, newsItem.category)?.korean || newsItem.category
 
   // 본문이 긴 경우(200자 이상)를 체크
-  const isLongContent = newsItem.content.length > 200
+  const isLongContent = newsItem.contentMarkdown.length > 200
 
   return (
     <div className="relative bg-gray-50">
@@ -140,7 +140,7 @@ const NewsDetailMainSection = ({ newsItem, categories }: NewsDetailMainSectionPr
             
             {/* 본문 영역 */}
             <div className="px-6 md:px-10 lg:px-12 pb-6 md:pb-10 lg:pb-12 min-h-[400px]">
-              {newsItem.imageUrl && (
+              {newsItem.images && newsItem.images.length > 0 && (
                 <motion.div 
                   className="mb-10"
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -148,7 +148,7 @@ const NewsDetailMainSection = ({ newsItem, categories }: NewsDetailMainSectionPr
                   transition={{ duration: 0.6, delay: 0.8 }}
                 >
                   <img
-                    src={newsItem.imageUrl}
+                    src={newsItem.images[0]}
                     alt={newsItem.title}
                     className="w-full rounded-lg shadow-sm"
                   />
@@ -156,9 +156,9 @@ const NewsDetailMainSection = ({ newsItem, categories }: NewsDetailMainSectionPr
               )}
               
               <div className="prose max-w-none">
-                {newsItem.content ? (
+                {newsItem.contentMarkdown ? (
                   <p className="text-lg md:text-xl leading-relaxed md:leading-loose text-gray-700 whitespace-pre-wrap">
-                    {newsItem.content}
+                    {newsItem.contentMarkdown}
                   </p>
                 ) : (
                   <div className="flex items-center justify-center h-64 text-gray-400">

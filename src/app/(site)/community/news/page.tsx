@@ -5,10 +5,10 @@ import { getCommunity } from '@/lib/services/dataService'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import NewsContentSection from '@/components/community/news/NewsContentSection'
 import { getAllNewsWithCategory, getNewsByCategory, separateNoticeAndNews, getEnglishCategory } from '@/lib/utils/newsUtils'
-import type { NewsItem, CategoryItem } from '@/types'
+import type { Article, CategoryItem } from '@/types'
 
 export default function NewsPage() {
-  const [newsData, setNewsData] = useState<Record<string, NewsItem[]>>({})
+  const [articlesData, setArticlesData] = useState<Article[]>([])
   const [categories, setCategories] = useState<CategoryItem[]>([])
   const [newsMessages, setNewsMessages] = useState<{
     hero?: { title?: string; description?: string; imageUrl?: string }
@@ -26,7 +26,7 @@ export default function NewsPage() {
       try {
         setLoading(true)
         const communityData = await getCommunity()
-        setNewsData(communityData.news.articles || {})
+        setArticlesData(communityData.news.articles || [])
         setCategories(communityData.news.categories || [])
         setNewsMessages({
           hero: communityData.news.hero,
@@ -45,16 +45,16 @@ export default function NewsPage() {
   
   // 필터링된 뉴스
   const filteredNews = selectedCategory === 'all' 
-    ? getAllNewsWithCategory(newsData) 
-    : getNewsByCategory(newsData, selectedCategory)
+    ? getAllNewsWithCategory(articlesData) 
+    : getNewsByCategory(articlesData, selectedCategory)
 
   // 페이지네이션 계산 (공지사항 제외)
-  const { noticeItems, regularNews } = separateNoticeAndNews(newsData)
+  const { noticeItems, regularNews } = separateNoticeAndNews(articlesData)
   const paginationTargetNews = selectedCategory === 'all' ? regularNews : filteredNews
   const totalPages = Math.ceil(paginationTargetNews.length / itemsPerPage)
   
   // 전체 뉴스 개수 (카테고리 필터 수치에 사용)
-  const allNews = getAllNewsWithCategory(newsData)
+  const allNews = getAllNewsWithCategory(articlesData)
 
   // 카테고리 변경 핸들러 (페이지를 1로 리셋)
   const handleCategoryChange = (categoryEnglish: string) => {
@@ -115,7 +115,7 @@ export default function NewsPage() {
       />
       <NewsContentSection 
         aboutMessage={newsMessages.aboutMessage}
-        newsData={newsData}
+        articlesData={articlesData}
         allNews={allNews}
         categories={categories}
         selectedCategory={selectedCategory}

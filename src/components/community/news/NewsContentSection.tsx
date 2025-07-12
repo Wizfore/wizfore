@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Filter, Megaphone } from 'lucide-react'
-import type { NewsItem, CategoryItem } from '@/types'
+import type { Article, CategoryItem } from '@/types'
 import { separateNoticeAndNews, createGlobalId } from '@/lib/utils/newsUtils'
 import {
   Table,
@@ -28,13 +28,13 @@ interface NewsContentSectionProps {
     title?: string
     description?: string
   }
-  newsData: Record<string, NewsItem[]>
-  allNews: (NewsItem & { category: string })[]
+  articlesData: Article[]
+  allNews: Article[]
   categories: CategoryItem[]
   selectedCategory: string
   onCategoryChange: (categoryEnglish: string) => void
-  filteredNews: (NewsItem & { category: string })[]
-  newsByYear: Record<string, (NewsItem & { category: string })[]>
+  filteredNews: Article[]
+  newsByYear: Record<string, Article[]>
   years: string[]
   currentPage: number
   totalPages: number
@@ -44,7 +44,7 @@ interface NewsContentSectionProps {
 
 const NewsContentSection: React.FC<NewsContentSectionProps> = ({
   aboutMessage,
-  newsData,
+  articlesData,
   allNews,
   categories,
   selectedCategory,
@@ -59,13 +59,13 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
 }) => {
   const router = useRouter()
 
-  const handleNewsClick = (newsItem: NewsItem & { category: string }) => {
+  const handleNewsClick = (newsItem: Article) => {
     const globalId = createGlobalId(newsItem.category, newsItem.id)
     router.push(`/community/news/${globalId}`)
   }
 
   // 공지사항과 일반 뉴스 분리
-  const { noticeItems, regularNews } = separateNoticeAndNews(newsData)
+  const { noticeItems, regularNews } = separateNoticeAndNews(articlesData)
   
   // 전체 필터에서 공지사항을 제외한 페이지네이션 계산
   const isAllCategory = selectedCategory === 'all'
@@ -121,7 +121,7 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
                     : 'bg-white text-wizfore-text-secondary border-gray-200 hover:border-wizfore-coral-primary'
                 }`}
               >
-                {category.korean} ({(newsData[category.english] || []).length})
+                {category.korean} ({articlesData.filter(article => article.category === category.english).length})
               </button>
             ))}
           </div>
