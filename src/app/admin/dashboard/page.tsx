@@ -32,9 +32,9 @@ const quickActions = [
     color: 'bg-blue-500 hover:bg-blue-600'
   },
   {
-    title: '문의 답변하기',
+    title: '문의 관리',
     icon: MessageSquare,
-    href: '/admin/customers/inquiries',
+    href: '/admin/contact/inquiries',
     color: 'bg-green-500 hover:bg-green-600'
   },
   {
