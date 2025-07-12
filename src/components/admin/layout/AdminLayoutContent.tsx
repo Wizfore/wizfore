@@ -3,7 +3,6 @@
 import { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import AdminSidebar from './AdminSidebar'
-import AdminHeader from './AdminHeader'
 import { withAuth } from '@/components/auth/withAuth'
 
 interface AdminLayoutContentProps {
@@ -19,9 +18,6 @@ function AdminLayoutContent({ children }: AdminLayoutContentProps) {
         
         {/* 메인 콘텐츠 영역 */}
         <div className="flex-1 ml-64">
-          {/* 헤더 */}
-          <AdminHeader />
-          
           {/* 페이지 콘텐츠 */}
           <main className="p-6">
             {children}
