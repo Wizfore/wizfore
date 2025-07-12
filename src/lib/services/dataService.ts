@@ -653,18 +653,6 @@ export async function getPublishedNotices(): Promise<Article[]> {
   }
 }
 
-/**
- * 추천 공지사항 조회
- */
-export async function getFeaturedNotices(): Promise<Article[]> {
-  try {
-    const notices = await getNotices()
-    return notices.filter(notice => notice.featured && notice.status === 'published')
-  } catch (error) {
-    console.error('Error fetching featured notices:', error)
-    throw error
-  }
-}
 
 
 /**

@@ -16,16 +16,15 @@ import type { NewsItem, CategoryItem } from '@/types'
 interface NewsDetailMainSectionProps {
   newsItem: NewsItem & { category: string }
   categories: CategoryItem[]
+  showBackButton?: boolean
 }
 
-const NewsDetailMainSection = ({ newsItem, categories }: NewsDetailMainSectionProps) => {
+const NewsDetailMainSection = ({ newsItem, categories, showBackButton = true }: NewsDetailMainSectionProps) => {
   const router = useRouter()
   
   // 영어 카테고리를 한글로 변환
   const categoryKorean = getCategoryByEnglish(categories, newsItem.category)?.korean || newsItem.category
 
-  // 본문이 긴 경우(200자 이상)를 체크
-  const isLongContent = newsItem.contentMarkdown.length > 200
 
   return (
     <div className="relative bg-gray-50">
@@ -43,21 +42,23 @@ const NewsDetailMainSection = ({ newsItem, categories }: NewsDetailMainSectionPr
       />
       
       {/* 뒤로가기 버튼 */}
-      <div className="relative z-10 container-custom mx-auto px-4 md:px-6 pt-6 md:pt-8">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <button
-            onClick={() => router.push('/community/news')}
-            className="inline-flex items-center px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+      {showBackButton && (
+        <div className="relative z-10 container-custom mx-auto px-4 md:px-6 pt-6 md:pt-8">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            목록으로 돌아가기
-          </button>
-        </motion.div>
-      </div>
+            <button
+              onClick={() => router.push('/community/news')}
+              className="inline-flex items-center px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              목록으로 돌아가기
+            </button>
+          </motion.div>
+        </div>
+      )}
 
       {/* 통합 메인 섹션 */}
       <div className="relative container-custom mx-auto px-4 md:px-6 py-8 md:py-12 z-10">

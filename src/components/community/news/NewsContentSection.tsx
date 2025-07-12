@@ -64,8 +64,11 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
     router.push(`/community/news/${globalId}`)
   }
 
+  // published 상태인 게시글만 필터링
+  const publishedArticles = articlesData.filter(article => article.status === 'published')
+  
   // 공지사항과 일반 뉴스 분리
-  const { noticeItems, regularNews } = separateNoticeAndNews(articlesData)
+  const { noticeItems, regularNews } = separateNoticeAndNews(publishedArticles)
   
   // 전체 필터에서 공지사항을 제외한 페이지네이션 계산
   const isAllCategory = selectedCategory === 'all'
@@ -109,7 +112,7 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
               }`}
             >
               <Filter className="w-4 h-4 mr-2" />
-              전체 ({allNews.length})
+              전체 ({allNews.filter(article => article.status === 'published').length})
             </button>
             {categories.map((category) => (
               <button
@@ -121,7 +124,7 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
                     : 'bg-white text-wizfore-text-secondary border-gray-200 hover:border-wizfore-coral-primary'
                 }`}
               >
-                {category.korean} ({articlesData.filter(article => article.category === category.english).length})
+                {category.korean} ({publishedArticles.filter(article => article.category === category.english).length})
               </button>
             ))}
           </div>
@@ -145,7 +148,7 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {displayedNews.map((item, index) => {
+                {displayedNews.map((item) => {
                     const isNotice = item.category === 'notices'
                     
                     // 번호 계산

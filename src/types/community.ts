@@ -7,7 +7,6 @@ export interface Article {
   contentMarkdown: string   // 마크다운 콘텐츠
   images: string[]          // Firebase Storage URLs 배열
   status: 'draft' | 'published' | 'archived'
-  featured: boolean
   createdAt: string
   updatedAt: string
   publishedAt?: string

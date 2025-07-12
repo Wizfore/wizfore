@@ -242,6 +242,7 @@ export default function NewsManagePage() {
                     <TableHead>제목</TableHead>
                     <TableHead>카테고리</TableHead>
                     <TableHead>상태</TableHead>
+                    <TableHead>발행일</TableHead>
                     <TableHead>작성일</TableHead>
                     <TableHead>수정일</TableHead>
                     <TableHead className="text-right">작업</TableHead>
@@ -253,15 +254,13 @@ export default function NewsManagePage() {
                       <TableCell className="max-w-xs">
                         <div className="flex items-center gap-2">
                           <span className="font-medium truncate">{article.title}</span>
-                          {article.featured && (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                              추천
-                            </span>
-                          )}
                         </div>
                       </TableCell>
                       <TableCell>{getCategoryBadge(article.category)}</TableCell>
                       <TableCell>{getStatusBadge(article.status)}</TableCell>
+                      <TableCell className="text-sm text-gray-500">
+                        {article.date}
+                      </TableCell>
                       <TableCell className="text-sm text-gray-500">
                         {formatDate(article.createdAt)}
                       </TableCell>

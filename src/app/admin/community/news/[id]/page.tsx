@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye, X, Trash2 } from 'lucide-react'
+import { ArrowLeft, Save, Eye, Trash2 } from 'lucide-react'
 import { Article } from '@/types/community'
 import { getArticleById, updateArticle, deleteArticle } from '@/lib/services/dataService'
-import { useImageUpload } from '@/lib/services/storageService'
 import NewsMarkdownEditor from '@/components/admin/community/NewsMarkdownEditor'
+import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
+import type { NewsItem, CategoryItem } from '@/types'
 
 interface EditNewsPageProps {
   params: {
@@ -21,15 +22,35 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
   const [isDeleting, setIsDeleting] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
   const [notFound, setNotFound] = useState(false)
-  const { upload: uploadImage, uploading: imageUploading } = useImageUpload('news')
 
   // 폼 상태
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [category, setCategory] = useState<Article['category']>('news')
   const [status, setStatus] = useState<Article['status']>('draft')
-  const [featured, setFeatured] = useState(false)
-  const [images, setImages] = useState<string[]>([])
+  const [date, setDate] = useState('')
+
+  // 카테고리 데이터
+  const categories: CategoryItem[] = [
+    { english: 'notices', korean: '공지사항' },
+    { english: 'partnership', korean: '협약' },
+    { english: 'news', korean: '소식' },
+    { english: 'events', korean: '행사' },
+    { english: 'awards', korean: '수상' }
+  ]
+
+  // 미리보기용 NewsItem 객체 생성
+  const previewNewsItem: NewsItem & { category: string } = {
+    id: params.id,
+    title: title || '제목을 입력하세요',
+    contentMarkdown: content || '내용을 입력하세요',
+    category,
+    date,
+    images: [],
+    status,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
 
   // 뉴스 데이터 로드
   useEffect(() => {
@@ -53,8 +74,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
       setContent(newsItem.contentMarkdown)
       setCategory(newsItem.category)
       setStatus(newsItem.status)
-      setFeatured(newsItem.featured)
-      setImages(newsItem.images || [])
+      setDate(newsItem.date)
     } catch (error) {
       console.error('뉴스 로드 실패:', error)
       setNotFound(true)
@@ -63,19 +83,6 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     }
   }
 
-  // 이미지 업로드 핸들러
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    try {
-      const url = await uploadImage(file)
-      setImages([...images, url])
-    } catch (error) {
-      console.error('이미지 업로드 실패:', error)
-      alert('이미지 업로드에 실패했습니다.')
-    }
-  }
 
 
   // 폼 제출
@@ -100,8 +107,8 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
         contentMarkdown: content.trim(),
         category,
         status,
-        featured,
-        images: images.length > 0 ? images : [],
+        images: [],
+        date: date,
       }
 
       await updateArticle(params.id, updateData)
@@ -135,22 +142,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     }
   }
 
-  // 임시 저장
-  const handleSaveDraft = async () => {
-    if (!title.trim()) {
-      alert('제목을 입력해주세요.')
-      return
-    }
 
-    const originalStatus = status
-    setStatus('draft')
-    
-    try {
-      await handleSubmit(new Event('submit') as any)
-    } catch (error) {
-      setStatus(originalStatus)
-    }
-  }
 
   // 미리보기 모드 토글
   const togglePreview = () => {
@@ -186,6 +178,58 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     )
   }
 
+  // 미리보기 모드일 때
+  if (previewMode) {
+    return (
+      <div>
+        {/* 미리보기 모드 헤더 */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="max-w-6xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.back()}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800"
+              >
+                <ArrowLeft size={20} />
+                돌아가기
+              </button>
+              <h1 className="text-xl font-bold text-gray-900">미리보기</h1>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={togglePreview}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                <Eye size={20} />
+                편집 모드
+              </button>
+              
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+              >
+                <Trash2 size={20} />
+                {isDeleting ? '삭제 중...' : '삭제'}
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        {/* 미리보기 컨텐츠 */}
+        <NewsDetailMainSection 
+          newsItem={previewNewsItem} 
+          categories={categories}
+          showBackButton={false}
+        />
+      </div>
+    )
+  }
+
+  // 편집 모드일 때
   return (
     <div className="p-6 max-w-6xl mx-auto">
       {/* 헤더 */}
@@ -208,17 +252,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
             className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
           >
             <Eye size={20} />
-            {previewMode ? '편집 모드' : '미리보기'}
-          </button>
-          
-          <button
-            type="button"
-            onClick={handleSaveDraft}
-            disabled={isSubmitting}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50"
-          >
-            <Save size={20} />
-            임시 저장
+            미리보기
           </button>
 
           <button
@@ -248,11 +282,10 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="뉴스 제목을 입력하세요"
+                placeholder="제목을 입력하세요"
                 required
               />
             </div>
-
 
             {/* 마크다운 에디터 */}
             <div>
@@ -262,7 +295,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
               <NewsMarkdownEditor
                 value={content}
                 onChange={setContent}
-                placeholder="뉴스 내용을 마크다운으로 작성하세요..."
+                placeholder="내용을 마크다운 형식으로 작성하세요..."
                 height={500}
               />
             </div>
@@ -308,64 +341,19 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
                   </select>
                 </div>
 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="featured"
-                    checked={featured}
-                    onChange={(e) => setFeatured(e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="featured" className="ml-2 block text-sm text-gray-900">
-                    중요 뉴스로 표시
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* 이미지 업로드 */}
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">대표 이미지</h3>
-              
-              <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    이미지 업로드
+                    발행일 *
                   </label>
                   <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={imageUploading}
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    required
                   />
-                  {imageUploading && (
-                    <div className="mt-2 text-sm text-blue-600">
-                      이미지 업로드 중...
-                    </div>
-                  )}
                 </div>
 
-                {images.length > 0 && (
-                  <div className="space-y-2">
-                    {images.map((url, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={url}
-                          alt={`이미지 ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-lg"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setImages(images.filter((_, i) => i !== index))}
-                          className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                        >
-                          <X size={16} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
 
