@@ -1,9 +1,13 @@
 import { 
   getDoc, 
-  doc
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import type { DefaultSiteData } from '@/types'
+import type { Article } from '@/types/community'
 
 /**
  * 운영용 데이터 조회 서비스
@@ -475,5 +479,310 @@ export async function getProgramsGridConfig() {
       description: "개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다",
       enabled: true
     }
+  }
+}
+
+/**
+ * 공지사항 CRUD 함수들
+ * community/main 문서의 news.articles.notices 배열을 직접 조작합니다.
+ */
+
+/**
+ * 공지사항 목록 조회
+ */
+export async function getNotices(): Promise<Article[]> {
+  try {
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    
+    // notices 카테고리만 필터링
+    const notices = allArticles.filter((article: Article) => article.category === 'notices')
+    
+    // 최신순으로 정렬
+    return notices.sort((a: Article, b: Article) => 
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    )
+  } catch (error) {
+    console.error('Error fetching notices:', error)
+    throw error
+  }
+}
+
+/**
+ * 특정 공지사항 조회
+ */
+export async function getNoticeById(id: string): Promise<Article | null> {
+  try {
+    const notices = await getNotices()
+    return notices.find(notice => notice.id === id) || null
+  } catch (error) {
+    console.error('Error fetching notice by id:', error)
+    throw error
+  }
+}
+
+/**
+ * 새 공지사항 생성
+ */
+export async function createNotice(noticeData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  try {
+    const now = new Date().toISOString()
+    const notices = await getNotices()
+    
+    // 새 ID 생성 (기존 ID들 중 최대값 + 1)
+    const maxId = notices.length > 0 
+      ? Math.max(...notices.map(notice => parseInt(notice.id.replace('notice_', '')) || 0))
+      : 0
+    const newId = `notice_${maxId + 1}`
+    
+    const newNotice: Article = {
+      id: newId,
+      ...noticeData,
+      category: 'notices', // 강제로 notices 카테고리 설정
+      createdAt: now,
+      updatedAt: now,
+      publishedAt: noticeData.status === 'published' ? now : undefined
+    }
+
+    // Firebase에 새 공지사항 추가
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      'news.articles': arrayUnion(newNotice)
+    })
+
+    return newId
+  } catch (error) {
+    console.error('Error creating notice:', error)
+    throw error
+  }
+}
+
+/**
+ * 공지사항 업데이트
+ */
+export async function updateNotice(id: string, updates: Partial<Omit<Article, 'id' | 'createdAt'>>): Promise<void> {
+  try {
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    const articleIndex = allArticles.findIndex((article: Article) => article.id === id && article.category === 'notices')
+    
+    if (articleIndex === -1) {
+      throw new Error('공지사항을 찾을 수 없습니다.')
+    }
+
+    const existingNotice = allArticles[articleIndex]
+    const now = new Date().toISOString()
+    
+    // 업데이트된 공지사항 생성
+    const updatedNotice: Article = {
+      ...existingNotice,
+      ...updates,
+      id, // ID는 변경되지 않도록 보장
+      category: 'notices', // 카테고리는 항상 notices로 유지
+      updatedAt: now,
+      publishedAt: updates.status === 'published' ? (existingNotice.publishedAt || now) : existingNotice.publishedAt
+    }
+
+    // 기존 공지사항 제거하고 업데이트된 것 추가
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      'news.articles': arrayRemove(existingNotice)
+    })
+    
+    await updateDoc(docRef, {
+      'news.articles': arrayUnion(updatedNotice)
+    })
+  } catch (error) {
+    console.error('Error updating notice:', error)
+    throw error
+  }
+}
+
+/**
+ * 공지사항 삭제
+ */
+export async function deleteNotice(id: string): Promise<void> {
+  try {
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    const noticeToDelete = allArticles.find((article: Article) => article.id === id && article.category === 'notices')
+    
+    if (!noticeToDelete) {
+      throw new Error('삭제할 공지사항을 찾을 수 없습니다.')
+    }
+
+    // Firebase에서 공지사항 제거
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      'news.articles': arrayRemove(noticeToDelete)
+    })
+  } catch (error) {
+    console.error('Error deleting notice:', error)
+    throw error
+  }
+}
+
+/**
+ * 공지사항 상태 변경
+ */
+export async function updateNoticeStatus(id: string, status: Article['status']): Promise<void> {
+  try {
+    const updates: Partial<Article> = { status }
+    
+    if (status === 'published') {
+      updates.publishedAt = new Date().toISOString()
+    }
+
+    await updateNotice(id, updates)
+  } catch (error) {
+    console.error('Error updating notice status:', error)
+    throw error
+  }
+}
+
+/**
+ * 발행된 공지사항만 조회
+ */
+export async function getPublishedNotices(): Promise<Article[]> {
+  try {
+    const notices = await getNotices()
+    return notices.filter(notice => notice.status === 'published')
+  } catch (error) {
+    console.error('Error fetching published notices:', error)
+    throw error
+  }
+}
+
+/**
+ * 추천 공지사항 조회
+ */
+export async function getFeaturedNotices(): Promise<Article[]> {
+  try {
+    const notices = await getNotices()
+    return notices.filter(notice => notice.featured && notice.status === 'published')
+  } catch (error) {
+    console.error('Error fetching featured notices:', error)
+    throw error
+  }
+}
+
+
+/**
+ * 범용 기사 CRUD 함수들
+ * 모든 카테고리(notices, news, events, awards, partnership)를 처리합니다.
+ */
+
+/**
+ * 새 기사 생성 (모든 카테고리)
+ */
+export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  try {
+    const now = new Date().toISOString()
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    
+    // 카테고리별로 ID 생성
+    const categoryArticles = allArticles.filter((article: Article) => article.category === articleData.category)
+    const maxId = categoryArticles.length > 0 
+      ? Math.max(...categoryArticles.map((article: Article) => parseInt(article.id.replace(`${articleData.category}_`, '')) || 0))
+      : 0
+    const newId = `${articleData.category}_${maxId + 1}`
+    
+    const newArticle: Article = {
+      id: newId,
+      ...articleData,
+      createdAt: now,
+      updatedAt: now,
+      publishedAt: articleData.status === 'published' ? now : undefined
+    }
+
+    // Firebase에 새 기사 추가
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      'news.articles': arrayUnion(newArticle)
+    })
+
+    return newId
+  } catch (error) {
+    console.error('Error creating article:', error)
+    throw error
+  }
+}
+
+/**
+ * 기사 업데이트 (모든 카테고리)
+ */
+export async function updateArticle(id: string, updates: Partial<Omit<Article, 'id' | 'createdAt'>>): Promise<void> {
+  try {
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    const articleIndex = allArticles.findIndex((article: Article) => article.id === id)
+    
+    if (articleIndex === -1) {
+      throw new Error('기사를 찾을 수 없습니다.')
+    }
+
+    const existingArticle = allArticles[articleIndex]
+    const now = new Date().toISOString()
+    
+    // 업데이트된 기사 생성
+    const updatedArticle: Article = {
+      ...existingArticle,
+      ...updates,
+      id, // ID는 변경되지 않도록 보장
+      updatedAt: now,
+      publishedAt: updates.status === 'published' ? (existingArticle.publishedAt || now) : existingArticle.publishedAt
+    }
+
+    // 기존 기사 제거하고 업데이트된 것 추가
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      'news.articles': arrayRemove(existingArticle)
+    })
+    
+    await updateDoc(docRef, {
+      'news.articles': arrayUnion(updatedArticle)
+    })
+  } catch (error) {
+    console.error('Error updating article:', error)
+    throw error
+  }
+}
+
+/**
+ * 기사 삭제 (모든 카테고리)
+ */
+export async function deleteArticle(id: string): Promise<void> {
+  try {
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    const articleToDelete = allArticles.find((article: Article) => article.id === id)
+    
+    if (!articleToDelete) {
+      throw new Error('삭제할 기사를 찾을 수 없습니다.')
+    }
+
+    // Firebase에서 기사 제거
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      'news.articles': arrayRemove(articleToDelete)
+    })
+  } catch (error) {
+    console.error('Error deleting article:', error)
+    throw error
+  }
+}
+
+/**
+ * 특정 기사 조회
+ */
+export async function getArticleById(id: string): Promise<Article | null> {
+  try {
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    return allArticles.find((article: Article) => article.id === id) || null
+  } catch (error) {
+    console.error('Error fetching article by id:', error)
+    throw error
   }
 }
