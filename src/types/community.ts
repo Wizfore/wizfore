@@ -1,16 +1,18 @@
 import { CategoryItem } from './common'
 
 // 커뮤니티 관련 타입들
-export interface Notice {
+export interface Article {
   id: string
   title: string
-  content: string
-  publishDate: string
-  author: string
+  contentMarkdown: string   // 마크다운 콘텐츠
+  images: string[]          // Firebase Storage URLs 배열
+  status: 'draft' | 'published' | 'archived'
   featured: boolean
-  status: 'published' | 'draft'
-  attachments?: Attachment[]
-  comments?: Comment[]
+  createdAt: string
+  updatedAt: string
+  publishedAt?: string
+  category: 'notices' | 'partnership' | 'news' | 'events' | 'awards'
+  date: string              // 발행일/표시일
 }
 
 export interface Attachment {
@@ -52,13 +54,8 @@ export interface Reply {
   isVisible: boolean
 }
 
-export interface NewsItem {
-  id: number
-  title: string
-  content: string
-  date: string
-  imageUrl?: string
-}
+// NewsItem은 Article과 통합됨 - 하위 호환성을 위해 별칭으로 유지
+export type NewsItem = Article
 
 export interface NewsInfo {
   categories: CategoryItem[]
@@ -71,7 +68,7 @@ export interface NewsInfo {
     title?: string
     description?: string
   }
-  articles: Record<string, NewsItem[]>
+  articles: Article[]
 }
 
 export interface SnsInfo {
