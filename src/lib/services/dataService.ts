@@ -693,7 +693,7 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt
       ...articleData,
       createdAt: now,
       updatedAt: now,
-      publishedAt: articleData.status === 'published' ? now : undefined
+      ...(articleData.status === 'published' && { publishedAt: now })
     }
 
     // Firebase에 새 기사 추가
@@ -725,14 +725,22 @@ export async function updateArticle(id: string, updates: Partial<Omit<Article, '
     const existingArticle = allArticles[articleIndex]
     const now = new Date().toISOString()
     
-    // 업데이트된 기사 생성
-    const updatedArticle: Article = {
+    // 업데이트된 기사 생성 (undefined 값 제거)
+    const baseArticle = {
       ...existingArticle,
       ...updates,
       id, // ID는 변경되지 않도록 보장
-      updatedAt: now,
-      publishedAt: updates.status === 'published' ? (existingArticle.publishedAt || now) : existingArticle.publishedAt
+      updatedAt: now
     }
+    
+    // publishedAt 처리 (undefined 방지)
+    if (updates.status === 'published') {
+      baseArticle.publishedAt = existingArticle.publishedAt || now
+    } else if (existingArticle.publishedAt) {
+      baseArticle.publishedAt = existingArticle.publishedAt
+    }
+    
+    const updatedArticle: Article = baseArticle
 
     // 기존 기사 제거하고 업데이트된 것 추가
     const docRef = doc(db, 'community', 'main')
