@@ -231,153 +231,134 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
 
   // 편집 모드일 때
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800"
-          >
-            <ArrowLeft size={20} />
-            돌아가기
-          </button>
-          <h1 className="text-2xl font-bold text-gray-900">뉴스 편집</h1>
-        </div>
-        
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={togglePreview}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
-          >
-            <Eye size={20} />
-            미리보기
-          </button>
-
-          <button
-            type="button"
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
-          >
-            <Trash2 size={20} />
-            {isDeleting ? '삭제 중...' : '삭제'}
-          </button>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* 상단 헤더 */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 rounded-lg hover:bg-gray-50"
+            >
+              <ArrowLeft size={20} />
+              돌아가기
+            </button>
+            <h1 className="text-xl font-bold text-gray-900">뉴스 편집</h1>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={togglePreview}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            >
+              <Eye size={20} />
+              미리보기
+            </button>
+            <button
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            >
+              <Save size={20} />
+              {isSubmitting ? '저장 중...' : status === 'published' ? '게시' : '저장'}
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+            >
+              <Trash2 size={20} />
+              {isDeleting ? '삭제 중...' : '삭제'}
+            </button>
+          </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* 기본 정보 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* 메인 콘텐츠 */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* 제목 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                제목 *
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="제목을 입력하세요"
-                required
-              />
-            </div>
+      {/* 메인 콘텐츠 영역 */}
+      <div className="flex-1">
+        <form onSubmit={handleSubmit} className="flex flex-col">
+          {/* 상단 메타데이터 영역 */}
+          <div className="bg-white border-b border-gray-200 p-6 flex-shrink-0">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              {/* 제목 입력 */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  제목 *
+                </label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
+                  placeholder="제목을 입력하세요"
+                  required
+                />
+              </div>
 
-            {/* 마크다운 에디터 */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                내용 *
-              </label>
-              <NewsMarkdownEditor
-                value={content}
-                onChange={setContent}
-                placeholder="내용을 마크다운 형식으로 작성하세요..."
-                height={500}
-              />
-            </div>
-          </div>
-
-          {/* 사이드바 */}
-          <div className="space-y-6">
-            {/* 발행 설정 */}
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">발행 설정</h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    상태
-                  </label>
-                  <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as Article['status'])}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    <option value="draft">초안</option>
-                    <option value="published">게시됨</option>
-                    <option value="archived">보관됨</option>
-                  </select>
+              {/* 발행 설정 */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  발행 설정
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <select
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value as Article['status'])}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="draft">초안</option>
+                      <option value="published">게시됨</option>
+                      <option value="archived">보관됨</option>
+                    </select>
+                  </div>
+                  <div>
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value as Article['category'])}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="notices">공지사항</option>
+                      <option value="partnership">협약</option>
+                      <option value="news">소식</option>
+                      <option value="events">행사</option>
+                      <option value="awards">수상</option>
+                    </select>
+                  </div>
+                  <div>
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    카테고리 *
-                  </label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value as Article['category'])}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  >
-                    <option value="notices">공지사항</option>
-                    <option value="partnership">협약</option>
-                    <option value="news">소식</option>
-                    <option value="events">행사</option>
-                    <option value="awards">수상</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    발행일 *
-                  </label>
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
-                </div>
-
               </div>
             </div>
-
           </div>
-        </div>
 
-        {/* 제출 버튼 */}
-        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-6 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
-          >
-            취소
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-          >
-            {isSubmitting ? '저장 중...' : status === 'published' ? '게시' : '저장'}
-          </button>
-        </div>
-      </form>
+          {/* 마크다운 에디터 영역 */}
+          <div className="bg-white p-6 max-w-full min-w-0">
+            <div className="flex flex-col max-w-full min-w-0">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                내용 *
+              </label>
+              <div className="w-full max-w-full min-w-0 overflow-hidden">
+                <NewsMarkdownEditor
+                  value={content}
+                  onChange={setContent}
+                  category={category}
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
