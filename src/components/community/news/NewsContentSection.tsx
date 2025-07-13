@@ -59,8 +59,8 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
 }) => {
   const router = useRouter()
 
-  const handleNewsClick = (newsItem: Article) => {
-    const globalId = createGlobalId(newsItem.category, newsItem.id)
+  const handleNewsClick = (article: Article) => {
+    const globalId = createGlobalId(article.category, article.id)
     router.push(`/community/news/${globalId}`)
   }
 

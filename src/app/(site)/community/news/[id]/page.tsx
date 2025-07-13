@@ -7,14 +7,14 @@ import { findNewsByGlobalId } from '@/lib/utils/newsUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
 import NewsDetailNavigationSection from '@/components/community/news/NewsDetailNavigationSection'
-import type { NewsItem, CategoryItem } from '@/types'
+import type { Article, CategoryItem } from '@/types'
 
 export default function NewsDetailPage() {
   const params = useParams()
   const router = useRouter()
   const { id } = params
   
-  const [newsItem, setNewsItem] = useState<(NewsItem & { category: string }) | null>(null)
+  const [article, setArticle] = useState<(Article & { category: string }) | null>(null)
   const [categories, setCategories] = useState<CategoryItem[]>([])
   const [newsMessages, setNewsMessages] = useState<{
     hero?: { title?: string; description?: string; imageUrl?: string }
@@ -31,7 +31,7 @@ export default function NewsDetailPage() {
         const foundNews = findNewsByGlobalId(communityData.news.articles, id as string)
         
         if (foundNews) {
-          setNewsItem(foundNews)
+          setArticle(foundNews)
           setCategories(communityData.news.categories || [])
           setNewsMessages({
             hero: communityData.news.hero,
@@ -64,7 +64,7 @@ export default function NewsDetailPage() {
     )
   }
 
-  if (error || !newsItem) {
+  if (error || !article) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -88,7 +88,7 @@ export default function NewsDetailPage() {
         backgroundImage={newsMessages.hero?.imageUrl || '/images/hero/defaultHero.jpg'}
       />
       <NewsDetailMainSection 
-        newsItem={newsItem}
+        article={article}
         categories={categories}
       />
       <NewsDetailNavigationSection />

@@ -11,19 +11,19 @@ import { BorderBeam } from '@/components/magicui/border-beam'
 import { DotPattern } from '@/components/magicui/dot-pattern'
 import { TextReveal } from '@/components/magicui/text-reveal'
 import { cn } from '@/lib/utils'
-import type { NewsItem, CategoryItem } from '@/types'
+import type { Article, CategoryItem } from '@/types'
 
 interface NewsDetailMainSectionProps {
-  newsItem: NewsItem & { category: string }
+  article: Article & { category: string }
   categories: CategoryItem[]
   showBackButton?: boolean
 }
 
-const NewsDetailMainSection = ({ newsItem, categories, showBackButton = true }: NewsDetailMainSectionProps) => {
+const NewsDetailMainSection = ({ article, categories, showBackButton = true }: NewsDetailMainSectionProps) => {
   const router = useRouter()
   
   // 영어 카테고리를 한글로 변환
-  const categoryKorean = getCategoryByEnglish(categories, newsItem.category)?.korean || newsItem.category
+  const categoryKorean = getCategoryByEnglish(categories, article.category)?.korean || article.category
 
 
   return (
@@ -119,7 +119,7 @@ const NewsDetailMainSection = ({ newsItem, categories, showBackButton = true }: 
                     className="inline-block"
                     as="span"
                   >
-                    {new Date(newsItem.date).toLocaleDateString('ko-KR', {
+                    {new Date(article.date).toLocaleDateString('ko-KR', {
                       year: 'numeric',
                       month: '2-digit',
                       day: '2-digit'
@@ -130,7 +130,7 @@ const NewsDetailMainSection = ({ newsItem, categories, showBackButton = true }: 
               
               {/* 제목 */}
               <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
-                {newsItem.title}
+                {article.title}
               </h1>
             </div>
             
@@ -141,7 +141,7 @@ const NewsDetailMainSection = ({ newsItem, categories, showBackButton = true }: 
             
             {/* 본문 영역 */}
             <div className="px-6 md:px-10 lg:px-12 pb-6 md:pb-10 lg:pb-12 min-h-[400px]">
-              {newsItem.images && newsItem.images.length > 0 && (
+              {article.images && article.images.length > 0 && (
                 <motion.div 
                   className="mb-10"
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -149,18 +149,19 @@ const NewsDetailMainSection = ({ newsItem, categories, showBackButton = true }: 
                   transition={{ duration: 0.6, delay: 0.8 }}
                 >
                   <img
-                    src={newsItem.images[0]}
-                    alt={newsItem.title}
+                    src={article.images[0]}
+                    alt={article.title}
                     className="w-full rounded-lg shadow-sm"
                   />
                 </motion.div>
               )}
               
               <div className="prose max-w-none">
-                {newsItem.contentMarkdown ? (
-                  <p className="text-lg md:text-xl leading-relaxed md:leading-loose text-gray-700 whitespace-pre-wrap">
-                    {newsItem.contentMarkdown}
-                  </p>
+                {article.contentHtml ? (
+                  <div 
+                    className="markdown-content text-lg md:text-xl leading-relaxed md:leading-loose text-gray-700"
+                    dangerouslySetInnerHTML={{ __html: article.contentHtml }}
+                  />
                 ) : (
                   <div className="flex items-center justify-center h-64 text-gray-400">
                     <p className="text-lg md:text-xl">본문 내용이 준비 중입니다.</p>

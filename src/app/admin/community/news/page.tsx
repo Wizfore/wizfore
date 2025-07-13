@@ -72,7 +72,7 @@ export default function NewsManagePage() {
       const searchLower = searchTerm.toLowerCase()
       filtered = filtered.filter(article => 
         article.title.toLowerCase().includes(searchLower) ||
-        article.contentMarkdown.toLowerCase().includes(searchLower)
+        article.contentHtml.toLowerCase().includes(searchLower)
       )
     }
 
