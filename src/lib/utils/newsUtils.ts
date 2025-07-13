@@ -1,7 +1,5 @@
 import type { Article, CategoryItem } from '@/types'
 
-// 하위 호환성을 위해 NewsItem 별칭 유지
-type NewsItem = Article
 
 /**
  * 특정 카테고리에서 다음 사용할 ID를 생성합니다.
@@ -35,7 +33,7 @@ export function getNextNewsId(articles: Article[], category: string): string {
  * @param newsData - 새 뉴스 데이터 (ID 제외)
  * @returns 새로운 뉴스 항목
  */
-export function createNewsItem(
+export function createArticle(
   articles: Article[],
   newsData: Omit<Article, 'id'>
 ): Article {
@@ -52,11 +50,11 @@ export function createNewsItem(
  * @param newsData - 새 뉴스 데이터 (ID 제외)
  * @returns 새 항목이 추가된 뉴스 배열
  */
-export function addNewsItem(
+export function addArticle(
   articles: Article[],
   newsData: Omit<Article, 'id'>
 ): Article[] {
-  const newItem = createNewsItem(articles, newsData)
+  const newItem = createArticle(articles, newsData)
   return [...articles, newItem]
 }
 
@@ -215,6 +213,6 @@ export function findNewsByGlobalId(
   
   const { category, id } = parsed
   
-  const newsItem = articles.find(item => item.category === category && item.id === id)
-  return newsItem || null
+  const article = articles.find(item => item.category === category && item.id === id)
+  return article || null
 }

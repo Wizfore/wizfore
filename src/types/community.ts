@@ -4,7 +4,7 @@ import { CategoryItem } from './common'
 export interface Article {
   id: string
   title: string
-  contentMarkdown: string   // 마크다운 콘텐츠
+  contentHtml: string    // HTML 콘텐츠
   images: string[]          // Firebase Storage URLs 배열
   status: 'draft' | 'published' | 'archived'
   createdAt: string
@@ -52,9 +52,6 @@ export interface Reply {
   repliedBy: string
   isVisible: boolean
 }
-
-// NewsItem은 Article과 통합됨 - 하위 호환성을 위해 별칭으로 유지
-export type NewsItem = Article
 
 export interface NewsInfo {
   categories: CategoryItem[]
