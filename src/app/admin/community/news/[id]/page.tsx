@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Eye, Trash2 } from 'lucide-react'
-import { Article } from '@/types/community'
 import { getArticleById, updateArticle, deleteArticle } from '@/lib/services/dataService'
-import NewsMarkdownEditor from '@/components/admin/community/NewsMarkdownEditor'
+import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
-import type { NewsItem, CategoryItem } from '@/types'
+import type { Article, CategoryItem } from '@/types'
 
 interface EditNewsPageProps {
   params: {
@@ -39,11 +38,11 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     { english: 'awards', korean: '수상' }
   ]
 
-  // 미리보기용 NewsItem 객체 생성
-  const previewNewsItem: NewsItem & { category: string } = {
+  // 미리보기용 Article 객체 생성
+  const previewArticle: Article & { category: string } = {
     id: params.id,
     title: title || '제목을 입력하세요',
-    contentMarkdown: content || '내용을 입력하세요',
+    contentHtml: content || '<p>내용을 입력하세요</p>',
     category,
     date,
     images: [],
@@ -55,26 +54,26 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
   // 뉴스 데이터 로드
   useEffect(() => {
     if (params.id) {
-      loadNewsItem()
+      loadArticle()
     }
   }, [params.id])
 
-  const loadNewsItem = async () => {
+  const loadArticle = async () => {
     try {
       setIsLoading(true)
-      const newsItem = await getArticleById(params.id)
+      const article = await getArticleById(params.id)
       
-      if (!newsItem) {
+      if (!article) {
         setNotFound(true)
         return
       }
 
       // 폼 데이터 설정
-      setTitle(newsItem.title)
-      setContent(newsItem.contentMarkdown)
-      setCategory(newsItem.category)
-      setStatus(newsItem.status)
-      setDate(newsItem.date)
+      setTitle(article.title)
+      setContent(article.contentHtml || '')
+      setCategory(article.category)
+      setStatus(article.status)
+      setDate(article.date)
     } catch (error) {
       console.error('뉴스 로드 실패:', error)
       setNotFound(true)
@@ -104,7 +103,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     try {
       const updateData: Partial<Omit<Article, 'id' | 'createdAt'>> = {
         title: title.trim(),
-        contentMarkdown: content.trim(),
+        contentHtml: content.trim(),
         category,
         status,
         images: [],
@@ -221,7 +220,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
         
         {/* 미리보기 컨텐츠 */}
         <NewsDetailMainSection 
-          newsItem={previewNewsItem} 
+          article={previewArticle} 
           categories={categories}
           showBackButton={false}
         />
@@ -342,14 +341,14 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
             </div>
           </div>
 
-          {/* 마크다운 에디터 영역 */}
+          {/* Tiptap 에디터 영역 */}
           <div className="bg-white p-6 max-w-full min-w-0">
             <div className="flex flex-col max-w-full min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 내용 *
               </label>
               <div className="w-full max-w-full min-w-0 overflow-hidden">
-                <NewsMarkdownEditor
+                <TiptapEditor
                   value={content}
                   onChange={setContent}
                   category={category}

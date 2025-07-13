@@ -242,6 +242,19 @@ export default function NewsMarkdownEditor({
                 </ul>
               </div>
 
+              {/* 이미지 크기 조정 */}
+              <div>
+                <h4 className="font-semibold mb-3 text-blue-900">🖼️ 이미지 크기 조정</h4>
+                <ul className="space-y-2 text-xs">
+                  <li><code className="bg-blue-100 px-1 rounded">![설명](URL "작게")</code> - 작은 이미지 (300px)</li>
+                  <li><code className="bg-blue-100 px-1 rounded">![설명](URL "보통")</code> - 보통 이미지 (500px)</li>
+                  <li><code className="bg-blue-100 px-1 rounded">![설명](URL "크게")</code> - 큰 이미지 (700px)</li>
+                  <li><code className="bg-blue-100 px-1 rounded">![설명](URL "전체")</code> - 전체 너비</li>
+                  <li><code className="bg-blue-100 px-1 rounded">![설명](URL "400")</code> - 직접 크기 (400px)</li>
+                  <li><code className="bg-blue-100 px-1 rounded">![설명](URL "50%")</code> - 비율로 크기</li>
+                </ul>
+              </div>
+
               {/* 테이블 및 코드 블록 */}
               <div>
                 <h4 className="font-semibold mb-3 text-blue-900">📊 테이블 및 코드</h4>
@@ -282,6 +295,8 @@ export default function NewsMarkdownEditor({
               <p className="text-xs font-medium text-blue-900 mb-1">💡 팁</p>
               <p className="text-xs text-blue-800">
                 • 이미지를 에디터 영역에 직접 드래그하면 자동으로 업로드되고 마크다운 형식으로 삽입됩니다<br/>
+                • 이미지 크기 조정: 업로드 후 마크다운 문법 끝에 "작게", "보통", "크게", "전체" 또는 숫자를 추가하세요<br/>
+                • 예시: ![logo](URL "작게") 또는 ![banner](URL "600") 형태로 사용<br/>
                 • Ctrl+Z로 실행 취소, Ctrl+Y로 다시 실행할 수 있습니다<br/>
                 • 에디터는 내용에 따라 자동으로 높이가 조정됩니다
               </p>

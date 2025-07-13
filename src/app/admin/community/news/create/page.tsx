@@ -3,11 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Eye } from 'lucide-react'
-import { Article } from '@/types/community'
 import { createArticle } from '@/lib/services/dataService'
-import NewsMarkdownEditor from '@/components/admin/community/NewsMarkdownEditor'
+import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
-import type { NewsItem, CategoryItem } from '@/types'
+import type { Article, CategoryItem } from '@/types'
 
 export default function CreateNewsPage() {
   const router = useRouter()
@@ -30,11 +29,11 @@ export default function CreateNewsPage() {
     { english: 'awards', korean: '수상' }
   ]
 
-  // 미리보기용 NewsItem 객체 생성
-  const previewNewsItem: NewsItem & { category: string } = {
+  // 미리보기용 Article 객체 생성
+  const previewArticle: Article & { category: string } = {
     id: 'preview',
     title: title || '제목을 입력하세요',
-    contentMarkdown: content || '내용을 입력하세요',
+    contentHtml: content || '<p>내용을 입력하세요</p>',
     category,
     date,
     images: [],
@@ -64,7 +63,7 @@ export default function CreateNewsPage() {
     try {
       const articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt' | 'publishedAt'> = {
         title: title.trim(),
-        contentMarkdown: content.trim(),
+        contentHtml: content.trim(),
         category,
         status,
         images: [],
@@ -121,7 +120,7 @@ export default function CreateNewsPage() {
         
         {/* 미리보기 컨텐츠 */}
         <NewsDetailMainSection 
-          newsItem={previewNewsItem} 
+          article={previewArticle} 
           categories={categories}
           showBackButton={false}
         />
@@ -233,14 +232,14 @@ export default function CreateNewsPage() {
             </div>
           </div>
 
-          {/* 마크다운 에디터 영역 */}
+          {/* Tiptap 에디터 영역 */}
           <div className="bg-white p-6 max-w-full min-w-0">
             <div className="flex flex-col max-w-full min-w-0">
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 내용 *
               </label>
               <div className="w-full max-w-full min-w-0 overflow-hidden">
-                <NewsMarkdownEditor
+                <TiptapEditor
                   value={content}
                   onChange={setContent}
                   category={category}
