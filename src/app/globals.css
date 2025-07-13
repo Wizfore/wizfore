@@ -378,6 +378,196 @@ html {
   animation-play-state: paused;
 }
 
+/* 마크다운 콘텐츠 스타일링 */
+.markdown-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem 0;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.markdown-content h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem 0;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.markdown-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.markdown-content h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0.875rem 0 0.5rem 0;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.markdown-content h5 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.375rem 0;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.markdown-content h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.625rem 0 0.25rem 0;
+  color: #1f2937;
+  line-height: 1.25;
+}
+
+.markdown-content p {
+  margin: 0.875rem 0;
+  line-height: inherit;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  margin: 0.375rem 0;
+  line-height: 1.6;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  background-color: #f9fafb;
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  font-style: italic;
+  color: #6b7280;
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.markdown-content blockquote p {
+  margin: 0.5rem 0;
+}
+
+.markdown-content hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.25rem 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 이미지 크기 조정 클래스 */
+.markdown-content .img-small {
+  width: 300px;
+  max-width: 100%;
+}
+
+.markdown-content .img-medium {
+  width: 500px;
+  max-width: 100%;
+}
+
+.markdown-content .img-large {
+  width: 700px;
+  max-width: 100%;
+}
+
+.markdown-content .img-full {
+  width: 100%;
+}
+
+/* 반응형 이미지 크기 조정 */
+@media (max-width: 768px) {
+  .markdown-content .img-large {
+    width: 100%;
+  }
+  
+  .markdown-content .img-medium {
+    width: 100%;
+  }
+}
+
+.markdown-content strong {
+  font-weight: 700;
+}
+
+.markdown-content em {
+  font-style: italic;
+}
+
+.markdown-content code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", monospace;
+  font-size: 0.875em;
+}
+
+.markdown-content pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.markdown-content pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: inherit;
+}
+
+.markdown-content a {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown-content a:hover {
+  color: #2563eb;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.markdown-content th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
 @theme inline {
   @keyframes shimmer-slide {
   to {
@@ -398,4 +588,221 @@ html {
     transform: translateZ(0) rotate(360deg);
     }
   }
+}
+
+/* Tiptap 에디터 전용 스타일링 */
+.tiptap-editor .ProseMirror {
+  outline: none !important;
+  padding: 1rem !important;
+  min-height: 400px !important;
+  background-color: white !important;
+  border: none !important;
+}
+
+.tiptap-editor .ProseMirror:focus {
+  outline: none !important;
+}
+
+/* Tiptap 에디터 내부 요소들의 실시간 스타일링 */
+
+/* 색상 선택기 스타일 */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #6b7280;
+  height: 2px;
+  border-radius: 1px;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: #6b7280;
+  height: 2px;
+  border-radius: 1px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #3b82f6;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input[type="range"]::-moz-range-track {
+  background: #6b7280;
+  height: 2px;
+  border-radius: 1px;
+  border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: #3b82f6;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+/* 색상 및 하이라이트 스타일 */
+.tiptap-editor mark.custom-highlight {
+  padding: 0.1em 0.2em;
+  border-radius: 0.25rem;
+  /* 인라인 스타일의 background-color가 우선 적용됨 */
+}
+
+/* 기본 하이라이트 색상 (스타일이 없는 경우) */
+.tiptap-editor mark:not([style]) {
+  background-color: #fef08a;
+  padding: 0.1em 0.2em;
+  border-radius: 0.25rem;
+}
+.tiptap-editor h1 {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  margin: 1.5rem 0 1rem 0 !important;
+  color: #1f2937 !important;
+  line-height: 1.25 !important;
+}
+
+.tiptap-editor h2 {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+  margin: 1.25rem 0 0.75rem 0 !important;
+  color: #1f2937 !important;
+  line-height: 1.25 !important;
+}
+
+.tiptap-editor h3 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  margin: 1rem 0 0.5rem 0 !important;
+  color: #1f2937 !important;
+  line-height: 1.25 !important;
+}
+
+.tiptap-editor p {
+  margin: 0.875rem 0 !important;
+  line-height: 1.6 !important;
+}
+
+.tiptap-editor strong {
+  font-weight: 700 !important;
+}
+
+.tiptap-editor em {
+  font-style: italic !important;
+}
+
+.tiptap-editor u {
+  text-decoration: underline !important;
+}
+
+.tiptap-editor s {
+  text-decoration: line-through !important;
+}
+
+.tiptap-editor ul {
+  list-style-type: disc !important;
+  margin: 1rem 0 !important;
+  padding-left: 1.5rem !important;
+}
+
+.tiptap-editor ol {
+  list-style-type: decimal !important;
+  margin: 1rem 0 !important;
+  padding-left: 1.5rem !important;
+}
+
+.tiptap-editor li {
+  margin: 0.375rem 0 !important;
+  line-height: 1.6 !important;
+}
+
+.tiptap-editor blockquote {
+  border-left: 4px solid #e5e7eb !important;
+  background-color: #f9fafb !important;
+  margin: 1.25rem 0 !important;
+  padding: 1rem 1.25rem !important;
+  font-style: italic !important;
+  border-radius: 0.25rem !important;
+}
+
+.tiptap-editor blockquote p {
+  margin: 0.5rem 0 !important;
+}
+
+.tiptap-editor hr {
+  border: none !important;
+  border-top: 2px solid #e5e7eb !important;
+  margin: 2rem 0 !important;
+}
+
+.tiptap-editor a {
+  color: #3b82f6 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+}
+
+.tiptap-editor a:hover {
+  color: #2563eb !important;
+}
+
+.tiptap-editor img {
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 1.25rem 0 !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 텍스트 정렬 스타일 */
+.tiptap-editor [style*="text-align: left"] {
+  text-align: left !important;
+}
+
+.tiptap-editor [style*="text-align: center"] {
+  text-align: center !important;
+}
+
+.tiptap-editor [style*="text-align: right"] {
+  text-align: right !important;
+}
+
+/* 플레이스홀더 스타일 */
+.tiptap-editor .ProseMirror-placeholder {
+  color: #9ca3af !important;
+  pointer-events: none !important;
+  height: 0 !important;
+}
+
+.tiptap-editor .ProseMirror-placeholder:first-child::before {
+  color: #9ca3af !important;
+  content: attr(data-placeholder) !important;
+  float: left !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 이미지 리사이즈 관련 스타일 */
+.tiptap-editor img {
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.tiptap-editor img:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+}
+
+.tiptap-editor img.image-selected {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4) !important;
 }
