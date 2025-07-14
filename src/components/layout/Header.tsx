@@ -72,7 +72,7 @@ const Header = () => {
       name: '문의', 
       href: '/contact',
       submenu: [
-        { name: '온라인 문의', href: '/contact/inquiry' },
+        { name: '1 : 1 문의', href: '/contact/inquiry' },
       ]
     },
   ]

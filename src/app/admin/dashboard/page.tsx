@@ -25,7 +25,7 @@ const adminMenus = [
     title: '사이트 설정',
     description: '기본 설정 및 사이트 정보',
     icon: Settings,
-    href: '/admin/default-data',
+    href: '/admin/settings',
     color: 'bg-gray-500 hover:bg-gray-600'
   },
   {
