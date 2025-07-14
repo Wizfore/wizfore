@@ -1,4 +1,4 @@
-import { ContactInfo, MainService } from './common'
+import { ContactInfo, MainServices } from './common'
 import { DirectorInfo, HistoryInfo, AdvisorsInfo, LocationInfo, InquiryInfo } from './about'
 import { ProgramCategory } from './program'
 import { TeamCategory } from './expert'
@@ -55,7 +55,7 @@ export interface DefaultSiteData {
     establishedDate: string
     purpose: string
     contact: ContactInfo
-    mainServices: MainService[]
+    mainServices: MainServices
     faviconUrl?: string
     headerLogoUrl?: string
   }

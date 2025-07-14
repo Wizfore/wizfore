@@ -47,6 +47,15 @@ export interface MainService {
   order: number
 }
 
+export interface MainServices {
+  aboutMessage: {
+    title: string
+    description: string
+    highlightKeywords: string[]
+  }
+  services: MainService[]
+}
+
 export interface CategoryItem {
   korean: string
   english: string

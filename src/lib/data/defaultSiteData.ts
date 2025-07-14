@@ -23,36 +23,48 @@ export const defaultSiteData: DefaultSiteData = {
       accountInfo: "",
       mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3260.848873729402!2d128.98987061177746!3d35.18531905694215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568ea9ea90ac5a9%3A0x170fb73b2e0fe64c!2z67aA7IKw6rSR7Jet7IucIOyCrOyDgeq1rCDrqqjrnbzroZwxMTDrsojquLggMjU!5e0!3m2!1sko!2skr!4v1751037173300!5m2!1sko!2skr",
     },
-    mainServices: [
-      {
-        title: "발달중재서비스",
-        description: "발달/심리검사, 언어/인지/미술/놀이/감각통합/심리운동/사회성 치료 서비스",
-        details: [
-          "복지부 발달재활서비스(2022년~) & 교육부 치료지원서비스(2021년~)",
-          "복지부 지역사회서비스 아동청소년 심리치유서비스(2016년~)"
-        ],
-        startYear: "2016",
-        order: 1
+    mainServices: {
+      aboutMessage: {
+        title: "\"주요 사업 분야\"",
+        description: "위즈포레는 다양한 전문 사업을 통해 종합적인 치료 서비스를 제공합니다. 아동부터 성인까지 생애주기별 맞춤 지원으로 함께 성장하는 지역사회를 만들어갑니다.\n\n각 사업 분야별로 전문 자격을 갖춘 치료사들이 개별 맞춤형 서비스를 제공하고 있습니다.\n\n자세한 상담 및 서비스 이용 문의는 센터로 연락 주시기 바랍니다. 지속적으로 사업 영역을 확대하고 있습니다.",
+        highlightKeywords: [
+          "다양한 전문 사업",
+          ".종합적인 치료 서비스",
+          "생애주기별 맞춤 지원",
+          "지속적으로 사업 영역을 확대"
+        ]
       },
-      {
-        title: "부모/가족지원서비스",
-        description: "가족이음(학부모코칭)서비스",
-        startYear: "2016",
-        order: 2
-      },
-      {
-        title: "발달장애인 주간활동 및 발달장애학생 방과후활동서비스",
-        description: "발달장애인 평생교육프로그램(일상생활훈련/지역사회적응/문화예술체험 등)",
-        startYear: "2020",
-        order: 3
-      },
-      {
-        title: "문체부 장애인 스포츠이용권 서비스 제공기관",
-        description: "장애인 스포츠 활동 지원 서비스",
-        startYear: "2024",
-        order: 4
-      }
-    ]
+      services: [
+        {
+          title: "발달중재서비스",
+          description: "발달/심리검사, 언어/인지/미술/놀이/감각통합/심리운동/사회성 치료 서비스",
+          details: [
+            "복지부 발달재활서비스(2022년~) & 교육부 치료지원서비스(2021년~)",
+            "복지부 지역사회서비스 아동청소년 심리치유서비스(2016년~)"
+          ],
+          startYear: "2016",
+          order: 1
+        },
+        {
+          title: "부모/가족지원서비스",
+          description: "가족이음(학부모코칭)서비스",
+          startYear: "2016",
+          order: 2
+        },
+        {
+          title: "발달장애인 주간활동 및 발달장애학생 방과후활동서비스",
+          description: "발달장애인 평생교육프로그램(일상생활훈련/지역사회적응/문화예술체험 등)",
+          startYear: "2020",
+          order: 3
+        },
+        {
+          title: "문체부 장애인 스포츠이용권 서비스 제공기관",
+          description: "장애인 스포츠 활동 지원 서비스",
+          startYear: "2024",
+          order: 4
+        }
+      ]
+    }
   },
   
   aboutInfo: {
