@@ -88,7 +88,7 @@ export default function SportsPage() {
               제공 프로그램
             </h2>
             <p className="text-wizfore-text-secondary">
-              총 {sportsProgram.programs.length}개의 특수 스포츠 프로그램을 제공합니다
+              총 {sportsProgram.programs.length}개의 장애인 스포츠 프로그램을 제공합니다
             </p>
           </motion.div>
 

@@ -472,7 +472,7 @@ export const defaultSiteData: DefaultSiteData = {
     {
       id: "special-sports",
       hero: {
-        title: "특수 스포츠 프로그램",
+        title: "장애인 스포츠 프로그램",
         description: "다양한 스포츠 활동을 통한 신체 기능 향상과 사회성 발달을 도모합니다.",
         imageUrl: ""
       },
