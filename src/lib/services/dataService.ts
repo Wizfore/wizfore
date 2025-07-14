@@ -54,6 +54,19 @@ export async function getSiteInfo() {
 }
 
 /**
+ * 사이트 기본 정보 업데이트
+ */
+export async function updateSiteInfo(updates: Partial<DefaultSiteData['siteInfo']>) {
+  try {
+    const docRef = doc(db, 'siteInfo', 'main')
+    await updateDoc(docRef, updates)
+  } catch (error) {
+    console.error('Error updating site info:', error)
+    throw error
+  }
+}
+
+/**
  * 센터 소개 정보 조회
  */
 export async function getAboutInfo() {

@@ -70,6 +70,76 @@ export function compressImage(
 }
 
 /**
+ * 사이트 에셋에 최적화된 이미지 리사이즈를 수행합니다.
+ * @param file - 리사이즈할 이미지 파일
+ * @param category - 에셋 카테고리 (favicon, logo)
+ * @returns 리사이즈된 파일
+ */
+export function resizeForSiteAsset(
+  file: File, 
+  category: string
+): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    const img = new Image()
+
+    img.onload = () => {
+      let targetWidth: number
+      let targetHeight: number
+      let quality = 0.9
+
+      if (category.includes('favicon')) {
+        // 파비콘: 32x32 고정
+        targetWidth = 32
+        targetHeight = 32
+        quality = 1.0 // 파비콘은 최고 품질
+      } else if (category.includes('logo')) {
+        // 로고: 높이 60px 기준으로 비율 유지
+        const maxHeight = 60
+        const ratio = Math.min(maxHeight / img.height, 1) // 확대는 하지 않음
+        targetWidth = img.width * ratio
+        targetHeight = img.height * ratio
+      } else {
+        // 기본값
+        targetWidth = img.width
+        targetHeight = img.height
+      }
+
+      canvas.width = targetWidth
+      canvas.height = targetHeight
+
+      // 고품질 리사이즈를 위한 설정
+      ctx!.imageSmoothingEnabled = true
+      ctx!.imageSmoothingQuality = 'high'
+
+      // 이미지 그리기
+      ctx?.drawImage(img, 0, 0, targetWidth, targetHeight)
+
+      // blob으로 변환
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const resizedFile = new File([blob], file.name, {
+              type: file.type,
+              lastModified: Date.now()
+            })
+            resolve(resizedFile)
+          } else {
+            reject(new Error('이미지 리사이즈에 실패했습니다.'))
+          }
+        },
+        file.type,
+        quality
+      )
+    }
+
+    img.onerror = () => reject(new Error('이미지 로드에 실패했습니다.'))
+    img.src = URL.createObjectURL(file)
+  })
+}
+
+/**
  * 고유한 파일명을 생성합니다.
  * @param originalName - 원본 파일명
  * @param category - 카테고리 (선택사항)
@@ -92,6 +162,12 @@ export function generateUniqueFileName(originalName: string, category?: string):
  * @returns Firebase Storage 경로
  */
 export function generateUploadPath(category: string, fileName: string): string {
+  // 사이트 에셋인 경우 날짜 구분 없이 저장
+  if (category.startsWith('site-assets/')) {
+    return `${category}/${fileName}`
+  }
+  
+  // 기존 news 이미지는 날짜별로 구분
   const now = new Date()
   const year = now.getFullYear()
   const month = String(now.getMonth() + 1).padStart(2, '0')
@@ -121,8 +197,13 @@ export async function uploadImage(
       throw new Error('파일 크기는 10MB를 초과할 수 없습니다.')
     }
 
-    // 이미지 압축
-    const compressedFile = await compressImage(file)
+    // 이미지 처리: 사이트 에셋은 특별한 리사이즈, 일반 이미지는 압축
+    let processedFile: File
+    if (options.category?.startsWith('site-assets/')) {
+      processedFile = await resizeForSiteAsset(file, options.category)
+    } else {
+      processedFile = await compressImage(file)
+    }
     
     // 파일명 생성
     const fileName = generateUniqueFileName(file.name, options.category)
@@ -134,7 +215,7 @@ export async function uploadImage(
     // 업로드 실행
     if (options.onProgress) {
       // 진행률을 추적하는 업로드
-      const uploadTask = uploadBytesResumable(storageRef, compressedFile)
+      const uploadTask = uploadBytesResumable(storageRef, processedFile)
       
       return new Promise((resolve, reject) => {
         uploadTask.on(
@@ -163,7 +244,7 @@ export async function uploadImage(
       })
     } else {
       // 일반 업로드
-      const snapshot = await uploadBytes(storageRef, compressedFile)
+      const snapshot = await uploadBytes(storageRef, processedFile)
       const downloadURL = await getDownloadURL(snapshot.ref)
       return downloadURL
     }

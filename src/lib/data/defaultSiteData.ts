@@ -12,15 +12,15 @@ export const defaultSiteData: DefaultSiteData = {
     contact: {
       address: "부산광역시 사상구 모라동 110번길 25 3층, 4층 (모라주공아파트1단지 입구 홈플러스 위 광명한의원 4층)",
       phone: "051-324-0940",
-      fax: "051-313-3922",
-      email: "wizfore@daum.net",
-      website: "wizfore.modoo.at",
+      fax: "051-313-0322",
+      email: "wizfore@naver.com",
+      website: "www.wizfore.com",
       operatingHours: {
         weekday: "09:00 ~ 19:00",
         weekend: "09:00 ~ 18:00"
       },
-      businessNumber: "123-45-67890",
-      accountInfo: "농협 123-456-789012 위즈포레사회서비스센터",
+      businessNumber: "790-94-01514",
+      accountInfo: "",
       mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3260.848873729402!2d128.98987061177746!3d35.18531905694215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568ea9ea90ac5a9%3A0x170fb73b2e0fe64c!2z67aA7IKw6rSR7Jet7IucIOyCrOyDgeq1rCDrqqjrnbzroZwxMTDrsojquLggMjU!5e0!3m2!1sko!2skr!4v1751037173300!5m2!1sko!2skr",
     },
     mainServices: [

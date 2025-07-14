@@ -39,29 +39,6 @@ export interface ContactInfo {
   mapUrl: string
 }
 
-export interface CoreValues {
-  diverse: string
-  together: string
-  restful: string
-  dreaming: string
-  growing: string
-  caring: string
-  healing: string
-}
-
-export interface OrganizationInfo {
-  totalStaff: number
-  staffComposition: {
-    category: string
-    count: number
-  }[]
-  totalClients: number
-  clientComposition: {
-    category: string
-    count: number
-  }[]
-}
-
 export interface MainService {
   title: string
   description: string
