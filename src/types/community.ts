@@ -5,7 +5,6 @@ export interface Article {
   id: string
   title: string
   contentHtml: string    // HTML 콘텐츠
-  images: string[]          // Firebase Storage URLs 배열
   status: 'draft' | 'published'
   createdAt: string
   updatedAt: string
