@@ -1,12 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { 
   FileText,
-  Plus,
-  Edit,
-  Eye,
-  Loader2
+  Loader2,
+  Settings,
+  Home,
+  Building,
+  BookOpen,
+  Users,
+  MessageSquare,
+  Mail
 } from 'lucide-react'
 import { 
   getRecentInquiries, 
@@ -14,6 +19,58 @@ import {
   type RecentInquiry,
   type RecentNews
 } from '@/lib/services/dashboardService'
+
+const adminMenus = [
+  {
+    title: '사이트 설정',
+    description: '기본 설정 및 사이트 정보',
+    icon: Settings,
+    href: '/admin/default-data',
+    color: 'bg-gray-500 hover:bg-gray-600'
+  },
+  {
+    title: '홈페이지 관리',
+    description: '메인 페이지 콘텐츠 관리',
+    icon: Home,
+    href: '/admin/home',
+    color: 'bg-blue-500 hover:bg-blue-600'
+  },
+  {
+    title: '센터소개 관리',
+    description: '센터 정보 및 소개 관리',
+    icon: Building,
+    href: '/admin/about',
+    color: 'bg-green-500 hover:bg-green-600'
+  },
+  {
+    title: '프로그램 관리',
+    description: '치료 및 교육 프로그램',
+    icon: BookOpen,
+    href: '/admin/programs',
+    color: 'bg-purple-500 hover:bg-purple-600'
+  },
+  {
+    title: '전문가 소개 관리',
+    description: '치료사 및 전문가 정보',
+    icon: Users,
+    href: '/admin/about', // 팀 관리 페이지로 수정 필요시
+    color: 'bg-orange-500 hover:bg-orange-600'
+  },
+  {
+    title: '커뮤니티 관리',
+    description: '게시글 및 소식 관리',
+    icon: MessageSquare,
+    href: '/admin/community',
+    color: 'bg-pink-500 hover:bg-pink-600'
+  },
+  {
+    title: '1:1 문의 관리',
+    description: '고객 문의 및 상담 관리',
+    icon: Mail,
+    href: '/admin/contact/inquiries',
+    color: 'bg-indigo-500 hover:bg-indigo-600'
+  }
+]
 
 export default function DashboardPage() {
   const [recentInquiries, setRecentInquiries] = useState<RecentInquiry[]>([])
@@ -155,7 +212,28 @@ export default function DashboardPage() {
         </div>
       </div>
 
-
+      {/* 관리 메뉴 */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">관리 메뉴</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {adminMenus.map((menu, index) => {
+            const IconComponent = menu.icon
+            return (
+              <Link
+                key={index}
+                href={menu.href}
+                className="group flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:shadow-md hover:border-gray-300 transition-all duration-200"
+              >
+                <div className={`${menu.color} w-12 h-12 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                  <IconComponent className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-medium text-gray-900 text-center text-sm">{menu.title}</h3>
+                <p className="text-xs text-gray-500 text-center mt-1">{menu.description}</p>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
