@@ -11,8 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 const statusOptions = [
   { value: 'all', label: '전체' },
   { value: 'draft', label: '임시저장' },
-  { value: 'published', label: '발행됨' },
-  { value: 'archived', label: '보관됨' }
+  { value: 'published', label: '발행됨' }
 ]
 
 const categoryOptions = [
@@ -48,7 +47,7 @@ export default function NewsManagePage() {
       const allArticles = communityData?.news?.articles || []
       setArticles(allArticles)
     } catch (error) {
-      console.error('기사 목록 조회 실패:', error)
+      console.error('게시글 목록 조회 실패:', error)
     } finally {
       setLoading(false)
     }
@@ -87,13 +86,13 @@ export default function NewsManagePage() {
   }
 
   const handleDelete = async (id: string, category: string) => {
-    if (window.confirm('정말로 이 기사를 삭제하시겠습니까?')) {
+    if (window.confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
       try {
         await deleteArticle(id)
         await loadArticles()
       } catch (error) {
-        console.error('기사 삭제 실패:', error)
-        alert('기사 삭제에 실패했습니다.')
+        console.error('게시글 삭제 실패:', error)
+        alert('게시글 삭제에 실패했습니다.')
       }
     }
   }
@@ -101,8 +100,7 @@ export default function NewsManagePage() {
   const getStatusBadge = (status: Article['status']) => {
     const statusMap = {
       published: { label: '발행됨', className: 'bg-green-100 text-green-800' },
-      draft: { label: '임시저장', className: 'bg-gray-100 text-gray-800' },
-      archived: { label: '보관됨', className: 'bg-yellow-100 text-yellow-800' }
+      draft: { label: '임시저장', className: 'bg-gray-100 text-gray-800' }
     }
     
     const config = statusMap[status] || { label: status, className: 'bg-gray-100 text-gray-800' }
@@ -146,12 +144,11 @@ export default function NewsManagePage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">뉴스 관리</h1>
-          <p className="text-gray-600">모든 카테고리의 기사를 작성, 수정, 삭제할 수 있습니다.</p>
+          <h1 className="text-2xl font-bold text-gray-900">공지사항 관리</h1>
         </div>
         <Button onClick={() => router.push('/admin/community/news/create')}>
           <Plus className="h-4 w-4 mr-2" />
-          새 기사 작성
+          새 게시글 작성
         </Button>
       </div>
 
@@ -204,26 +201,26 @@ export default function NewsManagePage() {
         </div>
       </div>
 
-      {/* 기사 목록 */}
+      {/* 게시글 목록 */}
       <div className="bg-white rounded-lg shadow border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">기사 목록</h2>
+          <h2 className="text-lg font-semibold text-gray-900">게시글 목록</h2>
           <p className="text-sm text-gray-600">
-            총 {filteredArticles.length}개의 기사가 있습니다.
+            총 {filteredArticles.length}개의 게시글이 있습니다.
           </p>
         </div>
         <div className="p-6">
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-              <p className="mt-2 text-gray-600">기사를 불러오는 중...</p>
+              <p className="mt-2 text-gray-600">게시글를 불러오는 중...</p>
             </div>
           ) : filteredArticles.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500">
                 {searchTerm || selectedStatus !== 'all' || selectedCategory !== 'all' 
-                  ? '조건에 맞는 기사가 없습니다.' 
-                  : '기사가 없습니다.'
+                  ? '조건에 맞는 게시글이 없습니다.' 
+                  : '게시글이 없습니다.'
                 }
               </p>
               <Button 
@@ -231,7 +228,7 @@ export default function NewsManagePage() {
                 onClick={() => router.push('/admin/community/news/create')}
               >
                 <Plus className="h-4 w-4 mr-2" />
-                첫 번째 기사 작성하기
+                첫 번째 게시글 작성하기
               </Button>
             </div>
           ) : (

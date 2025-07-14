@@ -9,16 +9,12 @@ export default function CommunityManagePage() {
   const menuItems = [
     {
       id: 'news',
-      title: '뉴스 관리',
+      title: '공지사항 관리',
       description: '공지사항, 협약, 소식 등 뉴스 콘텐츠를 관리합니다',
       icon: Newspaper,
       href: '/admin/community/news',
       color: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
-      stats: {
-        label: '총 게시물',
-        count: '24'
-      }
+      hoverColor: 'hover:bg-blue-600'
     },
     {
       id: 'sns',
@@ -27,11 +23,7 @@ export default function CommunityManagePage() {
       icon: Share,
       href: '/admin/community/sns',
       color: 'bg-purple-500',
-      hoverColor: 'hover:bg-purple-600',
-      stats: {
-        label: '연동 계정',
-        count: '3'
-      }
+      hoverColor: 'hover:bg-purple-600'
     }
   ]
 
@@ -40,7 +32,7 @@ export default function CommunityManagePage() {
       {/* 헤더 */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">커뮤니티 관리</h1>
-        <p className="text-gray-600">뉴스와 SNS 콘텐츠를 관리하고 운영할 수 있습니다.</p>
+        <p className="text-gray-600">센터소식과 SNS 콘텐츠를 관리하고 운영할 수 있습니다.</p>
       </div>
 
       {/* 메뉴 카드 */}
@@ -72,10 +64,7 @@ export default function CommunityManagePage() {
                   </p>
                   
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center text-sm text-gray-500">
-                      <span>{item.stats.label}: </span>
-                      <span className="font-semibold text-gray-900 ml-1">{item.stats.count}</span>
-                    </div>
+                    <div className="flex items-center text-sm text-gray-500"></div>
                     
                     <div className="flex items-center text-blue-600 font-medium group-hover:text-blue-700 transition-colors">
                       <span className="text-sm">관리하기</span>
