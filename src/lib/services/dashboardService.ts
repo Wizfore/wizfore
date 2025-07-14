@@ -31,7 +31,7 @@ export interface RecentInquiry {
   status: 'unread' | 'replied' | 'resolved'
 }
 
-// 최근 소식 타입
+// 최근 게시글 타입
 export interface RecentNews {
   id: string
   title: string
@@ -112,46 +112,42 @@ export async function getRecentInquiries(limitCount: number = 5): Promise<Recent
   }
 }
 
-// 최근 소식 가져오기
+// 최근 게시글 가져오기
 export async function getRecentNews(limitCount: number = 5): Promise<RecentNews[]> {
   try {
-    const newsRef = collection(db, 'news')
-    const q = query(
-      newsRef, 
-      orderBy('createdAt', 'desc'),
-      limit(limitCount)
-    )
-    const querySnapshot = await getDocs(q)
+    // community 컬렉션에서 뉴스 데이터 가져오기
+    const communityRef = collection(db, 'community')
+    const querySnapshot = await getDocs(communityRef)
     
-    return querySnapshot.docs.map(doc => {
+    if (querySnapshot.empty) {
+      return []
+    }
+    
+    // 모든 articles 수집
+    const allArticles: any[] = []
+    querySnapshot.forEach(doc => {
       const data = doc.data()
-      const publishDate = data.publishDate as Timestamp
-      
-      return {
-        id: doc.id,
-        title: data.title,
-        publishDate: publishDate ? publishDate.toDate().toLocaleDateString('ko-KR') : '날짜 없음',
-        status: data.status || 'draft'
+      if (data.news?.articles) {
+        allArticles.push(...data.news.articles)
       }
     })
-  } catch (error) {
-    console.error('최근 소식 조회 오류:', error)
     
-    // 에러 시 임시 데이터 반환
-    return [
-      {
-        id: '1',
-        title: '2024년 하반기 프로그램 안내',
-        publishDate: '2024-06-15',
-        status: 'published'
-      },
-      {
-        id: '2',
-        title: '여름방학 특별 프로그램 모집',
-        publishDate: '2024-06-10',
-        status: 'draft'
-      }
-    ]
+    // 최신순 정렬 후 제한된 개수만 반환
+    const sortedArticles = allArticles
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limitCount)
+    
+    return sortedArticles.map(article => ({
+      id: article.id,
+      title: article.title,
+      publishDate: new Date(article.date || article.createdAt).toLocaleDateString('ko-KR'),
+      status: article.status || 'draft'
+    }))
+  } catch (error) {
+    console.error('최근 게시글 조회 오류:', error)
+    
+    // 에러 시 빈 배열 반환
+    return []
   }
 }
 
