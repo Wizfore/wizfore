@@ -29,6 +29,17 @@ const menuItems = [
     icon: LayoutDashboard
   },
   {
+    title: '사이트 설정',
+    href: '/admin/settings',
+    icon: Settings,
+    subItems: [
+      { title: '기관 기본정보', href: '/admin/settings/organization' },
+      { title: 'SEO 설정', href: '/admin/settings/seo' },
+      { title: '관리자 계정', href: '/admin/settings/accounts' },
+      { title: '백업 관리', href: '/admin/settings/backup' }
+    ]
+  },
+  {
     title: '홈페이지 관리',
     href: '/admin/home',
     icon: Home,
@@ -79,7 +90,7 @@ const menuItems = [
     href: '/admin/community',
     icon: MessageSquare,
     subItems: [
-      { title: '센터 소식(뉴스)', href: '/admin/community/news' },
+      { title: '공지사항', href: '/admin/community/news' },
       { title: 'SNS 관리', href: '/admin/community/sns' }
     ]
   },
@@ -87,27 +98,6 @@ const menuItems = [
     title: '1:1 문의 관리',
     href: '/admin/contact/inquiries',
     icon: HelpCircle
-  },
-  {
-    title: '사이트 설정',
-    href: '/admin/settings',
-    icon: Settings,
-    subItems: [
-      { title: '기관 기본정보', href: '/admin/settings/organization' },
-      { title: 'SEO 설정', href: '/admin/settings/seo' },
-      { title: '관리자 계정', href: '/admin/settings/accounts' },
-      { title: '백업 관리', href: '/admin/settings/backup' }
-    ]
-  },
-  {
-    title: '통계 및 분석',
-    href: '/admin/analytics',
-    icon: BarChart3,
-    subItems: [
-      { title: '방문자 통계', href: '/admin/analytics/visitors' },
-      { title: '프로그램 신청 현황', href: '/admin/analytics/programs' },
-      { title: '문의 분석', href: '/admin/analytics/inquiries' }
-    ]
   },
   {
     title: '기본 데이터 추가',

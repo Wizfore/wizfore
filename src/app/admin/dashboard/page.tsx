@@ -147,7 +147,7 @@ export default function DashboardPage() {
       {/* 페이지 헤더 */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">대시보드</h1>
-        <p className="text-gray-600">위즈포레 운영 현황을 한눈에 확인하세요</p>
+        <p className="text-gray-600">한눈에 확인하세요</p>
       </div>
 
       {/* 통계 카드들 */}
@@ -193,7 +193,7 @@ export default function DashboardPage() {
                 <div key={inquiry.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50">
                   <div className="flex items-center space-x-3">
                     <div className={`w-2 h-2 rounded-full ${
-                      inquiry.status === 'unread' ? 'bg-red-500' : 'bg-green-500'
+                      inquiry.status === 'resolved' ? 'bg-green-500' : 'bg-red-500' 
                     }`}></div>
                     <div>
                       <p className="font-medium text-gray-900">{inquiry.name}</p>
@@ -203,11 +203,11 @@ export default function DashboardPage() {
                   <div className="text-right">
                     <p className="text-sm text-gray-500">{inquiry.time}</p>
                     <span className={`inline-block px-2 py-1 text-xs rounded-full ${
-                      inquiry.status === 'unread' 
-                        ? 'bg-red-100 text-red-700' 
-                        : 'bg-green-100 text-green-700'
+                      inquiry.status === 'resolved' 
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-700' 
                     }`}>
-                      {inquiry.status === 'unread' ? '미답변' : '답변완료'}
+                      {inquiry.status === 'unread' ? '미답변' : inquiry.status === 'replied' ? '처리중' : '답변완료'}
                     </span>
                   </div>
                 </div>

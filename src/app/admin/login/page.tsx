@@ -90,7 +90,7 @@ export default function LoginPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="admin@wizfore.com"
+                placeholder="이메일을 입력하세요"
                 disabled={loading}
               />
             </div>
