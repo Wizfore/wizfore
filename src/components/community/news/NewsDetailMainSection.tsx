@@ -141,21 +141,6 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
             
             {/* 본문 영역 */}
             <div className="px-6 md:px-10 lg:px-12 pb-6 md:pb-10 lg:pb-12 min-h-[400px]">
-              {article.images && article.images.length > 0 && (
-                <motion.div 
-                  className="mb-10"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                >
-                  <img
-                    src={article.images[0]}
-                    alt={article.title}
-                    className="w-full rounded-lg shadow-sm"
-                  />
-                </motion.div>
-              )}
-              
               <div className="prose max-w-none">
                 {article.contentHtml ? (
                   <div 
