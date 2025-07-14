@@ -1,4 +1,4 @@
-import { CoreValues, OrganizationInfo, ContactInfo, MainService } from './common'
+import { ContactInfo, MainService } from './common'
 import { DirectorInfo, HistoryInfo, AdvisorsInfo, LocationInfo, InquiryInfo } from './about'
 import { ProgramCategory } from './program'
 import { TeamCategory } from './expert'
@@ -54,8 +54,6 @@ export interface DefaultSiteData {
     enName: string
     establishedDate: string
     purpose: string
-    coreValues: CoreValues
-    organization: OrganizationInfo
     contact: ContactInfo
     mainServices: MainService[]
     faviconUrl?: string

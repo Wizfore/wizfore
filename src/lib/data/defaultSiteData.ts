@@ -9,34 +9,6 @@ export const defaultSiteData: DefaultSiteData = {
     purpose: "위즈포레는 \"함께 어우러지는 지혜의 숲(WIZ FORE)\"라는 의미를 담고 있으며, 장애인을 포함한 모든 사람들이 어우러져 더불어 살아가는 힘을 키우는데 필요한 사회서비스를 제공하는 전문기관입니다.",
     faviconUrl: "",
     headerLogoUrl: "",
-    coreValues: {
-      diverse: "다양성을 존중하고 포용하는 마음",
-      together: "함께 어우러져 살아가는 공동체",
-      restful: "모든 생명이 안전하고 편안한 공간",
-      dreaming: "희망과 꿈을 키워가는 터전",
-      growing: "지속적인 발전과 성장",
-      caring: "진심과 마음이 담긴 서비스",
-      healing: "치유와 회복을 지원하는 전문성"
-    },
-    organization: {
-      totalStaff: 24,
-      staffComposition: [
-        { category: "언어치료사", count: 5 },
-        { category: "미술치료사", count: 3 },
-        { category: "음악치료사", count: 2 },
-        { category: "놀이치료사", count: 4 },
-        { category: "감각통합치료사", count: 3 },
-        { category: "특수체육지도사", count: 4 },
-        { category: "부모상담사", count: 3 }
-      ],
-      totalClients: 23,
-      clientComposition: [
-        { category: "시설치료", count: 1 },
-        { category: "전담서비스", count: 1 },
-        { category: "발달장애인 주간활동/방과후", count: 6 },
-        { category: "기타 치료서비스", count: 15 }
-      ]
-    },
     contact: {
       address: "부산광역시 사상구 모라동 110번길 25 3층, 4층 (모라주공아파트1단지 입구 홈플러스 위 광명한의원 4층)",
       phone: "051-324-0940",
