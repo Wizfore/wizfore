@@ -795,3 +795,16 @@ export async function getArticleById(id: string): Promise<Article | null> {
     throw error
   }
 }
+
+/**
+ * 메인 서비스 정보 조회
+ */
+export async function getMainServices() {
+  try {
+    const siteInfo = await getSiteInfo()
+    return siteInfo.mainServices
+  } catch (error) {
+    console.error('Error fetching main services:', error)
+    throw error
+  }
+}
