@@ -28,7 +28,7 @@ export interface RecentInquiry {
   name: string
   category: string
   time: string
-  status: 'unread' | 'replied'
+  status: 'unread' | 'replied' | 'resolved'
 }
 
 // 최근 소식 타입

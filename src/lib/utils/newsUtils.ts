@@ -5,7 +5,7 @@ import type { Article, CategoryItem } from '@/types'
  * 특정 카테고리에서 다음 사용할 ID를 생성합니다.
  * 해당 카테고리 뉴스 배열의 최대값에 1을 더한 값을 반환합니다.
  * 
- * @param articles - 전체 기사 배열
+ * @param articles - 전체 게시글 배열
  * @param category - 카테고리명
  * @returns 다음 사용할 ID (문자열)
  */
@@ -29,7 +29,7 @@ export function getNextNewsId(articles: Article[], category: string): string {
  * 새로운 뉴스 항목을 생성합니다.
  * ID는 해당 카테고리에서 자동으로 생성됩니다.
  * 
- * @param articles - 전체 기사 배열
+ * @param articles - 전체 게시글 배열
  * @param newsData - 새 뉴스 데이터 (ID 제외)
  * @returns 새로운 뉴스 항목
  */
@@ -46,7 +46,7 @@ export function createArticle(
 /**
  * 전체 배열에 새 항목을 추가합니다.
  * 
- * @param articles - 전체 기사 배열
+ * @param articles - 전체 게시글 배열
  * @param newsData - 새 뉴스 데이터 (ID 제외)
  * @returns 새 항목이 추가된 뉴스 배열
  */
@@ -62,7 +62,7 @@ export function addArticle(
  * 전체 뉴스 배열을 반환합니다.
  * 새로운 배열 구조에서는 이미 category 필드가 포함되어 있습니다.
  * 
- * @param articles - 전체 기사 배열
+ * @param articles - 전체 게시글 배열
  * @returns 전체 뉴스 배열
  */
 export function getAllNewsWithCategory(articles: Article[]): Article[] {
@@ -72,7 +72,7 @@ export function getAllNewsWithCategory(articles: Article[]): Article[] {
 /**
  * 특정 카테고리의 뉴스만 반환합니다.
  * 
- * @param articles - 전체 기사 배열
+ * @param articles - 전체 게시글 배열
  * @param category - 조회할 카테고리
  * @returns 해당 카테고리의 뉴스 배열
  */
@@ -200,7 +200,7 @@ export function parseGlobalId(globalId: string): { category: string; id: string 
 /**
  * 특정 뉴스 항목을 전역 ID로 찾습니다.
  * 
- * @param articles - 전체 기사 배열
+ * @param articles - 전체 게시글 배열
  * @param globalId - 전역 고유 ID
  * @returns 해당 뉴스 항목 또는 null
  */

@@ -656,12 +656,12 @@ export async function getPublishedNotices(): Promise<Article[]> {
 
 
 /**
- * 범용 기사 CRUD 함수들
+ * 범용 게시글 CRUD 함수들
  * 모든 카테고리(notices, news, events, awards, partnership)를 처리합니다.
  */
 
 /**
- * 새 기사 생성 (모든 카테고리)
+ * 새 게시글 생성 (모든 카테고리)
  */
 export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
   try {
@@ -684,7 +684,7 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt
       ...(articleData.status === 'published' && { publishedAt: now })
     }
 
-    // Firebase에 새 기사 추가
+    // Firebase에 새 게시글 추가
     const docRef = doc(db, 'community', 'main')
     await updateDoc(docRef, {
       'news.articles': arrayUnion(newArticle)
@@ -698,7 +698,7 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt
 }
 
 /**
- * 기사 업데이트 (모든 카테고리)
+ * 게시글 업데이트 (모든 카테고리)
  */
 export async function updateArticle(id: string, updates: Partial<Omit<Article, 'id' | 'createdAt'>>): Promise<void> {
   try {
@@ -707,13 +707,13 @@ export async function updateArticle(id: string, updates: Partial<Omit<Article, '
     const articleIndex = allArticles.findIndex((article: Article) => article.id === id)
     
     if (articleIndex === -1) {
-      throw new Error('기사를 찾을 수 없습니다.')
+      throw new Error('게시글을 찾을 수 없습니다.')
     }
 
     const existingArticle = allArticles[articleIndex]
     const now = new Date().toISOString()
     
-    // 업데이트된 기사 생성 (undefined 값 제거)
+    // 업데이트된 게시글 생성 (undefined 값 제거)
     const baseArticle = {
       ...existingArticle,
       ...updates,
@@ -730,7 +730,7 @@ export async function updateArticle(id: string, updates: Partial<Omit<Article, '
     
     const updatedArticle: Article = baseArticle
 
-    // 기존 기사 제거하고 업데이트된 것 추가
+    // 기존 게시글 제거하고 업데이트된 것 추가
     const docRef = doc(db, 'community', 'main')
     await updateDoc(docRef, {
       'news.articles': arrayRemove(existingArticle)
@@ -746,7 +746,7 @@ export async function updateArticle(id: string, updates: Partial<Omit<Article, '
 }
 
 /**
- * 기사 삭제 (모든 카테고리)
+ * 게시글 삭제 (모든 카테고리)
  */
 export async function deleteArticle(id: string): Promise<void> {
   try {
@@ -755,10 +755,10 @@ export async function deleteArticle(id: string): Promise<void> {
     const articleToDelete = allArticles.find((article: Article) => article.id === id)
     
     if (!articleToDelete) {
-      throw new Error('삭제할 기사를 찾을 수 없습니다.')
+      throw new Error('삭제할 게시글을 찾을 수 없습니다.')
     }
 
-    // Firebase에서 기사 제거
+    // Firebase에서 게시글 제거
     const docRef = doc(db, 'community', 'main')
     await updateDoc(docRef, {
       'news.articles': arrayRemove(articleToDelete)
@@ -770,7 +770,7 @@ export async function deleteArticle(id: string): Promise<void> {
 }
 
 /**
- * 특정 기사 조회
+ * 특정 게시글 조회
  */
 export async function getArticleById(id: string): Promise<Article | null> {
   try {

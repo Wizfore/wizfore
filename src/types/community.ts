@@ -6,7 +6,7 @@ export interface Article {
   title: string
   contentHtml: string    // HTML 콘텐츠
   images: string[]          // Firebase Storage URLs 배열
-  status: 'draft' | 'published' | 'archived'
+  status: 'draft' | 'published'
   createdAt: string
   updatedAt: string
   publishedAt?: string
@@ -38,7 +38,7 @@ export interface Inquiry {
   category: string
   message: string
   createdAt: string
-  status: 'unread' | 'replied'
+  status: 'unread' | 'replied' | 'resolved'
   adminNote?: string
   replyContent?: string
   repliedAt?: string
