@@ -924,7 +924,6 @@ export const defaultSiteData: DefaultSiteData = {
           date: "2024-01-15",
           category: "notices",
           status: "published",
-          images: [],
           createdAt: "2024-01-15T00:00:00Z",
           updatedAt: "2024-01-15T00:00:00Z",
           publishedAt: "2024-01-15T00:00:00Z"
@@ -936,7 +935,6 @@ export const defaultSiteData: DefaultSiteData = {
           date: "2024-01-28",
           category: "notices",
           status: "published",
-          images: [],
           createdAt: "2024-01-28T00:00:00Z",
           updatedAt: "2024-01-28T00:00:00Z",
           publishedAt: "2024-01-28T00:00:00Z"
@@ -948,7 +946,6 @@ export const defaultSiteData: DefaultSiteData = {
           date: "2024-12-15",
           category: "notices",
           status: "published",
-          images: [],
           createdAt: "2024-12-15T00:00:00Z",
           updatedAt: "2024-12-15T00:00:00Z",
           publishedAt: "2024-12-15T00:00:00Z"
@@ -960,7 +957,6 @@ export const defaultSiteData: DefaultSiteData = {
           date: "2024-03-01",
           category: "notices",
           status: "published",
-          images: [],
           createdAt: "2024-03-01T00:00:00Z",
           updatedAt: "2024-03-01T00:00:00Z",
           publishedAt: "2024-03-01T00:00:00Z"
@@ -973,7 +969,6 @@ export const defaultSiteData: DefaultSiteData = {
           date: "2021-09-07",
           category: "partnership",
           status: "published",
-          images: [],
           createdAt: "2021-09-07T00:00:00Z",
           updatedAt: "2021-09-07T00:00:00Z",
           publishedAt: "2021-09-07T00:00:00Z"
@@ -988,8 +983,7 @@ export const defaultSiteData: DefaultSiteData = {
           status: "published",
           createdAt: "2021-11-26T00:00:00Z",
           updatedAt: "2021-11-26T00:00:00Z",
-          publishedAt: "2021-11-26T00:00:00Z",
-          images: []
+          publishedAt: "2021-11-26T00:00:00Z"
         },
         {
           id: "news_2",
@@ -1000,8 +994,7 @@ export const defaultSiteData: DefaultSiteData = {
           status: "published",
           createdAt: "2022-01-01T00:00:00Z",
           updatedAt: "2022-01-01T00:00:00Z",
-          publishedAt: "2022-01-01T00:00:00Z",
-          images: []
+          publishedAt: "2022-01-01T00:00:00Z"
         },
         {
           id: "news_3",
@@ -1012,8 +1005,7 @@ export const defaultSiteData: DefaultSiteData = {
           status: "published",
           createdAt: "2022-03-01T00:00:00Z",
           updatedAt: "2022-03-01T00:00:00Z",
-          publishedAt: "2022-03-01T00:00:00Z",
-          images: []
+          publishedAt: "2022-03-01T00:00:00Z"
         },
         // 행사
         {
@@ -1025,8 +1017,7 @@ export const defaultSiteData: DefaultSiteData = {
           status: "published",
           createdAt: "2021-11-19T00:00:00Z",
           updatedAt: "2021-11-19T00:00:00Z",
-          publishedAt: "2021-11-19T00:00:00Z",
-          images: []
+          publishedAt: "2021-11-19T00:00:00Z"
         },
         {
           id: "event_2",
@@ -1037,8 +1028,7 @@ export const defaultSiteData: DefaultSiteData = {
           status: "published",
           createdAt: "2021-12-14T00:00:00Z",
           updatedAt: "2021-12-14T00:00:00Z",
-          publishedAt: "2021-12-14T00:00:00Z",
-          images: []
+          publishedAt: "2021-12-14T00:00:00Z"
         },
         // 수상
         {
@@ -1050,8 +1040,7 @@ export const defaultSiteData: DefaultSiteData = {
           status: "published",
           createdAt: "2022-07-19T00:00:00Z",
           updatedAt: "2022-07-19T00:00:00Z",
-          publishedAt: "2022-07-19T00:00:00Z",
-          images: []
+          publishedAt: "2022-07-19T00:00:00Z"
         },
         {
           id: "award_2",
@@ -1062,8 +1051,7 @@ export const defaultSiteData: DefaultSiteData = {
           status: "published",
           createdAt: "2023-12-30T00:00:00Z",
           updatedAt: "2023-12-30T00:00:00Z",
-          publishedAt: "2023-12-30T00:00:00Z",
-          images: []
+          publishedAt: "2023-12-30T00:00:00Z"
         }
       ]
     },
