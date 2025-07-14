@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye } from 'lucide-react'
+import { ArrowLeft, Save, Eye, X } from 'lucide-react'
 import { createArticle } from '@/lib/services/dataService'
 import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
@@ -42,7 +42,25 @@ export default function CreateNewsPage() {
     updatedAt: new Date().toISOString()
   }
 
+  // 변경 사항 확인 함수 (빈 값에서 변경되었는지 확인)
+  const hasChanges = () => {
+    return title.trim() !== '' || 
+           content.trim() !== '' || 
+           category !== 'news' || 
+           status !== 'draft' || 
+           date !== new Date().toISOString().split('T')[0]
+  }
 
+  // 취소 핸들러
+  const handleCancel = () => {
+    if (hasChanges()) {
+      if (confirm('작성 중인 내용이 저장되지 않습니다. 정말 나가시겠습니까?')) {
+        router.push('/admin/community/news')
+      }
+    } else {
+      router.push('/admin/community/news')
+    }
+  }
 
   // 폼 제출
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,11 +90,11 @@ export default function CreateNewsPage() {
 
       const articleId = await createArticle(articleData)
       
-      console.log('기사 생성 완료:', articleId)
+      console.log('게시글 생성 완료:', articleId)
       router.push('/admin/community/news')
     } catch (error) {
-      console.error('기사 생성 실패:', error)
-      alert('기사 생성에 실패했습니다.')
+      console.error('게시글 생성 실패:', error)
+      alert('게시글 생성에 실패했습니다.')
     } finally {
       setIsSubmitting(false)
     }
@@ -107,6 +125,14 @@ export default function CreateNewsPage() {
               <h1 className="text-xl font-bold text-gray-900">미리보기</h1>
             </div>
             
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            >
+              <X size={20} />
+              취소
+            </button>
             <button
               type="button"
               onClick={togglePreview}
@@ -142,10 +168,18 @@ export default function CreateNewsPage() {
               <ArrowLeft size={20} />
               돌아가기
             </button>
-            <h1 className="text-xl font-bold text-gray-900">뉴스 작성</h1>
+            <h1 className="text-xl font-bold text-gray-900">게시글 작성</h1>
           </div>
           
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            >
+              <X size={20} />
+              취소
+            </button>
             <button
               type="button"
               onClick={togglePreview}
@@ -199,9 +233,8 @@ export default function CreateNewsPage() {
                       onChange={(e) => setStatus(e.target.value as Article['status'])}
                       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
-                      <option value="draft">초안</option>
+                      <option value="draft">임시저장</option>
                       <option value="published">게시됨</option>
-                      <option value="archived">보관됨</option>
                     </select>
                   </div>
                   <div>

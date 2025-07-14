@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye, Trash2 } from 'lucide-react'
+import { ArrowLeft, Save, Eye, Trash2, X } from 'lucide-react'
 import { getArticleById, updateArticle, deleteArticle } from '@/lib/services/dataService'
 import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
@@ -28,6 +28,15 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
   const [category, setCategory] = useState<Article['category']>('news')
   const [status, setStatus] = useState<Article['status']>('draft')
   const [date, setDate] = useState('')
+
+  // 초기 데이터 저장 (변경 감지용)
+  const [initialData, setInitialData] = useState({
+    title: '',
+    content: '',
+    category: 'news' as Article['category'],
+    status: 'draft' as Article['status'],
+    date: ''
+  })
 
   // 카테고리 데이터
   const categories: CategoryItem[] = [
@@ -74,6 +83,15 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
       setCategory(article.category)
       setStatus(article.status)
       setDate(article.date)
+
+      // 초기 데이터 저장
+      setInitialData({
+        title: article.title,
+        content: article.contentHtml || '',
+        category: article.category,
+        status: article.status,
+        date: article.date
+      })
     } catch (error) {
       console.error('뉴스 로드 실패:', error)
       setNotFound(true)
@@ -119,6 +137,26 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
       alert('뉴스 업데이트에 실패했습니다.')
     } finally {
       setIsSubmitting(false)
+    }
+  }
+
+  // 변경 사항 확인 함수
+  const hasChanges = () => {
+    return title !== initialData.title ||
+           content !== initialData.content ||
+           category !== initialData.category ||
+           status !== initialData.status ||
+           date !== initialData.date
+  }
+
+  // 취소 핸들러
+  const handleCancel = () => {
+    if (hasChanges()) {
+      if (confirm('변경 사항이 저장되지 않습니다. 정말 나가시겠습니까?')) {
+        router.push('/admin/community/news')
+      }
+    } else {
+      router.push('/admin/community/news')
     }
   }
 
@@ -198,6 +236,14 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
             <div className="flex items-center gap-3">
               <button
                 type="button"
+                onClick={handleCancel}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+              >
+                <X size={20} />
+                취소
+              </button>
+              <button
+                type="button"
                 onClick={togglePreview}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
@@ -246,6 +292,14 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
           </div>
           
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+            >
+              <X size={20} />
+              취소
+            </button>
             <button
               type="button"
               onClick={togglePreview}
@@ -308,9 +362,8 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
                       onChange={(e) => setStatus(e.target.value as Article['status'])}
                       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
-                      <option value="draft">초안</option>
+                      <option value="draft">임시저장</option>
                       <option value="published">게시됨</option>
-                      <option value="archived">보관됨</option>
                     </select>
                   </div>
                   <div>
