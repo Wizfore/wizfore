@@ -311,7 +311,7 @@ const TextAnimateBase = ({
   animation = "fadeIn",
   ...props
 }: TextAnimateProps) => {
-  const MotionComponent = motion.create(Component);
+  const MotionComponent = motion(Component as any);
 
   let segments: string[] = [];
   switch (by) {
