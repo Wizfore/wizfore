@@ -145,7 +145,7 @@ export default function LoginPage() {
             )}
           </button>
 
-          {/* 임시 테스트 계정 안내 */}
+          {/* 임시 테스트 계정 안내
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h3 className="text-sm font-medium text-blue-800 mb-2">테스트 계정</h3>
             <div className="text-xs text-blue-700 space-y-1">
@@ -154,7 +154,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* 계정 생성 안내 */}
+          계정 생성 안내
           <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <div className="flex items-center space-x-2 mb-2">
               <Database className="w-4 h-4 text-yellow-600" />
@@ -170,7 +170,7 @@ export default function LoginPage() {
             >
               개발자 도구에서 계정 생성하기
             </button>
-          </div>
+          </div> */}
         </form>
 
         {/* 하단 링크 */}
