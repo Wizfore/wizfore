@@ -3,9 +3,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Building2, Users, Heart, Calendar } from 'lucide-react'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
-import type { MainService } from '@/types'
+import { getMainServices } from '@/lib/services/dataService'
+import type { MainServices } from '@/types'
 
 const serviceIcons = {
   1: Building2,
@@ -38,19 +37,14 @@ const serviceColors = {
 }
 
 const MainServicesSection = () => {
-  const [mainServices, setMainServices] = useState<MainService[]>([])
+  const [mainServicesData, setMainServicesData] = useState<MainServices | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchMainServices = async () => {
+    const fetchMainServicesData = async () => {
       try {
-        const docRef = doc(db, 'siteInfo', 'main')
-        const docSnap = await getDoc(docRef)
-        
-        if (docSnap.exists()) {
-          const data = docSnap.data()
-          setMainServices(data.mainServices || [])
-        }
+        const data = await getMainServices()
+        setMainServicesData(data)
       } catch (error) {
         console.error('Error fetching main services:', error)
       } finally {
@@ -58,7 +52,7 @@ const MainServicesSection = () => {
       }
     }
 
-    fetchMainServices()
+    fetchMainServicesData()
   }, [])
 
   if (loading) {
@@ -82,32 +76,34 @@ const MainServicesSection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-wizfore-text-primary mb-6">
-            &ldquo;주요 사업 분야&rdquo;
+            {mainServicesData?.aboutMessage.title || '"주요 사업 분야"'}
           </h2>
           
           <div className="max-w-4xl mx-auto space-y-4 text-lg text-wizfore-text-primary">
-            <p>
-              위즈포레 사회서비스센터는
-              <strong className="text-wizfore-text-brand"> 다양한 전문 사업</strong>을 통해
-              <strong className="text-wizfore-text-brand"> 종합적인 치료 서비스</strong>를 제공합니다. 
-              아동부터 성인까지
-              <strong className="text-wizfore-text-brand"> 생애주기별 맞춤 지원</strong>으로 
-              함께 성장하는 지역사회를 만들어갑니다.
-            </p>
-            
-            <p className="text-base text-wizfore-text-secondary">
-              각 사업 분야별로 전문 자격을 갖춘 치료사들이 개별 맞춤형 서비스를 제공하고 있습니다.
-            </p>
-            
-            <p className="text-base text-wizfore-text-secondary">
-              자세한 상담 및 서비스 이용 문의는 센터로 연락 주시기 바랍니다.
-              <strong className="text-wizfore-text-brand"> 지속적으로 사업 영역을 확대</strong>하고 있습니다.
-            </p>
+            {mainServicesData?.aboutMessage.description.split('\n\n').map((paragraph, index) => {
+              const highlightKeywords = mainServicesData.aboutMessage.highlightKeywords || []
+              let processedParagraph = paragraph
+              
+              highlightKeywords.forEach(keyword => {
+                processedParagraph = processedParagraph.replace(
+                  keyword,
+                  `<strong className="text-wizfore-text-brand">${keyword}</strong>`
+                )
+              })
+              
+              return (
+                <p 
+                  key={index} 
+                  className={index === 0 ? "text-lg" : "text-base text-wizfore-text-secondary"}
+                  dangerouslySetInnerHTML={{ __html: processedParagraph }}
+                />
+              )
+            })}
           </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {mainServices
+          {mainServicesData?.services
             .sort((a, b) => a.order - b.order)
             .map((service, index) => {
               const IconComponent = serviceIcons[service.order as keyof typeof serviceIcons] || Building2
@@ -149,7 +145,7 @@ const MainServicesSection = () => {
                     <div className="space-y-2">
                       <h4 className="font-semibold text-wizfore-text-primary text-sm">세부 서비스:</h4>
                       <ul className="space-y-1">
-                        {service.details.map((detail, detailIndex) => (
+                        {service.details.map((detail: string, detailIndex: number) => (
                           <li key={detailIndex} className="text-wizfore-text-secondary text-sm flex items-start">
                             <span className="w-1.5 h-1.5 bg-wizfore-warm-brown rounded-full mt-2 mr-2 flex-shrink-0"></span>
                             {detail}
