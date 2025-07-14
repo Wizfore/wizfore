@@ -54,7 +54,6 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     contentHtml: content || '<p>내용을 입력하세요</p>',
     category,
     date,
-    images: [],
     status,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -124,7 +123,6 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
         contentHtml: content.trim(),
         category,
         status,
-        images: [],
         date: date,
       }
 
