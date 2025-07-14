@@ -58,7 +58,7 @@ export default function SettingsPage() {
     }
     
     // 메인 서비스 검증 (빈 서비스는 제외)
-    siteInfo.mainServices.forEach((service, index) => {
+    siteInfo.mainServices.services.forEach((service, index) => {
       // 모든 필드가 비어있는 서비스는 검증에서 제외
       if (!service.title.trim() && !service.description.trim() && !service.startYear.trim()) {
         return
@@ -93,9 +93,12 @@ export default function SettingsPage() {
       // 저장 전 빈 서비스 제거
       const cleanedSiteInfo = {
         ...siteInfo,
-        mainServices: siteInfo.mainServices.filter(service => 
-          service.title.trim() || service.description.trim() || service.startYear.trim()
-        )
+        mainServices: {
+          ...siteInfo.mainServices,
+          services: siteInfo.mainServices.services.filter(service => 
+            service.title.trim() || service.description.trim() || service.startYear.trim()
+          )
+        }
       }
       
       await updateSiteInfo(cleanedSiteInfo)
@@ -457,154 +460,321 @@ export default function SettingsPage() {
         )}
 
         {activeTab === 'services' && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">메인 서비스</h2>
-              <button
-                onClick={() => {
-                  const newService = {
-                    title: "",
-                    description: "",
-                    startYear: "",
-                    order: siteInfo.mainServices.length + 1
-                  }
-                  setSiteInfo(prev => ({
-                    ...prev,
-                    mainServices: [...prev.mainServices, newService]
-                  }))
-                }}
-                className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
-              >
-                <Plus className="w-4 h-4" />
-                <span>서비스 추가</span>
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              {siteInfo.mainServices.slice().reverse().map((service, reversedIndex) => {
-                const originalIndex = siteInfo.mainServices.length - 1 - reversedIndex
-                return (
-                <div key={originalIndex} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <GripVertical className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-medium text-gray-700">서비스 {originalIndex + 1}</span>
-                    </div>
+          <div className="space-y-8">
+            {/* 소개 메시지 섹션 */}
+            <div className="space-y-6">
+              <h2 className="text-lg font-semibold text-gray-900">소개 메시지</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    제목
+                  </label>
+                  <input
+                    type="text"
+                    value={siteInfo.mainServices.aboutMessage.title}
+                    onChange={(e) => setSiteInfo(prev => ({ 
+                      ...prev, 
+                      mainServices: {
+                        ...prev.mainServices,
+                        aboutMessage: {
+                          ...prev.mainServices.aboutMessage,
+                          title: e.target.value
+                        }
+                      }
+                    }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="주요 사업 분야 제목"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    하이라이트 키워드
+                  </label>
+                  <div className="space-y-2">
+                    {siteInfo.mainServices.aboutMessage.highlightKeywords.map((keyword, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          value={keyword}
+                          onChange={(e) => {
+                            const newKeywords = [...siteInfo.mainServices.aboutMessage.highlightKeywords]
+                            newKeywords[index] = e.target.value
+                            setSiteInfo(prev => ({
+                              ...prev,
+                              mainServices: {
+                                ...prev.mainServices,
+                                aboutMessage: {
+                                  ...prev.mainServices.aboutMessage,
+                                  highlightKeywords: newKeywords
+                                }
+                              }
+                            }))
+                          }}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="하이라이트할 키워드"
+                        />
+                        <button
+                          onClick={() => {
+                            const newKeywords = siteInfo.mainServices.aboutMessage.highlightKeywords.filter((_, i) => i !== index)
+                            setSiteInfo(prev => ({
+                              ...prev,
+                              mainServices: {
+                                ...prev.mainServices,
+                                aboutMessage: {
+                                  ...prev.mainServices.aboutMessage,
+                                  highlightKeywords: newKeywords
+                                }
+                              }
+                            }))
+                          }}
+                          className="text-red-600 hover:text-red-700 p-1"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
                     <button
                       onClick={() => {
-                        const newServices = siteInfo.mainServices.filter((_, i) => i !== originalIndex)
-                        setSiteInfo(prev => ({ ...prev, mainServices: newServices }))
+                        const newKeywords = [...siteInfo.mainServices.aboutMessage.highlightKeywords, ""]
+                        setSiteInfo(prev => ({
+                          ...prev,
+                          mainServices: {
+                            ...prev.mainServices,
+                            aboutMessage: {
+                              ...prev.mainServices.aboutMessage,
+                              highlightKeywords: newKeywords
+                            }
+                          }
+                        }))
                       }}
-                      className="text-red-600 hover:text-red-700 p-1"
+                      className="text-blue-600 hover:text-blue-700 text-sm"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      + 키워드 추가
                     </button>
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        서비스명
-                      </label>
-                      <input
-                        type="text"
-                        value={service.title}
-                        onChange={(e) => {
-                          const newServices = [...siteInfo.mainServices]
-                          newServices[originalIndex] = { ...service, title: e.target.value }
-                          setSiteInfo(prev => ({ ...prev, mainServices: newServices }))
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  설명
+                </label>
+                <textarea
+                  value={siteInfo.mainServices.aboutMessage.description}
+                  onChange={(e) => setSiteInfo(prev => ({ 
+                    ...prev, 
+                    mainServices: {
+                      ...prev.mainServices,
+                      aboutMessage: {
+                        ...prev.mainServices.aboutMessage,
+                        description: e.target.value
+                      }
+                    }
+                  }))}
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="메인 서비스 소개 내용을 입력하세요. \n\n으로 문단을 구분할 수 있습니다."
+                />
+              </div>
+            </div>
+
+            {/* 서비스 목록 섹션 */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-gray-900">서비스 목록</h2>
+                <button
+                  onClick={() => {
+                    const newService = {
+                      title: "",
+                      description: "",
+                      startYear: "",
+                      order: siteInfo.mainServices.services.length + 1
+                    }
+                    setSiteInfo(prev => ({
+                      ...prev,
+                      mainServices: {
+                        ...prev.mainServices,
+                        services: [...prev.mainServices.services, newService]
+                      }
+                    }))
+                  }}
+                  className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>서비스 추가</span>
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {siteInfo.mainServices.services.slice().reverse().map((service, reversedIndex) => {
+                  const originalIndex = siteInfo.mainServices.services.length - 1 - reversedIndex
+                  return (
+                  <div key={originalIndex} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-2">
+                        <GripVertical className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm font-medium text-gray-700">서비스 {originalIndex + 1}</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          const newServices = siteInfo.mainServices.services.filter((_, i) => i !== originalIndex)
+                          setSiteInfo(prev => ({ 
+                            ...prev, 
+                            mainServices: {
+                              ...prev.mainServices,
+                              services: newServices
+                            }
+                          }))
                         }}
+                        className="text-red-600 hover:text-red-700 p-1"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          서비스명
+                        </label>
+                        <input
+                          type="text"
+                          value={service.title}
+                          onChange={(e) => {
+                            const newServices = [...siteInfo.mainServices.services]
+                            newServices[originalIndex] = { ...service, title: e.target.value }
+                            setSiteInfo(prev => ({ 
+                              ...prev, 
+                              mainServices: {
+                                ...prev.mainServices,
+                                services: newServices
+                              }
+                            }))
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="서비스 제목을 입력하세요"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          시작년도
+                        </label>
+                        <input
+                          type="text"
+                          value={service.startYear}
+                          onChange={(e) => {
+                            const newServices = [...siteInfo.mainServices.services]
+                            newServices[originalIndex] = { ...service, startYear: e.target.value }
+                            setSiteInfo(prev => ({ 
+                              ...prev, 
+                              mainServices: {
+                                ...prev.mainServices,
+                                services: newServices
+                              }
+                            }))
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="예: 2016"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        서비스 설명
+                      </label>
+                      <textarea
+                        value={service.description}
+                        onChange={(e) => {
+                          const newServices = [...siteInfo.mainServices.services]
+                          newServices[originalIndex] = { ...service, description: e.target.value }
+                          setSiteInfo(prev => ({ 
+                            ...prev, 
+                            mainServices: {
+                              ...prev.mainServices,
+                              services: newServices
+                            }
+                          }))
+                        }}
+                        rows={3}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="서비스 제목을 입력하세요"
+                        placeholder="서비스에 대한 설명을 입력하세요"
                       />
                     </div>
                     
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        시작년도
-                      </label>
-                      <input
-                        type="text"
-                        value={service.startYear}
-                        onChange={(e) => {
-                          const newServices = [...siteInfo.mainServices]
-                          newServices[originalIndex] = { ...service, startYear: e.target.value }
-                          setSiteInfo(prev => ({ ...prev, mainServices: newServices }))
-                        }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="예: 2016"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      서비스 설명
-                    </label>
-                    <textarea
-                      value={service.description}
-                      onChange={(e) => {
-                        const newServices = [...siteInfo.mainServices]
-                        newServices[originalIndex] = { ...service, description: e.target.value }
-                        setSiteInfo(prev => ({ ...prev, mainServices: newServices }))
-                      }}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="서비스에 대한 설명을 입력하세요"
-                    />
-                  </div>
-                  
-                  {service.details && (
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        세부사항
-                      </label>
-                      <div className="space-y-2">
-                        {service.details.map((detail, detailIndex) => (
-                          <div key={detailIndex} className="flex items-center space-x-2">
-                            <input
-                              type="text"
-                              value={detail}
-                              onChange={(e) => {
-                                const newServices = [...siteInfo.mainServices]
-                                const newDetails = [...(service.details || [])]
-                                newDetails[detailIndex] = e.target.value
-                                newServices[originalIndex] = { ...service, details: newDetails }
-                                setSiteInfo(prev => ({ ...prev, mainServices: newServices }))
-                              }}
-                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              placeholder="세부사항을 입력하세요"
-                            />
-                            <button
-                              onClick={() => {
-                                const newServices = [...siteInfo.mainServices]
-                                const newDetails = (service.details || []).filter((_, i) => i !== detailIndex)
-                                newServices[originalIndex] = { ...service, details: newDetails }
-                                setSiteInfo(prev => ({ ...prev, mainServices: newServices }))
-                              }}
-                              className="text-red-600 hover:text-red-700 p-1"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                        <button
-                          onClick={() => {
-                            const newServices = [...siteInfo.mainServices]
-                            const newDetails = [...(service.details || []), ""]
-                            newServices[originalIndex] = { ...service, details: newDetails }
-                            setSiteInfo(prev => ({ ...prev, mainServices: newServices }))
-                          }}
-                          className="text-blue-600 hover:text-blue-700 text-sm"
-                        >
-                          + 세부사항 추가
-                        </button>
+                    {service.details && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          세부사항
+                        </label>
+                        <div className="space-y-2">
+                          {service.details.map((detail, detailIndex) => (
+                            <div key={detailIndex} className="flex items-center space-x-2">
+                              <input
+                                type="text"
+                                value={detail}
+                                onChange={(e) => {
+                                  const newServices = [...siteInfo.mainServices.services]
+                                  const newDetails = [...(service.details || [])]
+                                  newDetails[detailIndex] = e.target.value
+                                  newServices[originalIndex] = { ...service, details: newDetails }
+                                  setSiteInfo(prev => ({ 
+                                    ...prev, 
+                                    mainServices: {
+                                      ...prev.mainServices,
+                                      services: newServices
+                                    }
+                                  }))
+                                }}
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="세부사항을 입력하세요"
+                              />
+                              <button
+                                onClick={() => {
+                                  const newServices = [...siteInfo.mainServices.services]
+                                  const newDetails = (service.details || []).filter((_, i) => i !== detailIndex)
+                                  newServices[originalIndex] = { ...service, details: newDetails }
+                                  setSiteInfo(prev => ({ 
+                                    ...prev, 
+                                    mainServices: {
+                                      ...prev.mainServices,
+                                      services: newServices
+                                    }
+                                  }))
+                                }}
+                                className="text-red-600 hover:text-red-700 p-1"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const newServices = [...siteInfo.mainServices.services]
+                              const newDetails = [...(service.details || []), ""]
+                              newServices[originalIndex] = { ...service, details: newDetails }
+                              setSiteInfo(prev => ({ 
+                                ...prev, 
+                                mainServices: {
+                                  ...prev.mainServices,
+                                  services: newServices
+                                }
+                              }))
+                            }}
+                            className="text-blue-600 hover:text-blue-700 text-sm"
+                          >
+                            + 세부사항 추가
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-                )
-              })}
+                    )}
+                  </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         )}
