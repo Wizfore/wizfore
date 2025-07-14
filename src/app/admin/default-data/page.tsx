@@ -20,7 +20,8 @@ import {
   addDefaultDataByCategory, 
   checkAllCategoriesDataStatus,
   deleteAllDefaultData,
-  addAllDefaultData
+  addAllDefaultData,
+  deleteCategoryData
 } from '@/lib/services/seedService'
 import ConfirmDialog from '@/components/ui/ConfirmDialog'
 import ProgressDialog from '@/components/ui/ProgressDialog'
@@ -82,14 +83,6 @@ const dataCategories: DataCategory[] = [
     icon: Home,
     collections: ['homeConfig'],
     color: 'indigo'
-  },
-  {
-    id: 'site-assets',
-    title: '사이트 에셋',
-    description: '이미지 URL과 메타데이터를 추가합니다.',
-    icon: Image,
-    collections: ['siteAssets'],
-    color: 'teal'
   }
 ]
 
@@ -98,9 +91,10 @@ interface DataCategoryCardProps {
   hasData: boolean
   isLoading: boolean
   onAddData: (categoryId: string) => void
+  onDeleteData: (categoryId: string) => void
 }
 
-function DataCategoryCard({ category, hasData, isLoading, onAddData }: DataCategoryCardProps) {
+function DataCategoryCard({ category, hasData, isLoading, onAddData, onDeleteData }: DataCategoryCardProps) {
   const colorClasses = {
     blue: 'bg-blue-50 border-blue-200 text-blue-900',
     green: 'bg-green-50 border-green-200 text-green-900',
@@ -169,17 +163,27 @@ function DataCategoryCard({ category, hasData, isLoading, onAddData }: DataCateg
         </div>
       </div>
 
-      <button
-        onClick={() => onAddData(category.id)}
-        disabled={hasData || isLoading}
-        className={`w-full px-4 py-2 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-          hasData 
-            ? 'bg-gray-400' 
-            : buttonColorClasses[category.color as keyof typeof buttonColorClasses]
-        }`}
-      >
-        {isLoading ? '추가 중...' : hasData ? '이미 추가됨' : '기본 데이터 추가'}
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={() => onAddData(category.id)}
+          disabled={hasData || isLoading}
+          className={`flex-1 px-4 py-2 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+            hasData 
+              ? 'bg-gray-400' 
+              : buttonColorClasses[category.color as keyof typeof buttonColorClasses]
+          }`}
+        >
+          {isLoading ? '추가 중...' : hasData ? '이미 추가됨' : '기본 데이터 추가'}
+        </button>
+        
+        <button
+          onClick={() => onDeleteData(category.id)}
+          disabled={!hasData || isLoading}
+          className="flex-1 px-4 py-2 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-red-600 hover:bg-red-700 disabled:bg-gray-400"
+        >
+          {isLoading ? '삭제 중...' : !hasData ? '삭제할 데이터 없음' : '기본 데이터 삭제'}
+        </button>
+      </div>
     </div>
   )
 }
@@ -229,6 +233,25 @@ export default function DefaultDataPage() {
     } catch (error) {
       console.error('데이터 추가 실패:', error)
       alert('데이터 추가에 실패했습니다. 다시 시도해주세요.')
+    } finally {
+      setLoadingStates(prev => ({ ...prev, [categoryId]: false }))
+    }
+  }
+
+  const handleDeleteData = async (categoryId: string) => {
+    if (!confirm('정말로 이 카테고리의 기본 데이터를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.')) {
+      return
+    }
+
+    setLoadingStates(prev => ({ ...prev, [categoryId]: true }))
+    
+    try {
+      await deleteCategoryData(categoryId)
+      setDataStatus(prev => ({ ...prev, [categoryId]: false }))
+      alert('기본 데이터가 성공적으로 삭제되었습니다!')
+    } catch (error) {
+      console.error('데이터 삭제 실패:', error)
+      alert('데이터 삭제에 실패했습니다. 다시 시도해주세요.')
     } finally {
       setLoadingStates(prev => ({ ...prev, [categoryId]: false }))
     }
@@ -402,6 +425,7 @@ export default function DefaultDataPage() {
               hasData={dataStatus[category.id] || false}
               isLoading={loadingStates[category.id] || false}
               onAddData={handleAddData}
+              onDeleteData={handleDeleteData}
             />
           ))}
         </div>
