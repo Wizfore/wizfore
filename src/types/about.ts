@@ -10,6 +10,7 @@ export interface DirectorInfo {
   aboutMessage?: {
     title: string
     description: string
+    highlightKeywords?: string[]
   }
   hero?: {
     title: string

@@ -102,15 +102,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
                     ) : (
                       <>
                         {message.split(' ').map((word, wordIndex) => {
-                          const shouldHighlight = 
-                            word.includes('체계적이고') || 
-                            word.includes('전문적인') ||
-                            word.includes('전문성과') ||
-                            word.includes('진실성을') ||
-                            word.includes('겸비한') ||
-                            word.includes('전문가') ||
-                            word.includes('선생님이') ||
-                            word.includes('함께')
+                          const highlightKeywords = data?.director?.aboutMessage?.highlightKeywords || []
+                          const shouldHighlight = highlightKeywords.some(keyword => word.includes(keyword))
                           
                           return shouldHighlight ? (
                             <strong key={wordIndex} className="text-mindstory-lime font-semibold"> {word}</strong>
