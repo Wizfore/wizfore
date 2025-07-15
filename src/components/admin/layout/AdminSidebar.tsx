@@ -31,13 +31,7 @@ const menuItems = [
   {
     title: '사이트 설정',
     href: '/admin/settings',
-    icon: Settings,
-    subItems: [
-      { title: '기관 기본정보', href: '/admin/settings/organization' },
-      { title: 'SEO 설정', href: '/admin/settings/seo' },
-      { title: '관리자 계정', href: '/admin/settings/accounts' },
-      { title: '백업 관리', href: '/admin/settings/backup' }
-    ]
+    icon: Settings
   },
   {
     title: '홈페이지 관리',
@@ -96,7 +90,7 @@ const menuItems = [
   },
   {
     title: '1:1 문의 관리',
-    href: '/admin/contact/inquiries',
+    href: '/admin/contact',
     icon: HelpCircle
   },
   {
