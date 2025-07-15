@@ -48,18 +48,21 @@ export const defaultSiteData: DefaultSiteData = {
         {
           title: "부모/가족지원서비스",
           description: "가족이음(학부모코칭)서비스",
+          details: [],
           startYear: "2016",
           order: 2
         },
         {
           title: "발달장애인 주간활동 및 발달장애학생 방과후활동서비스",
           description: "발달장애인 평생교육프로그램(일상생활훈련/지역사회적응/문화예술체험 등)",
+          details: [],
           startYear: "2020",
           order: 3
         },
         {
           title: "문체부 장애인 스포츠이용권 서비스 제공기관",
           description: "장애인 스포츠 활동 지원 서비스",
+          details: [],
           startYear: "2024",
           order: 4
         }

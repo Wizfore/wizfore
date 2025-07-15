@@ -42,7 +42,7 @@ export interface ContactInfo {
 export interface MainService {
   title: string
   description: string
-  details?: string[]
+  details: string[]
   startYear: string
   order: number
 }

@@ -589,6 +589,7 @@ export default function SettingsPage() {
                     const newService = {
                       title: "",
                       description: "",
+                      details: [],
                       startYear: "",
                       order: siteInfo.mainServices.services.length + 1
                     }
