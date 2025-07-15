@@ -82,11 +82,7 @@ const menuItems = [
   {
     title: '커뮤니티 관리',
     href: '/admin/community',
-    icon: MessageSquare,
-    subItems: [
-      { title: '공지사항', href: '/admin/community/news' },
-      { title: 'SNS 관리', href: '/admin/community/sns' }
-    ]
+    icon: MessageSquare
   },
   {
     title: '1:1 문의 관리',
