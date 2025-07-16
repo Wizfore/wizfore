@@ -78,4 +78,4 @@ node_modules/
 tasks.json
 tasks/ 
 
-/.idx/
+/.process_data/

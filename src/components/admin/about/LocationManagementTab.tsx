@@ -288,18 +288,33 @@ export default function LocationManagementTab() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               상세 안내
             </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newTransportation.description}
-                onChange={(e) => setNewTransportation({ ...newTransportation, description: e.target.value })}
-                onKeyPress={(e) => e.key === 'Enter' && addTransportation()}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="교통편 상세 안내"
-              />
-              <Button onClick={addTransportation} disabled={!newTransportation.description.trim()}>
-                <Plus className="h-4 w-4" />
-              </Button>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="md:col-span-2">
+                <select
+                  value={newTransportation.type}
+                  onChange={(e) => setNewTransportation({ ...newTransportation, type: e.target.value as TransportationType })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="지하철">지하철</option>
+                  <option value="버스">버스</option>
+                  <option value="차">차</option>
+                </select>
+              </div>
+              <div className="md:col-span-8">
+                <input
+                  type="text"
+                  value={newTransportation.description}
+                  onChange={(e) => setNewTransportation({ ...newTransportation, description: e.target.value })}
+                  onKeyPress={(e) => e.key === 'Enter' && addTransportation()}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="교통편 상세 안내"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <Button onClick={addTransportation} disabled={!newTransportation.description.trim()}>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>

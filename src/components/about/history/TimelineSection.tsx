@@ -82,7 +82,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ milestones = [] }) =>
                           {/* 날짜 */}
                           <div className="w-20 flex-shrink-0">
                             <span className="text-lg font-bold text-wizfore-text-primary">
-                              {milestone.month.padStart(2, '0')}.{new Date().getDate().toString().padStart(2, '0')}
+                              {milestone.month.padStart(2,"")} 월
                             </span>
                           </div>
 
