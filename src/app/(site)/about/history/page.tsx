@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getHistoryData, getHistoryHero } from '@/lib/services/dataService'
-import type { Milestone } from '@/types'
+import { getHistoryData, getHistoryHero, getHistoryStats } from '@/lib/services/dataService'
+import type { Milestone, HistoryStats } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import StatsSection from '@/components/about/history/StatsSection'
 import TimelineSection from '@/components/about/history/TimelineSection'
@@ -20,6 +20,7 @@ export default function HistoryPage() {
     description: string
     imageUrl?: string
   } | null>(null)
+  const [stats, setStats] = useState<HistoryStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -27,12 +28,14 @@ export default function HistoryPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [historyData, heroData] = await Promise.all([
+        const [historyData, heroData, statsData] = await Promise.all([
           getHistoryData(),
-          getHistoryHero()
+          getHistoryHero(),
+          getHistoryStats()
         ])
         setData(historyData)
         setHero(heroData)
+        setStats(statsData)
         setError(null)
       } catch (err) {
         console.error('Error fetching history data:', err)
@@ -100,7 +103,7 @@ export default function HistoryPage() {
         description={hero?.description || "상시와 사회서비스센터의 역사와 발전 과정을 만나보세요"}
         backgroundImage={hero?.imageUrl || '/images/hero/defaultHero.jpg'}
       />
-      <StatsSection milestones={data.milestones} />
+      <StatsSection milestones={data.milestones} stats={stats} />
       <TimelineSection milestones={data.milestones} />
     </div>
   )
