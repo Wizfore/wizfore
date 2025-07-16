@@ -132,6 +132,44 @@ export const defaultSiteData: DefaultSiteData = {
         description: "위즈포레의 성장과 발전 과정을 시간순으로 소개합니다",
         imageUrl: ""
       },
+      stats: {
+        title: "성장 통계",
+        description: "센터의 주요 성과를 숫자로 확인해보세요",
+        cards: [
+          {
+            id: "establishment",
+            title: "서비스 설립 및 지정",
+            description: "다양한 사회서비스 분야의 설립과 지정을 통한 전문성 확보",
+            iconPath: "",
+            order: 1,
+            enabled: true
+          },
+          {
+            id: "partnership",
+            title: "협력 관계 구축", 
+            description: "전문기관과의 업무협약을 통한 서비스 품질 향상",
+            iconPath: "",
+            order: 2,
+            enabled: true
+          },
+          {
+            id: "award",
+            title: "수상 및 표창",
+            description: "우수한 서비스 운영으로 받은 각종 수상과 표창",
+            iconPath: "",
+            order: 3,
+            enabled: true
+          },
+          {
+            id: "duration",
+            title: "운영 연수",
+            description: "설립부터 현재까지 지속적인 성장과 발전",
+            iconPath: "",
+            order: 4,
+            enabled: true
+          }
+        ]
+      },
       milestones: [
         { year: "2016", month: "1", event: "위즈포레사회서비스센터 설립" },
         { year: "2016", month: "2", event: "아동청소년 심리치유서비스 제공기관 등록" },

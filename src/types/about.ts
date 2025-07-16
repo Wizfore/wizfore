@@ -35,6 +35,22 @@ export interface HistoryInfo {
     imageUrl?: string
   }
   milestones: Milestone[]
+  stats?: HistoryStats
+}
+
+export interface StatsCard {
+  id: string
+  title: string
+  description: string
+  iconPath: string
+  order: number
+  enabled: boolean
+}
+
+export interface HistoryStats {
+  title: string
+  description: string
+  cards: StatsCard[]
 }
 
 export interface AdvisorsInfo {

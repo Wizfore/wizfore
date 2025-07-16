@@ -28,11 +28,6 @@ type CategoryType = {
   programs?: ProgramType[]
 }
 
-type InquiryCategory = {
-  value: string
-  label: string
-  order: number
-}
 
 /**
  * 사이트 기본 정보 조회
@@ -865,6 +860,34 @@ export async function updateLocationInfo(locationData: any) {
     })
   } catch (error) {
     console.error('Error updating location info:', error)
+    throw error
+  }
+}
+
+/**
+ * 센터 발자취 통계 정보 조회
+ */
+export async function getHistoryStats() {
+  try {
+    const aboutInfo = await getAboutInfo()
+    return aboutInfo.history?.stats
+  } catch (error) {
+    console.error('Error fetching history stats:', error)
+    throw error
+  }
+}
+
+/**
+ * 센터 발자취 통계 정보 업데이트
+ */
+export async function updateHistoryStats(statsData: any) {
+  try {
+    const docRef = doc(db, 'aboutInfo', 'main')
+    await updateDoc(docRef, {
+      'history.stats': statsData
+    })
+  } catch (error) {
+    console.error('Error updating history stats:', error)
     throw error
   }
 }
