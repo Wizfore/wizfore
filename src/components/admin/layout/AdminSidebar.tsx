@@ -48,14 +48,7 @@ const menuItems = [
   {
     title: '센터 소개 관리',
     href: '/admin/about',
-    icon: Building2,
-    subItems: [
-      { title: '센터장 소개', href: '/admin/about/director' },
-      { title: '센터 발자취', href: '/admin/about/history' },
-      { title: '전문 자문위원', href: '/admin/about/advisors' },
-      { title: '시설 둘러보기', href: '/admin/about/facilities' },
-      { title: '오시는 길', href: '/admin/about/directions' }
-    ]
+    icon: Building2
   },
   {
     title: '프로그램 관리',

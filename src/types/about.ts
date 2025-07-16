@@ -107,8 +107,10 @@ export interface Photo {
   date: string
 }
 
+export type TransportationType = '지하철' | '버스' | '차'
+
 export interface TransportationInfo {
-  type: string
+  type: TransportationType
   description: string
 }
 

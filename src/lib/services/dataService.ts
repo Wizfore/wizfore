@@ -808,3 +808,63 @@ export async function getMainServices() {
     throw error
   }
 }
+
+/**
+ * 센터장 정보 업데이트
+ */
+export async function updateDirectorInfo(directorData: any) {
+  try {
+    const docRef = doc(db, 'aboutInfo', 'main')
+    await updateDoc(docRef, {
+      director: directorData
+    })
+  } catch (error) {
+    console.error('Error updating director info:', error)
+    throw error
+  }
+}
+
+/**
+ * 센터 발자취 정보 업데이트
+ */
+export async function updateHistoryInfo(historyData: any) {
+  try {
+    const docRef = doc(db, 'aboutInfo', 'main')
+    await updateDoc(docRef, {
+      history: historyData
+    })
+  } catch (error) {
+    console.error('Error updating history info:', error)
+    throw error
+  }
+}
+
+/**
+ * 전문 자문위원 정보 업데이트
+ */
+export async function updateAdvisorsInfo(advisorsData: any) {
+  try {
+    const docRef = doc(db, 'aboutInfo', 'main')
+    await updateDoc(docRef, {
+      advisors: advisorsData
+    })
+  } catch (error) {
+    console.error('Error updating advisors info:', error)
+    throw error
+  }
+}
+
+/**
+ * 오시는 길 정보 업데이트
+ */
+export async function updateLocationInfo(locationData: any) {
+  try {
+    const docRef = doc(db, 'aboutInfo', 'main')
+    await updateDoc(docRef, {
+      location: locationData
+    })
+  } catch (error) {
+    console.error('Error updating location info:', error)
+    throw error
+  }
+}
