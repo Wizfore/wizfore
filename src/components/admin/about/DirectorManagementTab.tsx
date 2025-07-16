@@ -9,18 +9,79 @@ import { ImageUpload } from '@/components/admin/common/ImageUpload'
 
 export default function DirectorManagementTab() {
   const [directorData, setDirectorData] = useState<DirectorInfo | null>(null)
+  const [initialData, setInitialData] = useState<DirectorInfo | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   useEffect(() => {
     loadDirectorData()
   }, [])
 
+  // 변경사항 감지
+  useEffect(() => {
+    if (initialData && directorData) {
+      const hasChanges = !compareDirectorData(initialData, directorData)
+      setHasUnsavedChanges(hasChanges)
+    }
+  }, [directorData, initialData])
+
+  // 브라우저 종료/새로고침 시 확인
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [hasUnsavedChanges])
+
+  // 데이터 비교 함수
+  const compareDirectorData = (data1: DirectorInfo, data2: DirectorInfo): boolean => {
+    // 기본 필드 비교
+    if (data1.name !== data2.name || data1.imageUrl !== data2.imageUrl) {
+      return false
+    }
+
+    // 배열 필드 비교
+    const arrayFields: (keyof DirectorInfo)[] = ['position', 'education', 'career', 'committees', 'certifications']
+    for (const field of arrayFields) {
+      const arr1 = data1[field] as string[] || []
+      const arr2 = data2[field] as string[] || []
+      if (arr1.length !== arr2.length || !arr1.every((item, index) => item === arr2[index])) {
+        return false
+      }
+    }
+
+    // 중첩 객체 비교
+    const compareNestedObject = (obj1: any, obj2: any): boolean => {
+      if (!obj1 && !obj2) return true
+      if (!obj1 || !obj2) return false
+      return JSON.stringify(obj1) === JSON.stringify(obj2)
+    }
+
+    if (!compareNestedObject(data1.aboutMessage, data2.aboutMessage)) {
+      return false
+    }
+
+    if (!compareNestedObject(data1.hero, data2.hero)) {
+      return false
+    }
+
+    return true
+  }
+
   const loadDirectorData = async () => {
     try {
       setLoading(true)
       const data = await getAboutSectionData()
-      setDirectorData(data?.director || null)
+      const directorInfo = data?.director || null
+      setDirectorData(directorInfo)
+      setInitialData(directorInfo ? JSON.parse(JSON.stringify(directorInfo)) : null)
+      setHasUnsavedChanges(false)
     } catch (error) {
       console.error('센터장 정보 조회 실패:', error)
     } finally {
@@ -28,12 +89,40 @@ export default function DirectorManagementTab() {
     }
   }
 
+  const validateDirectorData = () => {
+    if (!directorData) return false
+    
+    const arrayFields = ['position', 'education', 'career', 'committees', 'certifications']
+    
+    for (const field of arrayFields) {
+      const fieldValue = directorData[field as keyof DirectorInfo] as string[]
+      if (fieldValue && fieldValue.length > 0) {
+        // 빈 문자열이나 공백만 있는 항목이 있는지 검사
+        const hasEmptyItem = fieldValue.some(item => !item || item.trim() === '')
+        if (hasEmptyItem) {
+          return false
+        }
+      }
+    }
+    
+    return true
+  }
+
   const handleSave = async () => {
     if (!directorData) return
+    
+    // 유효성 검사
+    if (!validateDirectorData()) {
+      alert('빈 항목이 있습니다. 모든 필드를 입력해주세요.')
+      return
+    }
     
     try {
       setSaving(true)
       await updateDirectorInfo(directorData)
+      // 저장 성공 시 초기 데이터 업데이트
+      setInitialData(JSON.parse(JSON.stringify(directorData)))
+      setHasUnsavedChanges(false)
       alert('센터장 정보가 저장되었습니다.')
     } catch (error) {
       console.error('센터장 정보 저장 실패:', error)
@@ -86,6 +175,9 @@ export default function DirectorManagementTab() {
     updateField(field, newArray)
   }
 
+  // 변경사항 상태를 부모 컴포넌트에 노출 (필요시 사용)
+  // 예: const { hasUnsavedChanges, handlePageLeave } = useDirectorTab()
+  
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -112,11 +204,102 @@ export default function DirectorManagementTab() {
         <div>
           <h2 className="text-xl font-semibold text-gray-900">센터장 소개 관리</h2>
           <p className="text-sm text-gray-600">센터장의 프로필과 인사말을 관리할 수 있습니다.</p>
+          {hasUnsavedChanges && (
+            <p className="text-sm text-amber-600 mt-1">⚠️ 저장하지 않은 변경사항이 있습니다</p>
+          )}
         </div>
-        <Button onClick={handleSave} disabled={saving}>
+        <Button 
+          onClick={handleSave} 
+          disabled={saving}
+          className={hasUnsavedChanges ? 'bg-amber-600 hover:bg-amber-700' : ''}
+        >
           <Save className="h-4 w-4 mr-2" />
           {saving ? '저장 중...' : '저장'}
         </Button>
+      </div>
+
+      {/* 히어로 섹션 */}
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">히어로 섹션</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              페이지 제목
+            </label>
+            <input
+              type="text"
+              value={directorData.hero?.title || ''}
+              onChange={(e) => updateNestedField('hero.title', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="페이지 제목"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              페이지 설명
+            </label>
+            <textarea
+              value={directorData.hero?.description || ''}
+              onChange={(e) => updateNestedField('hero.description', e.target.value)}
+              rows={2}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="페이지 설명"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              배경 이미지
+            </label>
+            <ImageUpload
+              value={directorData.hero?.imageUrl || ''}
+              onChange={(url) => updateNestedField('hero.imageUrl', url)}
+              folder="director/hero"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 인사말 */}
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">인사말</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              제목
+            </label>
+            <input
+              type="text"
+              value={directorData.aboutMessage?.title || ''}
+              onChange={(e) => updateNestedField('aboutMessage.title', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="인사말 제목"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              내용
+            </label>
+            <textarea
+              value={directorData.aboutMessage?.description || ''}
+              onChange={(e) => updateNestedField('aboutMessage.description', e.target.value)}
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="인사말 내용"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              강조 키워드 (쉼표로 구분)
+            </label>
+            <input
+              type="text"
+              value={directorData.aboutMessage?.highlightKeywords?.join(', ') || ''}
+              onChange={(e) => updateNestedField('aboutMessage.highlightKeywords', e.target.value.split(',').map(k => k.trim()).filter(k => k))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="강조할 키워드들을 쉼표로 구분하여 입력"
+            />
+          </div>
+        </div>
       </div>
 
       {/* 기본 정보 */}
@@ -208,89 +391,6 @@ export default function DirectorManagementTab() {
         />
       </div>
 
-      {/* 인사말 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">인사말</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              제목
-            </label>
-            <input
-              type="text"
-              value={directorData.aboutMessage?.title || ''}
-              onChange={(e) => updateNestedField('aboutMessage.title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="인사말 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              내용
-            </label>
-            <textarea
-              value={directorData.aboutMessage?.description || ''}
-              onChange={(e) => updateNestedField('aboutMessage.description', e.target.value)}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="인사말 내용"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              강조 키워드 (쉼표로 구분)
-            </label>
-            <input
-              type="text"
-              value={directorData.aboutMessage?.highlightKeywords?.join(', ') || ''}
-              onChange={(e) => updateNestedField('aboutMessage.highlightKeywords', e.target.value.split(',').map(k => k.trim()).filter(k => k))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="강조할 키워드들을 쉼표로 구분하여 입력"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 히어로 섹션 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">히어로 섹션</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              페이지 제목
-            </label>
-            <input
-              type="text"
-              value={directorData.hero?.title || ''}
-              onChange={(e) => updateNestedField('hero.title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="페이지 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              페이지 설명
-            </label>
-            <textarea
-              value={directorData.hero?.description || ''}
-              onChange={(e) => updateNestedField('hero.description', e.target.value)}
-              rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="페이지 설명"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              배경 이미지
-            </label>
-            <ImageUpload
-              value={directorData.hero?.imageUrl || ''}
-              onChange={(url) => updateNestedField('hero.imageUrl', url)}
-              folder="director/hero"
-            />
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
@@ -305,13 +405,8 @@ interface ArrayFieldManagerProps {
 }
 
 function ArrayFieldManager({ items, onAdd, onRemove, onUpdate, placeholder }: ArrayFieldManagerProps) {
-  const [newItem, setNewItem] = useState('')
-
   const handleAdd = () => {
-    if (newItem.trim()) {
-      onAdd(newItem.trim())
-      setNewItem('')
-    }
+    onAdd('') // 빈 문자열로 새 항목 추가
   }
 
   return (
@@ -336,14 +431,7 @@ function ArrayFieldManager({ items, onAdd, onRemove, onUpdate, placeholder }: Ar
         </div>
       ))}
       <div className="flex gap-2">
-        <input
-          type="text"
-          value={newItem}
-          onChange={(e) => setNewItem(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder={placeholder}
-        />
+        <div className="flex-1"></div>
         <Button
           type="button"
           variant="outline"
