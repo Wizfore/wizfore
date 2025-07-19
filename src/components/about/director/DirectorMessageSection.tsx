@@ -46,7 +46,16 @@ const DirectorMessageSection: React.FC<DirectorMessageSectionProps> = ({ directo
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                {message}
+                {message.split(' ').map((word, wordIndex) => {
+                  const highlightKeywords = director.aboutMessage?.highlightKeywords || []
+                  const shouldHighlight = highlightKeywords.some(keyword => word.includes(keyword))
+                  
+                  return shouldHighlight ? (
+                    <strong key={wordIndex} className="text-wizfore-coral-primary font-semibold"> {word}</strong>
+                  ) : (
+                    <span key={wordIndex}> {word}</span>
+                  )
+                })}
               </motion.p>
             ))}
           </div>

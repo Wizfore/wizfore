@@ -50,7 +50,7 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
   }
 
   // 중첩 객체 업데이트 함수
-  const updateNestedObject = (parentField: 'aboutMessage' | 'hero', field: string, value: string) => {
+  const updateNestedObject = (parentField: 'aboutMessage' | 'hero', field: string, value: string | string[]) => {
     onUpdate({
       ...data,
       [parentField]: {
@@ -100,6 +100,100 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
 
   return (
     <div className="space-y-6">
+      {/* Hero 섹션 */}
+      {data.hero && (
+        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Hero 섹션</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hero 제목
+              </label>
+              <input
+                type="text"
+                value={data.hero.title || ''}
+                onChange={(e) => updateNestedObject('hero', 'title', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Hero 섹션 제목"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hero 설명
+              </label>
+              <textarea
+                value={data.hero.description || ''}
+                onChange={(e) => updateNestedObject('hero', 'description', e.target.value)}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Hero 섹션 설명"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hero 배경 이미지
+              </label>
+              <ImageUpload
+                value={data.hero.imageUrl || ''}
+                onChange={(url: string) => updateNestedObject('hero', 'imageUrl', url)}
+                folder="hero-images"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 소개 메시지 섹션 */}
+      {data.aboutMessage && (
+        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">소개 메시지</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                제목
+              </label>
+              <input
+                type="text"
+                value={data.aboutMessage.title || ''}
+                onChange={(e) => updateNestedObject('aboutMessage', 'title', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="소개 메시지 제목"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                설명
+              </label>
+              <textarea
+                value={data.aboutMessage.description || ''}
+                onChange={(e) => updateNestedObject('aboutMessage', 'description', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="소개 메시지 설명"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                강조 키워드 (쉼표로 구분)
+              </label>
+              <input
+                type="text"
+                value={data.aboutMessage.highlightKeywords?.join(', ') || ''}
+                onChange={(e) => {
+                  const keywords = e.target.value.split(',').map(k => k.trim()).filter(k => k)
+                  updateNestedObject('aboutMessage', 'highlightKeywords', keywords)
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="예: 전문적인 치료, 개별 맞춤 서비스, 지속적인 관리"
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                설명 텍스트에서 강조하고 싶은 키워드들을 쉼표로 구분하여 입력하세요
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 기본 정보 섹션 */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">기본 정보</h3>
@@ -147,83 +241,6 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
         </div>
       </div>
 
-      {/* 소개 메시지 섹션 */}
-      {data.aboutMessage && (
-        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">소개 메시지</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                제목
-              </label>
-              <input
-                type="text"
-                value={data.aboutMessage.title || ''}
-                onChange={(e) => updateNestedObject('aboutMessage', 'title', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="소개 메시지 제목"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                설명
-              </label>
-              <textarea
-                value={data.aboutMessage.description || ''}
-                onChange={(e) => updateNestedObject('aboutMessage', 'description', e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="소개 메시지 설명"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Hero 섹션 */}
-      {data.hero && (
-        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Hero 섹션</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hero 제목
-              </label>
-              <input
-                type="text"
-                value={data.hero.title || ''}
-                onChange={(e) => updateNestedObject('hero', 'title', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Hero 섹션 제목"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hero 설명
-              </label>
-              <textarea
-                value={data.hero.description || ''}
-                onChange={(e) => updateNestedObject('hero', 'description', e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Hero 섹션 설명"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Hero 배경 이미지 URL
-              </label>
-              <input
-                type="url"
-                value={data.hero.imageUrl || ''}
-                onChange={(e) => updateNestedObject('hero', 'imageUrl', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

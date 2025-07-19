@@ -2,6 +2,7 @@
 
 import { Instagram, Youtube, Facebook, Globe } from 'lucide-react'
 import type { SnsInfo } from '@/types/community'
+import { ImageUpload } from '@/components/admin/common/ImageUpload'
 
 interface SnsManagementTabProps {
   data: SnsInfo
@@ -71,14 +72,12 @@ export default function SnsManagementTab({ data: snsData, onUpdate }: SnsManagem
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              배경 이미지 URL
+              배경 이미지
             </label>
-            <input
-              type="url"
+            <ImageUpload
               value={snsData.hero?.imageUrl || ''}
-              onChange={(e) => updateField('hero.imageUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/image.jpg"
+              onChange={(url: string) => updateField('hero.imageUrl', url)}
+              folder="hero-images"
             />
           </div>
         </div>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Plus, Trash2, Edit2, BarChart3, Eye, EyeOff } from 'lucide-react'
 import { HistoryInfo, Milestone, StatsCard } from '@/types/about'
 import { Button } from '@/components/ui/button'
+import { ImageUpload } from '@/components/admin/common/ImageUpload'
 
 interface HistoryManagementTabProps {
   data: HistoryInfo
@@ -159,96 +160,14 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              배경 이미지 URL
+              배경 이미지
             </label>
-            <input
-              type="url"
+            <ImageUpload
               value={data.hero?.imageUrl || ''}
-              onChange={(e) => updateHero('imageUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/image.jpg"
+              onChange={(url: string) => updateHero('imageUrl', url)}
+              folder="hero-images"
             />
           </div>
-        </div>
-      </div>
-
-      {/* 연혁 관리 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">연혁 관리</h3>
-          <Button onClick={addMilestone}>
-            <Plus className="h-4 w-4 mr-2" />
-            연혁 추가
-          </Button>
-        </div>
-        
-        <div className="space-y-3">
-          {data.milestones?.map((milestone, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4">
-              {editingMilestone === index ? (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">연도</label>
-                    <input
-                      type="text"
-                      value={milestone.year}
-                      onChange={(e) => updateMilestone(index, 'year', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">월</label>
-                    <select
-                      value={milestone.month}
-                      onChange={(e) => updateMilestone(index, 'month', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      {Array.from({ length: 12 }, (_, i) => (
-                        <option key={i + 1} value={i + 1}>{i + 1}월</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="md:col-span-1">
-                    <label className="block text-xs font-medium text-gray-700 mb-1">내용</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={milestone.event}
-                        onChange={(e) => updateMilestone(index, 'event', e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                      <Button size="sm" onClick={() => setEditingMilestone(null)}>
-                        완료
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <span className="font-medium">{milestone.year}년 {milestone.month}월</span>
-                    <span className="text-gray-600">{milestone.event}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditingMilestone(index)}
-                    >
-                      <Edit2 className="h-3 w-3" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeMilestone(index)}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
         </div>
       </div>
 
@@ -346,6 +265,86 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
           </div>
         </div>
       )}
+
+      {/* 연혁 관리 */}
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">연혁 관리</h3>
+          <Button onClick={addMilestone}>
+            <Plus className="h-4 w-4 mr-2" />
+            연혁 추가
+          </Button>
+        </div>
+        
+        <div className="space-y-3">
+          {data.milestones?.map((milestone, index) => (
+            <div key={index} className="border border-gray-200 rounded-lg p-4">
+              {editingMilestone === index ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">연도</label>
+                    <input
+                      type="text"
+                      value={milestone.year}
+                      onChange={(e) => updateMilestone(index, 'year', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">월</label>
+                    <select
+                      value={milestone.month}
+                      onChange={(e) => updateMilestone(index, 'month', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      {Array.from({ length: 12 }, (_, i) => (
+                        <option key={i + 1} value={i + 1}>{i + 1}월</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="md:col-span-1">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">내용</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={milestone.event}
+                        onChange={(e) => updateMilestone(index, 'event', e.target.value)}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <Button size="sm" onClick={() => setEditingMilestone(null)}>
+                        완료
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <span className="font-medium">{milestone.year}년 {milestone.month}월</span>
+                    <span className="text-gray-600">{milestone.event}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setEditingMilestone(index)}
+                    >
+                      <Edit2 className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeMilestone(index)}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

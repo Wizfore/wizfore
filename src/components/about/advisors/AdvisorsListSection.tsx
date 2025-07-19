@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import type { AdvisorInfo } from '@/types'
+import { getAdvisorDefaultImage, getAdvisorTitle } from '@/lib/utils/advisorImageUtils'
 
 interface AdvisorsListSectionProps {
   advisors: AdvisorInfo[]
@@ -13,33 +14,6 @@ interface AdvisorsListSectionProps {
 }
 
 const AdvisorsListSection: React.FC<AdvisorsListSectionProps> = ({ advisors = [], aboutMessage, loading = false }) => {
-  // 자문위원 전문분야별 기본 이미지 결정
-  const getDefaultImage = (position: string[] | string = []) => {
-    const positionArray = Array.isArray(position) ? position : [position].filter(Boolean)
-    const positionStr = positionArray.join(' ')
-    if (positionStr.includes('교수')) {
-      return '/images/advisors/defaultProfessorM.png'
-    } else if (positionStr.includes('원장') || positionStr.includes('대표')) {
-      return '/images/advisors/defaultDirectorW.png'
-    } else if (positionStr.includes('경찰') || positionStr.includes('경감')) {
-      return '/images/advisors/defaultPoliceM.png'
-    } else if (positionStr.includes('약사')) {
-      return '/images/advisors/defaultPharmacistW.png'
-    } else {
-      return '/images/advisors/defaultProfessorM.png' // 기본값
-    }
-  }
-
-  const getAdvisorTitle = (position: string[] | string = []) => {
-    const positionArray = Array.isArray(position) ? position : [position].filter(Boolean)
-    const positionStr = positionArray.join(' ')
-    if (positionStr.includes('교수')) return '교수'
-    if (positionStr.includes('원장')) return '원장'
-    if (positionStr.includes('대표')) return '대표'
-    if (positionStr.includes('약사')) return '약사'
-    if (positionStr.includes('경찰') || positionStr.includes('경감')) return '경찰'
-    return '전문가'
-  }
 
   return (
     <section className="relative py-24 bg-gray-50 overflow-hidden">
@@ -124,12 +98,12 @@ const AdvisorsListSection: React.FC<AdvisorsListSectionProps> = ({ advisors = []
                         <div className="absolute inset-0 bg-gradient-to-br from-wizfore-coral-primary/20 to-wizfore-soft-pink/20 rounded-full" />
                         <div className="relative w-full h-full bg-wizfore-light-beige rounded-full overflow-hidden border-4 border-white shadow-lg">
                           <img 
-                            src={advisor.imageUrl || getDefaultImage(advisor.position)} 
+                            src={advisor.imageUrl || getAdvisorDefaultImage(advisor.position)} 
                             alt={`${advisor.name} 자문위원`}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement
-                              target.src = getDefaultImage(advisor.position)
+                              target.src = getAdvisorDefaultImage(advisor.position)
                             }}
                           />
                         </div>

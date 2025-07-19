@@ -3,6 +3,7 @@
 import { Plus, Trash2 } from 'lucide-react'
 import { LocationInfo, TransportationInfo } from '@/types/about'
 import { Button } from '@/components/ui/button'
+import { ImageUpload } from '@/components/admin/common/ImageUpload'
 
 interface LocationManagementTabProps {
   data: LocationInfo
@@ -45,26 +46,6 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
     })
   }
 
-  // 교통편 정보 추가
-  const addTransportation = () => {
-    const newTransportation: TransportationInfo = {
-      type: '지하철',
-      description: ''
-    }
-    onUpdate({
-      ...data,
-      transportation: [...(data.transportation || []), newTransportation]
-    })
-  }
-
-  // 교통편 정보 삭제
-  const removeTransportation = (index: number) => {
-    const newTransportation = data.transportation?.filter((_, i) => i !== index) || []
-    onUpdate({
-      ...data,
-      transportation: newTransportation
-    })
-  }
 
   return (
     <div className="space-y-6">
@@ -93,13 +74,11 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">배경 이미지 URL</label>
-            <input
-              type="url"
+            <label className="block text-sm font-medium text-gray-700 mb-2">배경 이미지</label>
+            <ImageUpload
               value={data.hero?.imageUrl || ''}
-              onChange={(e) => updateHero('imageUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/image.jpg"
+              onChange={(url: string) => updateHero('imageUrl', url)}
+              folder="hero-images"
             />
           </div>
         </div>
@@ -134,12 +113,8 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
 
       {/* 교통편 정보 */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <div className="flex justify-between items-center mb-4">
+        <div className="mb-4">
           <h3 className="text-lg font-semibold text-gray-900">교통편 정보</h3>
-          <Button onClick={addTransportation}>
-            <Plus className="h-4 w-4 mr-2" />
-            교통편 추가
-          </Button>
         </div>
 
         <div className="space-y-4">
@@ -159,27 +134,14 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <div className="flex gap-2">
-                    <div className="flex-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
-                      <input
-                        type="text"
-                        value={transport.description}
-                        onChange={(e) => updateTransportation(index, 'description', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="교통편 설명"
-                      />
-                    </div>
-                    <div className="self-end">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeTransportation(index)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
+                  <input
+                    type="text"
+                    value={transport.description}
+                    onChange={(e) => updateTransportation(index, 'description', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="교통편 설명"
+                  />
                 </div>
               </div>
             </div>

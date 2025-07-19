@@ -144,6 +144,17 @@ export function ContactInfoTab({ siteInfo, onUpdate }: ContactInfoTabProps) {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           지도 URL
         </label>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-3">
+          <h4 className="text-sm font-medium text-blue-800 mb-2">💡 구글 지도 URL 가져오는 방법</h4>
+          <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+            <li>구글 지도에서 원하는 위치를 검색합니다</li>
+            <li>'공유' 버튼을 클릭합니다</li>
+            <li>'지도 퍼가기' 탭을 선택합니다</li>
+            <li>나타나는 iframe 코드에서 <code className="bg-blue-100 px-1 rounded">src="..."</code> 부분의 URL을 복사합니다</li>
+            <li>복사한 URL을 아래 입력창에 붙여넣기 합니다</li>
+          </ol>
+        </div>
+      
         <input
           type="url"
           value={siteInfo.contact.mapUrl}

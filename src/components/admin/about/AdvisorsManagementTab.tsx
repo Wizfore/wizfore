@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit2, ArrowUp, ArrowDown } from 'lucide-react'
 import { AdvisorsInfo, AdvisorInfo } from '@/types/about'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/admin/common/ImageUpload'
+import { getAdvisorDefaultImage } from '@/lib/utils/advisorImageUtils'
 
 interface AdvisorsManagementTabProps {
   data: AdvisorsInfo
@@ -126,13 +127,11 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">배경 이미지 URL</label>
-            <input
-              type="url"
+            <label className="block text-sm font-medium text-gray-700 mb-2">배경 이미지</label>
+            <ImageUpload
               value={data.hero?.imageUrl || ''}
-              onChange={(e) => updateHero('imageUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/image.jpg"
+              onChange={(url: string) => updateHero('imageUrl', url)}
+              folder="hero-images"
             />
           </div>
         </div>
@@ -242,6 +241,70 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
                         직책 추가
                       </Button>
                     </div>
+
+                    {/* 학력 */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">학력</label>
+                      {advisor.education?.map((education, eduIndex) => (
+                        <div key={eduIndex} className="flex gap-2 mb-2">
+                          <input
+                            type="text"
+                            value={education}
+                            onChange={(e) => updateAdvisorArrayField(index, 'education', eduIndex, e.target.value)}
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="예: 서울대학교 의과대학 졸업"
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeAdvisorArrayItem(index, 'education', eduIndex)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addAdvisorArrayItem(index, 'education')}
+                        className="w-full"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        학력 추가
+                      </Button>
+                    </div>
+
+                    {/* 경력 */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">경력</label>
+                      {advisor.career?.map((career, carIndex) => (
+                        <div key={carIndex} className="flex gap-2 mb-2">
+                          <input
+                            type="text"
+                            value={career}
+                            onChange={(e) => updateAdvisorArrayField(index, 'career', carIndex, e.target.value)}
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="예: 서울대학교병원 소아과 교수"
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeAdvisorArrayItem(index, 'career', carIndex)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addAdvisorArrayItem(index, 'career')}
+                        className="w-full"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        경력 추가
+                      </Button>
+                    </div>
                   </div>
 
                   <div>
@@ -256,13 +319,15 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
               ) : (
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
-                    {advisor.imageUrl && (
-                      <img
-                        src={advisor.imageUrl}
-                        alt={advisor.name}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
+                    <img
+                      src={advisor.imageUrl || getAdvisorDefaultImage(advisor.position)}
+                      alt={advisor.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = getAdvisorDefaultImage(advisor.position)
+                      }}
+                    />
                   </div>
                   <div>
                     <h5 className="font-medium">{advisor.name || '이름 없음'}</h5>

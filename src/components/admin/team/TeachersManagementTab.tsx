@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Plus, Trash2, Edit2, User, ArrowUp, ArrowDown, Star, Target, GraduationCap, Award, FileText, Hash } from 'lucide-react'
 import { TeamCategory, TeamMember, TeamFeature } from '@/types/expert'
 import { Button } from '@/components/ui/button'
+import { ImageUpload } from '@/components/admin/common/ImageUpload'
 
 interface TeachersManagementTabProps {
   data: TeamCategory
@@ -197,6 +198,16 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
               rows={2}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="페이지 설명"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              배경 이미지
+            </label>
+            <ImageUpload
+              value={teachersData.hero?.imageUrl || ''}
+              onChange={(url: string) => updateHero('imageUrl', url)}
+              folder="hero-images"
             />
           </div>
         </div>
