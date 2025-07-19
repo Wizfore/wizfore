@@ -15,7 +15,7 @@ interface ProgramCardProps {
   icon: ReactNode
   colorClass: string
   index: number
-  cardType?: 'therapy' | 'adult-day' | 'afterschool'
+  cardType?: 'therapy' | 'adult-day' | 'afterschool' | 'counseling' | 'sports'
 }
 
 export default function ProgramCard({

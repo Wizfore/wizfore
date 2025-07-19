@@ -2,7 +2,7 @@ import {
   Target, Users, Clock, Award, Home, Leaf, Smile, MapPin, Heart, BookOpen 
 } from 'lucide-react'
 
-export type ProgramType = 'therapy' | 'adult-day' | 'afterschool'
+export type ProgramType = 'therapy' | 'adult-day' | 'afterschool' | 'counseling' | 'sports'
 
 export interface IconMapperConfig {
   getIcon: (_title: string) => React.ComponentType<{ className?: string }>
@@ -80,6 +80,10 @@ export const getIconMapper = (programType: ProgramType): IconMapperConfig => {
       return adultDayIconMapper
     case 'afterschool':
       return afterschoolIconMapper
+    case 'counseling':
+      return therapyIconMapper // counseling은 therapy mapper 사용
+    case 'sports':
+      return afterschoolIconMapper // sports는 afterschool mapper 사용 (2-column grid)
     default:
       return therapyIconMapper
   }
@@ -93,6 +97,10 @@ export const getGridConfig = (programType: ProgramType): string => {
     case 'adult-day':
       return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'
     case 'afterschool':
+      return 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto'
+    case 'counseling':
+      return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'
+    case 'sports':
       return 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto'
     default:
       return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'
