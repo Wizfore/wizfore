@@ -48,7 +48,7 @@ const Header = () => {
         { name: '치료 프로그램', href: '/programs/therapy' },
         { name: '상담 프로그램', href: '/programs/counseling' },
         { name: '방과후 프로그램', href: '/programs/afterschool' },
-        { name: '장애인 스포츠', href: '/programs/sports' },
+        { name: '장애인 스포츠 프로그램', href: '/programs/sports' },
         { name: '성인 주간활동 프로그램', href: '/programs/adult-day' },
       ]
     },
