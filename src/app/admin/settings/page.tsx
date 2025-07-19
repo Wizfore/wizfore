@@ -5,8 +5,9 @@ import { getSiteInfo, updateSiteInfo } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
 import { Settings, Loader2, XCircle } from 'lucide-react'
 import { useAdminForm } from '@/hooks/useAdminForm'
-import { AdminTabs, TabItem } from '@/components/admin/common/AdminTabs'
+import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabsWithUnsavedChanges'
 import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
+import { TabItem } from '@/components/admin/common/AdminTabs'
 import { BasicInfoTab } from '@/components/admin/settings/BasicInfoTab'
 import { ContactInfoTab } from '@/components/admin/settings/ContactInfoTab'
 import { ServicesTab } from '@/components/admin/settings/ServicesTab'
@@ -18,6 +19,9 @@ type TabKey = 'basic' | 'contact' | 'services' | 'images'
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabKey>('basic')
+  const [showUnsavedDialog, setShowUnsavedDialog] = useState(false)
+  const [pendingTab, setPendingTab] = useState<TabKey | null>(null)
+  const [dialogSaving, setDialogSaving] = useState(false)
 
   // 폼 검증 함수
   const validateSiteInfo = (data: SiteInfoData): string[] => {
@@ -90,6 +94,47 @@ export default function SettingsPage() {
     cleanData: cleanSiteInfo
   })
 
+  // 탭 전환 핸들러
+  const handleTabChange = (nextTab: TabKey) => {
+    if (hasChanges) {
+      setPendingTab(nextTab)
+      setShowUnsavedDialog(true)
+    } else {
+      setActiveTab(nextTab)
+    }
+  }
+
+  // 다이얼로그 핸들러
+  const handleDialogSave = async () => {
+    try {
+      setDialogSaving(true)
+      await handleSave()
+      setShowUnsavedDialog(false)
+      if (pendingTab) {
+        setActiveTab(pendingTab)
+        setPendingTab(null)
+      }
+    } catch (error) {
+      console.error('저장 실패:', error)
+    } finally {
+      setDialogSaving(false)
+    }
+  }
+
+  const handleDialogDiscard = () => {
+    handleReset()
+    setShowUnsavedDialog(false)
+    if (pendingTab) {
+      setActiveTab(pendingTab)
+      setPendingTab(null)
+    }
+  }
+
+  const handleDialogCancel = () => {
+    setShowUnsavedDialog(false)
+    setPendingTab(null)
+  }
+
   // 탭 정의
   const tabs: TabItem<TabKey>[] = [
     { key: 'basic', label: '기본 정보', icon: Settings },
@@ -139,10 +184,16 @@ export default function SettingsPage() {
         onReset={handleReset}
       />
 
-      <AdminTabs
+      <AdminTabsWithUnsavedChanges
         tabs={tabs}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
+        hasChanges={hasChanges}
+        showUnsavedDialog={showUnsavedDialog}
+        onDialogSave={handleDialogSave}
+        onDialogDiscard={handleDialogDiscard}
+        onDialogCancel={handleDialogCancel}
+        saving={dialogSaving}
       />
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

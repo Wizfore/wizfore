@@ -65,12 +65,7 @@ const menuItems = [
   {
     title: '전문가 소개 관리',
     href: '/admin/team',
-    icon: Users,
-    subItems: [
-      { title: '치료·상담사', href: '/admin/team/therapists' },
-      { title: '주간·방과후 교사', href: '/admin/team/teachers' },
-      { title: '직원 현황', href: '/admin/team/staff-status' }
-    ]
+    icon: Users
   },
   {
     title: '커뮤니티 관리',

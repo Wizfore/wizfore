@@ -23,7 +23,15 @@ const categoryOptions = [
   { value: 'awards', label: '수상' }
 ]
 
-export default function NewsManagementTab() {
+interface NewsManagementTabProps {
+  onRegister?: (methods: {
+    hasChanges: boolean
+    handleSave: () => Promise<void>
+    handleReset: () => void
+  }) => void
+}
+
+export default function NewsManagementTab({ onRegister }: NewsManagementTabProps) {
   const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
