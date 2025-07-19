@@ -135,3 +135,11 @@ export interface LocationImage {
   title: string
   imageUrl: string
 }
+
+// 센터소개 관리 통합 데이터 구조
+export interface AboutData {
+  director: DirectorInfo
+  history: HistoryInfo
+  advisors: AdvisorsInfo
+  location: LocationInfo
+}

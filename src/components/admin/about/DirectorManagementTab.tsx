@@ -1,198 +1,98 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Save, Plus, Trash2, User, Upload } from 'lucide-react'
-import { getAboutSectionData, updateDirectorInfo } from '@/lib/services/dataService'
+import { Plus, Trash2 } from 'lucide-react'
 import { DirectorInfo } from '@/types/about'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/admin/common/ImageUpload'
 
-export default function DirectorManagementTab() {
-  const [directorData, setDirectorData] = useState<DirectorInfo | null>(null)
-  const [initialData, setInitialData] = useState<DirectorInfo | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+interface DirectorManagementTabProps {
+  data: DirectorInfo
+  onUpdate: (data: DirectorInfo) => void
+}
 
-  useEffect(() => {
-    loadDirectorData()
-  }, [])
-
-  // 변경사항 감지
-  useEffect(() => {
-    if (initialData && directorData) {
-      const hasChanges = !compareDirectorData(initialData, directorData)
-      setHasUnsavedChanges(hasChanges)
-    }
-  }, [directorData, initialData])
-
-  // 브라우저 종료/새로고침 시 확인
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges) {
-        e.preventDefault()
-        e.returnValue = ''
-      }
-    }
-
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [hasUnsavedChanges])
-
-  // 데이터 비교 함수
-  const compareDirectorData = (data1: DirectorInfo, data2: DirectorInfo): boolean => {
-    // 기본 필드 비교
-    if (data1.name !== data2.name || data1.imageUrl !== data2.imageUrl) {
-      return false
-    }
-
-    // 배열 필드 비교
-    const arrayFields: (keyof DirectorInfo)[] = ['position', 'education', 'career', 'committees', 'certifications']
-    for (const field of arrayFields) {
-      const arr1 = data1[field] as string[] || []
-      const arr2 = data2[field] as string[] || []
-      if (arr1.length !== arr2.length || !arr1.every((item, index) => item === arr2[index])) {
-        return false
-      }
-    }
-
-    // 중첩 객체 비교
-    const compareNestedObject = (obj1: any, obj2: any): boolean => {
-      if (!obj1 && !obj2) return true
-      if (!obj1 || !obj2) return false
-      return JSON.stringify(obj1) === JSON.stringify(obj2)
-    }
-
-    if (!compareNestedObject(data1.aboutMessage, data2.aboutMessage)) {
-      return false
-    }
-
-    if (!compareNestedObject(data1.hero, data2.hero)) {
-      return false
-    }
-
-    return true
-  }
-
-  const loadDirectorData = async () => {
-    try {
-      setLoading(true)
-      const data = await getAboutSectionData()
-      const directorInfo = data?.director || null
-      setDirectorData(directorInfo)
-      setInitialData(directorInfo ? JSON.parse(JSON.stringify(directorInfo)) : null)
-      setHasUnsavedChanges(false)
-    } catch (error) {
-      console.error('센터장 정보 조회 실패:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const validateDirectorData = () => {
-    if (!directorData) return false
-    
-    const arrayFields = ['position', 'education', 'career', 'committees', 'certifications']
-    
-    for (const field of arrayFields) {
-      const fieldValue = directorData[field as keyof DirectorInfo] as string[]
-      if (fieldValue && fieldValue.length > 0) {
-        // 빈 문자열이나 공백만 있는 항목이 있는지 검사
-        const hasEmptyItem = fieldValue.some(item => !item || item.trim() === '')
-        if (hasEmptyItem) {
-          return false
-        }
-      }
-    }
-    
-    return true
-  }
-
-  const handleSave = async () => {
-    if (!directorData) return
-    
-    // 유효성 검사
-    if (!validateDirectorData()) {
-      alert('빈 항목이 있습니다. 모든 필드를 입력해주세요.')
-      return
-    }
-    
-    try {
-      setSaving(true)
-      await updateDirectorInfo(directorData)
-      // 저장 성공 시 초기 데이터 업데이트
-      setInitialData(JSON.parse(JSON.stringify(directorData)))
-      setHasUnsavedChanges(false)
-      alert('센터장 정보가 저장되었습니다.')
-    } catch (error) {
-      console.error('센터장 정보 저장 실패:', error)
-      alert('저장 중 오류가 발생했습니다.')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const updateField = (field: keyof DirectorInfo, value: any) => {
-    setDirectorData(prev => prev ? { ...prev, [field]: value } : null)
-  }
-
-  const updateNestedField = (field: string, value: any) => {
-    setDirectorData(prev => {
-      if (!prev) return null
-      const keys = field.split('.')
-      const newData = { ...prev }
-      let current: any = newData
-      
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (!current[keys[i]]) {
-          current[keys[i]] = {}
-        }
-        current = current[keys[i]]
-      }
-      
-      current[keys[keys.length - 1]] = value
-      return newData
+export default function DirectorManagementTab({ data, onUpdate }: DirectorManagementTabProps) {
+  // 기본 정보 업데이트 함수
+  const updateBasicInfo = (field: keyof DirectorInfo, value: string) => {
+    onUpdate({
+      ...data,
+      [field]: value
     })
   }
 
-  const addArrayItem = (field: keyof DirectorInfo, newItem: string) => {
-    if (!directorData) return
-    const currentArray = directorData[field] as string[] || []
-    updateField(field, [...currentArray, newItem])
-  }
-
-  const removeArrayItem = (field: keyof DirectorInfo, index: number) => {
-    if (!directorData) return
-    const currentArray = directorData[field] as string[] || []
-    updateField(field, currentArray.filter((_, i) => i !== index))
-  }
-
-  const updateArrayItem = (field: keyof DirectorInfo, index: number, value: string) => {
-    if (!directorData) return
-    const currentArray = directorData[field] as string[] || []
+  // 배열 필드 업데이트 함수
+  const updateArrayField = (field: keyof DirectorInfo, index: number, value: string) => {
+    const currentArray = (data[field] as string[]) || []
     const newArray = [...currentArray]
     newArray[index] = value
-    updateField(field, newArray)
+    onUpdate({
+      ...data,
+      [field]: newArray
+    })
   }
 
-  // 변경사항 상태를 부모 컴포넌트에 노출 (필요시 사용)
-  // 예: const { hasUnsavedChanges, handlePageLeave } = useDirectorTab()
-  
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-        <p className="ml-2 text-gray-600">센터장 정보를 불러오는 중...</p>
-      </div>
-    )
+  // 배열 필드에 새 항목 추가
+  const addArrayItem = (field: keyof DirectorInfo) => {
+    const currentArray = (data[field] as string[]) || []
+    onUpdate({
+      ...data,
+      [field]: [...currentArray, '']
+    })
   }
 
-  if (!directorData) {
+  // 배열 필드에서 항목 제거
+  const removeArrayItem = (field: keyof DirectorInfo, index: number) => {
+    const currentArray = (data[field] as string[]) || []
+    const newArray = currentArray.filter((_, i) => i !== index)
+    onUpdate({
+      ...data,
+      [field]: newArray
+    })
+  }
+
+  // 중첩 객체 업데이트 함수
+  const updateNestedObject = (parentField: 'aboutMessage' | 'hero', field: string, value: string) => {
+    onUpdate({
+      ...data,
+      [parentField]: {
+        ...data[parentField],
+        [field]: value
+      }
+    })
+  }
+
+  // 배열 필드 렌더링 함수
+  const renderArrayField = (field: keyof DirectorInfo, label: string) => {
+    const items = (data[field] as string[]) || []
+    
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-500">센터장 정보를 찾을 수 없습니다.</p>
-        <Button className="mt-4" onClick={loadDirectorData}>
-          다시 시도
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">{label}</label>
+        {items.map((item, index) => (
+          <div key={index} className="flex gap-2">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => updateArrayField(field, index, e.target.value)}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder={`${label} ${index + 1}`}
+            />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => removeArrayItem(field, index)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        ))}
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={() => addArrayItem(field)}
+          className="w-full"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          {label} 추가
         </Button>
       </div>
     )
@@ -200,247 +100,130 @@ export default function DirectorManagementTab() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-900">센터장 소개 관리</h2>
-          <p className="text-sm text-gray-600">센터장의 프로필과 인사말을 관리할 수 있습니다.</p>
-          {hasUnsavedChanges && (
-            <p className="text-sm text-amber-600 mt-1">⚠️ 저장하지 않은 변경사항이 있습니다</p>
-          )}
-        </div>
-        <Button 
-          onClick={handleSave} 
-          disabled={saving}
-          className={hasUnsavedChanges ? 'bg-amber-600 hover:bg-amber-700' : ''}
-        >
-          <Save className="h-4 w-4 mr-2" />
-          {saving ? '저장 중...' : '저장'}
-        </Button>
-      </div>
-
-      {/* 히어로 섹션 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">히어로 섹션</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              페이지 제목
-            </label>
-            <input
-              type="text"
-              value={directorData.hero?.title || ''}
-              onChange={(e) => updateNestedField('hero.title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="페이지 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              페이지 설명
-            </label>
-            <textarea
-              value={directorData.hero?.description || ''}
-              onChange={(e) => updateNestedField('hero.description', e.target.value)}
-              rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="페이지 설명"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              배경 이미지
-            </label>
-            <ImageUpload
-              value={directorData.hero?.imageUrl || ''}
-              onChange={(url) => updateNestedField('hero.imageUrl', url)}
-              folder="director/hero"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 인사말 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">인사말</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              제목
-            </label>
-            <input
-              type="text"
-              value={directorData.aboutMessage?.title || ''}
-              onChange={(e) => updateNestedField('aboutMessage.title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="인사말 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              내용
-            </label>
-            <textarea
-              value={directorData.aboutMessage?.description || ''}
-              onChange={(e) => updateNestedField('aboutMessage.description', e.target.value)}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="인사말 내용"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              강조 키워드 (쉼표로 구분)
-            </label>
-            <input
-              type="text"
-              value={directorData.aboutMessage?.highlightKeywords?.join(', ') || ''}
-              onChange={(e) => updateNestedField('aboutMessage.highlightKeywords', e.target.value.split(',').map(k => k.trim()).filter(k => k))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="강조할 키워드들을 쉼표로 구분하여 입력"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 기본 정보 */}
+      {/* 기본 정보 섹션 */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">기본 정보</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              이름
-            </label>
-            <input
-              type="text"
-              value={directorData.name || ''}
-              onChange={(e) => updateField('name', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="센터장 이름"
-            />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                센터장 이름
+              </label>
+              <input
+                type="text"
+                value={data.name || ''}
+                onChange={(e) => updateBasicInfo('name', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="센터장 이름을 입력하세요"
+              />
+            </div>
+            {renderArrayField('position', '직책')}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               프로필 이미지
             </label>
             <ImageUpload
-              value={directorData.imageUrl || ''}
-              onChange={(url) => updateField('imageUrl', url)}
+              value={data.imageUrl}
+              onChange={(url: string) => updateBasicInfo('imageUrl', url)}
               folder="director"
             />
           </div>
         </div>
       </div>
 
-      {/* 직책 */}
+      {/* 상세 정보 섹션 */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">직책</h3>
-        <ArrayFieldManager
-          items={directorData.position || []}
-          onAdd={(item) => addArrayItem('position', item)}
-          onRemove={(index) => removeArrayItem('position', index)}
-          onUpdate={(index, value) => updateArrayItem('position', index, value)}
-          placeholder="직책을 입력하세요"
-        />
-      </div>
-
-      {/* 학력 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">학력</h3>
-        <ArrayFieldManager
-          items={directorData.education || []}
-          onAdd={(item) => addArrayItem('education', item)}
-          onRemove={(index) => removeArrayItem('education', index)}
-          onUpdate={(index, value) => updateArrayItem('education', index, value)}
-          placeholder="학력을 입력하세요"
-        />
-      </div>
-
-      {/* 경력 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">경력</h3>
-        <ArrayFieldManager
-          items={directorData.career || []}
-          onAdd={(item) => addArrayItem('career', item)}
-          onRemove={(index) => removeArrayItem('career', index)}
-          onUpdate={(index, value) => updateArrayItem('career', index, value)}
-          placeholder="경력을 입력하세요"
-        />
-      </div>
-
-      {/* 위원회 활동 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">위원회 활동</h3>
-        <ArrayFieldManager
-          items={directorData.committees || []}
-          onAdd={(item) => addArrayItem('committees', item)}
-          onRemove={(index) => removeArrayItem('committees', index)}
-          onUpdate={(index, value) => updateArrayItem('committees', index, value)}
-          placeholder="위원회 활동을 입력하세요"
-        />
-      </div>
-
-      {/* 자격증 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">자격증</h3>
-        <ArrayFieldManager
-          items={directorData.certifications || []}
-          onAdd={(item) => addArrayItem('certifications', item)}
-          onRemove={(index) => removeArrayItem('certifications', index)}
-          onUpdate={(index, value) => updateArrayItem('certifications', index, value)}
-          placeholder="자격증을 입력하세요"
-        />
-      </div>
-
-    </div>
-  )
-}
-
-// 배열 필드 관리 컴포넌트
-interface ArrayFieldManagerProps {
-  items: string[]
-  onAdd: (item: string) => void
-  onRemove: (index: number) => void
-  onUpdate: (index: number, value: string) => void
-  placeholder: string
-}
-
-function ArrayFieldManager({ items, onAdd, onRemove, onUpdate, placeholder }: ArrayFieldManagerProps) {
-  const handleAdd = () => {
-    onAdd('') // 빈 문자열로 새 항목 추가
-  }
-
-  return (
-    <div className="space-y-3">
-      {items.map((item, index) => (
-        <div key={index} className="flex gap-2">
-          <input
-            type="text"
-            value={item}
-            onChange={(e) => onUpdate(index, e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder={placeholder}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => onRemove(index)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">상세 정보</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            {renderArrayField('education', '학력')}
+            {renderArrayField('career', '경력')}
+          </div>
+          <div className="space-y-6">
+            {renderArrayField('committees', '위원회')}
+            {renderArrayField('certifications', '자격증')}
+          </div>
         </div>
-      ))}
-      <div className="flex gap-2">
-        <div className="flex-1"></div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleAdd}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
       </div>
+
+      {/* 소개 메시지 섹션 */}
+      {data.aboutMessage && (
+        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">소개 메시지</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                제목
+              </label>
+              <input
+                type="text"
+                value={data.aboutMessage.title || ''}
+                onChange={(e) => updateNestedObject('aboutMessage', 'title', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="소개 메시지 제목"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                설명
+              </label>
+              <textarea
+                value={data.aboutMessage.description || ''}
+                onChange={(e) => updateNestedObject('aboutMessage', 'description', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="소개 메시지 설명"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hero 섹션 */}
+      {data.hero && (
+        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Hero 섹션</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hero 제목
+              </label>
+              <input
+                type="text"
+                value={data.hero.title || ''}
+                onChange={(e) => updateNestedObject('hero', 'title', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Hero 섹션 제목"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hero 설명
+              </label>
+              <textarea
+                value={data.hero.description || ''}
+                onChange={(e) => updateNestedObject('hero', 'description', e.target.value)}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Hero 섹션 설명"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Hero 배경 이미지 URL
+              </label>
+              <input
+                type="url"
+                value={data.hero.imageUrl || ''}
+                onChange={(e) => updateNestedObject('hero', 'imageUrl', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

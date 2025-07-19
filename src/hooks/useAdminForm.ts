@@ -36,7 +36,7 @@ export function useAdminForm<T>({
   const [error, setError] = useState<string | null>(null)
 
   // fetchData 함수를 메모이제이션하여 불필요한 리렌더링 방지
-  const memoizedFetchData = useCallback(fetchData, [])
+  const memoizedFetchData = useCallback(fetchData, [fetchData])
 
   useEffect(() => {
     const loadData = async () => {
@@ -60,6 +60,16 @@ export function useAdminForm<T>({
   }, [memoizedFetchData, defaultData])
 
   const hasChanges = JSON.stringify(data) !== JSON.stringify(originalData)
+  
+  // 디버깅용 로그
+  if (typeof window !== 'undefined') {
+    console.log('useAdminForm 상태:', {
+      hasChanges,
+      data: JSON.stringify(data),
+      originalData: JSON.stringify(originalData),
+      dataEqual: JSON.stringify(data) === JSON.stringify(originalData)
+    })
+  }
 
   const handleSave = async () => {
     try {
