@@ -35,7 +35,6 @@ export interface TeamMember {
   specialization: string[]
   education: string[]
   certifications: string[]
-  imageUrl?: string
   order: number
 }
 
@@ -61,4 +60,10 @@ export interface TeamCategory {
   features?: TeamFeature[]
   members: TeamMember[]
   order: number
+}
+
+// 전문가 소개 관리 통합 데이터 구조
+export interface TeamData {
+  therapists: TeamCategory
+  teachers: TeamCategory
 }
