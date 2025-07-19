@@ -331,6 +331,22 @@ export async function getCommunity() {
 }
 
 /**
+ * SNS 정보 업데이트
+ */
+export async function updateSnsData(snsData: any) {
+  try {
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      sns: snsData,
+      updatedAt: new Date().toISOString()
+    })
+  } catch (error) {
+    console.error('Error updating SNS data:', error)
+    throw error
+  }
+}
+
+/**
  * 홈 설정 정보 조회
  */
 export async function getHomeConfig() {
@@ -441,6 +457,61 @@ export async function getTherapists() {
     }
   } catch (error) {
     console.error('Error fetching therapists data:', error)
+    throw error
+  }
+}
+
+/**
+ * 팀 카테고리 정보 업데이트
+ */
+export async function updateTeamCategory(categoryId: string, categoryData: any) {
+  try {
+    const teamCategories = await getTeam()
+    const categoryIndex = teamCategories.findIndex((cat: any) => cat.id === categoryId)
+    
+    if (categoryIndex === -1) {
+      throw new Error(`Team category '${categoryId}' not found`)
+    }
+    
+    teamCategories[categoryIndex] = {
+      ...teamCategories[categoryIndex],
+      ...categoryData,
+      id: categoryId // ID는 변경되지 않도록 보장
+    }
+    
+    const siteInfoRef = doc(db, 'siteInfo', 'main')
+    await updateDoc(siteInfoRef, {
+      team: teamCategories,
+      updatedAt: new Date().toISOString()
+    })
+    
+    return teamCategories[categoryIndex]
+  } catch (error) {
+    console.error(`Error updating team category '${categoryId}':`, error)
+    throw error
+  }
+}
+
+/**
+ * 치료사진 정보 업데이트
+ */
+export async function updateTherapists(therapistsData: any) {
+  try {
+    return await updateTeamCategory('therapists', therapistsData)
+  } catch (error) {
+    console.error('Error updating therapists data:', error)
+    throw error
+  }
+}
+
+/**
+ * 교사진 정보 업데이트
+ */
+export async function updateTeachers(teachersData: any) {
+  try {
+    return await updateTeamCategory('teachers', teachersData)
+  } catch (error) {
+    console.error('Error updating teachers data:', error)
     throw error
   }
 }

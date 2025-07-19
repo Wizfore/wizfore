@@ -87,3 +87,8 @@ export interface SnsInfo {
   facebook?: string
   blog?: string
 }
+
+// 커뮤니티 관리 통합 데이터 구조 (SNS 관리용)
+export interface CommunityData {
+  sns: SnsInfo
+}

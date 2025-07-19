@@ -1,109 +1,48 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Save, Instagram, Youtube, Facebook, Globe } from 'lucide-react'
-import { getCommunity } from '@/lib/services/dataService'
-import { Button } from '@/components/ui/button'
+import { Instagram, Youtube, Facebook, Globe } from 'lucide-react'
+import type { SnsInfo } from '@/types/community'
 
-interface SnsData {
-  hero?: {
-    title?: string
-    description?: string
-    imageUrl?: string
-  }
-  aboutMessage?: {
-    title?: string
-    description?: string
-  }
-  youtube?: {
-    link?: string
-    message?: {
-      title?: string
-      description?: string
-    }
-  }
-  instagram?: string
-  facebook?: string
-  blog?: string
+interface SnsManagementTabProps {
+  data: SnsInfo
+  onUpdate: (data: SnsInfo) => void
 }
 
-export default function SnsManagementTab() {
-  const [snsData, setSnsData] = useState<SnsData>({})
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-
-  useEffect(() => {
-    loadSnsData()
-  }, [])
-
-  const loadSnsData = async () => {
-    try {
-      setLoading(true)
-      const communityData = await getCommunity()
-      setSnsData(communityData?.sns || {})
-    } catch (error) {
-      console.error('SNS 데이터 조회 실패:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSave = async () => {
-    try {
-      setSaving(true)
-      // TODO: updateSnsData 함수 구현 필요
-      // await updateSnsData(snsData)
-      alert('SNS 설정이 저장되었습니다.')
-    } catch (error) {
-      console.error('SNS 데이터 저장 실패:', error)
-      alert('저장 중 오류가 발생했습니다.')
-    } finally {
-      setSaving(false)
-    }
-  }
+export default function SnsManagementTab({ data: snsData, onUpdate }: SnsManagementTabProps) {
+  console.log('SnsManagementTab 렌더링, 받은 데이터:', snsData)
 
   const updateField = (path: string, value: string) => {
-    setSnsData(prev => {
-      const keys = path.split('.')
-      const newData = { ...prev }
-      let current: any = newData
-      
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (!current[keys[i]]) {
-          current[keys[i]] = {}
-        }
-        current = current[keys[i]]
+    console.log(`필드 업데이트: ${path} = "${value}"`)
+    
+    const keys = path.split('.')
+    const newData = JSON.parse(JSON.stringify(snsData)) // 깊은 복사
+    let current: any = newData
+    
+    // 중첩 객체 경로 생성
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
+        current[keys[i]] = {}
       }
-      
-      current[keys[keys.length - 1]] = value
-      return newData
-    })
+      current = current[keys[i]]
+    }
+    
+    // 최종 값 설정
+    current[keys[keys.length - 1]] = value
+    
+    console.log('업데이트된 데이터:', newData)
+    onUpdate(newData)
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-        <p className="ml-2 text-gray-600">SNS 설정을 불러오는 중...</p>
-      </div>
-    )
-  }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-900">SNS 관리</h2>
-          <p className="text-sm text-gray-600">SNS 페이지 설정 및 링크를 관리할 수 있습니다.</p>
-        </div>
-        <Button onClick={handleSave} disabled={saving}>
-          <Save className="h-4 w-4 mr-2" />
-          {saving ? '저장 중...' : '설정 저장'}
-        </Button>
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900">SNS 관리</h2>
+        <p className="text-sm text-gray-600">SNS 페이지 설정 및 링크를 관리할 수 있습니다.</p>
       </div>
 
       {/* Hero 섹션 설정 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+      <div className="bg-gray-50 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Hero 섹션</h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
@@ -146,7 +85,7 @@ export default function SnsManagementTab() {
       </div>
 
       {/* About 메시지 설정 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+      <div className="bg-gray-50 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">소개 메시지</h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
@@ -177,7 +116,7 @@ export default function SnsManagementTab() {
       </div>
 
       {/* YouTube 설정 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+      <div className="bg-gray-50 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <Youtube className="h-5 w-5 text-red-600" />
           YouTube 설정
@@ -223,7 +162,7 @@ export default function SnsManagementTab() {
       </div>
 
       {/* 소셜 미디어 링크 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+      <div className="bg-gray-50 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">소셜 미디어 링크</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -269,7 +208,7 @@ export default function SnsManagementTab() {
       </div>
 
       {/* 미리보기 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+      <div className="bg-gray-50 rounded-lg p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">설정 미리보기</h3>
         <div className="bg-gray-50 rounded-lg p-4">
           <div className="space-y-4">
