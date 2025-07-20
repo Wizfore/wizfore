@@ -90,7 +90,7 @@ const MainServicesSection = () => {
                   {/* 서비스 내용 */}
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-wizfore-text-primary mb-2">
-                      {service.title} ({service.startYear}년부터 운영)
+                      {service.title}
                     </h3>
                     
                     <div className="space-y-4">
