@@ -85,37 +85,26 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
             </h2>
             
             <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-              {messages.map((message, index) => {
-                const isLastMessage = index === messages.length - 1
-                
-                return (
-                  <motion.p
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 + (index * 0.2) }}
-                    viewport={{ once: true }}
-                    className={isLastMessage ? "text-xl font-medium text-mindstory-lime" : ""}
-                  >
-                    {isLastMessage ? (
-                      message
+              {messages.map((message, index) => (
+                <motion.p
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 + (index * 0.2) }}
+                  viewport={{ once: true }}
+                >
+                  {message.split(' ').map((word, wordIndex) => {
+                    const highlightKeywords = data?.director?.aboutMessage?.highlightKeywords || []
+                    const shouldHighlight = highlightKeywords.some(keyword => word.includes(keyword))
+                    
+                    return shouldHighlight ? (
+                      <strong key={wordIndex} className="text-mindstory-lime font-semibold"> {word}</strong>
                     ) : (
-                      <>
-                        {message.split(' ').map((word, wordIndex) => {
-                          const highlightKeywords = data?.director?.aboutMessage?.highlightKeywords || []
-                          const shouldHighlight = highlightKeywords.some(keyword => word.includes(keyword))
-                          
-                          return shouldHighlight ? (
-                            <strong key={wordIndex} className="text-mindstory-lime font-semibold"> {word}</strong>
-                          ) : (
-                            <span key={wordIndex}> {word}</span>
-                          )
-                        })}
-                      </>
-                    )}
-                  </motion.p>
-                )
-              })}
+                      <span key={wordIndex}> {word}</span>
+                    )
+                  })}
+                </motion.p>
+              ))}
             </div>
 
             <motion.div

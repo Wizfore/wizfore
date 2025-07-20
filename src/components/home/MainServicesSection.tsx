@@ -2,39 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Building2, Users, Heart, Calendar } from 'lucide-react'
 import { getMainServices } from '@/lib/services/dataService'
 import type { MainServices } from '@/types'
-
-const serviceIcons = {
-  1: Building2,
-  2: Users,
-  3: Heart,
-  4: Calendar
-}
-
-const serviceColors = {
-  1: {
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200',
-    iconColor: 'text-blue-600'
-  },
-  2: {
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-200',
-    iconColor: 'text-green-600'
-  },
-  3: {
-    bgColor: 'bg-purple-50',
-    borderColor: 'border-purple-200',
-    iconColor: 'text-purple-600'
-  },
-  4: {
-    bgColor: 'bg-orange-50',
-    borderColor: 'border-orange-200',
-    iconColor: 'text-orange-600'
-  }
-}
 
 const MainServicesSection = () => {
   const [mainServicesData, setMainServicesData] = useState<MainServices | null>(null)
@@ -80,83 +49,101 @@ const MainServicesSection = () => {
           </h2>
           
           <div className="max-w-4xl mx-auto space-y-4 text-lg text-wizfore-text-primary">
-            {mainServicesData?.aboutMessage.description.split('\n\n').map((paragraph, index) => {
-              const highlightKeywords = mainServicesData.aboutMessage.highlightKeywords || []
-              let processedParagraph = paragraph
-              
-              highlightKeywords.forEach(keyword => {
-                processedParagraph = processedParagraph.replace(
-                  keyword,
-                  `<strong className="text-wizfore-text-brand">${keyword}</strong>`
-                )
-              })
-              
-              return (
-                <p 
-                  key={index} 
-                  className={index === 0 ? "text-lg" : "text-base text-wizfore-text-secondary"}
-                  dangerouslySetInnerHTML={{ __html: processedParagraph }}
-                />
-              )
-            })}
+            {mainServicesData?.aboutMessage.description.split('\n\n').map((paragraph, index) => (
+              <p 
+                key={index} 
+                className="text-lg text-wizfore-text-primary"
+              >
+                {paragraph.split(' ').map((word, wordIndex) => {
+                  const highlightKeywords = mainServicesData.aboutMessage.highlightKeywords || []
+                  const shouldHighlight = highlightKeywords.some(keyword => word.includes(keyword))
+                  
+                  return shouldHighlight ? (
+                    <strong key={wordIndex} className="text-wizfore-text-brand font-semibold"> {word}</strong>
+                  ) : (
+                    <span key={wordIndex}> {word}</span>
+                  )
+                })}
+              </p>
+            ))}
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="max-w-5xl mx-auto space-y-8">
           {mainServicesData?.services
             .sort((a, b) => a.order - b.order)
-            .map((service, index) => {
-              const IconComponent = serviceIcons[service.order as keyof typeof serviceIcons] || Building2
-              const colors = serviceColors[service.order as keyof typeof serviceColors] || serviceColors[1]
-              
-              return (
-                <motion.div
-                  key={service.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className={`${colors.bgColor} border-2 ${colors.borderColor} rounded-xl p-8 hover:shadow-lg transition-all duration-300`}
-                >
-                  {/* 헤더 */}
-                  <div className="flex items-start space-x-4 mb-6">
-                    <div className="w-12 h-12 bg-wizfore-warm-brown rounded-full flex items-center justify-center flex-shrink-0">
-                      <IconComponent size={24} className="text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-wizfore-text-primary text-xl leading-tight mb-2">
-                        {service.title}
-                      </h3>
-                      <p className="text-sm text-wizfore-text-secondary">
-                        ({service.startYear}년부터 운영)
-                      </p>
+            .map((service, index) => (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="border-l-4 border-wizfore-coral-primary pl-8 py-6"
+              >
+                <div className="flex items-start gap-6">
+                  {/* 번호 배지 */}
+                  <div className="w-10 h-10 bg-wizfore-coral-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-bold text-lg">{index + 1}</span>
+                  </div>
+                  
+                  {/* 서비스 내용 */}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-wizfore-text-primary mb-2">
+                      {service.title} ({service.startYear}년에 8회 지원)
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      {/* 서비스 설명 */}
+                      <div className="flex items-start">
+                        <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                        <p className="text-wizfore-text-primary">
+                          제공 서류: {service.description}
+                        </p>
+                      </div>
+                      
+                      {/* 운영 정보 */}
+                      <div className="flex items-start">
+                        <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                        <p className="text-wizfore-text-primary">
+                          자격 기준: {service.startYear}년부터 운영
+                        </p>
+                      </div>
+                      
+                      {/* 세부 내용 */}
+                      {service.details && service.details.length > 0 && (
+                        <>
+                          <div className="flex items-start">
+                            <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                            <p className="text-wizfore-text-primary">
+                              아동 정보 및 성인 심리상담
+                            </p>
+                          </div>
+                          
+                          <div className="flex items-start">
+                            <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                            <div className="text-wizfore-text-primary">
+                              <span className="font-semibold">서비스 가격: </span>
+                              <span>1회당 1급 유형은 8만원, 2급 유형은 7만원</span>
+                            </div>
+                          </div>
+                          
+                          <div className="ml-5 pl-3 border-l-2 border-gray-200">
+                            <div className="space-y-1 text-sm text-wizfore-text-secondary">
+                              {service.details.map((detail: string, detailIndex: number) => (
+                                <p key={detailIndex}>
+                                  - {detail}
+                                </p>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
-
-                  {/* 설명 */}
-                  <div className="mb-6">
-                    <p className="text-wizfore-text-primary text-base leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-
-                  {/* 세부 내용 */}
-                  {service.details && service.details.length > 0 && (
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-wizfore-text-primary text-sm">세부 서비스:</h4>
-                      <ul className="space-y-1">
-                        {service.details.map((detail: string, detailIndex: number) => (
-                          <li key={detailIndex} className="text-wizfore-text-secondary text-sm flex items-start">
-                            <span className="w-1.5 h-1.5 bg-wizfore-warm-brown rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                            {detail}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </motion.div>
-              )
-            })}
+                </div>
+              </motion.div>
+            ))}
         </div>
 
       </div>
