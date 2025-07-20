@@ -17,14 +17,14 @@ import {
 
 // 프로그램 아이콘 및 색상 매핑
 const programIconsAndColors = [
-  { icon: Brain, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' },      // 인지/학습
-  { icon: Heart, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' },      // 정서/심리
-  { icon: Users, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' },    // 사회성
-  { icon: Target, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' }, // 목표달성
-  { icon: Lightbulb, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' }, // 창의성
-  { icon: Star, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' },   // 특성화
-  { icon: MessageCircle, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' }, // 상담
-  { icon: Activity, bgColor: 'bg-[rgb(254,243,239)]', hoverColor: 'bg-[rgb(254,243,239)]' }      // 활동
+  { icon: Brain, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },      // 인지/학습
+  { icon: Heart, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },      // 정서/심리
+  { icon: Users, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },    // 사회성
+  { icon: Target, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }, // 목표달성
+  { icon: Lightbulb, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }, // 창의성
+  { icon: Star, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },   // 특성화
+  { icon: MessageCircle, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }, // 상담
+  { icon: Activity, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }      // 활동
 ]
 
 interface Program {
