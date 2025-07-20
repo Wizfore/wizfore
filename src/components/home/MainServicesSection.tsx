@@ -83,61 +83,51 @@ const MainServicesSection = () => {
               >
                 <div className="flex items-start gap-6">
                   {/* 번호 배지 */}
-                  <div className="w-10 h-10 bg-wizfore-coral-primary rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-lg">{index + 1}</span>
+                  <div className="w-10 h-10 bg-wizfore-light-beige rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-wizfore-coral-primary font-bold text-lg">{index + 1}</span>
                   </div>
                   
                   {/* 서비스 내용 */}
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-wizfore-text-primary mb-2">
-                      {service.title} ({service.startYear}년에 8회 지원)
+                      {service.title} ({service.startYear}년부터 운영)
                     </h3>
                     
                     <div className="space-y-4">
-                      {/* 서비스 설명 */}
+                      {/* 제공 서비스 */}
                       <div className="flex items-start">
                         <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
                         <p className="text-wizfore-text-primary">
-                          제공 서류: {service.description}
+                          <span className="font-semibold">제공 서비스: </span>
+                          {service.description}
                         </p>
                       </div>
                       
-                      {/* 운영 정보 */}
+                      {/* 운영 기간 */}
                       <div className="flex items-start">
                         <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
                         <p className="text-wizfore-text-primary">
-                          자격 기준: {service.startYear}년부터 운영
+                          <span className="font-semibold">운영 기간: </span>
+                          {service.startYear}년부터 시작
                         </p>
                       </div>
                       
-                      {/* 세부 내용 */}
+                      {/* 세부 프로그램 */}
                       {service.details && service.details.length > 0 && (
-                        <>
-                          <div className="flex items-start">
-                            <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                            <p className="text-wizfore-text-primary">
-                              아동 정보 및 성인 심리상담
-                            </p>
-                          </div>
-                          
-                          <div className="flex items-start">
-                            <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                            <div className="text-wizfore-text-primary">
-                              <span className="font-semibold">서비스 가격: </span>
-                              <span>1회당 1급 유형은 8만원, 2급 유형은 7만원</span>
-                            </div>
-                          </div>
-                          
-                          <div className="ml-5 pl-3 border-l-2 border-gray-200">
-                            <div className="space-y-1 text-sm text-wizfore-text-secondary">
+                        <div className="flex items-start">
+                          <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                          <div className="text-wizfore-text-primary">
+                            <span className="font-semibold">세부 프로그램:</span>
+                            <div className="mt-2 ml-2 space-y-1">
                               {service.details.map((detail: string, detailIndex: number) => (
-                                <p key={detailIndex}>
-                                  - {detail}
-                                </p>
+                                <div key={detailIndex} className="flex items-start text-sm text-wizfore-text-secondary">
+                                  <span className="text-green-500 mr-2 mt-0.5">✓</span>
+                                  {detail}
+                                </div>
                               ))}
                             </div>
                           </div>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>
