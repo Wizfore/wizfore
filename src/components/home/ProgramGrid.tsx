@@ -205,7 +205,7 @@ const ProgramGrid = () => {
 
   if (loading) {
     return (
-      <section className="py-24 bg-wizfore-light-beige">
+      <section className="py-16 md:py-24 lg:py-32 bg-wizfore-light-beige">
         <div className="container-custom mx-auto px-4">
           <div className="text-center mb-12">
             <div className="h-10 bg-gray-300 rounded w-80 mx-auto mb-4 animate-pulse"></div>
@@ -232,7 +232,7 @@ const ProgramGrid = () => {
   }
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 bg-wizfore-light-beige">
+    <section className="py-16 md:py-24 lg:py-32 bg-wizfore-light-beige">
       <div className="container-custom mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -252,8 +252,8 @@ const ProgramGrid = () => {
         {/* 프로그램 마키 레이아웃 */}
         <div className="relative w-full px-4 space-y-6 overflow-hidden">
           {/* 그라데이션 마스크 - 왼쪽과 오른쪽 가장자리 */}
-          <div className="absolute left-0 top-4 w-20 h-full bg-gradient-to-r from-wizfore-light-beige to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-4 w-20 h-full bg-gradient-to-l from-wizfore-light-beige to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-4 w-12 md:w-20 h-full bg-gradient-to-r from-wizfore-light-beige to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-4 w-12 md:w-20 h-full bg-gradient-to-l from-wizfore-light-beige to-transparent z-10 pointer-events-none"></div>
           {/* 첫 번째 마키 - 정방향 */}
           <div 
             ref={row1Ref}
@@ -313,22 +313,22 @@ const ProgramGrid = () => {
                         duration: 0.2, 
                         ease: "easeOut"
                       }}
-                      className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-6 w-80 h-24 flex items-center gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
+                      className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-12 h-12 ${iconData.bgColor} group-hover:${iconData.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
-                        <IconComponent className="w-6 h-6 text-black" />
+                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${iconData.bgColor} group-hover:${iconData.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
+                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-black" />
                       </div>
 
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-base font-semibold text-wizfore-text-primary group-hover:text-wizfore-text-brand transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-wizfore-text-brand transition-colors duration-300 mb-1 truncate">
                           {program.title}
                         </h3>
                         
                         {/* 프로그램 설명 */}
-                        <p className="text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
+                        <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
                           {truncatedDescription}
                         </p>
                       </div>
@@ -399,22 +399,22 @@ const ProgramGrid = () => {
                         duration: 0.2, 
                         ease: "easeOut"
                       }}
-                      className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-6 w-80 h-24 flex items-center gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
+                      className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-12 h-12 ${iconData.bgColor} group-hover:${iconData.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
-                        <IconComponent className="w-6 h-6 text-black" />
+                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${iconData.bgColor} group-hover:${iconData.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
+                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-black" />
                       </div>
 
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-base font-semibold text-wizfore-text-primary group-hover:text-wizfore-text-brand transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-wizfore-text-brand transition-colors duration-300 mb-1 truncate">
                           {program.title}
                         </h3>
                         
                         {/* 프로그램 설명 */}
-                        <p className="text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
+                        <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
                           {truncatedDescription}
                         </p>
                       </div>

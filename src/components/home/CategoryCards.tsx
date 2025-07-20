@@ -109,7 +109,7 @@ const CategoryCards = () => {
 
   if (loading) {
     return (
-      <section className="relative overflow-hidden pt-48 pb-56 md:pt-64 md:pb-72">
+      <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72">
         {/* 메디모아 스타일 조약돌 모양 SVG 배경 (로딩 상태) */}
         <div className="absolute inset-0">
           <svg 
@@ -147,7 +147,7 @@ const CategoryCards = () => {
         <div className="w-full relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {[...Array(4)].map((_, index) => (
-              <div key={index} className="relative h-64 w-full shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse">
+              <div key={index} className="relative h-48 md:h-64 w-full shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse">
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                   <div className="h-6 bg-white/30 rounded w-3/4 mb-2 ml-2"></div>
                   <div className="h-4 bg-white/20 rounded w-5/6 ml-2"></div>
@@ -161,7 +161,7 @@ const CategoryCards = () => {
   }
 
   return (
-    <section className="relative overflow-hidden pt-48 pb-56 md:pt-64 md:pb-72">
+    <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72">
       {/* 메디모아 스타일 조약돌 모양 SVG 배경 */}
       <div className="absolute inset-0">
         <svg 
@@ -203,7 +203,7 @@ const CategoryCards = () => {
             <span className="text-wizfore-text-primary">위즈포레</span> <span className="text-wizfore-coral-primary">프로그램</span>
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-12 max-w-6xl mx-auto">
           {programCategories.map((category, index) => {
             const fallbackGradient = fallbackGradients[category.id as keyof typeof fallbackGradients] || fallbackGradients['therapy']
             
@@ -218,7 +218,7 @@ const CategoryCards = () => {
                 className="group"
               >
                 <Link href={`/programs/${category.id}`}>
-                  <div className={`relative h-64 w-full shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient}`}>
+                  <div className={`relative h-48 md:h-64 w-full shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient}`}>
                     {/* 배경 이미지 */}
                     <CategoryImage 
                       categoryImageUrl={category.hero?.imageUrl}
@@ -229,11 +229,11 @@ const CategoryCards = () => {
                     <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-all duration-300 z-5"></div>
                     
                     {/* 왼쪽 하단 텍스트 오버레이 */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 z-10">
-                      <h2 className="text-white text-lg font-bold mb-2 drop-shadow-lg ml-2">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 md:p-6 z-10">
+                      <h2 className="text-white text-base md:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-2">
                         {category.hero?.title}
                       </h2>
-                      <p className="text-white/90 text-sm drop-shadow-md line-clamp-2 ml-2">
+                      <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-2 ml-2">
                         {category.hero?.description}
                       </p>
                     </div>

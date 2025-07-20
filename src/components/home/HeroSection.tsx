@@ -113,10 +113,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="text-left"
                   >
-                  <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 text-white font-bold drop-shadow-lg leading-tight">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-4 text-white font-bold drop-shadow-lg leading-tight">
                     {currentSlideData.title}
                   </h1>
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed drop-shadow-lg">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed drop-shadow-lg">
                     {currentSlideData.description}
                   </p>
                   </motion.div>

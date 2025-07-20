@@ -35,7 +35,7 @@ const MainServicesSection = () => {
   }
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 bg-gray-50">
+    <section className="py-16 md:py-24 lg:py-32 bg-gray-50">
       <div className="container-custom mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -81,23 +81,23 @@ const MainServicesSection = () => {
                 viewport={{ once: true }}
                 className="border-l-4 border-wizfore-coral-primary pl-8 py-6"
               >
-                <div className="flex items-start gap-6">
+                <div className="flex items-start gap-4 md:gap-6">
                   {/* 번호 배지 */}
-                  <div className="w-10 h-10 bg-wizfore-light-beige rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-wizfore-coral-primary font-bold text-lg">{index + 1}</span>
+                  <div className="w-8 md:w-10 h-8 md:h-10 bg-wizfore-light-beige rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-wizfore-coral-primary font-bold text-base md:text-lg">{index + 1}</span>
                   </div>
                   
                   {/* 서비스 내용 */}
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-wizfore-text-primary mb-2">
+                    <h3 className="text-lg md:text-xl font-bold text-wizfore-text-primary mb-2">
                       {service.title}
                     </h3>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                       {/* 제공 서비스 */}
                       <div className="flex items-start">
                         <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                        <p className="text-wizfore-text-primary">
+                        <p className="text-sm md:text-base text-wizfore-text-primary">
                           <span className="font-semibold">제공 서비스: </span>
                           {service.description}
                         </p>
@@ -106,7 +106,7 @@ const MainServicesSection = () => {
                       {/* 운영 기간 */}
                       <div className="flex items-start">
                         <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                        <p className="text-wizfore-text-primary">
+                        <p className="text-sm md:text-base text-wizfore-text-primary">
                           <span className="font-semibold">운영 기간: </span>
                           {service.startYear}년부터 시작
                         </p>
@@ -116,11 +116,11 @@ const MainServicesSection = () => {
                       {service.details && service.details.length > 0 && (
                         <div className="flex items-start">
                           <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                          <div className="text-wizfore-text-primary">
+                          <div className="text-sm md:text-base text-wizfore-text-primary">
                             <span className="font-semibold">세부 프로그램:</span>
                             <div className="mt-2 ml-2 space-y-1">
                               {service.details.map((detail: string, detailIndex: number) => (
-                                <div key={detailIndex} className="flex items-start text-sm text-wizfore-text-secondary">
+                                <div key={detailIndex} className="flex items-start text-xs md:text-sm text-wizfore-text-secondary">
                                   <span className="text-green-500 mr-2 mt-0.5">✓</span>
                                   {detail}
                                 </div>

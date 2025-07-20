@@ -46,7 +46,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
 
   if (loading) {
     return (
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-32 bg-gray-50">
         <div className="container-custom mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="animate-pulse space-y-6">
@@ -71,7 +71,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
   const siteName = data?.siteName || "위즈포레 사회서비스센터"
 
   return (
-    <section className="py-24 md:py-32 lg:py-40 bg-gray-50">
+    <section className="py-16 md:py-24 lg:py-32 bg-gray-50">
       <div className="container-custom mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -80,11 +80,11 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-mindstory-gray-text mb-8">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-mindstory-gray-text mb-6 md:mb-8">
               &ldquo;{title}&rdquo;
             </h2>
             
-            <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-gray-700 leading-relaxed">
               {messages.map((message, index) => (
                 <motion.p
                   key={index}
@@ -112,12 +112,12 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
               viewport={{ once: true }}
-              className="mt-8 text-right"
+              className="mt-6 md:mt-8 text-right"
             >
-              <p className="text-lg font-semibold text-mindstory-gray-text mb-1">
+              <p className="text-base md:text-lg font-semibold text-mindstory-gray-text mb-1">
                 {directorName}
               </p>
-              <p className="text-gray-600">
+              <p className="text-sm md:text-base text-gray-600">
                 {siteName}
               </p>
             </motion.div>
