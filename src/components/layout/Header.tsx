@@ -2,13 +2,13 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ChevronDown, ChevronUp } from 'lucide-react'
 import { getSiteInfo } from '@/lib/services/dataService'
-import { defaultSiteData } from '@/lib/data/defaultSiteData'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isNavExpanded, setIsNavExpanded] = useState(false)
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
   const [headerLogoUrl, setHeaderLogoUrl] = useState('/icons/withoutBackground.png')
 
   useEffect(() => {
@@ -83,13 +83,11 @@ const Header = () => {
         <div className="relative flex items-center h-24 md:h-26 lg:h-28">
           {/* 로고 - 왼쪽 고정 */}
           <Link href="/" className="flex items-center space-x-3 flex-shrink-0">
-            <div className="hidden md:block">
-              <img 
-                src={headerLogoUrl} 
-                alt="위즈포레 로고" 
-                className="h-16 md:h-18 lg:h-20 w-auto object-contain"
-              />
-            </div>
+            <img 
+              src={headerLogoUrl} 
+              alt="위즈포레 로고" 
+              className="h-10 md:h-16 lg:h-20 w-auto object-contain"
+            />
           </Link>
 
           {/* 데스크톱 네비게이션 - 절대적 중앙 배치 */}
@@ -114,7 +112,12 @@ const Header = () => {
           {/* 모바일 메뉴 버튼 - 오른쪽 */}
           <button
             className="md:hidden ml-auto"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => {
+              setIsMenuOpen(!isMenuOpen)
+              if (isMenuOpen) {
+                setExpandedCategory(null)
+              }
+            }}
             aria-label="메뉴 토글"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -166,35 +169,40 @@ const Header = () => {
         <nav 
           className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden border-t border-gray-200 transition-all duration-300`}
         >
-          {/* 모바일 메인 네비게이션 */}
+          {/* 모바일 메인 네비게이션 - 상위 카테고리만 */}
           <ul className="flex flex-col py-4 space-y-2">
             {navigation.map((item) => (
               <li key={item.name} className="relative">
-                <div
-                  className="block px-4 py-2 text-wizfore-text-primary hover:text-wizfore-text-brand font-medium transition-colors cursor-default"
+                <button
+                  onClick={() => {
+                    if (expandedCategory === item.name) {
+                      setExpandedCategory(null)
+                    } else {
+                      setExpandedCategory(item.name)
+                    }
+                  }}
+                  className="w-full flex items-center justify-between px-4 py-3 text-wizfore-text-primary hover:text-wizfore-text-brand font-medium transition-colors text-left"
                 >
-                  {item.name}
-                </div>
-              </li>
-            ))}
-          </ul>
-
-
-          {/* 모바일용 서브메뉴 */}
-          {isMenuOpen && navigation.map((item) => (
-            <div key={`mobile-${item.name}`} className="border-t border-gray-100 py-3">
-              <div className="px-4">
-                <h3 className="font-semibold text-wizfore-text-primary text-sm mb-2">
-                  {item.name}
-                </h3>
-                {item.submenu && (
-                  <ul className="space-y-1 pl-4">
+                  <span>{item.name}</span>
+                  {item.submenu && (
+                    expandedCategory === item.name ? 
+                      <ChevronUp size={20} /> : 
+                      <ChevronDown size={20} />
+                  )}
+                </button>
+                
+                {/* 하위 메뉴 - 선택된 카테고리만 표시 */}
+                {expandedCategory === item.name && item.submenu && (
+                  <ul className="bg-gray-50 border-t border-gray-200">
                     {item.submenu.map((subItem) => (
                       <li key={subItem.name}>
                         <Link
                           href={subItem.href}
-                          className="text-sm text-wizfore-text-secondary hover:text-wizfore-text-brand transition-colors block py-1"
-                          onClick={() => setIsMenuOpen(false)}
+                          className="block px-8 py-2 text-wizfore-text-secondary hover:text-wizfore-text-brand hover:bg-gray-100 transition-colors"
+                          onClick={() => {
+                            setIsMenuOpen(false)
+                            setExpandedCategory(null)
+                          }}
                         >
                           {subItem.name}
                         </Link>
@@ -202,9 +210,9 @@ const Header = () => {
                     ))}
                   </ul>
                 )}
-              </div>
-            </div>
-          ))}
+              </li>
+            ))}
+          </ul>
         </nav>
       </div>
     </header>
