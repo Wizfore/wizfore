@@ -55,6 +55,7 @@ module.exports = {
   			wizfore: {
   				white: '#FFFFFF',
   				'warm-beige': '#FFF8F0',
+  				'light-beige': '#FEF3EF',
   				'coral-primary': '#FF6B6B',
   				'coral-secondary': '#FF8A80',
   				'coral-light': '#FFAA9D',
