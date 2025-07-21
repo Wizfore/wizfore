@@ -79,14 +79,14 @@ const Header = () => {
 
   return (
     <header className="bg-white sticky top-0 z-50">
-      <div className="mx-auto px-4 md:px-8 lg:px-16 pt-4">
-        <div className="relative flex items-center h-24 md:h-26 lg:h-28">
+      <div className="mx-auto px-4 md:px-8 lg:px-16 pt-2 md:pt-4">
+        <div className="relative flex items-center h-16 md:h-24 lg:h-28">
           {/* 로고 - 왼쪽 고정 */}
           <Link href="/" className="flex items-center space-x-3 flex-shrink-0">
             <img 
               src={headerLogoUrl} 
               alt="위즈포레 로고" 
-              className="h-10 md:h-16 lg:h-20 w-auto object-contain"
+              className="h-8 md:h-14 lg:h-18 w-auto object-contain"
             />
           </Link>
 

@@ -144,7 +144,7 @@ const CategoryCards = () => {
           </svg>
         </div>
         
-        <div className="w-full relative z-10">
+        <div className="w-full relative z-10 px-4 md:px-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="relative h-48 md:h-64 w-full shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse">
@@ -196,7 +196,7 @@ const CategoryCards = () => {
         </svg>
       </div>
       
-      <div className="w-full relative z-10">
+      <div className="w-full relative z-10 px-4 md:px-0">
         {/* 섹션 제목 */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold">
