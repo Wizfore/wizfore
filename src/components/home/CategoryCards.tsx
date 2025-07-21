@@ -161,13 +161,13 @@ const CategoryCards = () => {
   }
 
   return (
-    <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72">
+    <section className="relative overflow-hidden pt-32 pb-48 md:pt-48 md:pb-64 lg:pt-56 lg:pb-80 xl:pt-64 xl:pb-96">
       {/* 메디모아 스타일 조약돌 모양 SVG 배경 */}
       <div className="absolute inset-0">
         <svg 
           className="absolute inset-0 w-full h-full" 
-          preserveAspectRatio="xMidYMid slice" 
-          viewBox="0 0 100 100"
+          preserveAspectRatio="xMidYMid meet" 
+          viewBox="-30 -10 200 140"
         >
           <defs>
             <linearGradient id="stoneGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -178,18 +178,17 @@ const CategoryCards = () => {
             </linearGradient>
           </defs>
           <path 
-            d="M -15,16 
-               C 0,8 12,0 25,1.5
-               C 25,1.5 30,2 35,3 
-               C 40,4 50,8 60,10 
-               C 70,11 80,10 90,9 
-               C 100,8 110,8 115,8 
-               C 118,18 115,35 112,50 
-               C 115,65 108,80 95,85 
-               C 80,92 60,95 35,92 
-               C 15,89 -8,78 -12,65 
-               C -15,52 -12,35 -10,20 
-               C -15,15 -12,16 -15,16 Z" 
+            d="M -20,40 
+               C -25,15 -10,-2 20,-8 
+               C 40,-12 60,-10 80,-8 
+               C 100,-6 120,-8 140,-6 
+               C 160,-4 165,5 163,25 
+               C 165,45 163,65 159,85 
+               C 153,105 143,118 115,122 
+               C 90,126 65,124 50,123 
+               C 35,122 20,125 5,120 
+               C -15,115 -25,95 -25,75 
+               C -25,55 -22,47 -20,40 Z" 
             fill="url(#stoneGradient)" 
             opacity="0.75"
           />
