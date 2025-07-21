@@ -96,11 +96,11 @@ const Header = () => {
             onMouseEnter={() => setIsNavExpanded(true)}
             onMouseLeave={() => setIsNavExpanded(false)}
           >
-            <ul className="flex space-x-12">
+            <ul className="flex space-x-4 md:space-x-8 lg:space-x-12">
               {navigation.map((item) => (
                 <li key={item.name} className="relative">
                   <div
-                    className="block py-4 text-lg text-wizfore-text-primary hover:text-wizfore-text-brand font-semibold transition-colors border-b-2 border-transparent hover:border-wizfore-warm-brown cursor-default"
+                    className="block py-4 text-base md:text-lg text-wizfore-text-primary hover:text-wizfore-text-brand font-semibold transition-colors border-b-2 border-transparent hover:border-wizfore-warm-brown cursor-default whitespace-nowrap"
                   >
                     {item.name}
                   </div>
