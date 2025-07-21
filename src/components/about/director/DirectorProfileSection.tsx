@@ -46,8 +46,8 @@ const DirectorProfileSection: React.FC<DirectorProfileSectionProps> = ({ directo
                 </div>
                 
                 {/* 이름과 직책 */}
-                <h3 className="text-3xl lg:text-4xl font-black text-wizfore-text-primary mb-3">
-                  {director.name} 원장
+                <h3 className="text-3xl lg:text-4xl font-bold text-wizfore-text-primary mb-3">
+                  {director.name} <span className="text-xl lg:text-2xl font-normal">원장</span>
                 </h3>
                 <div className="flex flex-wrap gap-2 justify-center">
                   {Array.isArray(director.position) ? (

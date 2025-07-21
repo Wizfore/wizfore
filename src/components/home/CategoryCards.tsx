@@ -114,7 +114,7 @@ const CategoryCards = () => {
         <div className="absolute inset-0">
           <svg 
             className="absolute inset-0 w-full h-full" 
-            preserveAspectRatio="none" 
+            preserveAspectRatio="xMidYMid slice" 
             viewBox="0 0 100 100"
           >
             <defs>
@@ -144,13 +144,13 @@ const CategoryCards = () => {
           </svg>
         </div>
         
-        <div className="w-full relative z-10 px-4 md:px-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="w-full relative z-10 px-4 lg:px-8 xl:px-0">
+          <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
             {[...Array(4)].map((_, index) => (
-              <div key={index} className="relative h-48 md:h-64 w-full shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse">
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                  <div className="h-6 bg-white/30 rounded w-3/4 mb-2 ml-2"></div>
-                  <div className="h-4 bg-white/20 rounded w-5/6 ml-2"></div>
+              <div key={index} className="relative h-32 md:h-56 w-full shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6">
+                  <div className="h-4 md:h-6 bg-white/30 rounded w-3/4 mb-1 md:mb-2 ml-1 md:ml-2"></div>
+                  <div className="h-3 md:h-4 bg-white/20 rounded w-5/6 ml-1 md:ml-2"></div>
                 </div>
               </div>
             ))}
@@ -166,7 +166,7 @@ const CategoryCards = () => {
       <div className="absolute inset-0">
         <svg 
           className="absolute inset-0 w-full h-full" 
-          preserveAspectRatio="none" 
+          preserveAspectRatio="xMidYMid slice" 
           viewBox="0 0 100 100"
         >
           <defs>
@@ -196,14 +196,14 @@ const CategoryCards = () => {
         </svg>
       </div>
       
-      <div className="w-full relative z-10 px-4 md:px-0">
+      <div className="w-full relative z-10 px-4 lg:px-8 xl:px-0">
         {/* 섹션 제목 */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold">
             <span className="text-wizfore-text-primary">위즈포레</span> <span className="text-wizfore-coral-primary">프로그램</span>
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
           {programCategories.map((category, index) => {
             const fallbackGradient = fallbackGradients[category.id as keyof typeof fallbackGradients] || fallbackGradients['therapy']
             
@@ -218,7 +218,7 @@ const CategoryCards = () => {
                 className="group"
               >
                 <Link href={`/programs/${category.id}`}>
-                  <div className={`relative h-48 md:h-64 w-full shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient}`}>
+                  <div className={`relative h-32 md:h-56 w-full shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient}`}>
                     {/* 배경 이미지 */}
                     <CategoryImage 
                       categoryImageUrl={category.hero?.imageUrl}
@@ -229,11 +229,11 @@ const CategoryCards = () => {
                     <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-all duration-300 z-5"></div>
                     
                     {/* 왼쪽 하단 텍스트 오버레이 */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 md:p-6 z-10">
-                      <h2 className="text-white text-base md:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-2">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6 z-10">
+                      <h2 className="text-white text-sm md:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-1 md:ml-2">
                         {category.hero?.title}
                       </h2>
-                      <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-2 ml-2">
+                      <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-2 ml-1 md:ml-2">
                         {category.hero?.description}
                       </p>
                     </div>

@@ -112,14 +112,16 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
               viewport={{ once: true }}
-              className="mt-6 md:mt-8 text-right"
+              className="mt-8 md:mt-12 text-right pr-4 md:pr-8"
             >
-              <p className="text-base md:text-lg font-semibold text-mindstory-gray-text mb-1">
-                {directorName}
-              </p>
-              <p className="text-sm md:text-base text-gray-600">
-                {siteName}
-              </p>
+              <div className="text-right">
+                <p className="text-2xl md:text-3xl font-bold text-mindstory-gray-text mb-1">
+                  {directorName}
+                </p>
+                <p className="text-base md:text-lg text-mindstory-gray-text">
+                  {siteName} 원장
+                </p>
+              </div>
             </motion.div>
           </motion.div>
         </div>
