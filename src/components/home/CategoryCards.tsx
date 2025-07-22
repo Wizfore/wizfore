@@ -19,8 +19,10 @@ const fallbackGradients = {
   'therapy': 'bg-gradient-to-br from-wizfore-coral-primary to-wizfore-coral-secondary',
   'counseling': 'bg-gradient-to-br from-wizfore-coral-secondary to-wizfore-coral-light',
   'afterschool': 'bg-gradient-to-br from-wizfore-coral-light to-wizfore-coral-accent',
-  'adult-day': 'bg-gradient-to-br from-wizfore-coral-accent to-wizfore-soft-pink'
+  'adult-day': 'bg-gradient-to-br from-wizfore-coral-accent to-wizfore-soft-pink',
+  'special-sports': 'bg-gradient-to-br from-wizfore-soft-pink to-wizfore-coral-primary'
 }
+
 
 // 이미지 fallback을 처리하는 컴포넌트
 interface CategoryImageProps {
@@ -78,18 +80,16 @@ const CategoryCards = () => {
       try {
         const categories = await getPrograms()
         const defaultImg = '/images/programs/defaultImage.jpg'
-        
-        // 첫 4개 카테고리만 표시하고 순서대로 정렬
+        // 모든 카테고리를 순서대로 정렬
         const sortedCategories = categories
           .sort((a: ProgramCategory, b: ProgramCategory) => a.order - b.order)
-          .slice(0, 4)
         
         setProgramCategories(sortedCategories)
         setDefaultImageUrl(defaultImg)
       } catch (error) {
         console.error('Error fetching program categories, using fallback:', error)
         // DB 실패 시 기본 데이터 사용
-        const fallbackCategories = defaultSiteData.programs.slice(0, 4).map((program, index) => ({
+        const fallbackCategories = defaultSiteData.programs.map((program, index) => ({
           id: program.id,
           title: program.hero?.title || '',
           description: program.hero?.description || '',
@@ -147,12 +147,14 @@ const CategoryCards = () => {
         <div className="w-full relative z-10 px-4 lg:px-8 xl:px-0">
           <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
             {[...Array(4)].map((_, index) => (
-              <div key={index} className="relative h-32 md:h-56 w-full shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse">
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6">
-                  <div className="h-4 md:h-6 bg-white/30 rounded w-3/4 mb-1 md:mb-2 ml-1 md:ml-2"></div>
-                  <div className="h-3 md:h-4 bg-white/20 rounded w-5/6 ml-1 md:ml-2"></div>
+                <div key={index}>
+                  <div className="relative h-32 md:h-56 shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse w-full">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6">
+                      <div className="h-4 md:h-6 bg-white/30 rounded w-3/4 mb-1 md:mb-2 ml-1 md:ml-2"></div>
+                      <div className="h-3 md:h-4 bg-white/20 rounded w-5/6 ml-1 md:ml-2"></div>
+                    </div>
+                  </div>
                 </div>
-              </div>
             ))}
           </div>
         </div>
@@ -161,34 +163,34 @@ const CategoryCards = () => {
   }
 
   return (
-    <section className="relative overflow-hidden pt-32 pb-48 md:pt-48 md:pb-64 lg:pt-56 lg:pb-80 xl:pt-64 xl:pb-96">
+    <section className="relative overflow-hidden pt-40 pb-56 md:pt-56 md:pb-72 lg:pt-64 lg:pb-88 xl:pt-72 xl:pb-104">
       {/* 메디모아 스타일 조약돌 모양 SVG 배경 */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 overflow-hidden">
         <svg 
           className="absolute inset-0 w-full h-full" 
-          preserveAspectRatio="xMidYMid meet" 
-          viewBox="-30 -10 200 140"
+          preserveAspectRatio="xMidYMid slice" 
+          viewBox="-100 -80 400 320"
         >
           <defs>
-            <linearGradient id="stoneGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgb(255, 224, 224)" />
-              <stop offset="40%" stopColor="rgb(248, 215, 218)" />
-              <stop offset="80%" stopColor="rgb(245, 198, 203)" />
-              <stop offset="100%" stopColor="rgb(240, 160, 168)" />
+            <linearGradient id="stoneGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="rgb(255, 240, 240)" />
+              <stop offset="30%" stopColor="rgb(252, 220, 225)" />
+              <stop offset="70%" stopColor="rgb(245, 198, 203)" />
+              <stop offset="100%" stopColor="rgb(235, 145, 155)" />
             </linearGradient>
           </defs>
           <path 
-            d="M -20,40 
-               C -25,15 -10,-2 20,-8 
-               C 40,-12 60,-10 80,-8 
-               C 100,-6 120,-8 140,-6 
-               C 160,-4 165,5 163,25 
-               C 165,45 163,65 159,85 
-               C 153,105 143,118 115,122 
-               C 90,126 65,124 50,123 
-               C 35,122 20,125 5,120 
-               C -15,115 -25,95 -25,75 
-               C -25,55 -22,47 -20,40 Z" 
+            d="M -75,35 
+               C -90,10 -80,-30 -55,-45 
+               C -30,-60 25,-55 75,-50 
+               C 125,-45 175,-50 225,-45 
+               C 275,-40 290,-25 285,15 
+               C 290,55 285,95 275,135 
+               C 265,175 245,195 195,205 
+               C 145,215 95,210 65,207 
+               C 35,205 5,210 -20,200 
+               C -45,190 -65,160 -70,120 
+               C -75,80 -70,60 -75,35 Z" 
             fill="url(#stoneGradient)" 
             opacity="0.75"
           />
@@ -203,7 +205,7 @@ const CategoryCards = () => {
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
-          {programCategories.map((category, index) => {
+          {programCategories.slice(0, 4).map((category, index) => {
             const fallbackGradient = fallbackGradients[category.id as keyof typeof fallbackGradients] || fallbackGradients['therapy']
             
             return (
@@ -217,7 +219,7 @@ const CategoryCards = () => {
                 className="group"
               >
                 <Link href={`/programs/${category.id}`}>
-                  <div className={`relative h-32 md:h-56 w-full shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient}`}>
+                  <div className={`relative h-32 md:h-56 shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient} w-full`}>
                     {/* 배경 이미지 */}
                     <CategoryImage 
                       categoryImageUrl={category.hero?.imageUrl}

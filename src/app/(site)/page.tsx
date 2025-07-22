@@ -12,7 +12,7 @@ export default function HomePage() {
       {/* 히어로 섹션 - 슬라이더 방식 */}
       <HeroSection />
       
-      {/* 4개 카테고리 카드 */}
+      {/* 카테고리 카드 */}
       <CategoryCards />
       
       {/* 센터 소개 - "함께 걷는 성장의 길" */}
