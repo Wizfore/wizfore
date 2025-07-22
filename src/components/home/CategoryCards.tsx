@@ -146,7 +146,7 @@ const CategoryCards = () => {
         
         <div className="w-full relative z-10 px-4 lg:px-8 xl:px-0">
           <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
-            {[...Array(4)].map((_, index) => (
+            {[...Array(5)].map((_, index) => (
                 <div key={index}>
                   <div className="relative h-32 md:h-56 shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse w-full">
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6">
@@ -204,8 +204,18 @@ const CategoryCards = () => {
             <span className="text-wizfore-text-primary">위즈포레</span> <span className="text-wizfore-coral-primary">프로그램</span>
           </h2>
         </div>
-        <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
-          {programCategories.slice(0, 4).map((category, index) => {
+        
+        {/* 홀수 카드 처리를 위한 조건부 로직 */}
+        {(() => {
+          const isOdd = programCategories.length % 2 !== 0
+          const gridCards = isOdd ? programCategories.slice(0, -1) : programCategories
+          const centerCard = isOdd ? programCategories[programCategories.length - 1] : null
+
+          return (
+            <>
+              {/* 기존 2열 그리드 (홀수인 경우 마지막 카드 제외) */}
+              <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
+                {gridCards.map((category, index) => {
             const fallbackGradient = fallbackGradients[category.id as keyof typeof fallbackGradients] || fallbackGradients['therapy']
             
             return (
@@ -241,9 +251,61 @@ const CategoryCards = () => {
                   </div>
                 </Link>
               </motion.div>
+              
             )
-          })}
-        </div>
+                })}
+              </div>
+
+              {/* 홀수일 때 마지막 카드를 중앙에 배치 */}
+              {centerCard && (
+                <div className="flex justify-center mt-3 md:mt-12 max-w-sm md:max-w-6xl mx-auto">
+                  <div className="w-[calc(50%-0.375rem)] md:w-[calc(50%-1.5rem)]">
+                    {(() => {
+                      const category = centerCard
+                      const index = programCategories.length - 1
+                      const fallbackGradient = fallbackGradients[category.id as keyof typeof fallbackGradients] || fallbackGradients['therapy']
+                      
+                      return (
+                        <motion.div
+                          key={category.id}
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6, delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                          whileHover={{ y: -5 }}
+                          className="group"
+                        >
+                          <Link href={`/programs/${category.id}`}>
+                            <div className={`relative h-32 md:h-56 shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient} w-full`}>
+                              {/* 배경 이미지 */}
+                              <CategoryImage 
+                                categoryImageUrl={category.hero?.imageUrl}
+                                defaultImageUrl={defaultImageUrl}
+                                alt={`${category.hero?.title} 프로그램`}
+                              />
+                              {/* 어두운 필터 오버레이 */}
+                              <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-all duration-300 z-5"></div>
+                              
+                              {/* 왼쪽 하단 텍스트 오버레이 */}
+                              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6 z-10">
+                                <h2 className="text-white text-sm md:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-1 md:ml-2">
+                                  {category.hero?.title}
+                                </h2>
+                                <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-2 ml-1 md:ml-2">
+                                  {category.hero?.description}
+                                </p>
+                              </div>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      )
+                    })()}
+                  </div>
+                </div>
+              )}
+            </>
+          )
+        })()}
       </div>
     </section>
   )
