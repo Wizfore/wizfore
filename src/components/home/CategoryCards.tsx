@@ -175,8 +175,8 @@ const CategoryCards = () => {
             <linearGradient id="stoneGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="rgb(255, 240, 240)" />
               <stop offset="30%" stopColor="rgb(252, 220, 225)" />
-              <stop offset="70%" stopColor="rgb(245, 198, 203)" />
-              <stop offset="100%" stopColor="rgb(235, 145, 155)" />
+              <stop offset="70%" stopColor="rgb(240, 180, 190)" />
+              <stop offset="100%" stopColor="rgb(220, 120, 140)" />
             </linearGradient>
           </defs>
           <path 
