@@ -23,7 +23,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ milestones = [] }) =>
   const years = Object.keys(groupedMilestones).sort((a, b) => parseInt(b) - parseInt(a))
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-gradient-to-b from-wizfore-light-beige to-white">
       <div className="container-custom mx-auto px-4">
         <motion.div 
           className="text-center mb-16"
@@ -39,7 +39,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ milestones = [] }) =>
 
         <div className="max-w-6xl mx-auto relative">
           {/* 전체 세로 라인 */}
-          <div className="absolute left-40 top-0 bottom-0 w-px bg-gray-300 ml-6"></div>
+          <div className="absolute left-40 top-0 bottom-0 w-px bg-wizfore-coral-primary ml-6"></div>
           
           {years.map((year, yearIndex) => (
             <motion.div
@@ -54,7 +54,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ milestones = [] }) =>
               <div className="flex">
                 {/* 왼쪽 연도 */}
                 <div className="w-40 flex-shrink-0 pr-8">
-                  <div className="text-4xl font-bold text-wizfore-text-primary">
+                  <div className="text-4xl font-bold text-wizfore-coral-primary">
                     {year}
                   </div>
                 </div>
@@ -62,7 +62,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ milestones = [] }) =>
                 {/* 가운데 타임라인 */}
                 <div className="w-12 flex-shrink-0 flex flex-col items-center relative">
                   {/* 타임라인 점 - 첫번째 항목과 정렬 */}
-                  <div className="w-3 h-3 bg-gray-400 rounded-full absolute top-1 z-10"></div>
+                  <div className="w-3 h-3 bg-wizfore-coral-primary rounded-full absolute top-1 z-10"></div>
                 </div>
 
                 {/* 오른쪽 내용 */}

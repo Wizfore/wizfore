@@ -72,7 +72,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
   }
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gradient-to-b from-wizfore-light-beige to-wizfore-soft-pink/30">
       <div className="container-custom mx-auto px-4">
         <motion.div 
           className="text-center mb-12"
