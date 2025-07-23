@@ -16,7 +16,7 @@ import type { Article } from '@/types/community'
 
 type ProgramType = {
   title: string
-  goal?: string
+  goal?: string | string[]
   order?: number
 }
 
@@ -131,7 +131,7 @@ export async function getAllProgramsFlattened() {
     const categories = await getPrograms()
     const allPrograms: Array<{
       title: string
-      description: string
+      goal: string
       categoryTitle: string
       categoryId: string
       order: number
@@ -140,9 +140,14 @@ export async function getAllProgramsFlattened() {
     categories.forEach((category: CategoryType) => {
       if (category.programs && category.programs.length > 0) {
         category.programs.forEach((program: ProgramType) => {
+          // goal이 배열인 경우 · 문자로 연결, 문자열인 경우 그대로 사용
+          const goalText = Array.isArray(program.goal) 
+            ? program.goal.join(' · ')
+            : program.goal || ''
+          
           allPrograms.push({
             title: program.title,
-            description: program.goal || category.description,
+            goal: goalText,
             categoryTitle: category.title,
             categoryId: category.id,
             order: program.order || 0
@@ -361,6 +366,68 @@ export async function getHomeConfig() {
     }
   } catch (error) {
     console.error('Error fetching home config:', error)
+    throw error
+  }
+}
+
+/**
+ * 홈 설정 정보 업데이트
+ */
+export async function updateHomeConfig(updates: Partial<any>) {
+  try {
+    const docRef = doc(db, 'homeConfig', 'main')
+    await updateDoc(docRef, updates)
+    console.log('Home config updated successfully')
+  } catch (error) {
+    console.error('Error updating home config:', error)
+    throw error
+  }
+}
+
+/**
+ * 프로그램 아이콘 매핑 업데이트
+ */
+export async function updateProgramIconMappings(iconMappings: any[]) {
+  try {
+    const docRef = doc(db, 'homeConfig', 'main')
+    await updateDoc(docRef, {
+      'sections.programGrid.iconMappings': iconMappings
+    })
+    console.log('Program icon mappings updated successfully')
+  } catch (error) {
+    console.error('Error updating program icon mappings:', error)
+    throw error
+  }
+}
+
+/**
+ * CategoryCards 섹션 설정 업데이트
+ */
+export async function updateCategoryCardsConfig(config: { title: string; description?: string; enabled: boolean }) {
+  try {
+    const docRef = doc(db, 'homeConfig', 'main')
+    await updateDoc(docRef, {
+      'sections.categoryCards': config
+    })
+    console.log('CategoryCards config updated successfully')
+  } catch (error) {
+    console.error('Error updating CategoryCards config:', error)
+    throw error
+  }
+}
+
+/**
+ * 섹션별 표시/숨김 설정 업데이트
+ */
+export async function updateSectionVisibility(sectionName: string, enabled: boolean) {
+  try {
+    const docRef = doc(db, 'homeConfig', 'main')
+    await updateDoc(docRef, {
+      [`sections.${sectionName}.enabled`]: enabled
+    })
+    console.log(`${sectionName} visibility updated successfully`)
+  } catch (error) {
+    console.error(`Error updating ${sectionName} visibility:`, error)
     throw error
   }
 }
