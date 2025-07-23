@@ -26,7 +26,7 @@ const MainServicesSection = () => {
 
   if (loading) {
     return (
-      <section className="py-16 bg-wizfore-light-beige">
+      <section className="py-16 bg-gradient-to-b from-wizfore-soft-pink via-wizfore-soft-pink via-85% to-white">
         <div className="container-custom mx-auto px-4 text-center">
           <div className="animate-pulse text-wizfore-text-primary">주요 사업 정보를 불러오는 중...</div>
         </div>
@@ -35,7 +35,7 @@ const MainServicesSection = () => {
   }
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gray-50">
+    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-wizfore-soft-pink via-wizfore-soft-pink via-85% to-white">
       <div className="container-custom mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -69,7 +69,7 @@ const MainServicesSection = () => {
           </div>
         </motion.div>
 
-        <div className="max-w-5xl mx-auto space-y-8">
+        <div className="max-w-5xl mx-auto space-y-8 mb-16 md:mb-24 lg:mb-32">
           {mainServicesData?.services
             .sort((a, b) => a.order - b.order)
             .map((service, index) => (

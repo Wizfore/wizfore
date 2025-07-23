@@ -14,13 +14,13 @@ interface CategoryWithFallback extends ProgramCategory {
   imageUrl?: string
 }
 
-// 각 카테고리별 fallback 그라데이션 매핑
+// 각 카테고리별 fallback 그라데이션 매핑 - 따뜻한 오렌지-베이지 톤
 const fallbackGradients = {
   'therapy': 'bg-gradient-to-br from-wizfore-coral-primary to-wizfore-coral-secondary',
   'counseling': 'bg-gradient-to-br from-wizfore-coral-secondary to-wizfore-coral-light',
   'afterschool': 'bg-gradient-to-br from-wizfore-coral-light to-wizfore-coral-accent',
   'adult-day': 'bg-gradient-to-br from-wizfore-coral-accent to-wizfore-soft-pink',
-  'special-sports': 'bg-gradient-to-br from-wizfore-soft-pink to-wizfore-coral-primary'
+  'special-sports': 'bg-gradient-to-br from-wizfore-soft-pink to-wizfore-warm-brown'
 }
 
 
@@ -109,7 +109,7 @@ const CategoryCards = () => {
 
   if (loading) {
     return (
-      <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72">
+      <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72 bg-gradient-to-b from-transparent to-wizfore-light-beige">
         {/* 메디모아 스타일 조약돌 모양 SVG 배경 (로딩 상태) */}
         <div className="absolute inset-0">
           <svg 
@@ -119,10 +119,10 @@ const CategoryCards = () => {
           >
             <defs>
               <linearGradient id="stoneGradientLoading" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="rgb(255, 224, 224)" />
-                <stop offset="40%" stopColor="rgb(248, 215, 218)" />
-                <stop offset="80%" stopColor="rgb(245, 198, 203)" />
-                <stop offset="100%" stopColor="rgb(240, 160, 168)" />
+                <stop offset="0%" stopColor="#FFF9F4" stopOpacity="1.0" />
+                <stop offset="40%" stopColor="#FFEDE4" stopOpacity="1.0" />
+                <stop offset="80%" stopColor="#FFCAB0" stopOpacity="1.0" />
+                <stop offset="100%" stopColor="#FFA585" stopOpacity="1.0" />
               </linearGradient>
             </defs>
             <path 
@@ -139,7 +139,7 @@ const CategoryCards = () => {
                   C -15,52 -12,35 -10,20 
                   C -15,15 -12,16 -15,16 Z"  
               fill="url(#stoneGradientLoading)" 
-              opacity="0.75"
+              opacity="0.9"
             />
           </svg>
         </div>
@@ -163,7 +163,7 @@ const CategoryCards = () => {
   }
 
   return (
-    <section className="relative overflow-hidden pt-40 pb-56 md:pt-56 md:pb-72 lg:pt-64 lg:pb-88 xl:pt-72 xl:pb-104">
+    <section className="relative overflow-hidden pt-40 pb-56 md:pt-56 md:pb-72 lg:pt-64 lg:pb-88 xl:pt-72 xl:pb-104 bg-gradient-to-b from-transparent to-wizfore-light-beige">
       {/* 메디모아 스타일 조약돌 모양 SVG 배경 */}
       <div className="absolute inset-0 overflow-hidden">
         <svg 
@@ -173,10 +173,10 @@ const CategoryCards = () => {
         >
           <defs>
             <linearGradient id="stoneGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="rgb(255, 240, 240)" />
-              <stop offset="30%" stopColor="rgb(252, 220, 225)" />
-              <stop offset="70%" stopColor="rgb(240, 180, 190)" />
-              <stop offset="100%" stopColor="rgb(220, 120, 140)" />
+              <stop offset="0%" stopColor="#FEFBF6" stopOpacity="1.0" />
+              <stop offset="20%" stopColor="#FFF9F4" stopOpacity="1.0" />
+              <stop offset="50%" stopColor="#FFCAB0" stopOpacity="1.0" />
+              <stop offset="100%" stopColor="#FF8C69" stopOpacity="1.0" />
             </linearGradient>
           </defs>
           <path 
@@ -192,7 +192,7 @@ const CategoryCards = () => {
                C -55,190 -70,160 -77,120 
                C -87,80 -86,60 -88,35 Z" 
             fill="url(#stoneGradient)" 
-            opacity="0.75"
+            opacity="0.9"
           />
         </svg>
       </div>

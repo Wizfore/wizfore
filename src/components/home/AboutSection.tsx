@@ -46,7 +46,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-24 lg:py-32 bg-gray-50">
+      <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-wizfore-light-beige via-wizfore-light-beige to-wizfore-light-beige">
         <div className="container-custom mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="animate-pulse space-y-6">
@@ -71,7 +71,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
   const siteName = data?.siteName || "위즈포레 사회서비스센터"
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gray-50">
+    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-wizfore-light-beige via-wizfore-light-beige to-wizfore-light-beige">
       <div className="container-custom mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
