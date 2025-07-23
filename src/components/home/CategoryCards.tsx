@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { getPrograms } from '@/lib/services/dataService'
+import { getPrograms, getHomeConfig } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
+import { defaultHomeConfig } from '@/lib/data/defaultHomeConfig'
 import type { ProgramCategory } from '@/types'
 
 // CategoryCards에서 사용하는 확장된 타입 (fallback 데이터를 위해)
@@ -73,12 +74,31 @@ const CategoryImage = ({ categoryImageUrl, defaultImageUrl, alt }: CategoryImage
 const CategoryCards = () => {
   const [programCategories, setProgramCategories] = useState<CategoryWithFallback[]>([])
   const [defaultImageUrl, setDefaultImageUrl] = useState<string>('/images/programs/defaultImage.jpg')
+  const [sectionConfig, setSectionConfig] = useState({
+    title: "위즈포레 프로그램",
+    description: "다양한 영역의 전문 프로그램을 제공합니다",
+    enabled: true
+  })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchProgramCategories = async () => {
       try {
-        const categories = await getPrograms()
+        const [categories, homeConfigData] = await Promise.all([
+          getPrograms(),
+          getHomeConfig().catch(() => null)
+        ])
+        
+        // 섹션 설정 업데이트 (DB에서 가져오거나 기본값 사용)
+        const categoryCardsConfig = homeConfigData?.sections?.categoryCards || 
+                                   defaultHomeConfig.sections?.categoryCards ||
+                                   {
+                                     title: "위즈포레 프로그램",
+                                     description: "다양한 영역의 전문 프로그램을 제공합니다",
+                                     enabled: true
+                                   }
+        setSectionConfig(categoryCardsConfig)
+        
         const defaultImg = '/images/programs/defaultImage.jpg'
         // 모든 카테고리를 순서대로 정렬
         const sortedCategories = categories
@@ -99,6 +119,13 @@ const CategoryCards = () => {
         }))
         setProgramCategories(fallbackCategories)
         setDefaultImageUrl('/images/programs/defaultImage.jpg')
+        
+        // 기본 섹션 설정
+        setSectionConfig({
+          title: "위즈포레 프로그램",
+          description: "다양한 영역의 전문 프로그램을 제공합니다",
+          enabled: true
+        })
       } finally {
         setLoading(false)
       }
@@ -201,8 +228,13 @@ const CategoryCards = () => {
         {/* 섹션 제목 */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold">
-            <span className="text-wizfore-text-primary">위즈포레</span> <span className="text-wizfore-coral-primary">프로그램</span>
+            <span className="text-wizfore-text-primary">{sectionConfig.title.split(' ')[0]}</span> <span className="text-wizfore-coral-primary">{sectionConfig.title.split(' ').slice(1).join(' ')}</span>
           </h2>
+          {sectionConfig.description && (
+            <p className="text-wizfore-text-secondary mt-4 text-lg max-w-2xl mx-auto">
+              {sectionConfig.description}
+            </p>
+          )}
         </div>
         
         {/* 홀수 카드 처리를 위한 조건부 로직 */}

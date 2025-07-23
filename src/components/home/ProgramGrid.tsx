@@ -2,41 +2,31 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { getAllProgramsFlattened, getProgramsGridConfig } from '@/lib/services/dataService'
+import { getAllProgramsFlattened, getProgramsGridConfig, getHomeConfig } from '@/lib/services/dataService'
 import Marquee from '@/components/ui/marquee'
-import { 
-  Brain, 
-  Heart, 
-  Users, 
-  Target, 
-  Lightbulb, 
-  Star,
-  MessageCircle,
-  Activity
-} from 'lucide-react'
-
-// 프로그램 아이콘 및 색상 매핑
-const programIconsAndColors = [
-  { icon: Brain, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },      // 인지/학습
-  { icon: Heart, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },      // 정서/심리
-  { icon: Users, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },    // 사회성
-  { icon: Target, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }, // 목표달성
-  { icon: Lightbulb, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }, // 창의성
-  { icon: Star, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' },   // 특성화
-  { icon: MessageCircle, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }, // 상담
-  { icon: Activity, bgColor: 'bg-wizfore-light-beige', hoverColor: 'bg-wizfore-light-beige' }      // 활동
-]
+import { LucideIcon } from 'lucide-react'
+import { combineProgramsWithIcons } from '@/lib/utils/iconMapper'
+import { defaultHomeConfig } from '@/lib/data/defaultHomeConfig'
+import type { ProgramIconMapping } from '@/types'
 
 interface Program {
   title: string
-  description: string
+  goal: string
   categoryTitle: string
   categoryId: string
   order: number
 }
 
+interface ProgramWithIcon extends Program {
+  icon: LucideIcon
+  bgColor: string
+  hoverColor: string
+  iconMapping?: ProgramIconMapping
+}
+
 const ProgramGrid = () => {
-  const [programs, setPrograms] = useState<Program[]>([])
+  const [programs, setPrograms] = useState<ProgramWithIcon[]>([])
+  const [iconMappings, setIconMappings] = useState<ProgramIconMapping[]>([])
   const [gridConfig, setGridConfig] = useState<{
     title: string
     description: string
@@ -60,14 +50,35 @@ const ProgramGrid = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [programData, configData] = await Promise.all([
+        const [programData, configData, homeConfigData] = await Promise.all([
           getAllProgramsFlattened(),
-          getProgramsGridConfig()
+          getProgramsGridConfig(),
+          getHomeConfig().catch(() => null) // homeConfig가 없을 수도 있으므로 에러 처리
         ])
-        setPrograms(programData)
-        setGridConfig(configData)
+        
+        // 아이콘 매핑 데이터 설정 (DB에서 가져오거나 기본값 사용)
+        const mappings = homeConfigData?.sections?.programGrid?.iconMappings || 
+                        defaultHomeConfig.sections?.programGrid?.iconMappings || 
+                        []
+        setIconMappings(mappings)
+        
+        // 프로그램 데이터와 아이콘 매핑 결합
+        const programsWithIcons = combineProgramsWithIcons(programData, mappings)
+        setPrograms(programsWithIcons)
+        
+        // 그리드 설정 (DB에서 가져오거나 기본값 사용)
+        const gridSettings = homeConfigData?.sections?.programGrid || configData
+        setGridConfig({
+          title: gridSettings.title || configData.title,
+          description: gridSettings.description || configData.description,
+          enabled: gridSettings.enabled ?? configData.enabled
+        })
+        
       } catch (error) {
         console.error('Error fetching programs data:', error)
+        // 에러 시 기본값 사용
+        const defaultMappings = defaultHomeConfig.sections?.programGrid?.iconMappings || []
+        setIconMappings(defaultMappings)
       } finally {
         setLoading(false)
       }
@@ -282,13 +293,12 @@ const ProgramGrid = () => {
             {/* 카드들을 반복해서 렌더링 */}
             {[...Array(15)].flatMap((_, repeatIndex) => 
               programs.slice(0, Math.ceil(programs.length / 2)).map((program, index) => {
-                const iconData = programIconsAndColors[index % programIconsAndColors.length]
-                const IconComponent = iconData.icon
+                const IconComponent = program.icon
               
-                // 설명 텍스트를 더 짧게 제한
-                const truncatedDescription = program.description.length > 80 
-                  ? program.description.substring(0, 80) + '...'
-                  : program.description
+                // 목표 텍스트를 더 짧게 제한
+                const truncatedGoal = program.goal.length > 80 
+                  ? program.goal.substring(0, 80) + '...'
+                  : program.goal
                 
                 return (
                   <motion.div
@@ -316,7 +326,7 @@ const ProgramGrid = () => {
                       className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${iconData.bgColor} group-hover:${iconData.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
+                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
                         <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-black" />
                       </div>
 
@@ -327,9 +337,9 @@ const ProgramGrid = () => {
                           {program.title}
                         </h3>
                         
-                        {/* 프로그램 설명 */}
+                        {/* 프로그램 목표 */}
                         <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
-                          {truncatedDescription}
+                          {truncatedGoal}
                         </p>
                       </div>
                     </motion.div>
@@ -368,13 +378,12 @@ const ProgramGrid = () => {
             {/* 카드들을 반복해서 렌더링 */}
             {[...Array(15)].flatMap((_, repeatIndex) => 
               programs.slice(Math.ceil(programs.length / 2)).reverse().map((program, index) => {
-                const iconData = programIconsAndColors[(index + Math.ceil(programs.length / 2)) % programIconsAndColors.length]
-                const IconComponent = iconData.icon
+                const IconComponent = program.icon
               
-                // 설명 텍스트를 더 짧게 제한
-                const truncatedDescription = program.description.length > 80 
-                  ? program.description.substring(0, 80) + '...'
-                  : program.description
+                // 목표 텍스트를 더 짧게 제한
+                const truncatedGoal = program.goal.length > 80 
+                  ? program.goal.substring(0, 80) + '...'
+                  : program.goal
                 
                 return (
                   <motion.div
@@ -402,7 +411,7 @@ const ProgramGrid = () => {
                       className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${iconData.bgColor} group-hover:${iconData.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
+                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
                         <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-black" />
                       </div>
 
@@ -413,9 +422,9 @@ const ProgramGrid = () => {
                           {program.title}
                         </h3>
                         
-                        {/* 프로그램 설명 */}
+                        {/* 프로그램 목표 */}
                         <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
-                          {truncatedDescription}
+                          {truncatedGoal}
                         </p>
                       </div>
                     </motion.div>
