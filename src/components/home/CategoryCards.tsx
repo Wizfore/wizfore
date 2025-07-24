@@ -134,6 +134,11 @@ const CategoryCards = () => {
     fetchProgramCategories()
   }, [])
 
+  // enabled가 false면 섹션을 렌더링하지 않음
+  if (!sectionConfig.enabled) {
+    return null
+  }
+
   if (loading) {
     return (
       <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72 bg-gradient-to-b from-transparent to-wizfore-light-beige">

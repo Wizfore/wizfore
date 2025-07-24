@@ -2,18 +2,36 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getMainServices } from '@/lib/services/dataService'
+import { getMainServices, getHomeConfig } from '@/lib/services/dataService'
 import type { MainServices } from '@/types'
+
+interface MainServicesConfig {
+  enabled: boolean
+  showSubPrograms: boolean
+}
 
 const MainServicesSection = () => {
   const [mainServicesData, setMainServicesData] = useState<MainServices | null>(null)
+  const [config, setConfig] = useState<MainServicesConfig>({ enabled: true, showSubPrograms: true })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchMainServicesData = async () => {
       try {
-        const data = await getMainServices()
-        setMainServicesData(data)
+        const [mainServicesData, homeConfig] = await Promise.all([
+          getMainServices(),
+          getHomeConfig().catch(() => null)
+        ])
+        
+        setMainServicesData(mainServicesData)
+        
+        // HomeConfig에서 MainServices 설정 가져오기
+        if (homeConfig?.sections?.mainServices) {
+          setConfig({
+            enabled: homeConfig.sections.mainServices.enabled ?? true,
+            showSubPrograms: homeConfig.sections.mainServices.showSubPrograms ?? true
+          })
+        }
       } catch (error) {
         console.error('Error fetching main services:', error)
       } finally {
@@ -23,6 +41,11 @@ const MainServicesSection = () => {
 
     fetchMainServicesData()
   }, [])
+
+  // enabled가 false면 섹션을 렌더링하지 않음
+  if (!config.enabled) {
+    return null
+  }
 
   if (loading) {
     return (
@@ -113,7 +136,7 @@ const MainServicesSection = () => {
                       </div>
                       
                       {/* 세부 프로그램 */}
-                      {service.details && service.details.length > 0 && (
+                      {config.showSubPrograms && service.details && service.details.length > 0 && (
                         <div className="flex items-start">
                           <span className="w-1.5 h-1.5 bg-wizfore-coral-primary rounded-full mt-2 mr-3 flex-shrink-0"></span>
                           <div className="text-sm md:text-base text-wizfore-text-primary">
