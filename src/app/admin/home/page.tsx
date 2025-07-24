@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { Monitor, Grid3X3, Settings, Briefcase, Loader2 } from 'lucide-react'
+import { Monitor, Grid3X3, Settings, Briefcase, User, Loader2 } from 'lucide-react'
 import { getHomeConfig, updateHomeConfig } from '@/lib/services/dataService'
 import { defaultHomeConfig } from '@/lib/data/defaultHomeConfig'
 import { useAdminForm } from '@/hooks/useAdminForm'
@@ -10,7 +10,7 @@ import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
 import { TabItem } from '@/components/admin/common/AdminTabs'
 import type { HomeConfig } from '@/types'
 
-type HomeTab = 'hero' | 'categories' | 'programs' | 'mainservices'
+type HomeTab = 'hero' | 'categories' | 'programs' | 'mainservices' | 'about'
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<HomeTab>('hero')
@@ -164,6 +164,11 @@ export default function HomePage() {
       icon: Grid3X3
     },
     {
+      key: 'about',
+      label: '센터 소개',
+      icon: User
+    },
+    {
       key: 'programs',
       label: '프로그램 그리드',
       icon: Settings
@@ -173,6 +178,7 @@ export default function HomePage() {
       label: '주요 사업 분야',
       icon: Briefcase
     }
+    
   ]
 
   return (
@@ -209,18 +215,6 @@ export default function HomePage() {
             <div>
               <h3 className="text-lg font-semibold mb-2">히어로 섹션 관리</h3>
               <p className="text-gray-600 mb-4">메인 페이지 상단의 슬라이더 배너를 관리합니다.</p>
-            </div>
-
-            {/* 여기서 관리하는 데이터 */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-medium text-green-800 mb-2">✅ 이 페이지에서 관리</h4>
-              <ul className="text-sm text-green-700 space-y-1">
-                <li>• 슬라이더 자동재생 설정</li>
-                <li>• 슬라이드별 제목과 설명 텍스트</li>
-                <li>• 슬라이드별 버튼 텍스트와 링크</li>
-                <li>• 슬라이드별 배경 이미지</li>
-                <li>• 슬라이드 순서 및 활성화 설정</li>
-              </ul>
             </div>
 
             {/* 실제 편집 폼 영역 */}
@@ -350,26 +344,6 @@ export default function HomePage() {
               <p className="text-gray-600 mb-4">4대 프로그램 카테고리 영역의 설정을 관리합니다.</p>
             </div>
 
-            {/* 여기서 관리하는 데이터 */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-medium text-green-800 mb-2">✅ 이 페이지에서 관리</h4>
-              <ul className="text-sm text-green-700 space-y-1">
-                <li>• 섹션 제목 ("위즈포레 프로그램")</li>
-                <li>• 섹션 설명 텍스트</li>
-                <li>• 섹션 활성화/비활성화</li>
-              </ul>
-            </div>
-
-            {/* 다른 곳에서 관리하는 데이터 */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-medium text-blue-800 mb-2">ℹ️ 다른 페이지에서 관리</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• 카테고리별 프로그램 목록 → <strong>프로그램 관리</strong> 페이지</li>
-                <li>• 카테고리 이름 및 설명 → <strong>프로그램 관리</strong> 페이지</li>
-                <li>• 카테고리별 아이콘 → <strong>프로그램 관리</strong> 페이지</li>
-              </ul>
-            </div>
-
             {/* 실제 편집 폼 */}
             <div className="border border-gray-200 rounded-lg p-4">
               <h4 className="font-medium mb-3">카테고리 카드 섹션 설정</h4>
@@ -438,6 +412,54 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+
+            {/* 다른 곳에서 관리하는 데이터 */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-medium text-blue-800 mb-2">ℹ️ 다른 페이지에서 관리</h4>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• 카테고리별 프로그램 목록 → <strong>프로그램 관리</strong> 페이지</li>
+                <li>• 카테고리 이름 및 설명 → <strong>프로그램 관리</strong> 페이지</li>
+                <li>• 카테고리별 아이콘 → <strong>프로그램 관리</strong> 페이지</li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'about' && (
+          <div className="p-6 space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">센터 소개 섹션</h3>
+              <p className="text-gray-600 mb-4">홈페이지의 센터장 인사말 및 센터 소개 영역을 확인할 수 있습니다.</p>
+            </div>
+
+            {/* 안내 메시지 */}
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0">
+                  <svg className="w-5 h-5 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-medium text-amber-800 mb-1">데이터 수정 안내</h4>
+                  <p className="text-sm text-amber-700">
+                    AboutSection에 표시되는 센터장 인사말 및 관련 정보를 수정하려면 
+                    <strong className="mx-1">센터소개관리 페이지의 센터장소개탭</strong>에서 
+                    <strong className="mx-1">소개메시지</strong> 섹션을 편집하세요.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 다른 곳에서 관리하는 데이터 */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-medium text-blue-800 mb-2">ℹ️ 다른 페이지에서 관리</h4>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• 센터장 인사말 제목 및 내용 → <strong>센터소개관리 → 센터장소개탭 → 소개메시지</strong></li>
+                <li>• 하이라이트 키워드 설정 → <strong>센터소개관리 → 센터장소개탭 → 소개메시지</strong></li>
+                <li>• 센터장명 및 프로필 정보 → <strong>센터소개관리 → 센터장소개탭</strong></li>
+              </ul>
+            </div>
           </div>
         )}
 
@@ -446,35 +468,6 @@ export default function HomePage() {
             <div>
               <h3 className="text-lg font-semibold mb-2">프로그램 그리드 섹션</h3>
               <p className="text-gray-600 mb-4">12개 세부 프로그램 목록 영역의 설정을 관리합니다.</p>
-            </div>
-
-            {/* 여기서 관리하는 데이터 */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-medium text-green-800 mb-2">✅ 이 페이지에서 관리</h4>
-              <ul className="text-sm text-green-700 space-y-1">
-                <li>• 섹션 제목 ("세부 전문 프로그램")</li>
-                <li>• 섹션 설명 텍스트</li>
-                <li>• 프로그램별 아이콘 매핑 설정</li>
-                <li>• 섹션 활성화/비활성화</li>
-              </ul>
-            </div>
-
-            {/* 다른 곳에서 관리하는 데이터 */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-medium text-blue-800 mb-2">ℹ️ 다른 페이지에서 관리</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• 프로그램 이름, 목표, 내용 → <strong>프로그램 관리</strong> 페이지</li>
-                <li>• 프로그램 카테고리 분류 → <strong>프로그램 관리</strong> 페이지</li>
-                <li>• 프로그램 순서 → <strong>프로그램 관리</strong> 페이지</li>
-              </ul>
-            </div>
-
-            {/* 센터 소개 안내 */}
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-              <h4 className="font-medium text-orange-800 mb-2">⚠️ 참고사항</h4>
-              <ul className="text-sm text-orange-700 space-y-1">
-                <li>• 센터 소개 영역 ("함께 걷는 성장의 길") → <strong>About 관리</strong> 페이지</li>
-              </ul>
             </div>
 
             {/* 실제 편집 폼 */}
@@ -556,6 +549,16 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+
+            {/* 다른 곳에서 관리하는 데이터 */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-medium text-blue-800 mb-2">ℹ️ 다른 페이지에서 관리</h4>
+              <ul className="text-sm text-blue-700 space-y-1">
+                <li>• 프로그램 이름, 목표, 내용 → <strong>프로그램 관리</strong> 페이지</li>
+                <li>• 프로그램 카테고리 분류 → <strong>프로그램 관리</strong> 페이지</li>
+                <li>• 프로그램 순서 → <strong>프로그램 관리</strong> 페이지</li>
+              </ul>
+            </div>
           </div>
         )}
 
@@ -564,16 +567,6 @@ export default function HomePage() {
             <div>
               <h3 className="text-lg font-semibold mb-2">주요 사업 분야 섹션</h3>
               <p className="text-gray-600 mb-4">홈페이지 하단의 주요 사업 분야 영역을 완전히 관리합니다.</p>
-            </div>
-
-            {/* 여기서 관리하는 데이터 */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h4 className="font-medium text-green-800 mb-2">✅ 이 페이지에서 관리</h4>
-              <ul className="text-sm text-green-700 space-y-1">
-                <li>• 소개 메시지 (제목, 설명, 하이라이트 키워드)</li>
-                <li>• 서비스 목록 (제목, 설명, 세부사항, 시작년도)</li>
-                <li>• 섹션 활성화/비활성화 및 하위 프로그램 표시 설정</li>
-              </ul>
             </div>
 
             {/* 소개 메시지 섹션 */}
