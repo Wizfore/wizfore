@@ -36,14 +36,7 @@ const menuItems = [
   {
     title: '홈페이지 관리',
     href: '/admin/home',
-    icon: Home,
-    subItems: [
-      { title: '히어로 섹션', href: '/admin/home/hero' },
-      { title: '프로그램 미리보기', href: '/admin/home/program-preview' },
-      { title: '전문가 하이라이트', href: '/admin/home/expert-highlight' },
-      { title: '센터 소식', href: '/admin/home/news' },
-      { title: '문의 버튼 설정', href: '/admin/home/contact-button' }
-    ]
+    icon: Home
   },
   {
     title: '센터 소개 관리',
