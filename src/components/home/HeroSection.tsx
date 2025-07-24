@@ -31,18 +31,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
         // 클라이언트에서 데이터 가져오기 (폴백)
         try {
           const homeConfig = await getHomeConfig()
-          const slides = homeConfig.hero?.slides || []
+          // sections.hero 또는 기존 hero에서 데이터 가져오기
+          const heroData = (homeConfig as any).sections?.hero || (homeConfig as any).hero
+          const slides = heroData?.slides || []
           const enabledSlides = slides
             .filter((slide: any) => slide.enabled)
             .sort((a: any, b: any) => a.order - b.order)
           
           setSlides(enabledSlides)
-          setIsAutoPlaying(homeConfig.hero?.autoPlay ?? true)
+          setIsAutoPlaying(heroData?.autoPlay ?? true)
         } catch (error) {
           console.error('Error fetching hero data, using fallback:', error)
           // DB 실패 시 기본 데이터 사용
-          setSlides(defaultHomeConfig.hero.slides)
-          setIsAutoPlaying(defaultHomeConfig.hero.autoPlay)
+          setSlides(defaultHomeConfig.hero?.slides || [])
+          setIsAutoPlaying(defaultHomeConfig.hero?.autoPlay ?? true)
         } finally {
           setLoading(false)
         }
