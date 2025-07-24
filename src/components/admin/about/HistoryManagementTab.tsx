@@ -61,6 +61,18 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
     })
   }
 
+  // 통계 섹션 초기화
+  const initializeStats = () => {
+    onUpdate({
+      ...data,
+      stats: {
+        title: '',
+        description: '',
+        cards: []
+      }
+    })
+  }
+
   // 통계 섹션 업데이트
   const updateStats = (field: string, value: string) => {
     onUpdate({
@@ -172,99 +184,117 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
       </div>
 
       {/* 통계 섹션 */}
-      {data.stats && (
-        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
-            통계 섹션
-          </h3>
-          
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                통계 섹션 제목
-              </label>
-              <input
-                type="text"
-                value={data.stats.title || ''}
-                onChange={(e) => updateStats('title', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="통계 섹션 제목"
-              />
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <BarChart3 className="h-5 w-5" />
+          통계 섹션
+        </h3>
+        
+        {data.stats ? (
+          <>
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  통계 섹션 제목
+                </label>
+                <input
+                  type="text"
+                  value={data.stats.title || ''}
+                  onChange={(e) => updateStats('title', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="통계 섹션 제목"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  통계 섹션 설명
+                </label>
+                <textarea
+                  value={data.stats.description || ''}
+                  onChange={(e) => updateStats('description', e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="통계 섹션 설명"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                통계 섹션 설명
-              </label>
-              <textarea
-                value={data.stats.description || ''}
-                onChange={(e) => updateStats('description', e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="통계 섹션 설명"
-              />
+
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="font-medium text-gray-900">통계 카드</h4>
+              <Button onClick={addStatsCard} size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                카드 추가
+              </Button>
             </div>
-          </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <h4 className="font-medium text-gray-900">통계 카드</h4>
-            <Button onClick={addStatsCard} size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              카드 추가
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {data.stats.cards?.map((card) => (
-              <div key={card.id} className="border border-gray-200 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">카드 #{card.order}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {data.stats.cards?.map((card) => (
+                <div key={card.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">카드 #{card.order}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateStatsCard(card.id, 'enabled', !card.enabled)}
+                      >
+                        {card.enabled ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                      </Button>
+                    </div>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => updateStatsCard(card.id, 'enabled', !card.enabled)}
+                      onClick={() => removeStatsCard(card.id)}
                     >
-                      {card.enabled ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                      <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => removeStatsCard(card.id)}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
+                  
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      value={card.title}
+                      onChange={(e) => updateStatsCard(card.id, 'title', e.target.value)}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="카드 제목"
+                    />
+                    <textarea
+                      value={card.description}
+                      onChange={(e) => updateStatsCard(card.id, 'description', e.target.value)}
+                      rows={2}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="카드 설명"
+                    />
+                    <input
+                      type="text"
+                      value={card.iconPath}
+                      onChange={(e) => updateStatsCard(card.id, 'iconPath', e.target.value)}
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="아이콘 경로"
+                    />
+                  </div>
                 </div>
-                
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    value={card.title}
-                    onChange={(e) => updateStatsCard(card.id, 'title', e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="카드 제목"
-                  />
-                  <textarea
-                    value={card.description}
-                    onChange={(e) => updateStatsCard(card.id, 'description', e.target.value)}
-                    rows={2}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="카드 설명"
-                  />
-                  <input
-                    type="text"
-                    value={card.iconPath}
-                    onChange={(e) => updateStatsCard(card.id, 'iconPath', e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="아이콘 경로"
-                  />
+              ))}
+              
+              {(!data.stats.cards || data.stats.cards.length === 0) && (
+                <div className="col-span-full text-center py-8 text-gray-500">
+                  아직 등록된 통계 카드가 없습니다.
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-8">
+            <div className="text-gray-500 mb-4">
+              통계 섹션이 아직 활성화되지 않았습니다.
+            </div>
+            <Button onClick={initializeStats}>
+              <BarChart3 className="h-4 w-4 mr-2" />
+              통계 섹션 활성화
+            </Button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* 연혁 관리 */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
