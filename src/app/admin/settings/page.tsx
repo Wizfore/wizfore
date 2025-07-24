@@ -10,12 +10,11 @@ import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
 import { TabItem } from '@/components/admin/common/AdminTabs'
 import { BasicInfoTab } from '@/components/admin/settings/BasicInfoTab'
 import { ContactInfoTab } from '@/components/admin/settings/ContactInfoTab'
-import { ServicesTab } from '@/components/admin/settings/ServicesTab'
 import { ImagesTab } from '@/components/admin/settings/ImagesTab'
 import type { DefaultSiteData } from '@/types'
 
 type SiteInfoData = DefaultSiteData['siteInfo']
-type TabKey = 'basic' | 'contact' | 'services' | 'images'
+type TabKey = 'basic' | 'contact' | 'images'
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabKey>('basic')
@@ -41,33 +40,13 @@ export default function SettingsPage() {
       errors.push('올바른 이메일 형식을 입력해주세요.')
     }
     
-    // 메인 서비스 검증 (빈 서비스는 제외)
-    data.mainServices.services.forEach((service, index) => {
-      // 모든 필드가 비어있는 서비스는 검증에서 제외
-      if (!service.title.trim() && !service.description.trim() && !service.startYear.trim()) {
-        return
-      }
-      
-      // 하나라도 필드가 있으면 모든 필드 검증
-      if (!service.title.trim()) errors.push(`메인 서비스 ${index + 1}의 제목은 필수입니다.`)
-      if (!service.description.trim()) errors.push(`메인 서비스 ${index + 1}의 설명은 필수입니다.`)
-      if (!service.startYear.trim()) errors.push(`메인 서비스 ${index + 1}의 시작년도는 필수입니다.`)
-    })
     
     return errors
   }
 
-  // 데이터 정리 함수
+  // 데이터 정리 함수 (필요시 확장 가능)
   const cleanSiteInfo = (data: SiteInfoData): SiteInfoData => {
-    return {
-      ...data,
-      mainServices: {
-        ...data.mainServices,
-        services: data.mainServices.services.filter(service => 
-          service.title.trim() || service.description.trim() || service.startYear.trim()
-        )
-      }
-    }
+    return data
   }
 
   // fetchData 함수를 메모이제이션하여 불필요한 리렌더링 방지
@@ -139,7 +118,6 @@ export default function SettingsPage() {
   const tabs: TabItem<TabKey>[] = [
     { key: 'basic', label: '기본 정보', icon: Settings },
     { key: 'contact', label: '연락처 정보', icon: Settings },
-    { key: 'services', label: '메인 서비스', icon: Settings },
     { key: 'images', label: '이미지 설정', icon: Settings },
   ]
 
@@ -162,8 +140,6 @@ export default function SettingsPage() {
         return <BasicInfoTab siteInfo={siteInfo} onUpdate={setSiteInfo} />
       case 'contact':
         return <ContactInfoTab siteInfo={siteInfo} onUpdate={setSiteInfo} />
-      case 'services':
-        return <ServicesTab siteInfo={siteInfo} onUpdate={setSiteInfo} />
       case 'images':
         return <ImagesTab siteInfo={siteInfo} onUpdate={setSiteInfo} />
       default:

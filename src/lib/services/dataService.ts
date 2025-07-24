@@ -3,7 +3,8 @@ import {
   doc,
   updateDoc,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
+  writeBatch
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import type { DefaultSiteData } from '@/types'
@@ -356,14 +357,41 @@ export async function updateSnsData(snsData: any) {
  */
 export async function getHomeConfig() {
   try {
-    const docRef = doc(db, 'homeConfig', 'main')
-    const docSnap = await getDoc(docRef)
+    // homeConfig와 siteInfo의 mainServices를 함께 가져오기
+    const [homeConfigSnap, siteInfoSnap] = await Promise.all([
+      getDoc(doc(db, 'homeConfig', 'main')),
+      getDoc(doc(db, 'siteInfo', 'main'))
+    ])
     
-    if (docSnap.exists()) {
-      return docSnap.data()
+    let homeConfigData = {}
+    let mainServicesData = null
+    
+    if (homeConfigSnap.exists()) {
+      homeConfigData = homeConfigSnap.data()
     } else {
       throw new Error('Home config not found in database')
     }
+    
+    if (siteInfoSnap.exists()) {
+      const siteInfo = siteInfoSnap.data()
+      mainServicesData = siteInfo.mainServices
+    }
+    
+    // mainServices 데이터를 homeConfig에 통합
+    const result = {
+      ...homeConfigData,
+      sections: {
+        ...(homeConfigData as any).sections,
+        mainServices: mainServicesData ? {
+          aboutMessage: mainServicesData.aboutMessage,
+          services: mainServicesData.services,
+          enabled: (homeConfigData as any).sections?.mainServices?.enabled || false,
+          showSubPrograms: (homeConfigData as any).sections?.mainServices?.showSubPrograms || false
+        } : undefined
+      }
+    }
+    
+    return result
   } catch (error) {
     console.error('Error fetching home config:', error)
     throw error
@@ -375,8 +403,43 @@ export async function getHomeConfig() {
  */
 export async function updateHomeConfig(updates: Partial<any>) {
   try {
-    const docRef = doc(db, 'homeConfig', 'main')
-    await updateDoc(docRef, updates)
+    const batch = writeBatch(db)
+    
+    // mainServices 데이터가 있다면 siteInfo와 homeConfig 모두 업데이트
+    if (updates.sections?.mainServices) {
+      const { enabled, showSubPrograms, aboutMessage, services } = updates.sections.mainServices
+      
+      // siteInfo의 mainServices 업데이트
+      if (aboutMessage || services) {
+        const siteInfoRef = doc(db, 'siteInfo', 'main')
+        batch.update(siteInfoRef, {
+          mainServices: {
+            aboutMessage,
+            services
+          }
+        })
+      }
+      
+      // homeConfig의 섹션 설정 업데이트
+      const homeConfigRef = doc(db, 'homeConfig', 'main')
+      const homeConfigUpdates = {
+        ...updates,
+        sections: {
+          ...updates.sections,
+          mainServices: {
+            enabled,
+            showSubPrograms
+          }
+        }
+      }
+      batch.update(homeConfigRef, homeConfigUpdates)
+    } else {
+      // mainServices가 없다면 homeConfig만 업데이트
+      const homeConfigRef = doc(db, 'homeConfig', 'main')
+      batch.update(homeConfigRef, updates)
+    }
+    
+    await batch.commit()
     console.log('Home config updated successfully')
   } catch (error) {
     console.error('Error updating home config:', error)
@@ -589,7 +652,9 @@ export async function updateTeachers(teachersData: any) {
 export async function getHeroData() {
   try {
     const homeConfig = await getHomeConfig()
-    const slides = homeConfig.hero?.slides || []
+    // sections.hero 또는 기존 hero에서 데이터 가져오기
+    const heroData = (homeConfig as any).sections?.hero || (homeConfig as any).hero
+    const slides = heroData?.slides || []
     
     const enabledSlides = slides
       .filter((slide: any) => slide.enabled)
@@ -597,7 +662,7 @@ export async function getHeroData() {
     
     return {
       slides: enabledSlides,
-      autoPlay: homeConfig.hero?.autoPlay ?? true
+      autoPlay: heroData?.autoPlay ?? true
     }
   } catch (error) {
     console.error('Error fetching hero data:', error)
@@ -611,11 +676,13 @@ export async function getHeroData() {
 export async function getProgramsGridConfig() {
   try {
     const homeConfig = await getHomeConfig()
+    // sections.programGrid 또는 기존 programs에서 데이터 가져오기
+    const programsData = (homeConfig as any).sections?.programGrid || (homeConfig as any).programs
     
     return {
-      title: homeConfig.programs?.title || "세부 전문 프로그램",
-      description: homeConfig.programs?.description || "개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다",
-      enabled: homeConfig.programs?.enabled ?? true
+      title: programsData?.title || "세부 전문 프로그램",
+      description: programsData?.description || "개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다",
+      enabled: programsData?.enabled ?? true
     }
   } catch (error) {
     console.error('Error fetching programs grid config:', error)

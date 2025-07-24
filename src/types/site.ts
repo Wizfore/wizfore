@@ -1,4 +1,4 @@
-import { ContactInfo, MainServices } from './common'
+import { ContactInfo, MainServices, MainService } from './common'
 import { DirectorInfo, HistoryInfo, AdvisorsInfo, LocationInfo, InquiryInfo } from './about'
 import { ProgramCategory } from './program'
 import { TeamCategory } from './expert'
@@ -54,43 +54,54 @@ export interface GradientColor {
 }
 
 export interface HomeConfig {
-  hero: {
-    enabled: boolean
-    autoPlay: boolean
-    slides: HeroSlide[]
+  hero?: {
+    enabled?: boolean
+    autoPlay?: boolean
+    slides?: HeroSlide[]
   }
   programs?: {
-    title: string
-    description: string
-    enabled: boolean
+    title?: string
+    description?: string
+    enabled?: boolean
   }
-  // 새로 추가되는 섹션 설정
+  // 섹션 설정
   sections?: {
+    hero?: {
+      enabled?: boolean
+      autoPlay?: boolean
+      slides?: HeroSlide[]
+    }
     categoryCards?: {
-      title: string
+      title?: string
       description?: string
-      enabled: boolean
+      enabled?: boolean
     }
     programGrid?: {
-      title: string
-      description: string
-      enabled: boolean
-      iconMappings: ProgramIconMapping[]
+      title?: string
+      description?: string
+      enabled?: boolean
+      iconMappings?: ProgramIconMapping[]
     }
     aboutSection?: {
-      enabled: boolean
-      showButton: boolean
+      enabled?: boolean
+      showButton?: boolean
     }
     mainServices?: {
-      enabled: boolean
-      showSubPrograms: boolean
+      aboutMessage?: {
+        title?: string
+        description?: string
+        highlightKeywords?: string[]
+      }
+      services?: MainService[]
+      enabled?: boolean
+      showSubPrograms?: boolean
     }
   }
   // UI 테마 설정
   theme?: {
-    primaryColor: string
-    accentColor: string
-    gradientColors: GradientColor[]
+    primaryColor?: string
+    accentColor?: string
+    gradientColors?: GradientColor[]
   }
 }
 
