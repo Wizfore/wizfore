@@ -1,97 +1,279 @@
-export default function ProgramsPage() {
-  return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">프로그램 관리</h1>
-        <p className="text-gray-600">다양한 치료 및 교육 프로그램을 관리합니다.</p>
+'use client'
+
+import { useState, useCallback } from 'react'
+import { Activity, Brain, Users, Trophy, Calendar, Loader2 } from 'lucide-react'
+import { getPrograms, updatePrograms } from '@/lib/services/dataService'
+import { useAdminForm } from '@/hooks/useAdminForm'
+import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabsWithUnsavedChanges'
+import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
+import { TabItem } from '@/components/admin/common/AdminTabs'
+import { TherapyManagementTab } from '@/components/admin/programs/TherapyManagementTab'
+import { CounselingManagementTab } from '@/components/admin/programs/CounselingManagementTab'
+import { AfterschoolManagementTab } from '@/components/admin/programs/AfterschoolManagementTab'
+import { SportsManagementTab } from '@/components/admin/programs/SportsManagementTab'
+import { AdultDayManagementTab } from '@/components/admin/programs/AdultDayManagementTab'
+import type { ProgramCategory } from '@/types/program'
+
+type ProgramTab = 'therapy' | 'counseling' | 'afterschool' | 'sports' | 'adult-day'
+
+interface ProgramsData {
+  [key: string]: ProgramCategory
+}
+
+// 기본 데이터 구조
+const DEFAULT_PROGRAMS_DATA: ProgramsData = {
+  therapy: {
+    id: 'therapy',
+    programs: [],
+    order: 1
+  },
+  counseling: {
+    id: 'counseling',
+    programs: [],
+    order: 2
+  },
+  afterschool: {
+    id: 'afterschool',
+    programs: [],
+    order: 3
+  },
+  sports: {
+    id: 'special-sports',
+    programs: [],
+    order: 4
+  },
+  'adult-day': {
+    id: 'adult-day',
+    programs: [],
+    order: 5
+  }
+}
+
+export default function ProgramsManagementPage() {
+  const [activeTab, setActiveTab] = useState<ProgramTab>('therapy')
+  const [showUnsavedDialog, setShowUnsavedDialog] = useState(false)
+  const [pendingTab, setPendingTab] = useState<ProgramTab | null>(null)
+  const [dialogSaving, setDialogSaving] = useState(false)
+
+  // fetchData 함수
+  const fetchData = useCallback(async (): Promise<ProgramsData> => {
+    try {
+      const categories = await getPrograms()
+      const programsData: ProgramsData = { ...DEFAULT_PROGRAMS_DATA }
+      
+      // API에서 받은 데이터를 구조화
+      categories.forEach((category: any) => {
+        // special-sports를 sports로 매핑
+        const mappedId = category.id === 'special-sports' ? 'sports' : category.id
+        
+        if (programsData[mappedId]) {
+          programsData[mappedId] = {
+            id: category.id, // 원본 id 유지
+            programs: category.programs || [],
+            order: category.order || programsData[mappedId].order,
+            hero: category.hero,
+            aboutMessage: category.aboutMessage
+          }
+        }
+      })
+      
+      return programsData
+    } catch (error) {
+      console.error('Error fetching programs data:', error)
+      return DEFAULT_PROGRAMS_DATA
+    }
+  }, [])
+
+  // saveData 함수
+  const saveData = useCallback(async (data: ProgramsData): Promise<void> => {
+    // 객체를 배열로 변환하여 저장
+    const categoriesArray = Object.values(data)
+    await updatePrograms(categoriesArray)
+  }, [])
+
+  // useAdminForm 훅 사용
+  const {
+    data: programsData,
+    setData: setProgramsData,
+    loading,
+    saving,
+    saveStatus,
+    error,
+    hasChanges,
+    handleSave,
+    handleReset
+  } = useAdminForm({
+    fetchData,
+    saveData,
+    defaultData: DEFAULT_PROGRAMS_DATA
+  })
+
+  // 탭 정의
+  const tabs: TabItem<ProgramTab>[] = [
+    {
+      key: 'therapy',
+      label: '치료 프로그램',
+      icon: Activity
+    },
+    {
+      key: 'counseling',
+      label: '상담 프로그램',
+      icon: Brain
+    },
+    {
+      key: 'afterschool',
+      label: '방과후 프로그램',
+      icon: Users
+    },
+    {
+      key: 'sports',
+      label: '장애인 스포츠 프로그램',
+      icon: Trophy
+    },
+    {
+      key: 'adult-day',
+      label: '성인 주간활동 프로그램',
+      icon: Calendar
+    }
+  ]
+
+  // 탭 전환 핸들러
+  const handleTabChange = useCallback((newTab: ProgramTab) => {
+    if (hasChanges) {
+      setPendingTab(newTab)
+      setShowUnsavedDialog(true)
+    } else {
+      setActiveTab(newTab)
+    }
+  }, [hasChanges])
+
+  const handleSaveAndSwitch = async () => {
+    setDialogSaving(true)
+    try {
+      await handleSave()
+      if (pendingTab) {
+        setActiveTab(pendingTab)
+        setPendingTab(null)
+      }
+      setShowUnsavedDialog(false)
+    } catch (error) {
+      console.error('저장 실패:', error)
+    } finally {
+      setDialogSaving(false)
+    }
+  }
+
+  const handleDiscardAndSwitch = () => {
+    handleReset()
+    if (pendingTab) {
+      setActiveTab(pendingTab)
+      setPendingTab(null)
+    }
+    setShowUnsavedDialog(false)
+  }
+
+  // 로딩 상태
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="flex items-center space-x-2">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span>프로그램 데이터를 불러오는 중...</span>
+        </div>
       </div>
+    )
+  }
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* 치료 프로그램 */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">치료 프로그램</h3>
-          <p className="text-gray-600 mb-4">8개 치료 영역의 프로그램을 관리합니다.</p>
-          <div className="text-sm text-gray-500 mb-4">
-            • 언어치료, 인지치료<br/>
-            • 놀이치료, 미술치료<br/>
-            • 음악치료, 감각통합치료<br/>
-            • 특수체육, 심리운동치료
-          </div>
-          <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-            관리하기
-          </button>
-        </div>
+  // 현재 탭의 프로그램 데이터 업데이트 핸들러
+  const updateCurrentTabData = (updatedData: ProgramCategory) => {
+    setProgramsData(prev => ({
+      ...prev,
+      [activeTab]: updatedData
+    }))
+  }
 
-        {/* 상담 서비스 */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">상담 서비스</h3>
-          <p className="text-gray-600 mb-4">진단 평가와 상담 서비스를 관리합니다.</p>
-          <div className="text-sm text-gray-500 mb-4">
-            • 발달/심리검사<br/>
-            • 사회성 그룹치료<br/>
-            • 부모상담/부모코칭
-          </div>
-          <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-            관리하기
-          </button>
-        </div>
+  // 탭 콘텐츠 렌더링
+  const renderTabContent = () => {
+    const currentData = programsData[activeTab]
+    
+    switch (activeTab) {
+      case 'therapy':
+        return (
+          <TherapyManagementTab
+            data={currentData}
+            onUpdate={updateCurrentTabData}
+          />
+        )
+      
+      case 'counseling':
+        return (
+          <CounselingManagementTab
+            data={currentData}
+            onUpdate={updateCurrentTabData}
+          />
+        )
+      
+      case 'afterschool':
+        return (
+          <AfterschoolManagementTab
+            data={currentData}
+            onUpdate={updateCurrentTabData}
+          />
+        )
+      
+      case 'sports':
+        return (
+          <SportsManagementTab
+            data={currentData}
+            onUpdate={updateCurrentTabData}
+          />
+        )
+      
+      case 'adult-day':
+        return (
+          <AdultDayManagementTab
+            data={currentData}
+            onUpdate={updateCurrentTabData}
+          />
+        )
+      
+      default:
+        return null
+    }
+  }
 
-        {/* 방과후 프로그램 */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">방과후 프로그램</h3>
-          <p className="text-gray-600 mb-4">토요/평일 방과후 프로그램을 관리합니다.</p>
-          <div className="text-sm text-gray-500 mb-4">
-            • 토요방과후(사회성교실)<br/>
-            • 평일방과후(기초학습교실)<br/>
-            • 프로그램 일정 관리
-          </div>
-          <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-            관리하기
-          </button>
-        </div>
+  return (
+    <div className="space-y-6">
+      <AdminPageHeader
+        title="프로그램 관리"
+        description="다양한 치료 및 교육 프로그램을 관리합니다"
+        error={error}
+        saveStatus={saveStatus}
+        hasChanges={hasChanges}
+        saving={saving}
+        onSave={handleSave}
+        onReset={handleReset}
+      />
 
-        {/* 특수 스포츠 프로그램 */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">특수 스포츠 프로그램</h3>
-          <p className="text-gray-600 mb-4">장애인 뉴스포츠와 운동재활을 관리합니다.</p>
-          <div className="text-sm text-gray-500 mb-4">
-            • 장애인 뉴스포츠<br/>
-            • 특수체육 운동재활<br/>
-            • 스포츠 장비 관리
-          </div>
-          <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-            관리하기
-          </button>
-        </div>
+      <AdminTabsWithUnsavedChanges
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        hasChanges={hasChanges}
+        showUnsavedDialog={showUnsavedDialog}
+        onDialogSave={handleSaveAndSwitch}
+        onDialogDiscard={handleDiscardAndSwitch}
+        onDialogCancel={() => {
+          setShowUnsavedDialog(false)
+          setPendingTab(null)
+        }}
+        saving={dialogSaving}
+      />
 
-        {/* 성인 주간활동 */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">성인 주간활동</h3>
-          <p className="text-gray-600 mb-4">6개 영역의 성인 주간활동을 관리합니다.</p>
-          <div className="text-sm text-gray-500 mb-4">
-            • 일상생활기술훈련<br/>
-            • 사회적응기술훈련<br/>
-            • 쉼(힐링), 재미(여가), 지역사회활용, 건강생활관리
-          </div>
-          <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-            관리하기
-          </button>
-        </div>
-
-        {/* 프로그램 통계 */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">프로그램 통계</h3>
-          <p className="text-gray-600 mb-4">프로그램 이용 현황과 통계를 확인합니다.</p>
-          <div className="text-sm text-gray-500 mb-4">
-            • 이용자 현황<br/>
-            • 프로그램별 통계<br/>
-            • 월간/연간 리포트
-          </div>
-          <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">
-            통계 보기
-          </button>
-        </div>
+      <div className="bg-white rounded-lg border">
+        {renderTabContent()}
       </div>
     </div>
   )
 }
+

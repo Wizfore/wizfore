@@ -175,6 +175,24 @@ export async function getAllProgramsFlattened() {
 }
 
 /**
+ * 프로그램 데이터 업데이트
+ */
+export async function updatePrograms(programsData: any) {
+  try {
+    const docRef = doc(db, 'programs', 'main')
+    await updateDoc(docRef, {
+      categories: programsData,
+      updatedAt: new Date().toISOString()
+    })
+    
+    return programsData
+  } catch (error) {
+    console.error('Error updating programs:', error)
+    throw error
+  }
+}
+
+/**
  * 자문위원 정보 조회
  */
 export async function getAdvisors() {
