@@ -22,7 +22,19 @@ import {
 import { useAuth } from '@/contexts/AuthContext'
 import { logout } from '@/lib/services/authService'
 
-const menuItems = [
+interface SubMenuItem {
+  title: string
+  href: string
+}
+
+interface MenuItem {
+  title: string
+  href: string
+  icon: any
+  subItems?: SubMenuItem[]
+}
+
+const menuItems: MenuItem[] = [
   {
     title: '대시보드',
     href: '/admin/dashboard',
@@ -46,14 +58,7 @@ const menuItems = [
   {
     title: '프로그램 관리',
     href: '/admin/programs',
-    icon: BookOpen,
-    subItems: [
-      { title: '치료 프로그램', href: '/admin/programs/individual' },
-      { title: '상담 서비스', href: '/admin/programs/evaluation' },
-      { title: '방과후 프로그램', href: '/admin/programs/afterschool' },
-      { title: '특수 스포츠 프로그램', href: '/admin/programs/sports' },
-      { title: '성인 주간활동', href: '/admin/programs/adult-activities' }
-    ]
+    icon: BookOpen
   },
   {
     title: '전문가 소개 관리',

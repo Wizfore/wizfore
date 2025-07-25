@@ -1,5 +1,5 @@
-import { addProgram } from '@/lib/services/programService'
 import { addInquiry } from '@/lib/services/inquiryService'
+import { updateDoc, doc } from 'firebase/firestore'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 
@@ -123,17 +123,30 @@ export async function addSamplePrograms() {
   console.log('샘플 프로그램 데이터 추가 시작...')
   
   try {
-    // 치료 프로그램 추가
-    for (const program of sampleTherapyPrograms) {
-      const id = await addProgram(program)
-      console.log(`치료 프로그램 추가됨: ${program.name} (ID: ${id})`)
-    }
+    // 치료 프로그램 데이터를 programs/main 문서에 추가
+    const therapyProgramsDoc = doc(db, 'programs', 'main')
+    await updateDoc(therapyProgramsDoc, {
+      'therapy.programs': sampleTherapyPrograms.map((program, index) => ({
+        ...program,
+        id: `therapy-${index + 1}`,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      })),
+      'therapy.updatedAt': serverTimestamp()
+    })
+    console.log('치료 프로그램 데이터 추가 완료')
 
-    // 상담 프로그램 추가
-    for (const program of sampleCounselingPrograms) {
-      const id = await addProgram(program)
-      console.log(`상담 프로그램 추가됨: ${program.name} (ID: ${id})`)
-    }
+    // 상담 프로그램 데이터를 programs/main 문서에 추가
+    await updateDoc(therapyProgramsDoc, {
+      'counseling.programs': sampleCounselingPrograms.map((program, index) => ({
+        ...program,
+        id: `counseling-${index + 1}`,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      })),
+      'counseling.updatedAt': serverTimestamp()
+    })
+    console.log('상담 프로그램 데이터 추가 완료')
 
     console.log('✅ 모든 샘플 프로그램이 추가되었습니다.')
     return true
