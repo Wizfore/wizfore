@@ -102,6 +102,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                 backgroundImage: `url('${backgroundImageUrl}')`
               }}
             />
+            {/* 김포 스타일 부드러운 오버레이 */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gcf-primary/20 via-gcf-secondary/10 to-gcf-accent/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             <div className="relative z-10 h-full">
               
               {/* 메인 콘텐츠 텍스트 - 카테고리 박스 위 */}
@@ -160,39 +163,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
           ))}
         </div>
 
-        {/* 카테고리 텍스트 - 히어로 섹션 위로 오버레이 배치 */}
-        <div className="absolute bottom-4 md:bottom-8 lg:bottom-16 left-4 md:left-8 lg:left-16 z-30 w-80 md:w-96 lg:w-[400px]">
-          <svg width="0" height="0">
-            <defs>
-              <clipPath id="category-clip" clipPathUnits="objectBoundingBox">
-                <path d="M0, 0 Q0,0.25 0.15,0.25 L0.7, 0.25 Q0.85,0.25 0.85, 0.5 L0.85, 0.75 Q0.85,1 1,1 L0, 1 Z" />
-              </clipPath>
-            </defs> 
-          </svg>
-
-          <div
-            className="bg-white px-3 py-3 sm:px-4 sm:py-5 md:px-5 md:py-6 lg:px-6 lg:py-6 transition-all duration-1000 ease-in-out min-w-[200px] sm:min-w-[240px] md:min-w-[280px] lg:min-w-[320px]"
-            style={{ 
-              clipPath: 'url(#category-clip)',
-              width: 'fit-content'
-            }}
-          >
-            <div className="ml-0 mr-3 sm:ml-0 sm:mr-4 md:ml-0.5 md:mr-6 lg:ml-0.5 lg:mr-8 mt-8 sm:mt-14 md:mt-16 lg:mt-18 mb-2 sm:mb-4 md:mb-5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`category-text-${currentSlide}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-wizfore-text-primary text-center"
-                >
-                  {currentSlideData.categoryText}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
 
     </section>
   )

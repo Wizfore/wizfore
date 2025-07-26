@@ -15,13 +15,13 @@ interface CategoryWithFallback extends ProgramCategory {
   imageUrl?: string
 }
 
-// 각 카테고리별 fallback 그라데이션 매핑 - 따뜻한 오렌지-베이지 톤
+// 각 카테고리별 fallback 그라데이션 매핑 - Heart-Heart 따뜻한 오렌지 톤
 const fallbackGradients = {
-  'therapy': 'bg-gradient-to-br from-wizfore-coral-primary to-wizfore-coral-secondary',
-  'counseling': 'bg-gradient-to-br from-wizfore-coral-secondary to-wizfore-coral-light',
-  'afterschool': 'bg-gradient-to-br from-wizfore-coral-light to-wizfore-coral-accent',
-  'adult-day': 'bg-gradient-to-br from-wizfore-coral-accent to-wizfore-soft-pink',
-  'special-sports': 'bg-gradient-to-br from-wizfore-soft-pink to-wizfore-warm-brown'
+  'therapy': 'bg-gradient-to-br from-heart-primary to-heart-primary-hover',
+  'counseling': 'bg-gradient-to-br from-heart-primary-hover to-heart-secondary',
+  'afterschool': 'bg-gradient-to-br from-heart-secondary to-heart-accent',
+  'adult-day': 'bg-gradient-to-br from-heart-accent to-heart-bright',
+  'special-sports': 'bg-gradient-to-br from-heart-bright to-heart-warm'
 }
 
 
@@ -141,8 +141,8 @@ const CategoryCards = () => {
 
   if (loading) {
     return (
-      <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72 bg-gradient-to-b from-transparent to-wizfore-light-beige">
-        {/* 메디모아 스타일 조약돌 모양 SVG 배경 (로딩 상태) */}
+      <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72 bg-gradient-to-b from-transparent to-heart-bright">
+        {/* Heart-Heart 스타일 조약돌 모양 SVG 배경 (로딩 상태) */}
         <div className="absolute inset-0">
           <svg 
             className="absolute inset-0 w-full h-full" 
@@ -151,10 +151,10 @@ const CategoryCards = () => {
           >
             <defs>
               <linearGradient id="stoneGradientLoading" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#FFF9F4" stopOpacity="1.0" />
+                <stop offset="0%" stopColor="#FFF7F0" stopOpacity="1.0" />
                 <stop offset="40%" stopColor="#FFEDE4" stopOpacity="1.0" />
-                <stop offset="80%" stopColor="#FFCAB0" stopOpacity="1.0" />
-                <stop offset="100%" stopColor="#FFA585" stopOpacity="1.0" />
+                <stop offset="80%" stopColor="#F38B5E" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#ED7B41" stopOpacity="0.9" />
               </linearGradient>
             </defs>
             <path 
@@ -180,10 +180,10 @@ const CategoryCards = () => {
           <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
             {[...Array(5)].map((_, index) => (
                 <div key={index}>
-                  <div className="relative h-32 md:h-56 shadow-md overflow-hidden rounded-2xl bg-gray-300 animate-pulse w-full">
+                  <div className="relative h-32 md:h-56 shadow-heart-card overflow-hidden rounded-heart-lg bg-heart-primary/30 animate-pulse w-full">
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6">
-                      <div className="h-4 md:h-6 bg-white/30 rounded w-3/4 mb-1 md:mb-2 ml-1 md:ml-2"></div>
-                      <div className="h-3 md:h-4 bg-white/20 rounded w-5/6 ml-1 md:ml-2"></div>
+                      <div className="h-4 md:h-6 bg-white/30 rounded-heart-md w-3/4 mb-1 md:mb-2 ml-1 md:ml-2"></div>
+                      <div className="h-3 md:h-4 bg-white/20 rounded-heart-sm w-5/6 ml-1 md:ml-2"></div>
                     </div>
                   </div>
                 </div>
@@ -195,8 +195,8 @@ const CategoryCards = () => {
   }
 
   return (
-    <section className="relative overflow-hidden pt-40 pb-56 md:pt-56 md:pb-72 lg:pt-64 lg:pb-88 xl:pt-72 xl:pb-104 bg-gradient-to-b from-transparent to-wizfore-light-beige">
-      {/* 메디모아 스타일 조약돌 모양 SVG 배경 */}
+    <section className="relative overflow-hidden pt-40 pb-56 md:pt-56 md:pb-72 lg:pt-64 lg:pb-88 xl:pt-72 xl:pb-104 bg-gradient-to-b from-transparent to-heart-bright">
+      {/* Heart-Heart 스타일 조약돌 모양 SVG 배경 */}
       <div className="absolute inset-0 overflow-hidden">
         <svg 
           className="absolute inset-0 w-full h-full" 
@@ -205,10 +205,10 @@ const CategoryCards = () => {
         >
           <defs>
             <linearGradient id="stoneGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#FEFBF6" stopOpacity="1.0" />
-              <stop offset="20%" stopColor="#FFF9F4" stopOpacity="1.0" />
-              <stop offset="50%" stopColor="#FFCAB0" stopOpacity="1.0" />
-              <stop offset="100%" stopColor="#FF8C69" stopOpacity="1.0" />
+              <stop offset="0%" stopColor="#FFF7F0" stopOpacity="1.0" />
+              <stop offset="20%" stopColor="#FFEDE4" stopOpacity="1.0" />
+              <stop offset="80%" stopColor="#F38B5E" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#ED7B41" stopOpacity="0.9" />
             </linearGradient>
           </defs>
           <path 
@@ -232,11 +232,11 @@ const CategoryCards = () => {
       <div className="w-full relative z-10 px-4 lg:px-8 xl:px-0">
         {/* 섹션 제목 */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold">
-            <span className="text-wizfore-text-primary">{sectionConfig.title.split(' ')[0]}</span> <span className="text-wizfore-coral-primary">{sectionConfig.title.split(' ').slice(1).join(' ')}</span>
+          <h2 className="text-3xl md:text-4xl font-bold heart-pulse">
+            <span className="text-heart-body">{sectionConfig.title.split(' ')[0]}</span> <span className="text-heart-primary">{sectionConfig.title.split(' ').slice(1).join(' ')}</span>
           </h2>
           {sectionConfig.description && (
-            <p className="text-wizfore-text-secondary mt-4 text-lg max-w-2xl mx-auto">
+            <p className="text-heart-gray mt-4 text-lg max-w-2xl mx-auto">
               {sectionConfig.description}
             </p>
           )}
@@ -266,7 +266,7 @@ const CategoryCards = () => {
                 className="group"
               >
                 <Link href={`/programs/${category.id}`}>
-                  <div className={`relative h-32 md:h-56 shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient} w-full`}>
+                  <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full heart-pulse`}>
                     {/* 배경 이미지 */}
                     <CategoryImage 
                       categoryImageUrl={category.hero?.imageUrl}
@@ -313,7 +313,7 @@ const CategoryCards = () => {
                           className="group"
                         >
                           <Link href={`/programs/${category.id}`}>
-                            <div className={`relative h-32 md:h-56 shadow-md hover:shadow-xl transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-2xl ${fallbackGradient} w-full`}>
+                            <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full heart-pulse`}>
                               {/* 배경 이미지 */}
                               <CategoryImage 
                                 categoryImageUrl={category.hero?.imageUrl}

@@ -216,18 +216,25 @@ const ProgramGrid = () => {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-wizfore-light-beige via-wizfore-soft-pink/30 via-50% to-wizfore-soft-pink">
+      <section 
+        className="py-16 md:py-24 lg:py-32"
+        style={{
+          background: `radial-gradient(ellipse at center bottom, #F38B5E 0%, var(--wizfore-warm-beige) 60%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
+          paddingBottom: '80px',
+          paddingTop: '0'
+        }}
+      >
         <div className="container-custom mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="h-10 bg-gray-300 rounded w-80 mx-auto mb-4 animate-pulse"></div>
-            <div className="h-6 bg-gray-200 rounded w-[32rem] mx-auto animate-pulse"></div>
+            <div className="h-10 bg-gcf-border rounded-xl w-80 mx-auto mb-4 animate-pulse shadow-gcf-sm"></div>
+            <div className="h-6 bg-gcf-muted rounded-lg w-[32rem] mx-auto animate-pulse"></div>
           </div>
           <div className="w-full max-w-6xl mx-auto">
             <Marquee pauseOnHover className="[--duration:30s]">
               {[...Array(8)].map((_, index) => (
                 <div 
                   key={index} 
-                  className="w-80 h-24 bg-white border border-gray-200 rounded-lg mx-3 animate-pulse"
+                  className="w-80 h-24 bg-gcf-card border border-gcf-border rounded-2xl mx-3 animate-pulse shadow-gcf-md"
                 ></div>
               ))}
             </Marquee>
@@ -243,7 +250,14 @@ const ProgramGrid = () => {
   }
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-wizfore-light-beige via-wizfore-soft-pink/30 via-50% to-wizfore-soft-pink">
+    <section 
+      className="py-16 md:py-24 lg:py-32"
+      style={{
+        background: `radial-gradient(ellipse at center bottom, #F38B5E 0%, var(--wizfore-warm-beige) 60%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
+        paddingBottom: '80px',
+        paddingTop: '0'
+      }}
+    >
       <div className="container-custom mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -252,19 +266,16 @@ const ProgramGrid = () => {
           viewport={{ once: true }}
           className="text-center mb-16 md:mb-20 lg:mb-24"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-wizfore-text-primary mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gcf-primary-foreground mb-4 gcf-float">
             {gridConfig.title}
           </h2>
-          <p className="text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
+          <p className="text-lg text-gcf-muted-foreground max-w-2xl mx-auto">
             {gridConfig.description}
           </p>
         </motion.div>
 
         {/* 프로그램 마키 레이아웃 */}
         <div className="relative w-full px-4 space-y-6 overflow-hidden">
-          {/* 그라데이션 마스크 - 왼쪽과 오른쪽 가장자리 */}
-          <div className="absolute left-0 top-4 w-8 md:w-12 h-full bg-gradient-to-r from-wizfore-soft-pink/20 to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-4 w-8 md:w-12 h-full bg-gradient-to-l from-wizfore-soft-pink/20 to-transparent z-10 pointer-events-none"></div>
           {/* 첫 번째 마키 - 정방향 */}
           <div 
             ref={row1Ref}
@@ -323,22 +334,22 @@ const ProgramGrid = () => {
                         duration: 0.2, 
                         ease: "easeOut"
                       }}
-                      className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
+                      className="bg-gcf-card border border-gcf-border hover:border-gcf-accent rounded-2xl p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-gcf-sm hover:shadow-gcf-lg transition-all duration-300 select-none gcf-float"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
-                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-black" />
+                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-xl flex items-center justify-center transition-colors duration-300 shadow-gcf-sm`}>
+                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-gcf-primary-foreground" />
                       </div>
 
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-wizfore-text-brand transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-sm md:text-base font-semibold text-gcf-primary-foreground group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
                           {program.title}
                         </h3>
                         
                         {/* 프로그램 목표 */}
-                        <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
+                        <p className="text-xs md:text-sm text-gcf-muted-foreground group-hover:text-gcf-primary-foreground transition-colors duration-300 line-clamp-1">
                           {truncatedGoal}
                         </p>
                       </div>
@@ -408,22 +419,22 @@ const ProgramGrid = () => {
                         duration: 0.2, 
                         ease: "easeOut"
                       }}
-                      className="bg-white border border-wizfore-coral-200 hover:border-wizfore-coral-300 rounded-lg p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md transition-all duration-300 select-none"
+                      className="bg-gcf-card border border-gcf-border hover:border-gcf-accent rounded-2xl p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-gcf-sm hover:shadow-gcf-lg transition-all duration-300 select-none gcf-float"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-lg flex items-center justify-center transition-colors duration-300`}>
-                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-black" />
+                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-xl flex items-center justify-center transition-colors duration-300 shadow-gcf-sm`}>
+                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-gcf-primary-foreground" />
                       </div>
 
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-wizfore-text-brand transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-sm md:text-base font-semibold text-gcf-primary-foreground group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
                           {program.title}
                         </h3>
                         
                         {/* 프로그램 목표 */}
-                        <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
+                        <p className="text-xs md:text-sm text-gcf-muted-foreground group-hover:text-gcf-primary-foreground transition-colors duration-300 line-clamp-1">
                           {truncatedGoal}
                         </p>
                       </div>

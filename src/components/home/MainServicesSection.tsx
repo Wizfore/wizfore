@@ -102,11 +102,12 @@ const MainServicesSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="border-l-4 border-wizfore-coral-primary pl-8 py-6"
+                whileHover={{ x: 5 }}
+                className="border-l-4 border-wizfore-coral-primary pl-8 py-6 hover:bg-wizfore-warm-beige/20 rounded-r-lg transition-all duration-300 card-hover"
               >
                 <div className="flex items-start gap-4 md:gap-6">
                   {/* 번호 배지 */}
-                  <div className="w-8 md:w-10 h-8 md:h-10 bg-wizfore-light-beige rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 md:w-10 h-8 md:h-10 bg-wizfore-light-beige rounded-full flex items-center justify-center flex-shrink-0 shadow-sm hover:shadow-md transition-shadow duration-300">
                     <span className="text-wizfore-coral-primary font-bold text-base md:text-lg">{index + 1}</span>
                   </div>
                   

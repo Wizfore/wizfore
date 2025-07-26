@@ -14,6 +14,36 @@ const Card = React.forwardRef<
     {...props}
   />
 ))
+
+// 김포 문화공간 스타일 카드 변형
+const GcfCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "bg-gcf-card border border-gcf-border rounded-2xl p-6 shadow-gcf-md hover:shadow-gcf-xl transition-all duration-300 hover:-translate-y-1 text-gcf-card-foreground",
+      className
+    )}
+    {...props}
+  />
+))
+
+// Heart-Heart.org 스타일 카드 변형
+const HeartCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "bg-heart-bright border border-heart-line rounded-heart-lg p-6 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 hover:-translate-y-1 text-heart-body",
+      className
+    )}
+    {...props}
+  />
+))
 Card.displayName = "Card"
 
 const CardHeader = React.forwardRef<
@@ -75,4 +105,4 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, GcfCard, HeartCard, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

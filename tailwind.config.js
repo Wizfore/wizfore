@@ -83,6 +83,44 @@ module.exports = {
   				'gray-text': '#333333',
   				'gray-light': '#FFFAF0'
   			},
+  			gcf: {
+  				primary: 'hsl(var(--gcf-primary))',
+  				'primary-foreground': 'hsl(var(--gcf-primary-foreground))',
+  				secondary: 'hsl(var(--gcf-secondary))',
+  				'secondary-foreground': 'hsl(var(--gcf-secondary-foreground))',
+  				accent: 'hsl(var(--gcf-accent))',
+  				'accent-foreground': 'hsl(var(--gcf-accent-foreground))',
+  				background: 'hsl(var(--gcf-background))',
+  				muted: 'hsl(var(--gcf-muted))',
+  				'muted-foreground': 'hsl(var(--gcf-muted-foreground))',
+  				border: 'hsl(var(--gcf-border))',
+  				card: 'hsl(var(--gcf-card))',
+  				'card-foreground': 'hsl(var(--gcf-card-foreground))',
+  			},
+  			seasonal: {
+  				'spring-primary': 'hsl(var(--seasonal-spring-primary))',
+  				'spring-accent': 'hsl(var(--seasonal-spring-accent))',
+  				'summer-primary': 'hsl(var(--seasonal-summer-primary))',
+  				'summer-accent': 'hsl(var(--seasonal-summer-accent))',
+  				'autumn-primary': 'hsl(var(--seasonal-autumn-primary))',
+  				'autumn-accent': 'hsl(var(--seasonal-autumn-accent))',
+  				'winter-primary': 'hsl(var(--seasonal-winter-primary))',
+  				'winter-accent': 'hsl(var(--seasonal-winter-accent))',
+  			},
+  			heart: {
+  				primary: 'hsl(var(--heart-primary))',
+  				'primary-hover': 'hsl(var(--heart-primary-hover))',
+  				'primary-foreground': 'hsl(var(--heart-primary-foreground))',
+  				background: 'hsl(var(--heart-background))',
+  				bright: 'hsl(var(--heart-bright))',
+  				body: 'hsl(var(--heart-body))',
+  				gray: 'hsl(var(--heart-gray))',
+  				light: 'hsl(var(--heart-light))',
+  				line: 'hsl(var(--heart-line))',
+  				dark: 'hsl(var(--heart-dark))',
+  				'dark-bg': 'hsl(var(--heart-dark-bg))',
+  				'white-bg': 'hsl(var(--heart-white-bg))',
+  			},
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',
@@ -98,11 +136,48 @@ module.exports = {
   		},
   		fontFamily: {
   			sans: [
+  				'Pretendard Variable',
+  				'Pretendard',
   				'Noto Sans KR',
   				'Apple SD Gothic Neo',
   				'Malgun Gothic',
+  				'-apple-system',
+  				'BlinkMacSystemFont',
+  				'system-ui',
+  				'Roboto',
   				'sans-serif'
+  			],
+  			serif: [
+  				'Noto Serif KR', 
+  				'serif'
+  			],
+  			mono: [
+  				'JetBrains Mono',
+  				'Fira Code',
+  				'ui-monospace',
+  				'SFMono-Regular',
+  				'SF Mono',
+  				'monospace'
   			]
+  		},
+  		boxShadow: {
+  			'gcf-xs': 'var(--gcf-shadow-xs)',
+  			'gcf-sm': 'var(--gcf-shadow-sm)',
+  			'gcf-md': 'var(--gcf-shadow-md)',
+  			'gcf-lg': 'var(--gcf-shadow-lg)',
+  			'gcf-xl': 'var(--gcf-shadow-xl)',
+  			'heart-subtle': 'var(--heart-shadow-subtle)',
+  			'heart-card': 'var(--heart-shadow-card)',
+  			'heart-elevated': 'var(--heart-shadow-elevated)',
+  			'heart-deep': 'var(--heart-shadow-deep)',
+  		},
+  		borderRadius: {
+  			'heart-sm': 'var(--heart-radius-sm)',
+  			'heart': 'var(--heart-radius)',
+  			'heart-lg': 'var(--heart-radius-lg)',
+  			'heart-xl': 'var(--heart-radius-xl)',
+  			'heart-2xl': 'var(--heart-radius-2xl)',
+  			'heart-full': 'var(--heart-radius-full)',
   		},
   		keyframes: {
   			marquee: {

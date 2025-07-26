@@ -46,8 +46,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-wizfore-light-beige via-wizfore-light-beige to-wizfore-light-beige">
-        <div className="container-custom mx-auto px-4">
+      <section className="py-16 md:py-24 lg:py-32" style={{ backgroundColor: 'var(--wizfore-warm-beige)' }}>
+        <div className="heart-container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="animate-pulse space-y-6">
               <div className="h-12 bg-gray-300 rounded mx-auto w-80"></div>
@@ -71,8 +71,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
   const siteName = data?.siteName || "위즈포레 사회서비스센터"
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-wizfore-light-beige via-wizfore-light-beige to-wizfore-light-beige">
-      <div className="container-custom mx-auto px-4">
+    <section className="py-16 md:py-24 lg:py-32" style={{ backgroundColor: 'var(--wizfore-warm-beige)' }}>
+      <div className="heart-container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -80,11 +80,11 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-mindstory-gray-text mb-6 md:mb-8">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold heart-text-dark mb-6 md:mb-8">
               &ldquo;{title}&rdquo;
             </h2>
             
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-gray-700 leading-relaxed">
+            <div className="space-y-4 md:space-y-6 text-base md:text-lg heart-text-body leading-relaxed">
               {messages.map((message, index) => (
                 <motion.p
                   key={index}
@@ -92,13 +92,15 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 + (index * 0.2) }}
                   viewport={{ once: true }}
+                  className="heart-pulse"
+                  style={{animationDelay: `${index * 0.3}s`}}
                 >
                   {message.split(' ').map((word, wordIndex) => {
                     const highlightKeywords = data?.director?.aboutMessage?.highlightKeywords || []
                     const shouldHighlight = highlightKeywords.some(keyword => word.includes(keyword))
                     
                     return shouldHighlight ? (
-                      <strong key={wordIndex} className="text-mindstory-lime font-semibold"> {word}</strong>
+                      <strong key={wordIndex} className="heart-text-primary font-semibold"> {word}</strong>
                     ) : (
                       <span key={wordIndex}> {word}</span>
                     )
