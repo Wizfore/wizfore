@@ -47,7 +47,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
   if (loading) {
     return (
       <section 
-        className="py-16 md:py-24 lg:py-32" 
+        className="py-24 md:py-32 lg:py-40" 
         style={{ 
           backgroundColor: 'var(--wizfore-warm-beige)' 
         }}
@@ -90,8 +90,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold heart-text-dark mb-6 md:mb-8">
-              &ldquo;{title}&rdquo;
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold heart-text-dark gcf-float mb-6 md:mb-8">
+              {title}
             </h2>
             
             <div className="space-y-4 md:space-y-6 text-base md:text-lg heart-text-body leading-relaxed">
@@ -102,7 +102,6 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 + (index * 0.2) }}
                   viewport={{ once: true }}
-                  className="heart-pulse"
                   style={{animationDelay: `${index * 0.3}s`}}
                 >
                   {message.split(' ').map((word, wordIndex) => {

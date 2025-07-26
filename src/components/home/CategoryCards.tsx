@@ -232,8 +232,14 @@ const CategoryCards = () => {
       <div className="w-full relative z-10 px-4 lg:px-8 xl:px-0">
         {/* 섹션 제목 */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold heart-pulse">
-            <span className="text-heart-body">{sectionConfig.title.split(' ')[0]}</span> <span className="text-heart-primary">{sectionConfig.title.split(' ').slice(1).join(' ')}</span>
+          <h2 
+            className="text-3xl md:text-4xl font-bold"
+            style={{
+              animation: 'heart-pulse 2s ease-in-out infinite'
+            }}
+          >
+            <span className="text-heart-body">{sectionConfig.title.split(' ')[0]}</span>{' '}
+            <span className="text-heart-primary">{sectionConfig.title.split(' ').slice(1).join(' ')}</span>
           </h2>
           {sectionConfig.description && (
             <p className="text-heart-gray mt-4 text-lg max-w-2xl mx-auto">
@@ -266,7 +272,7 @@ const CategoryCards = () => {
                 className="group"
               >
                 <Link href={`/programs/${category.id}`}>
-                  <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full heart-pulse`}>
+                  <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full`}>
                     {/* 배경 이미지 */}
                     <CategoryImage 
                       categoryImageUrl={category.hero?.imageUrl}
@@ -313,7 +319,7 @@ const CategoryCards = () => {
                           className="group"
                         >
                           <Link href={`/programs/${category.id}`}>
-                            <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full heart-pulse`}>
+                            <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full`}>
                               {/* 배경 이미지 */}
                               <CategoryImage 
                                 categoryImageUrl={category.hero?.imageUrl}

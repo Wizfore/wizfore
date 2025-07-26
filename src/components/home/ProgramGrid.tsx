@@ -217,11 +217,11 @@ const ProgramGrid = () => {
   if (loading) {
     return (
       <section 
-        className="py-16 md:py-24 lg:py-32"
+        className="py-24 md:py-32 lg:py-40"
         style={{
           background: `radial-gradient(ellipse 80% 100% at center 120%, #F6C8B0 0%, #F1D4CB 25%, #F3DDD4 45%, #F5E6DD 65%, #F8F0EA 80%, #F9F2ED 90%, var(--wizfore-warm-beige) 100%)`,
           paddingBottom: '120px',
-          paddingTop: '0'
+          paddingTop: '60px'
         }}
       >
         <div className="container-custom mx-auto px-4">
@@ -251,11 +251,11 @@ const ProgramGrid = () => {
 
   return (
     <section 
-      className="py-16 md:py-24 lg:py-32"
+      className="py-24 md:py-32 lg:py-40"
       style={{
         background: `radial-gradient(ellipse 80% 100% at center 120%, #F6C8B0 0%, #F1D4CB 25%, #F3DDD4 45%, #F5E6DD 65%, #F8F0EA 80%, #F9F2ED 90%, var(--wizfore-warm-beige) 100%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
         paddingBottom: '120px',
-        paddingTop: '0'
+        paddingTop: '60px'
       }}
     >
       <div className="container-custom mx-auto px-4">
@@ -293,7 +293,7 @@ const ProgramGrid = () => {
             onTouchEnd={() => handleTouchEnd('row1')}
           >
             <div 
-              className={`flex gap-4 py-2 ${isAnimationPaused.row1 ? '' : 'animate-marquee-scroll'}`}
+              className={`flex gap-4 py-8 ${isAnimationPaused.row1 ? '' : 'animate-marquee-scroll'}`}
               style={{ 
                 width: 'max-content',
                 animationDuration: '60s',
@@ -378,7 +378,7 @@ const ProgramGrid = () => {
             onTouchEnd={() => handleTouchEnd('row2')}
           >
             <div 
-              className={`flex gap-4 py-2 ${isAnimationPaused.row2 ? '' : 'animate-marquee-scroll-reverse'}`}
+              className={`flex gap-4 py-8 ${isAnimationPaused.row2 ? '' : 'animate-marquee-scroll-reverse'}`}
               style={{ 
                 width: 'max-content',
                 animationDuration: '70s',
