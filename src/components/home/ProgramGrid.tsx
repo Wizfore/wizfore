@@ -219,8 +219,8 @@ const ProgramGrid = () => {
       <section 
         className="py-16 md:py-24 lg:py-32"
         style={{
-          background: `radial-gradient(ellipse at center bottom, #F38B5E 0%, var(--wizfore-warm-beige) 60%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
-          paddingBottom: '80px',
+          background: `radial-gradient(ellipse 80% 100% at center 120%, #F6C8B0 0%, #F1D4CB 25%, #F3DDD4 45%, #F5E6DD 65%, #F8F0EA 80%, #F9F2ED 90%, var(--wizfore-warm-beige) 100%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
+          paddingBottom: '120px',
           paddingTop: '0'
         }}
       >
@@ -253,8 +253,8 @@ const ProgramGrid = () => {
     <section 
       className="py-16 md:py-24 lg:py-32"
       style={{
-        background: `radial-gradient(ellipse at center bottom, #F38B5E 0%, var(--wizfore-warm-beige) 60%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
-        paddingBottom: '80px',
+        background: `radial-gradient(ellipse 80% 100% at center 120%, #F6C8B0 0%, #F1D4CB 25%, #F3DDD4 45%, #F5E6DD 65%, #F8F0EA 80%, #F9F2ED 90%, var(--wizfore-warm-beige) 100%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
+        paddingBottom: '120px',
         paddingTop: '0'
       }}
     >
