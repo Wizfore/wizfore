@@ -44,6 +44,9 @@ const HeartCard = React.forwardRef<
     {...props}
   />
 ))
+GcfCard.displayName = "GcfCard"
+HeartCard.displayName = "HeartCard"
+
 Card.displayName = "Card"
 
 const CardHeader = React.forwardRef<
