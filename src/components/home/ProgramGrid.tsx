@@ -219,7 +219,7 @@ const ProgramGrid = () => {
       <section 
         className="py-16 md:py-24 lg:py-32"
         style={{
-          background: `radial-gradient(ellipse 80% 100% at center 120%, #F6C8B0 0%, #F1D4CB 25%, #F3DDD4 45%, #F5E6DD 65%, #F8F0EA 80%, #F9F2ED 90%, var(--wizfore-warm-beige) 100%), url('/images/index/sect7-bg.jpg') no-repeat center top/cover`,
+          background: `radial-gradient(ellipse 80% 100% at center 120%, #F6C8B0 0%, #F1D4CB 25%, #F3DDD4 45%, #F5E6DD 65%, #F8F0EA 80%, #F9F2ED 90%, var(--wizfore-warm-beige) 100%)`,
           paddingBottom: '120px',
           paddingTop: '0'
         }}
@@ -266,10 +266,10 @@ const ProgramGrid = () => {
           viewport={{ once: true }}
           className="text-center mb-16 md:mb-20 lg:mb-24"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gcf-primary-foreground mb-4 gcf-float">
+          <h2 className="text-3xl md:text-4xl font-bold text-wizfore-text-primary mb-4 gcf-float">
             {gridConfig.title}
           </h2>
-          <p className="text-lg text-gcf-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
             {gridConfig.description}
           </p>
         </motion.div>
@@ -344,12 +344,12 @@ const ProgramGrid = () => {
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-sm md:text-base font-semibold text-gcf-primary-foreground group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
                           {program.title}
                         </h3>
                         
                         {/* 프로그램 목표 */}
-                        <p className="text-xs md:text-sm text-gcf-muted-foreground group-hover:text-gcf-primary-foreground transition-colors duration-300 line-clamp-1">
+                        <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
                           {truncatedGoal}
                         </p>
                       </div>
@@ -429,12 +429,12 @@ const ProgramGrid = () => {
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-sm md:text-base font-semibold text-gcf-primary-foreground group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
                           {program.title}
                         </h3>
                         
                         {/* 프로그램 목표 */}
-                        <p className="text-xs md:text-sm text-gcf-muted-foreground group-hover:text-gcf-primary-foreground transition-colors duration-300 line-clamp-1">
+                        <p className="text-xs md:text-sm text-wizfore-text-secondary group-hover:text-wizfore-text-primary transition-colors duration-300 line-clamp-1">
                           {truncatedGoal}
                         </p>
                       </div>

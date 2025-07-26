@@ -141,7 +141,7 @@ const CategoryCards = () => {
 
   if (loading) {
     return (
-      <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72 bg-gradient-to-b from-transparent to-heart-bright">
+      <section className="relative overflow-hidden pt-32 pb-40 md:pt-48 md:pb-56 lg:pt-64 lg:pb-72 bg-gradient-to-b from-transparent to-white">
         {/* Heart-Heart 스타일 조약돌 모양 SVG 배경 (로딩 상태) */}
         <div className="absolute inset-0">
           <svg 
@@ -195,7 +195,7 @@ const CategoryCards = () => {
   }
 
   return (
-    <section className="relative overflow-hidden pt-40 pb-56 md:pt-56 md:pb-72 lg:pt-64 lg:pb-88 xl:pt-72 xl:pb-104 bg-gradient-to-b from-transparent to-heart-bright">
+    <section className="relative overflow-hidden pt-40 pb-56 md:pt-56 md:pb-72 lg:pt-64 lg:pb-88 xl:pt-72 xl:pb-104 bg-gradient-to-b from-transparent to-white">
       {/* Heart-Heart 스타일 조약돌 모양 SVG 배경 */}
       <div className="absolute inset-0 overflow-hidden">
         <svg 
