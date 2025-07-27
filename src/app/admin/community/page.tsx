@@ -1,15 +1,15 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Newspaper, Share, Loader2 } from 'lucide-react'
-import { getCommunity, updateSnsData } from '@/lib/services/dataService'
+import { getCommunity, updateCommunity } from '@/lib/services/dataService'
 import { useAdminForm } from '@/hooks/useAdminForm'
 import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabsWithUnsavedChanges'
 import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
 import { TabItem } from '@/components/admin/common/AdminTabs'
 import NewsManagementTab from '@/components/admin/community/NewsManagementTab'
 import SnsManagementTab from '@/components/admin/community/SnsManagementTab'
-import type { CommunityData, SnsInfo } from '@/types/community'
+import type { CommunityData, SnsInfo, NewsInfo } from '@/types/community'
 
 type CommunityTab = 'news' | 'sns'
 
@@ -22,6 +22,11 @@ const DEFAULT_COMMUNITY_DATA: CommunityData = {
     instagram: '',
     facebook: '',
     blog: ''
+  },
+  news: {
+    hero: { title: '', description: '', imageUrl: '' },
+    aboutMessage: { title: '', description: '' },
+    articles: []
   }
 }
 
@@ -30,17 +35,8 @@ export default function CommunityManagePage() {
   const [showUnsavedDialog, setShowUnsavedDialog] = useState(false)
   const [pendingTab, setPendingTab] = useState<CommunityTab | null>(null)
   const [dialogSaving, setDialogSaving] = useState(false)
-  
-  // 공지사항 탭용 기존 ref 방식
-  const tabRefs = useRef<Record<'news', {
-    hasChanges: boolean
-    handleSave: () => Promise<void>
-    handleReset: () => void
-  } | null>>({
-    news: null
-  })
 
-  // SNS 탭용 fetchData 함수
+  // fetchData 함수
   const fetchData = useCallback(async (): Promise<CommunityData> => {
     try {
       const communityData = await getCommunity()
@@ -62,33 +58,41 @@ export default function CommunityManagePage() {
         facebook: snsData.facebook || '',
         blog: snsData.blog || ''
       }
+
+      const newsData = communityData?.news || {}
+      const normalizedNewsData = {
+        hero: newsData.hero || { title: '', description: '', imageUrl: '' },
+        aboutMessage: newsData.aboutMessage || { title: '', description: '' },
+        articles: newsData.articles || []
+      }
       
-      console.log('정규화된 SNS 데이터:', normalizedSnsData)
+      console.log('정규화된 커뮤니티 데이터:', { sns: normalizedSnsData, news: normalizedNewsData })
       
       return {
-        sns: normalizedSnsData
+        sns: normalizedSnsData,
+        news: normalizedNewsData
       }
     } catch (error) {
-      console.error('SNS 데이터 로딩 실패:', error)
+      console.error('커뮤니티 데이터 로딩 실패:', error)
       return DEFAULT_COMMUNITY_DATA
     }
   }, [])
 
-  // SNS 탭용 useAdminForm 훅
+  // useAdminForm 훅
   const {
     data: communityData,
     setData: setCommunityData,
-    loading: snsLoading,
-    saving: snsSaving,
-    saveStatus: snsSaveStatus,
-    error: snsError,
-    hasChanges: snsHasChanges,
-    handleSave: handleSnsSave,
-    handleReset: handleSnsReset
+    loading,
+    saving,
+    saveStatus,
+    error,
+    hasChanges,
+    handleSave,
+    handleReset
   } = useAdminForm({
     fetchData,
     saveData: async (data: CommunityData) => {
-      await updateSnsData(data.sns)
+      await updateCommunity(data)
     },
     defaultData: DEFAULT_COMMUNITY_DATA
   })
@@ -107,22 +111,10 @@ export default function CommunityManagePage() {
     }
   ]
 
-  // 현재 탭의 변경사항 확인 (혼합 방식)
-  const getCurrentTabHasChanges = () => {
-    if (activeTab === 'sns') {
-      console.log('SNS 탭 변경사항:', snsHasChanges)
-      return snsHasChanges
-    } else {
-      const newsTabState = tabRefs.current.news
-      return newsTabState?.hasChanges || false
-    }
-  }
-
-  // 탭 전환 핸들러 (혼합 방식)
+  // 탭 전환 핸들러
   const handleTabChange = (nextTab: CommunityTab) => {
-    const hasChanges = getCurrentTabHasChanges()
-    
-    if (hasChanges) {
+    // SNS 탭에서만 변경사항 확인
+    if (activeTab === 'sns' && hasChanges) {
       setPendingTab(nextTab)
       setShowUnsavedDialog(true)
     } else {
@@ -130,18 +122,11 @@ export default function CommunityManagePage() {
     }
   }
 
-  // 다이얼로그 핸들러 (혼합 방식)
+  // 다이얼로그 핸들러
   const handleDialogSave = async () => {
     try {
       setDialogSaving(true)
-      if (activeTab === 'sns') {
-        await handleSnsSave()
-      } else {
-        const newsTabState = tabRefs.current.news
-        if (newsTabState) {
-          await newsTabState.handleSave()
-        }
-      }
+      await handleSave()
       setShowUnsavedDialog(false)
       if (pendingTab) {
         setActiveTab(pendingTab)
@@ -155,14 +140,7 @@ export default function CommunityManagePage() {
   }
 
   const handleDialogDiscard = () => {
-    if (activeTab === 'sns') {
-      handleSnsReset()
-    } else {
-      const newsTabState = tabRefs.current.news
-      if (newsTabState) {
-        newsTabState.handleReset()
-      }
-    }
+    handleReset()
     setShowUnsavedDialog(false)
     if (pendingTab) {
       setActiveTab(pendingTab)
@@ -175,17 +153,8 @@ export default function CommunityManagePage() {
     setPendingTab(null)
   }
 
-  // 공지사항 탭 등록 (기존 방식)
-  const registerTab = (tab: 'news', methods: {
-    hasChanges: boolean
-    handleSave: () => Promise<void>
-    handleReset: () => void
-  }) => {
-    tabRefs.current[tab] = methods
-  }
-
-  // 로딩 상태 처리 (SNS 탭만)
-  if (activeTab === 'sns' && snsLoading) {
+  // 로딩 상태 처리
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="flex items-center space-x-2">
@@ -200,16 +169,28 @@ export default function CommunityManagePage() {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'news':
-        return <NewsManagementTab onRegister={(methods) => registerTab('news', methods)} />
+        return (
+          <NewsManagementTab 
+            data={communityData.news} 
+            onUpdate={(newsData: NewsInfo) => {
+              console.log('News onUpdate 호출됨, 새 데이터:', newsData)
+              setCommunityData(prev => {
+                const newData = { ...prev, news: newsData }
+                console.log('setCommunityData 호출, 새 커뮤니티 데이터:', newData)
+                return newData
+              })
+            }} 
+          />
+        )
       case 'sns':
         return (
           <SnsManagementTab 
             data={communityData.sns} 
             onUpdate={(snsData: SnsInfo) => {
-              console.log('onUpdate 호출됨, 새 SNS 데이터:', snsData)
+              console.log('SNS onUpdate 호출됨, 새 데이터:', snsData)
               setCommunityData(prev => {
                 const newData = { ...prev, sns: snsData }
-                console.log('setCommunityData 호출, 새 데이터:', newData)
+                console.log('setCommunityData 호출, 새 커뮤니티 데이터:', newData)
                 return newData
               })
             }} 
@@ -225,19 +206,19 @@ export default function CommunityManagePage() {
       <AdminPageHeader
         title="커뮤니티 관리"
         description="센터소식과 SNS 콘텐츠를 관리하고 운영할 수 있습니다"
-        error={activeTab === 'sns' ? snsError : undefined}
-        saveStatus={activeTab === 'sns' ? snsSaveStatus : undefined}
-        hasChanges={getCurrentTabHasChanges()}
-        saving={activeTab === 'sns' ? snsSaving : false}
-        onSave={activeTab === 'sns' ? handleSnsSave : undefined}
-        onReset={activeTab === 'sns' ? handleSnsReset : undefined}
+        error={activeTab === 'sns' ? error : undefined}
+        saveStatus={activeTab === 'sns' ? saveStatus : undefined}
+        hasChanges={activeTab === 'sns' ? hasChanges : false}
+        saving={activeTab === 'sns' ? saving : false}
+        onSave={activeTab === 'sns' ? handleSave : undefined}
+        onReset={activeTab === 'sns' ? handleReset : undefined}
       />
 
       <AdminTabsWithUnsavedChanges
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={handleTabChange}
-        hasChanges={getCurrentTabHasChanges()}
+        hasChanges={activeTab === 'sns' ? hasChanges : false}
         showUnsavedDialog={showUnsavedDialog}
         onDialogSave={handleDialogSave}
         onDialogDiscard={handleDialogDiscard}

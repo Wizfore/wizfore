@@ -930,13 +930,6 @@ export const defaultSiteData: DefaultSiteData = {
 
   community: {
     news: {
-      categories: [
-        { korean: "파트너쉽", english: "partnership" },
-        { korean: "소식", english: "news" },
-        { korean: "행사", english: "events" },
-        { korean: "수상", english: "awards" },
-        { korean: "공지사항", english: "notices" }
-      ],
       hero: {
         title: "공지사항",
         description: "위즈포레의 다양한 활동과 성과를 확인해보세요",

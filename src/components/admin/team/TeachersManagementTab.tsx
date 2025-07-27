@@ -14,154 +14,144 @@ interface TeachersManagementTabProps {
 export default function TeachersManagementTab({ data: teachersData, onUpdate }: TeachersManagementTabProps) {
   const [editingMember, setEditingMember] = useState<number | null>(null)
   const [editingFeature, setEditingFeature] = useState<string | null>(null)
-  const [showAddMemberForm, setShowAddMemberForm] = useState(false)
-  const [newMember, setNewMember] = useState<Omit<TeamMember, 'order'>>({
-    name: '',
-    specialization: [],
-    education: [],
-    certifications: []
-  })
 
-
-  const updateHero = (field: 'title' | 'description' | 'imageUrl', value: string) => {
-    onUpdate({
-      ...teachersData,
-      hero: {
-        title: teachersData.hero?.title || '',
-        description: teachersData.hero?.description || '',
-        imageUrl: teachersData.hero?.imageUrl || '',
-        [field]: value
+  // SnsManagementTab 패턴 적용: 깊은 복사를 사용한 필드 업데이트
+  const updateField = (path: string, value: string) => {
+    const keys = path.split('.')
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    let current: any = newData
+    
+    // 중첩 객체 경로 생성
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
+        current[keys[i]] = {}
       }
-    })
+      current = current[keys[i]]
+    }
+    
+    // 최종 값 설정
+    current[keys[keys.length - 1]] = value
+    
+    onUpdate(newData)
   }
 
-  const updateAboutMessage = (field: 'title' | 'description', value: string) => {
-    onUpdate({
-      ...teachersData,
-      aboutMessage: {
-        title: teachersData.aboutMessage?.title || '',
-        description: teachersData.aboutMessage?.description || '',
-        [field]: value
-      }
-    })
+  // 멤버 기본 정보 업데이트 (깊은 복사 패턴 적용)
+  const updateMemberBasicInfo = (index: number, field: keyof TeamMember, value: string | number) => {
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    newData.members[index][field] = value
+    onUpdate(newData)
   }
 
-  const resetNewMemberForm = () => {
-    setNewMember({
+  // 멤버 배열 필드 업데이트 (깊은 복사 패턴 적용)
+  const updateMemberArrayField = (memberIndex: number, field: 'specialization' | 'education' | 'certifications', arrayIndex: number, value: string) => {
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    newData.members[memberIndex][field][arrayIndex] = value
+    onUpdate(newData)
+  }
+
+  // 멤버 배열 필드에 새 항목 추가 (깊은 복사 패턴 적용)
+  const addMemberArrayItem = (memberIndex: number, field: 'specialization' | 'education' | 'certifications') => {
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    if (!newData.members[memberIndex][field]) {
+      newData.members[memberIndex][field] = []
+    }
+    newData.members[memberIndex][field].push('')
+    onUpdate(newData)
+  }
+
+  // 멤버 배열 필드에서 항목 제거 (깊은 복사 패턴 적용)
+  const removeMemberArrayItem = (memberIndex: number, field: 'specialization' | 'education' | 'certifications', arrayIndex: number) => {
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    newData.members[memberIndex][field].splice(arrayIndex, 1)
+    onUpdate(newData)
+  }
+
+  // 새 멤버 추가 (깊은 복사 패턴 적용)
+  const addMember = () => {
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    const maxOrder = Math.max(...newData.members.map((m: TeamMember) => m.order || 0), 0)
+    const newMember: TeamMember = {
       name: '',
       specialization: [],
       education: [],
-      certifications: []
-    })
-  }
-
-
-  const addMember = () => {
-    if (!newMember.name.trim()) return
-    
-    const maxOrder = Math.max(...teachersData.members.map(m => m.order || 0), 0)
-    const memberWithOrder = {
-      ...newMember,
+      certifications: [],
       order: maxOrder + 1
     }
-    
-    onUpdate({
-      ...teachersData,
-      members: [...teachersData.members, memberWithOrder]
-    })
-    
-    resetNewMemberForm()
-    setShowAddMemberForm(false)
+    newData.members.push(newMember)
+    onUpdate(newData)
   }
 
-
-  // 멤버 관리 함수들
-  const updateMember = (index: number, field: keyof TeamMember, value: any) => {
-    const updatedMembers = [...teachersData.members]
-    updatedMembers[index] = {
-      ...updatedMembers[index],
-      [field]: value
-    }
-    
-    onUpdate({
-      ...teachersData,
-      members: updatedMembers
-    })
-  }
-
+  // 멤버 제거 (깊은 복사 패턴 적용)
   const removeMember = (index: number) => {
-    const updatedMembers = teachersData.members.filter((_, i) => i !== index)
-    onUpdate({
-      ...teachersData,
-      members: updatedMembers
-    })
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    newData.members.splice(index, 1)
+    onUpdate(newData)
   }
 
+  // 멤버 순서 변경 (깊은 복사 패턴 적용)
   const moveMember = (index: number, direction: 'up' | 'down') => {
-    const newMembers = [...teachersData.members]
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
     const newIndex = direction === 'up' ? index - 1 : index + 1
     
-    if (newIndex >= 0 && newIndex < newMembers.length) {
-      [newMembers[index], newMembers[newIndex]] = [newMembers[newIndex], newMembers[index]]
+    if (newIndex >= 0 && newIndex < newData.members.length) {
+      [newData.members[index], newData.members[newIndex]] = [newData.members[newIndex], newData.members[index]]
       
       // order 값 업데이트
-      newMembers[index].order = index + 1
-      newMembers[newIndex].order = newIndex + 1
+      newData.members[index].order = index + 1
+      newData.members[newIndex].order = newIndex + 1
       
-      onUpdate({
-        ...teachersData,
-        members: newMembers
-      })
+      onUpdate(newData)
     }
   }
 
-  // 특징 관리 함수들
+  // 특징 업데이트 (깊은 복사 패턴 적용)
   const updateFeature = (id: string, field: keyof TeamFeature, value: any) => {
-    const updatedFeatures = (teachersData.features || []).map(feature =>
-      feature.id === id ? { ...feature, [field]: value } : feature
-    )
+    const newData = JSON.parse(JSON.stringify(teachersData)) // 깊은 복사
+    const featureIndex = newData.features?.findIndex((feature: TeamFeature) => feature.id === id)
+    if (featureIndex !== undefined && featureIndex >= 0) {
+      newData.features[featureIndex][field] = value
+    }
+    onUpdate(newData)
+  }
+
+  // 배열 필드 렌더링 함수 (센터소개관리페이지 패턴 적용)
+  const renderMemberArrayField = (memberIndex: number, field: 'specialization' | 'education' | 'certifications', label: string) => {
+    const items = teachersData.members[memberIndex][field] || []
     
-    onUpdate({
-      ...teachersData,
-      features: updatedFeatures
-    })
-  }
-
-
-  // 멤버 배열 필드 관리 함수들
-  const addMemberArrayItem = (memberIndex: number, field: 'specialization' | 'education' | 'certifications', item: string) => {
-    const currentArray = teachersData.members[memberIndex][field] || []
-    updateMember(memberIndex, field, [...currentArray, item])
-  }
-
-  const removeMemberArrayItem = (memberIndex: number, field: 'specialization' | 'education' | 'certifications', itemIndex: number) => {
-    const currentArray = teachersData.members[memberIndex][field] || []
-    updateMember(memberIndex, field, currentArray.filter((_, i) => i !== itemIndex))
-  }
-
-  const updateMemberArrayItem = (memberIndex: number, field: 'specialization' | 'education' | 'certifications', itemIndex: number, value: string) => {
-    const currentArray = teachersData.members[memberIndex][field] || []
-    const newArray = [...currentArray]
-    newArray[itemIndex] = value
-    updateMember(memberIndex, field, newArray)
-  }
-
-  // 새 멤버 배열 필드 관리 함수들
-  const addNewMemberArrayItem = (field: 'specialization' | 'education' | 'certifications', item: string) => {
-    const currentArray = newMember[field] || []
-    setNewMember({ ...newMember, [field]: [...currentArray, item] })
-  }
-
-  const removeNewMemberArrayItem = (field: 'specialization' | 'education' | 'certifications', itemIndex: number) => {
-    const currentArray = newMember[field] || []
-    setNewMember({ ...newMember, [field]: currentArray.filter((_, i) => i !== itemIndex) })
-  }
-
-  const updateNewMemberArrayItem = (field: 'specialization' | 'education' | 'certifications', itemIndex: number, value: string) => {
-    const currentArray = newMember[field] || []
-    const newArray = [...currentArray]
-    newArray[itemIndex] = value
-    setNewMember({ ...newMember, [field]: newArray })
+    return (
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">{label}</label>
+        {items.map((item, arrayIndex) => (
+          <div key={arrayIndex} className="flex gap-2">
+            <input
+              type="text"
+              value={item}
+              onChange={(e) => updateMemberArrayField(memberIndex, field, arrayIndex, e.target.value)}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              placeholder={`${label} ${arrayIndex + 1}`}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => removeMemberArrayItem(memberIndex, field, arrayIndex)}
+            >
+              <Trash2 className="h-3 w-3" />
+            </Button>
+          </div>
+        ))}
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => addMemberArrayItem(memberIndex, field)}
+          className="w-full"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          {label} 추가
+        </Button>
+      </div>
+    )
   }
 
 
@@ -183,7 +173,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
             <input
               type="text"
               value={teachersData.hero?.title || ''}
-              onChange={(e) => updateHero('title', e.target.value)}
+              onChange={(e) => updateField('hero.title', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="페이지 제목"
             />
@@ -194,7 +184,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
             </label>
             <textarea
               value={teachersData.hero?.description || ''}
-              onChange={(e) => updateHero('description', e.target.value)}
+              onChange={(e) => updateField('hero.description', e.target.value)}
               rows={2}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="페이지 설명"
@@ -206,7 +196,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
             </label>
             <ImageUpload
               value={teachersData.hero?.imageUrl || ''}
-              onChange={(url: string) => updateHero('imageUrl', url)}
+              onChange={(url: string) => updateField('hero.imageUrl', url)}
               folder="hero-images"
             />
           </div>
@@ -224,7 +214,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
             <input
               type="text"
               value={teachersData.aboutMessage?.title || ''}
-              onChange={(e) => updateAboutMessage('title', e.target.value)}
+              onChange={(e) => updateField('aboutMessage.title', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="소개 메시지 제목"
             />
@@ -235,7 +225,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
             </label>
             <textarea
               value={teachersData.aboutMessage?.description || ''}
-              onChange={(e) => updateAboutMessage('description', e.target.value)}
+              onChange={(e) => updateField('aboutMessage.description', e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="소개 메시지 설명"
@@ -320,93 +310,11 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
         <h3 className="text-lg font-semibold text-gray-900">
           교사 목록 ({teachersData.members.length}명)
         </h3>
-        <Button onClick={() => setShowAddMemberForm(!showAddMemberForm)}>
+        <Button onClick={addMember}>
           <Plus className="h-4 w-4 mr-2" />
           교사 추가
         </Button>
       </div>
-
-      {/* 새 교사 추가 폼 */}
-      {showAddMemberForm && (
-        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-          <h4 className="text-lg font-semibold text-gray-900 mb-4">새 교사 추가</h4>
-          <div className="space-y-6">
-            {/* 기본 정보 */}
-            <div>
-              <h5 className="text-md font-medium text-gray-800 mb-3">기본 정보</h5>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  이름
-                </label>
-                <input
-                  type="text"
-                  value={newMember.name}
-                  onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="교사 이름"
-                />
-              </div>
-            </div>
-
-            {/* 상세 정보 */}
-            <div>
-              <h5 className="text-md font-medium text-gray-800 mb-3">상세 정보</h5>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    전문분야
-                  </label>
-                  <MemberArrayFieldManager
-                    items={newMember.specialization || []}
-                    onAdd={(item) => addNewMemberArrayItem('specialization', item)}
-                    onRemove={(itemIndex) => removeNewMemberArrayItem('specialization', itemIndex)}
-                    onUpdate={(itemIndex, value) => updateNewMemberArrayItem('specialization', itemIndex, value)}
-                    placeholder="전문분야를 입력하세요"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    학력
-                  </label>
-                  <MemberArrayFieldManager
-                    items={newMember.education || []}
-                    onAdd={(item) => addNewMemberArrayItem('education', item)}
-                    onRemove={(itemIndex) => removeNewMemberArrayItem('education', itemIndex)}
-                    onUpdate={(itemIndex, value) => updateNewMemberArrayItem('education', itemIndex, value)}
-                    placeholder="학력을 입력하세요"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    자격증
-                  </label>
-                  <MemberArrayFieldManager
-                    items={newMember.certifications || []}
-                    onAdd={(item) => addNewMemberArrayItem('certifications', item)}
-                    onRemove={(itemIndex) => removeNewMemberArrayItem('certifications', itemIndex)}
-                    onUpdate={(itemIndex, value) => updateNewMemberArrayItem('certifications', itemIndex, value)}
-                    placeholder="자격증을 입력하세요"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-2 pt-4 border-t">
-              <Button onClick={addMember} disabled={!newMember.name.trim()}>
-                추가
-              </Button>
-              <Button variant="outline" onClick={() => {
-                resetNewMemberForm()
-                setShowAddMemberForm(false)
-              }}>
-                취소
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 교사 목록 */}
       <div className="space-y-4">
@@ -458,12 +366,11 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
             </div>
 
             {editingMember === index ? (
-              <div className="space-y-6">
-                {/* 기본 정보 */}
-                <div className="bg-slate-50 rounded-lg p-4">
+              <div className="space-y-4">
+                <div className="bg-gray-50 rounded-lg p-4 mb-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <FileText className="h-5 w-5 text-gray-600" />
-                    <h5 className="text-sm font-semibold text-gray-900">기본 정보</h5>
+                    <FileText className="h-4 w-4 text-blue-500" />
+                    <h6 className="text-sm font-medium text-gray-800">기본 정보</h6>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -472,56 +379,15 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
                     <input
                       type="text"
                       value={member.name}
-                      onChange={(e) => updateMember(index, 'name', e.target.value)}
+                      onChange={(e) => updateMemberBasicInfo(index, 'name', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
 
-                {/* 전문분야 */}
-                <div className="bg-green-50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Target className="h-5 w-5 text-green-600" />
-                    <h5 className="text-sm font-semibold text-gray-900">전문분야</h5>
-                  </div>
-                  <MemberArrayFieldManager
-                    items={member.specialization || []}
-                    onAdd={(item) => addMemberArrayItem(index, 'specialization', item)}
-                    onRemove={(itemIndex) => removeMemberArrayItem(index, 'specialization', itemIndex)}
-                    onUpdate={(itemIndex, value) => updateMemberArrayItem(index, 'specialization', itemIndex, value)}
-                    placeholder="전문분야를 입력하세요"
-                  />
-                </div>
-
-                {/* 학력 */}
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <GraduationCap className="h-5 w-5 text-blue-600" />
-                    <h5 className="text-sm font-semibold text-gray-900">학력</h5>
-                  </div>
-                  <MemberArrayFieldManager
-                    items={member.education || []}
-                    onAdd={(item) => addMemberArrayItem(index, 'education', item)}
-                    onRemove={(itemIndex) => removeMemberArrayItem(index, 'education', itemIndex)}
-                    onUpdate={(itemIndex, value) => updateMemberArrayItem(index, 'education', itemIndex, value)}
-                    placeholder="학력을 입력하세요"
-                  />
-                </div>
-
-                {/* 자격증 */}
-                <div className="bg-purple-50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Award className="h-5 w-5 text-purple-600" />
-                    <h5 className="text-sm font-semibold text-gray-900">자격증</h5>
-                  </div>
-                  <MemberArrayFieldManager
-                    items={member.certifications || []}
-                    onAdd={(item) => addMemberArrayItem(index, 'certifications', item)}
-                    onRemove={(itemIndex) => removeMemberArrayItem(index, 'certifications', itemIndex)}
-                    onUpdate={(itemIndex, value) => updateMemberArrayItem(index, 'certifications', itemIndex, value)}
-                    placeholder="자격증을 입력하세요"
-                  />
-                </div>
+                {renderMemberArrayField(index, 'specialization', '전문분야')}
+                {renderMemberArrayField(index, 'education', '학력')}
+                {renderMemberArrayField(index, 'certifications', '자격증')}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -602,52 +468,3 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
   )
 }
 
-// 멤버 배열 필드 관리 컴포넌트
-interface MemberArrayFieldManagerProps {
-  items: string[]
-  onAdd: (item: string) => void
-  onRemove: (index: number) => void
-  onUpdate: (index: number, value: string) => void
-  placeholder: string
-}
-
-function MemberArrayFieldManager({ items, onAdd, onRemove, onUpdate, placeholder }: MemberArrayFieldManagerProps) {
-  const handleAdd = () => {
-    onAdd('') // 빈 문자열로 새 항목 추가
-  }
-
-  return (
-    <div className="space-y-2">
-      {items.map((item, index) => (
-        <div key={index} className="flex gap-2">
-          <input
-            type="text"
-            value={item}
-            onChange={(e) => onUpdate(index, e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-            placeholder={placeholder}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => onRemove(index)}
-          >
-            <Trash2 className="h-3 w-3" />
-          </Button>
-        </div>
-      ))}
-      <div className="flex gap-2">
-        <div className="flex-1"></div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleAdd}
-        >
-          <Plus className="h-3 w-3" />
-        </Button>
-      </div>
-    </div>
-  )
-}

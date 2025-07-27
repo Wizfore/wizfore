@@ -1,4 +1,3 @@
-import { CategoryItem } from './common'
 
 // 커뮤니티 관련 타입들
 export interface Article {
@@ -53,7 +52,6 @@ export interface Reply {
 }
 
 export interface NewsInfo {
-  categories: CategoryItem[]
   hero?: {
     title?: string
     description?: string
@@ -88,7 +86,8 @@ export interface SnsInfo {
   blog?: string
 }
 
-// 커뮤니티 관리 통합 데이터 구조 (SNS 관리용)
+// 커뮤니티 관리 통합 데이터 구조
 export interface CommunityData {
   sns: SnsInfo
+  news: NewsInfo
 }

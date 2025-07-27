@@ -147,7 +147,7 @@ export default function ProgramsManagementPage() {
     }
   }, [hasChanges])
 
-  const handleSaveAndSwitch = async () => {
+  const handleDialogSave = async () => {
     setDialogSaving(true)
     try {
       await handleSave()
@@ -163,13 +163,18 @@ export default function ProgramsManagementPage() {
     }
   }
 
-  const handleDiscardAndSwitch = () => {
+  const handleDialogDiscard = () => {
     handleReset()
     if (pendingTab) {
       setActiveTab(pendingTab)
       setPendingTab(null)
     }
     setShowUnsavedDialog(false)
+  }
+
+  const handleDialogCancel = () => {
+    setShowUnsavedDialog(false)
+    setPendingTab(null)
   }
 
   // 로딩 상태
@@ -184,12 +189,13 @@ export default function ProgramsManagementPage() {
     )
   }
 
-  // 현재 탭의 프로그램 데이터 업데이트 핸들러
+  // 현재 탭의 프로그램 데이터 업데이트 핸들러 (깊은 복사 패턴 적용)
   const updateCurrentTabData = (updatedData: ProgramCategory) => {
-    setProgramsData(prev => ({
-      ...prev,
-      [activeTab]: updatedData
-    }))
+    setProgramsData(prev => {
+      const newData = JSON.parse(JSON.stringify(prev)) // 깊은 복사
+      newData[activeTab] = updatedData
+      return newData
+    })
   }
 
   // 탭 콘텐츠 렌더링
@@ -261,16 +267,13 @@ export default function ProgramsManagementPage() {
         onTabChange={handleTabChange}
         hasChanges={hasChanges}
         showUnsavedDialog={showUnsavedDialog}
-        onDialogSave={handleSaveAndSwitch}
-        onDialogDiscard={handleDiscardAndSwitch}
-        onDialogCancel={() => {
-          setShowUnsavedDialog(false)
-          setPendingTab(null)
-        }}
+        onDialogSave={handleDialogSave}
+        onDialogDiscard={handleDialogDiscard}
+        onDialogCancel={handleDialogCancel}
         saving={dialogSaving}
       />
 
-      <div className="bg-white rounded-lg border">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         {renderTabContent()}
       </div>
     </div>

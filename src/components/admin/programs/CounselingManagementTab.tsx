@@ -26,45 +26,39 @@ export function CounselingManagementTab({
     types: []
   })
 
-  // Hero 섹션 업데이트
-  const updateHero = (field: 'title' | 'description' | 'imageUrl', value: string) => {
-    onUpdate({
-      ...data,
-      hero: {
-        title: data.hero?.title || '',
-        description: data.hero?.description || '',
-        imageUrl: data.hero?.imageUrl || '',
-        [field]: value
+  // SnsManagementTab 패턴 적용: 깊은 복사를 사용한 필드 업데이트
+  const updateField = (path: string, value: string) => {
+    const keys = path.split('.')
+    const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
+    let current: any = newData
+    
+    // 중첩 객체 경로 생성
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
+        current[keys[i]] = {}
       }
-    })
+      current = current[keys[i]]
+    }
+    
+    // 최종 값 설정
+    current[keys[keys.length - 1]] = value
+    
+    onUpdate(newData)
   }
 
-  // About Message 업데이트
-  const updateAboutMessage = (field: 'title' | 'description', value: string) => {
-    onUpdate({
-      ...data,
-      aboutMessage: {
-        title: data.aboutMessage?.title || '',
-        description: data.aboutMessage?.description || '',
-        [field]: value
-      }
-    })
-  }
-
-  // 프로그램 관리 함수들
+  // 프로그램 관리 함수들 (깊은 복사 패턴 적용)
   const addProgram = () => {
     if (!newProgram.title.trim()) return
     
-    const maxOrder = Math.max(...data.programs.map(p => p.order || 0), 0)
+    const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
+    const maxOrder = Math.max(...newData.programs.map((p: ProgramDetail) => p.order || 0), 0)
     const programWithOrder = {
       ...newProgram,
       order: maxOrder + 1
     }
     
-    onUpdate({
-      ...data,
-      programs: [...data.programs, programWithOrder]
-    })
+    newData.programs.push(programWithOrder)
+    onUpdate(newData)
     
     resetNewProgramForm()
     setShowAddForm(false)
@@ -81,41 +75,29 @@ export function CounselingManagementTab({
   }
 
   const updateProgram = (index: number, field: keyof ProgramDetail, value: any) => {
-    const updatedPrograms = [...data.programs]
-    updatedPrograms[index] = {
-      ...updatedPrograms[index],
-      [field]: value
-    }
-    
-    onUpdate({
-      ...data,
-      programs: updatedPrograms
-    })
+    const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
+    newData.programs[index][field] = value
+    onUpdate(newData)
   }
 
   const removeProgram = (index: number) => {
-    const updatedPrograms = data.programs.filter((_, i) => i !== index)
-    onUpdate({
-      ...data,
-      programs: updatedPrograms
-    })
+    const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
+    newData.programs.splice(index, 1)
+    onUpdate(newData)
   }
 
   const moveProgram = (index: number, direction: 'up' | 'down') => {
-    const newPrograms = [...data.programs]
+    const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
     const newIndex = direction === 'up' ? index - 1 : index + 1
     
-    if (newIndex >= 0 && newIndex < newPrograms.length) {
-      [newPrograms[index], newPrograms[newIndex]] = [newPrograms[newIndex], newPrograms[index]]
+    if (newIndex >= 0 && newIndex < newData.programs.length) {
+      [newData.programs[index], newData.programs[newIndex]] = [newData.programs[newIndex], newData.programs[index]]
       
       // order 값 업데이트
-      newPrograms[index].order = index + 1
-      newPrograms[newIndex].order = newIndex + 1
+      newData.programs[index].order = index + 1
+      newData.programs[newIndex].order = newIndex + 1
       
-      onUpdate({
-        ...data,
-        programs: newPrograms
-      })
+      onUpdate(newData)
     }
   }
 
@@ -216,7 +198,7 @@ export function CounselingManagementTab({
             <input
               type="text"
               value={data.hero?.title || ''}
-              onChange={(e) => updateHero('title', e.target.value)}
+              onChange={(e) => updateField('hero.title', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="페이지 제목"
             />
@@ -227,7 +209,7 @@ export function CounselingManagementTab({
             </label>
             <textarea
               value={data.hero?.description || ''}
-              onChange={(e) => updateHero('description', e.target.value)}
+              onChange={(e) => updateField('hero.description', e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="페이지 설명"
@@ -239,7 +221,7 @@ export function CounselingManagementTab({
             </label>
             <ImageUpload
               value={data.hero?.imageUrl || ''}
-              onChange={(url: string) => updateHero('imageUrl', url)}
+              onChange={(url: string) => updateField('hero.imageUrl', url)}
               folder="hero-images"
             />
           </div>
@@ -257,7 +239,7 @@ export function CounselingManagementTab({
             <input
               type="text"
               value={data.aboutMessage?.title || ''}
-              onChange={(e) => updateAboutMessage('title', e.target.value)}
+              onChange={(e) => updateField('aboutMessage.title', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="소개 메시지 제목"
             />
@@ -268,7 +250,7 @@ export function CounselingManagementTab({
             </label>
             <textarea
               value={data.aboutMessage?.description || ''}
-              onChange={(e) => updateAboutMessage('description', e.target.value)}
+              onChange={(e) => updateField('aboutMessage.description', e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="소개 메시지 설명"

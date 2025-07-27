@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, Edit, Trash2, Filter, Search } from 'lucide-react'
-import { Article } from '@/types/community'
-import { getCommunity, deleteArticle } from '@/lib/services/dataService'
+import { Article, NewsInfo } from '@/types/community'
+import { deleteArticle } from '@/lib/services/dataService'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
@@ -24,42 +24,22 @@ const categoryOptions = [
 ]
 
 interface NewsManagementTabProps {
-  onRegister?: (methods: {
-    hasChanges: boolean
-    handleSave: () => Promise<void>
-    handleReset: () => void
-  }) => void
+  data: NewsInfo
+  onUpdate: (data: NewsInfo) => void
 }
 
-export default function NewsManagementTab({ onRegister }: NewsManagementTabProps) {
+export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabProps) {
   const router = useRouter()
-  const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
 
-  useEffect(() => {
-    loadArticles()
-  }, [])
+  const articles = data.articles || []
 
   useEffect(() => {
     filterArticles()
   }, [articles, searchTerm, selectedStatus, selectedCategory])
-
-  const loadArticles = async () => {
-    try {
-      setLoading(true)
-      const communityData = await getCommunity()
-      const allArticles = communityData?.news?.articles || []
-      setArticles(allArticles)
-    } catch (error) {
-      console.error('게시글 목록 조회 실패:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const filterArticles = () => {
     let filtered = [...articles]
@@ -93,11 +73,16 @@ export default function NewsManagementTab({ onRegister }: NewsManagementTabProps
     filterArticles()
   }
 
-  const handleDelete = async (id: string, category: string) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
       try {
         await deleteArticle(id)
-        await loadArticles()
+        // 상태에서 삭제된 게시글 제거
+        const updatedArticles = articles.filter(article => article.id !== id)
+        onUpdate({
+          ...data,
+          articles: updatedArticles
+        })
       } catch (error) {
         console.error('게시글 삭제 실패:', error)
         alert('게시글 삭제에 실패했습니다.')
@@ -175,7 +160,7 @@ export default function NewsManagementTab({ onRegister }: NewsManagementTabProps
                 placeholder="제목, 내용으로 검색..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <Button onClick={handleSearch} variant="outline">
@@ -219,12 +204,7 @@ export default function NewsManagementTab({ onRegister }: NewsManagementTabProps
           </p>
         </div>
         <div className="p-6">
-          {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-              <p className="mt-2 text-gray-600">게시글을 불러오는 중...</p>
-            </div>
-          ) : filteredArticles.length === 0 ? (
+          {filteredArticles.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500">
                 {searchTerm || selectedStatus !== 'all' || selectedCategory !== 'all' 
@@ -285,7 +265,7 @@ export default function NewsManagementTab({ onRegister }: NewsManagementTabProps
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => handleDelete(article.id, article.category)}
+                            onClick={() => handleDelete(article.id)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>

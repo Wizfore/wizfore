@@ -371,6 +371,22 @@ export async function updateSnsData(snsData: any) {
 }
 
 /**
+ * 커뮤니티 정보 통합 업데이트
+ */
+export async function updateCommunity(communityData: any) {
+  try {
+    const docRef = doc(db, 'community', 'main')
+    await updateDoc(docRef, {
+      ...communityData,
+      updatedAt: new Date().toISOString()
+    })
+  } catch (error) {
+    console.error('Error updating community data:', error)
+    throw error
+  }
+}
+
+/**
  * 홈 설정 정보 조회
  */
 export async function getHomeConfig() {
