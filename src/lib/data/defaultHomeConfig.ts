@@ -12,6 +12,7 @@ export const defaultHomeConfig: HomeConfig = {
         categoryText: '전문가 소개 보기',
         categoryLink: '/team',
         backgroundImage: '',
+        defaultBackgroundImage: '/images/hero/defaultHero.jpg',
         order: 1,
         enabled: true
       },
@@ -22,6 +23,7 @@ export const defaultHomeConfig: HomeConfig = {
         categoryText: '센터 소개 보기',
         categoryLink: '/about',
         backgroundImage: '',
+        defaultBackgroundImage: '/images/hero/defaultHero.jpg',
         order: 2,
         enabled: true
       },
@@ -32,6 +34,7 @@ export const defaultHomeConfig: HomeConfig = {
         categoryText: '프로그램 보기',
         categoryLink: '/programs',
         backgroundImage: '',
+        defaultBackgroundImage: '/images/hero/defaultHero.jpg',
         order: 3,
         enabled: true
       }
@@ -41,8 +44,7 @@ export const defaultHomeConfig: HomeConfig = {
     categoryCards: {
       title: "위즈포레 프로그램",
       description: "다양한 영역의 전문 프로그램을 제공합니다",
-      enabled: true,
-      defaultImageUrl: "/images/programs/defaultImage.jpg"
+      enabled: true
     },
     programGrid: {
       title: "세부 전문 프로그램",

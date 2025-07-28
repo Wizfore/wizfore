@@ -28,14 +28,20 @@ const fallbackGradients = {
 // 이미지 fallback을 처리하는 컴포넌트
 interface CategoryImageProps {
   categoryImageUrl?: string
-  defaultImageUrl: string
+  defaultImageUrl?: string
   alt: string
 }
 
 const CategoryImage = ({ categoryImageUrl, defaultImageUrl, alt }: CategoryImageProps) => {
-  // 카테고리 이미지가 없으면 바로 기본 이미지 사용
-  const initialImageUrl = categoryImageUrl && categoryImageUrl.trim() !== "" ? categoryImageUrl : defaultImageUrl
-  const [currentImageUrl, setCurrentImageUrl] = useState<string>(initialImageUrl)
+  // 카테고리 이미지가 있고 빈 문자열이 아니면 사용, 그렇지 않으면 기본 이미지 사용
+  const getInitialImageUrl = () => {
+    if (categoryImageUrl && categoryImageUrl.trim() !== "") {
+      return categoryImageUrl
+    }
+    return defaultImageUrl || ""
+  }
+  
+  const [currentImageUrl, setCurrentImageUrl] = useState<string>(getInitialImageUrl())
   const [imageLoadFailed, setImageLoadFailed] = useState(false)
 
   const handleImageError = () => {
@@ -43,19 +49,20 @@ const CategoryImage = ({ categoryImageUrl, defaultImageUrl, alt }: CategoryImage
       // 카테고리 이미지 실패 → 기본 이미지로 전환
       setCurrentImageUrl(defaultImageUrl)
     } else {
-      // 기본 이미지도 실패 → 이미지 숨김
+      // 기본 이미지도 실패하거나 없으면 → 이미지 숨김
       setImageLoadFailed(true)
     }
   }
 
   // 카테고리 이미지 URL이 변경되면 초기화
   useEffect(() => {
-    const newImageUrl = categoryImageUrl && categoryImageUrl.trim() !== "" ? categoryImageUrl : defaultImageUrl
+    const newImageUrl = getInitialImageUrl()
     setCurrentImageUrl(newImageUrl)
     setImageLoadFailed(false)
   }, [categoryImageUrl, defaultImageUrl])
 
-  if (imageLoadFailed) {
+  // 이미지 로드 실패하거나 이미지 URL이 없으면 숨김
+  if (imageLoadFailed || !currentImageUrl) {
     return null // 그라데이션 배경만 표시
   }
 
@@ -73,12 +80,10 @@ const CategoryImage = ({ categoryImageUrl, defaultImageUrl, alt }: CategoryImage
 
 const CategoryCards = () => {
   const [programCategories, setProgramCategories] = useState<CategoryWithFallback[]>([])
-  const [defaultImageUrl, setDefaultImageUrl] = useState<string>('')
   const [sectionConfig, setSectionConfig] = useState<{
     title?: string
     description?: string
     enabled?: boolean
-    defaultImageUrl?: string
   }>({
     title: "위즈포레 프로그램",
     description: "다양한 영역의 전문 프로그램을 제공합니다",
@@ -104,14 +109,11 @@ const CategoryCards = () => {
                                    }
         setSectionConfig(categoryCardsConfig)
         
-        // 데이터베이스 기반 기본 이미지 URL 사용
-        const defaultImg = categoryCardsConfig.defaultImageUrl || '/images/programs/defaultImage.jpg'
         // 모든 카테고리를 순서대로 정렬
         const sortedCategories = categories
           .sort((a: ProgramCategory, b: ProgramCategory) => a.order - b.order)
         
         setProgramCategories(sortedCategories)
-        setDefaultImageUrl(defaultImg)
       } catch (error) {
         console.error('Error fetching program categories, using fallback:', error)
         // DB 실패 시 기본 데이터 사용
@@ -124,10 +126,6 @@ const CategoryCards = () => {
           order: index + 1
         }))
         setProgramCategories(fallbackCategories)
-        
-        // 기본 홈 설정에서 defaultImageUrl 가져오기
-        const fallbackDefaultImg = defaultHomeConfig.sections?.categoryCards?.defaultImageUrl || '/images/programs/defaultImage.jpg'
-        setDefaultImageUrl(fallbackDefaultImg)
         
         // 기본 섹션 설정
         const fallbackSectionConfig = defaultHomeConfig.sections?.categoryCards || {
@@ -286,7 +284,7 @@ const CategoryCards = () => {
                     {/* 배경 이미지 */}
                     <CategoryImage 
                       categoryImageUrl={category.hero?.imageUrl}
-                      defaultImageUrl={defaultImageUrl}
+                      defaultImageUrl={category.hero?.defaultImageUrl}
                       alt={`${category.hero?.title} 프로그램`}
                     />
                     {/* 어두운 필터 오버레이 */}
@@ -333,7 +331,7 @@ const CategoryCards = () => {
                               {/* 배경 이미지 */}
                               <CategoryImage 
                                 categoryImageUrl={category.hero?.imageUrl}
-                                defaultImageUrl={defaultImageUrl}
+                                defaultImageUrl={category.hero?.defaultImageUrl}
                                 alt={`${category.hero?.title} 프로그램`}
                               />
                               {/* 어두운 필터 오버레이 */}

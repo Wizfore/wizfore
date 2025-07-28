@@ -91,17 +91,28 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
   }
 
   const currentSlideData = slides[currentSlide] || slides[0]
-  const backgroundImageUrl = currentSlideData?.backgroundImage || currentSlideData?.defaultBackgroundImage
+  
+  // 배경 이미지 URL 결정: backgroundImage가 있고 빈 문자열이 아니면 사용, 그렇지 않으면 defaultBackgroundImage 사용
+  const getBackgroundImageUrl = () => {
+    if (currentSlideData?.backgroundImage && currentSlideData.backgroundImage.trim() !== '') {
+      return currentSlideData.backgroundImage
+    }
+    return currentSlideData?.defaultBackgroundImage || ''
+  }
+  
+  const backgroundImageUrl = getBackgroundImageUrl()
 
   return (
     <section className="relative h-[60vh] md:h-[70vh] lg:h-[calc(100vh-5rem)] overflow-hidden px-4 md:px-8 lg:px-16 pb-24 md:pb-32 lg:pb-40">
       <div className="absolute inset-x-4 md:inset-x-8 lg:inset-x-16 top-0 bottom-4 md:bottom-8 lg:bottom-16 rounded-[3rem] overflow-hidden border-2 border-white">
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-in-out"
-              style={{
-                backgroundImage: `url('${backgroundImageUrl}')`
-              }}
-            />
+            {backgroundImageUrl && (
+              <div 
+                className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-in-out"
+                style={{
+                  backgroundImage: `url('${backgroundImageUrl}')`
+                }}
+              />
+            )}
             {/* 김포 스타일 부드러운 오버레이 */}
             <div className="absolute inset-0 bg-gradient-to-br from-gcf-primary/20 via-gcf-secondary/10 to-gcf-accent/20" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
