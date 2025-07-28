@@ -102,7 +102,7 @@ export default function HistoryPage() {
       <CommonHeroSection 
         title={hero?.title || "센터 연혁"}
         description={hero?.description || "상시와 사회서비스센터의 역사와 발전 과정을 만나보세요"}
-        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
+        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
       />
       <StatsSection milestones={data.milestones} stats={stats} />
       <TimelineSection milestones={data.milestones} />

@@ -64,7 +64,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
 
   // 아이콘 경로 결정 함수
   const getIconPath = (card: any): string => {
-    return card.iconPath || card.defaultIconPath
+    return (card.iconPath && card.iconPath.trim() !== '') ? card.iconPath : card.defaultIconPath
   }
 
   return (

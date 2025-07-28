@@ -110,7 +110,7 @@ export default function LocationPage() {
       <CommonHeroSection 
         title={hero?.title || "오시는길"}
         description={hero?.description || "상시와 사회서비스센터로 오시는 길을 안내해드립니다"}
-        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
+        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
       />
       <TransportationSection 
         contact={data.contact}

@@ -38,7 +38,7 @@ const DirectorProfileSection: React.FC<DirectorProfileSectionProps> = ({ directo
                   <div className="absolute inset-0 bg-gradient-to-br from-wizfore-coral-primary/20 to-wizfore-soft-pink/20 rounded-full" />
                   <div className="relative w-full h-full bg-wizfore-light-beige rounded-full overflow-hidden border-4 border-white shadow-lg">
                     <img 
-                      src={director.imageUrl || director.defaultImageUrl} 
+                      src={(director.imageUrl && director.imageUrl.trim() !== '') ? director.imageUrl : director.defaultImageUrl} 
                       alt={`${director.name} 센터장`}
                       className="w-full h-full object-cover"
                     />

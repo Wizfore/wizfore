@@ -98,7 +98,7 @@ const AdvisorsListSection: React.FC<AdvisorsListSectionProps> = ({ advisors = []
                         <div className="absolute inset-0 bg-gradient-to-br from-wizfore-coral-primary/20 to-wizfore-soft-pink/20 rounded-full" />
                         <div className="relative w-full h-full bg-wizfore-light-beige rounded-full overflow-hidden border-4 border-white shadow-lg">
                           <img 
-                            src={advisor.imageUrl || advisor.defaultImageUrl} 
+                            src={(advisor.imageUrl && advisor.imageUrl.trim() !== '') ? advisor.imageUrl : advisor.defaultImageUrl} 
                             alt={`${advisor.name} 자문위원`}
                             className="w-full h-full object-cover"
                             onError={(e) => {

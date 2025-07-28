@@ -115,7 +115,7 @@ export default function TherapyPage() {
       <CommonHeroSection 
         title={hero?.title || "치료·재활"}
         description={hero?.description || "전문적이고 개별화된 치료와 재활 서비스를 제공합니다"}
-        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
+        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
       />
 
       {/* 개요 섹션 */}

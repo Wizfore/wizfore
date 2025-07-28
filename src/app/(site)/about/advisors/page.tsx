@@ -90,7 +90,7 @@ export default function AdvisorsPage() {
       <CommonHeroSection 
         title={hero?.title || "자문위원"}
         description={hero?.description || "상시와 사회서비스센터의 전문 자문위원들을 소개합니다"}
-        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
+        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
       />
       
       {/* 자문위원 목록 섹션 */}

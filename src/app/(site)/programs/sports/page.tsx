@@ -115,7 +115,7 @@ export default function SportsPage() {
       <CommonHeroSection 
         title={hero?.title || "특수 스포츠"}
         description={hero?.description || "장애인을 위한 특별한 스포츠 프로그램을 제공합니다"}
-        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
+        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
       />
 
       {/* 개요 섹션 */}

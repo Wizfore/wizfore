@@ -28,7 +28,7 @@ export default function ProgramPageLayout({
       <section 
         className="relative h-96 bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage: `url('${heroData.backgroundImage || heroData.defaultImageUrl}')`
+          backgroundImage: `url('${(heroData.backgroundImage && heroData.backgroundImage.trim() !== '') ? heroData.backgroundImage : heroData.defaultImageUrl}')`
         }}
       >
         <div className="absolute inset-0 bg-black/30" />
