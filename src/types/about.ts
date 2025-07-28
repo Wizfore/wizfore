@@ -7,6 +7,7 @@ export interface DirectorInfo {
   committees: string[]
   certifications: string[]
   imageUrl?: string
+  defaultImageUrl?: string
   aboutMessage?: {
     title: string
     description: string
@@ -16,6 +17,7 @@ export interface DirectorInfo {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
 }
 
@@ -25,6 +27,7 @@ export interface AdvisorInfo {
   education: string[]
   career: string[]
   imageUrl?: string
+  defaultImageUrl?: string
   order: number
 }
 
@@ -33,6 +36,7 @@ export interface HistoryInfo {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
   milestones: Milestone[]
   stats?: HistoryStats
@@ -43,6 +47,7 @@ export interface StatsCard {
   title: string
   description: string
   iconPath: string
+  defaultIconPath: string
   order: number
   enabled: boolean
 }
@@ -62,6 +67,7 @@ export interface AdvisorsInfo {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
   list: AdvisorInfo[]
 }
@@ -71,6 +77,7 @@ export interface LocationInfo {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
   aboutMessage: {
     title: string
@@ -84,6 +91,7 @@ export interface InquiryInfo {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
   aboutMessage: {
     title: string

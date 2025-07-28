@@ -115,7 +115,9 @@ export interface DefaultSiteData {
     contact: ContactInfo
     mainServices: MainServices
     faviconUrl?: string
+    defaultFaviconUrl?: string
     headerLogoUrl?: string
+    defaultHeaderLogoUrl?: string
   }
   aboutInfo: {
     director: DirectorInfo

@@ -8,7 +8,9 @@ export const defaultSiteData: DefaultSiteData = {
     establishedDate: "2016년 1월 1일",
     purpose: "위즈포레는 \"함께 어우러지는 지혜의 숲(WIZ FORE)\"라는 의미를 담고 있으며, 장애인을 포함한 모든 사람들이 어우러져 더불어 살아가는 힘을 키우는데 필요한 사회서비스를 제공하는 전문기관입니다.",
     faviconUrl: "",
+    defaultFaviconUrl: "/icons/favicon.png",
     headerLogoUrl: "",
+    defaultHeaderLogoUrl: "/icons/logo.png",
     contact: {
       address: "부산광역시 사상구 모라동 110번길 25 3층, 4층 (모라주공아파트1단지 입구 홈플러스 위 광명한의원 4층)",
       phone: "051-324-0940",
@@ -107,6 +109,7 @@ export const defaultSiteData: DefaultSiteData = {
         "발달장애인 공공후견인"
       ],
       imageUrl: "",
+      defaultImageUrl: "/images/director/defaultDirector.png",
       aboutMessage: {
         title: "함께 걷는 성장의 길",
         description: "영유아부터 성인까지 온 가족이 함께하는 종합사회서비스센터로 개인별 특성을 고려한 맞춤형 치료서비스를 제공하고 있습니다.\n\n건강한 발달과 성장의 핵심은 전문가의 경험과 진심입니다. 각 치료영역의 깊은 전문성과 따뜻한 애정을 가진 선생님들이 동행합니다.\n\n이렇게 아이와 가족 모두의 행복한 일상을 함께 만들어갑니다.",
@@ -118,7 +121,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "센터장 소개",
         description: "위즈포레를 이끌어가는 센터장을 소개합니다",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       }
     },
     
@@ -126,7 +130,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "센터 발자취",
         description: "위즈포레의 성장과 발전 과정을 시간순으로 소개합니다",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       stats: {
         title: "성장 통계",
@@ -137,6 +142,7 @@ export const defaultSiteData: DefaultSiteData = {
             title: "서비스 설립 및 지정",
             description: "다양한 사회서비스 분야의 설립과 지정을 통한 전문성 확보",
             iconPath: "",
+            defaultIconPath: "/icons/history/establishment.png",
             order: 1,
             enabled: true
           },
@@ -145,6 +151,7 @@ export const defaultSiteData: DefaultSiteData = {
             title: "협력 관계 구축", 
             description: "전문기관과의 업무협약을 통한 서비스 품질 향상",
             iconPath: "",
+            defaultIconPath: "/icons/history/partnership.png",
             order: 2,
             enabled: true
           },
@@ -153,6 +160,7 @@ export const defaultSiteData: DefaultSiteData = {
             title: "수상 및 표창",
             description: "우수한 서비스 운영으로 받은 각종 수상과 표창",
             iconPath: "",
+            defaultIconPath: "/icons/history/award.png",
             order: 3,
             enabled: true
           },
@@ -161,6 +169,7 @@ export const defaultSiteData: DefaultSiteData = {
             title: "운영 연수",
             description: "설립부터 현재까지 지속적인 성장과 발전",
             iconPath: "",
+            defaultIconPath: "/icons/history/duration.png",
             order: 4,
             enabled: true
           }
@@ -202,7 +211,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "자문위원",
         description: "위즈포레의 전문성 향상을 위해 도움을 주시는 분들을 소개합니다",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       list: [
         {
@@ -214,6 +224,7 @@ export const defaultSiteData: DefaultSiteData = {
             "전)춘해보건대학교 언어치료학과 정교수"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultProfessorM.png",
           order: 1
         },
         {
@@ -225,6 +236,7 @@ export const defaultSiteData: DefaultSiteData = {
             "현)세림어르신의집 원장"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultDirectorF.png",
           order: 2
         },
         {
@@ -235,6 +247,7 @@ export const defaultSiteData: DefaultSiteData = {
             "현)부산가톨릭대학교 언어청각치료학과 정교수"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultProfessorM.png",
           order: 3
         },
         {
@@ -246,6 +259,7 @@ export const defaultSiteData: DefaultSiteData = {
             "현)한국사회복지상담학회장"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultProfessorM.png",
           order: 4
         },
         {
@@ -256,6 +270,7 @@ export const defaultSiteData: DefaultSiteData = {
             "현)한마음약국 대표"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultPharmacistF.png",
           order: 5
         },
         {
@@ -267,6 +282,7 @@ export const defaultSiteData: DefaultSiteData = {
             "창원시육아종합지원센터 인성교육 강사"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultProfessorF.png",
           order: 6
         },
         {
@@ -278,6 +294,7 @@ export const defaultSiteData: DefaultSiteData = {
             "중앙경찰학교 교수요원"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultPoliceM.png",
           order: 7
         },
         {
@@ -289,6 +306,7 @@ export const defaultSiteData: DefaultSiteData = {
             "심리운동사1급"
           ],
           imageUrl: "",
+          defaultImageUrl: "/images/advisors/defaultProfessorF.png",
           order: 8
         }
       ]
@@ -298,7 +316,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "오시는길",
         description: "위즈포레 사회서비스센터 위치 및 교통 안내",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       aboutMessage: {
         title: "위즈포레로 오시는 길을 확인하세요",
@@ -324,7 +343,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "1:1 문의",
         description: "궁금한 사항이나 문의사항을 언제든지 남겨주세요",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       aboutMessage: {
         title: "문의하기",
@@ -353,7 +373,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "치료 프로그램",
         description: "개별적인 특성과 필요에 맞춘 전문적인 치료 서비스를 제공합니다.",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultProgramsHero.jpg"
       },
       aboutMessage: {
         title: "개별화된 치료 접근",
@@ -433,7 +454,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "상담 프로그램",
         description: "정확한 진단과 개별화된 상담을 통해 최적의 치료 계획을 제공합니다.",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultProgramsHero.jpg"
       },
       aboutMessage: {
         title: "종합적인 평가와 지원",
@@ -473,7 +495,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "방과후 프로그램",
         description: "학령기 아동의 발달과 사회성 향상을 위한 집단 프로그램입니다.",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultProgramsHero.jpg"
       },
       aboutMessage: {
         title: "사회성과 학습의 균형",
@@ -505,7 +528,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "장애인 스포츠 프로그램",
         description: "다양한 스포츠 활동을 통한 신체 기능 향상과 사회성 발달을 도모합니다.",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultProgramsHero.jpg"
       },
       aboutMessage: {
         title: "다양한 스포츠 경험",
@@ -537,7 +561,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "성인 주간활동 프로그램",
         description: "성인 발달장애인의 자립생활과 사회통합을 위한 종합적인 서비스를 제공합니다.",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultProgramsHero.jpg"
       },
       aboutMessage: {
         title: "종합적인 생활 지원",
@@ -603,7 +628,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "치료·상담사",
         description: "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       aboutMessage: {
         title: "전문 치료진 소개",
@@ -837,7 +863,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "주간·방과후 교사",
         description: "성인 주간활동과 방과후 프로그램을 전담하는 전문 교사진을 소개합니다",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       aboutMessage: {
         title: "전문 교육진 소개",
@@ -933,7 +960,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "공지사항",
         description: "위즈포레의 다양한 활동과 성과를 확인해보세요",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       aboutMessage: {
         title: "전체 소식",
@@ -943,56 +971,23 @@ export const defaultSiteData: DefaultSiteData = {
         // 공지사항
         {
           id: "notice_1",
-          title: "발늬재활서비스 이용 안내",
-          contentHtml: "<h1>발늬재활서비스 이용 안내</h1><p>위즈포레 사회서비스센터에서 제공하는 <strong>발늬재활서비스</strong> 이용 안내를 드립니다.</p><h2>제공 서비스</h2><h3>언어치료</h3><ul><li>개별치료: 40,000원/회</li><li>그룹치료: 30,000원/회</li></ul><h3>인지학습치료</h3><ul><li>개별치료: 40,000원/회</li><li>그룹치료: 30,000원/회</li></ul><h3>심리운동치료</h3><ul><li>개별치료: 40,000원/회</li><li>그룹치료: 30,000원/회</li></ul><h2>신청 방법</h2><ol><li>전화 상담: 051-123-4567</li><li>방문 상담: 평일 09:00 - 18:00</li><li>온라인 신청: 홈페이지 문의 메뉴 이용</li></ol><blockquote><p>자세한 사항은 전화 문의 바랍니다.</p></blockquote>",
+          title: "공지사항 테스트 게시글",
+          contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2024-01-15",
           category: "notices",
-          status: "published",
+          status: "draft",
           createdAt: "2024-01-15T00:00:00Z",
           updatedAt: "2024-01-15T00:00:00Z",
           publishedAt: "2024-01-15T00:00:00Z"
         },
-        {
-          id: "notice_2",
-          title: "시설 이용 시간 변경 안내",
-          contentHtml: "<h1>시설 이용 시간 변경 안내</h1><p>안녕하세요. 위즈포레 사회서비스센터입니다.</p><p>새로운 정책에 따라 <strong>시설 이용 시간이 변경</strong>되었습니다.</p><h2>변경 내용</h2><h3>기존 이용 시간</h3><ul><li>평일: 09:00 - 17:00</li><li>토요일: 09:00 - 12:00</li><li>일요일: 휴무</li></ul><h3>변경된 이용 시간</h3><ul><li>평일: 09:00 - 18:00</li><li>토요일: 09:00 - 15:00</li><li>일요일: 휴무</li></ul><h2>적용 일정</h2><ul><li>시행일: <strong>2024년 2월 1일(목)</strong></li><li>사전 예약된 서비스는 기존 시간대로 진행</li></ul><blockquote><p>이용에 참고하시기 바랍니다.</p></blockquote>",
-          date: "2024-01-28",
-          category: "notices",
-          status: "published",
-          createdAt: "2024-01-28T00:00:00Z",
-          updatedAt: "2024-01-28T00:00:00Z",
-          publishedAt: "2024-01-28T00:00:00Z"
-        },
-        {
-          id: "notice_3",
-          title: "휴무일 안내 및 비상연락처 공지",
-          contentHtml: "<h1>휴무일 안내 및 비상연락처 공지</h1><p>안녕하세요. 위즈포레 사회서비스센터입니다.</p><p>연말연시 및 설연휴 기간의 <strong>휴무일 안내</strong>를 드립니다.</p><h2>휴무 일정</h2><h3>2024년 연말연시</h3><ul><li>휴무일: 2024년 12월 30일(월) ~ 2025년 1월 2일(목)</li><li>정상 운영: 2025년 1월 3일(금)부터</li></ul><h3>2025년 설연휴</h3><ul><li>휴무일: 2025년 1월 27일(월) ~ 1월 30일(목)</li><li>정상 운영: 2025년 1월 31일(금)부터</li></ul><h2>비상연락처</h2><p>휴무 기간 중 긴급한 사안이 있으실 경우:</p><ul><li>비상연락처: 010-1234-5678</li><li>이메일: emergency@wizfore.or.kr</li></ul><blockquote><p>휴무 기간 중에도 안전하고 행복한 시간 보내세요!</p></blockquote>",
-          date: "2024-12-15",
-          category: "notices",
-          status: "published",
-          createdAt: "2024-12-15T00:00:00Z",
-          updatedAt: "2024-12-15T00:00:00Z",
-          publishedAt: "2024-12-15T00:00:00Z"
-        },
-        {
-          id: "notice_4",
-          title: "코로나19 방역수칙 안내",
-          contentHtml: "<h1>코로나19 방역수칙 안내</h1><p>안전한 서비스 제공을 위해 <strong>코로나19 방역수칙</strong>을 안내드립니다.</p><h2>방역수칙 안내</h2><h3>이용자 수칙사항</h3><ul><li>마스크 착용 필수 (입구에서 제공)</li><li>체온 측정 및 건강상태 확인</li><li>손 소독제 사용</li><li>방문 전 사전 예약 및 확인</li></ul><h3>서비스 제한 사항</h3><ul><li>발열, 기침 등 증상 시 서비스 연기</li><li>확진자 접촉 시 14일 격리 후 이용 가능</li></ul><h2>예약 및 문의</h2><ul><li>전화: 051-123-4567</li><li>온라인: 홈페이지 예약 시스템</li></ul><blockquote><p>모두의 건강과 안전을 위해 협조 부탁드립니다.</p></blockquote>",
-          date: "2024-03-01",
-          category: "notices",
-          status: "published",
-          createdAt: "2024-03-01T00:00:00Z",
-          updatedAt: "2024-03-01T00:00:00Z",
-          publishedAt: "2024-03-01T00:00:00Z"
-        },
         // 파트너쉽
         {
           id: "partnership_1",
-          title: "부산정보문화센터 업무협약",
-          contentHtml: "<h1>부산정보문화센터 업무협약</h1><p>부산시 유관기관 부산정보문화센터와 업무협약을 체결하였습니다.</p>",
+          title: "협약(파트너쉽) 테스트 게시글",
+          contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2021-09-07",
           category: "partnership",
-          status: "published",
+          status: "draft",
           createdAt: "2021-09-07T00:00:00Z",
           updatedAt: "2021-09-07T00:00:00Z",
           publishedAt: "2021-09-07T00:00:00Z"
@@ -1000,82 +995,38 @@ export const defaultSiteData: DefaultSiteData = {
         // 소식
         {
           id: "news_1",
-          title: "모라1동 주민자치위원 위촉",
-          contentHtml: "<h1>모라1동 주민자치위원 위촉</h1><p><strong>2021년 11월 26일</strong>, 모라1동 주민센터에서 자치위원 위촉식이 있었습니다.</p><h2>위촉식 주요 내용</h2><ul><li>주민자치위원회 위촉장 전달</li><li>지역사회 발전을 위한 역할 안내</li><li>사회서비스센터 협력 방안 논의</li></ul><h3>위촉위원으로서의 역할</h3><ul><li>주민의 발전을 위한 정책 제안</li><li>지역사회 프로그램 기획 및 운영</li><li>주민과 행정 간의 연결고리 역할</li></ul><blockquote><p>지역사회 발전을 위한 의미있는 역할을 수행하겠습니다.</p></blockquote>",
+          title: "소식 테스트 게시글",
+          contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2021-11-26",
           category: "news",
-          status: "published",
+          status: "draft",
           createdAt: "2021-11-26T00:00:00Z",
           updatedAt: "2021-11-26T00:00:00Z",
           publishedAt: "2021-11-26T00:00:00Z"
         },
-        {
-          id: "news_2",
-          title: "2022년 발달재활서비스 단가표 안내",
-          contentHtml: "<h1>2022년 발달재활서비스 단가표 안내</h1><p>위와 같이 본 기관의 <strong>2022년 발달재활서비스 단가표</strong>를 안내드립니다.</p><h2>주요 서비스 단가 안내</h2><h3>언어치료</h3><ul><li>개별치료: 40,000원/회</li><li>그룹치료: 30,000원/회</li></ul><h3>인지학습치료</h3><ul><li>개별치료: 40,000원/회</li><li>그룹치료: 30,000원/회</li></ul><h3>심리운동치료</h3><ul><li>개별치료: 40,000원/회</li><li>그룹치료: 30,000원/회</li></ul><blockquote><p>자세한 사항은 전화 문의 바랍니다. (051-123-4567)</p></blockquote>",
-          date: "2022-01-01",
-          category: "news",
-          status: "published",
-          createdAt: "2022-01-01T00:00:00Z",
-          updatedAt: "2022-01-01T00:00:00Z",
-          publishedAt: "2022-01-01T00:00:00Z"
-        },
-        {
-          id: "news_3",
-          title: "사회서비스 전자바우처 클린센터 안내",
-          contentHtml: "<h1>사회서비스 전자바우처 클린센터 안내</h1><p>사회서비스 전자바우처 <strong>클린센터</strong> 운영에 대해 안내드리오니 서비스 이에 참고바랍니다.</p><h2>클린센터란?</h2><p>사회서비스 전자바우처 시스템의 안전한 운영을 위한 전담 기관입니다.</p><h3>주요 역할</h3><ul><li>전자바우처 시스템 보안 강화</li><li>서비스 이용자 안전 보장</li><li>서비스 제공기관 지원 및 관리</li></ul><h3>이용 안내</h3><ul><li>운영시간: 평일 09:00 ~ 18:00</li><li>연락처: 1588-0000</li><li>온라인: www.cleanservice.go.kr</li></ul><blockquote><p>안전하고 신뢰할 수 있는 사회서비스 제공을 위해 노력하겠습니다.</p></blockquote>",
-          date: "2022-03-01",
-          category: "news",
-          status: "published",
-          createdAt: "2022-03-01T00:00:00Z",
-          updatedAt: "2022-03-01T00:00:00Z",
-          publishedAt: "2022-03-01T00:00:00Z"
-        },
         // 행사
         {
           id: "event_1",
-          title: "성평등 공동포럼 사례발표",
-          contentHtml: "<h1>성평등 공동포럼 사례발표</h1><p>부산시여성가족개발원 주최 성평등 공동포럼에 참여했습니다.</p>",
+          title: "행사 테스트 게시글",
+          contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2021-11-19",
           category: "events",
-          status: "published",
+          status: "draft",
           createdAt: "2021-11-19T00:00:00Z",
           updatedAt: "2021-11-19T00:00:00Z",
           publishedAt: "2021-11-19T00:00:00Z"
         },
-        {
-          id: "event_2",
-          title: "부산솔빛학교 학부모설명회",
-          contentHtml: "<h1>부산솔빛학교 학부모설명회</h1><p>부산솔빛학교 학부모설명회에 참여했습니다.</p>",
-          date: "2021-12-14",
-          category: "events",
-          status: "published",
-          createdAt: "2021-12-14T00:00:00Z",
-          updatedAt: "2021-12-14T00:00:00Z",
-          publishedAt: "2021-12-14T00:00:00Z"
-        },
         // 수상
         {
           id: "award_1",
-          title: "성인지 사례 공모전 우수상 수상",
-          contentHtml: "<h1>성인지 사례 공모전 우수상 수상</h1><p>부산여성가족개발원 성인지 사례 공모전에서 우수상을 수상했습니다.</p>",
+          title: "수상 테스트 게시글",
+          contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2022-07-19",
           category: "awards",
-          status: "published",
+          status: "draft",
           createdAt: "2022-07-19T00:00:00Z",
           updatedAt: "2022-07-19T00:00:00Z",
           publishedAt: "2022-07-19T00:00:00Z"
-        },
-        {
-          id: "award_2",
-          title: "사상구청장 표창장 수상",
-          contentHtml: "<h1>사상구청장 표창장 수상</h1><p>주민자치활동 및 장애인 사회통합 기여로 사상구청장 표창장을 수상했습니다.</p>",
-          date: "2023-12-30",
-          category: "awards",
-          status: "published",
-          createdAt: "2023-12-30T00:00:00Z",
-          updatedAt: "2023-12-30T00:00:00Z",
-          publishedAt: "2023-12-30T00:00:00Z"
         }
       ]
     },
@@ -1083,7 +1034,8 @@ export const defaultSiteData: DefaultSiteData = {
       hero: {
         title: "SNS",
         description: "위즈포레의 생생한 활동 모습을 영상으로 만나보세요",
-        imageUrl: ""
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
       },
       aboutMessage: {
         title: "위즈포레 YouTube",

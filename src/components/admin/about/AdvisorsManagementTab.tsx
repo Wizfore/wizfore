@@ -313,6 +313,7 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
                       value={advisor.imageUrl}
                       onChange={(url: string) => updateAdvisor(index, 'imageUrl', url)}
                       folder="advisors"
+                      role={advisor.position?.join(' ') || ''}
                     />
                   </div>
                 </div>

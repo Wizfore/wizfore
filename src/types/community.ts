@@ -56,6 +56,7 @@ export interface NewsInfo {
     title?: string
     description?: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
   aboutMessage?: {
     title?: string
@@ -69,6 +70,7 @@ export interface SnsInfo {
     title?: string
     description?: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
   aboutMessage?: {
     title?: string

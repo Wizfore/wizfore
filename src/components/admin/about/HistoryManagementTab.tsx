@@ -111,6 +111,7 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
       title: '',
       description: '',
       iconPath: '',
+      defaultIconPath: '/icons/stats/default.svg',
       order: (data.stats?.cards?.length || 0) + 1,
       enabled: true
     }

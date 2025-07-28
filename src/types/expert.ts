@@ -52,6 +52,7 @@ export interface TeamCategory {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   }
   aboutMessage?: {
     title: string
