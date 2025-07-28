@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { X, Upload, ImageIcon, AlertCircle, CheckCircle } from 'lucide-react'
 import { uploadImage, deleteImage } from '@/lib/services/storageService'
+import { ImagePreview } from './ImagePreview'
+import { getFallbackImageForContext } from './utils/fallbackImages'
 
 interface SingleImageUploadProps {
   imageUrl?: string
@@ -12,6 +14,8 @@ interface SingleImageUploadProps {
   className?: string
   accept?: string[]
   maxFileSize?: number
+  showPreview?: boolean
+  previewLabel?: string
 }
 
 export default function SingleImageUpload({
@@ -20,7 +24,9 @@ export default function SingleImageUpload({
   category,
   className = '',
   accept = ['.png', '.jpg', '.jpeg', '.ico', '.svg'],
-  maxFileSize = 2 * 1024 * 1024 // 2MB
+  maxFileSize = 2 * 1024 * 1024, // 2MB
+  showPreview = true,
+  previewLabel
 }: SingleImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -120,6 +126,11 @@ export default function SingleImageUpload({
     }
   }
 
+  // Fallback 이미지 경로 계산
+  const fallbackImagePath = getFallbackImageForContext({
+    category
+  })
+
   return (
     <div className={`space-y-4 ${className}`}>
       {/* 에러 메시지 */}
@@ -146,27 +157,30 @@ export default function SingleImageUpload({
         </div>
       )}
 
-      {/* 현재 이미지 표시 */}
-      {imageUrl && !uploading && (
-        <div className="relative inline-block">
-          <div className="relative group">
-            <img
-              src={imageUrl}
-              alt={`${category} 이미지`}
-              className={`border border-gray-300 rounded-lg ${
-                category === 'favicon' ? 'w-16 h-16' : 'h-16 w-auto'
-              }`}
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+      {/* 이미지 미리보기 */}
+      {showPreview && !uploading && (
+        <div className="space-y-2">
+          <ImagePreview
+            imageUrl={imageUrl}
+            fallbackPath={fallbackImagePath}
+            alt={previewLabel || `${category} 이미지`}
+            className={category === 'favicon' ? 'w-16 h-16' : 'h-16 w-auto'}
+            showLabel={!!previewLabel}
+            label={previewLabel}
+          />
+          
+          {imageUrl && (
+            <div className="flex justify-end">
               <button
                 onClick={removeImage}
-                className="text-white hover:text-red-300 p-1"
+                className="text-sm text-red-600 hover:text-red-800 flex items-center gap-1"
                 title="이미지 삭제"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
+                이미지 삭제
               </button>
             </div>
-          </div>
+          )}
         </div>
       )}
 

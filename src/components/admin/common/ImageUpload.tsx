@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { X, Upload, ImageIcon, AlertCircle, CheckCircle } from 'lucide-react'
 import { uploadImage, deleteImage } from '@/lib/services/storageService'
+import { ImagePreview } from './ImagePreview'
+import { getFallbackImageForContext } from './utils/fallbackImages'
 
 interface ImageUploadProps {
   value?: string
@@ -13,6 +15,11 @@ interface ImageUploadProps {
   accept?: string[]
   maxFileSize?: number
   placeholder?: string
+  showPreview?: boolean
+  previewLabel?: string
+  previewSize?: string
+  role?: string
+  gender?: 'male' | 'female'
 }
 
 export function ImageUpload({
@@ -22,7 +29,12 @@ export function ImageUpload({
   className = '',
   accept = ['.png', '.jpg', '.jpeg', '.svg'],
   maxFileSize = 2 * 1024 * 1024, // 2MB
-  placeholder = '이미지를 드래그하거나 클릭하여 업로드'
+  placeholder = '이미지를 드래그하거나 클릭하여 업로드',
+  showPreview = true,
+  previewLabel,
+  previewSize = 'h-32 w-auto',
+  role,
+  gender
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -100,6 +112,13 @@ export function ImageUpload({
 
   const resetError = () => setError(null)
 
+  // Fallback 이미지 경로 계산
+  const fallbackImagePath = getFallbackImageForContext({
+    folder,
+    role,
+    gender
+  })
+
   return (
     <div className={`space-y-4 ${className}`}>
       {/* 에러 메시지 */}
@@ -126,25 +145,30 @@ export function ImageUpload({
         </div>
       )}
 
-      {/* 현재 이미지 표시 */}
-      {value && !uploading && (
-        <div className="relative inline-block">
-          <div className="relative group">
-            <img
-              src={value}
-              alt="업로드된 이미지"
-              className="max-h-32 w-auto border border-gray-300 rounded-lg"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+      {/* 이미지 미리보기 */}
+      {showPreview && !uploading && (
+        <div className="space-y-2">
+          <ImagePreview
+            imageUrl={value}
+            fallbackPath={fallbackImagePath}
+            alt={previewLabel || "이미지 미리보기"}
+            className={previewSize}
+            showLabel={!!previewLabel}
+            label={previewLabel}
+          />
+          
+          {value && (
+            <div className="flex justify-end">
               <button
                 onClick={removeImage}
-                className="text-white hover:text-red-300 p-1"
+                className="text-sm text-red-600 hover:text-red-800 flex items-center gap-1"
                 title="이미지 삭제"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
+                이미지 삭제
               </button>
             </div>
-          </div>
+          )}
         </div>
       )}
 

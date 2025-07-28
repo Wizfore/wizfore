@@ -41,6 +41,7 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
               category="favicon"
               accept={['.ico', '.png']}
               maxFileSize={1024 * 1024} // 1MB
+              previewLabel="현재 파비콘"
             />
           </div>
           
@@ -80,6 +81,7 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
               category="logo"
               accept={['.png', '.jpg', '.jpeg', '.svg']}
               maxFileSize={2 * 1024 * 1024} // 2MB
+              previewLabel="현재 헤더 로고"
             />
           </div>
           
