@@ -15,6 +15,7 @@ export default function TherapistsPage() {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
@@ -96,7 +97,7 @@ export default function TherapistsPage() {
       <CommonHeroSection 
         title={hero?.title || "치료·상담사"}
         description={hero?.description || "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다"}
-        backgroundImage={hero?.imageUrl || '/images/hero/defaultHero.jpg'}
+        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
       />
 
       {/* 개요 섹션 */}

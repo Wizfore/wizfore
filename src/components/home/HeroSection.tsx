@@ -91,7 +91,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
   }
 
   const currentSlideData = slides[currentSlide] || slides[0]
-  const backgroundImageUrl = currentSlideData?.backgroundImage || '/images/hero/defaultHero.jpg'
+  const backgroundImageUrl = currentSlideData?.backgroundImage || currentSlideData?.defaultBackgroundImage
 
   return (
     <section className="relative h-[60vh] md:h-[70vh] lg:h-[calc(100vh-5rem)] overflow-hidden px-4 md:px-8 lg:px-16 pb-24 md:pb-32 lg:pb-40">

@@ -66,6 +66,8 @@ function getCategoryCollections(categoryId: string): string[] {
       return ['community']
     case 'home-config':
       return ['homeConfig']
+    case 'inquiry':
+      return ['inquiry']
     case 'site-assets':
       return ['siteAssets']
     default:
@@ -159,6 +161,20 @@ async function addHomeConfigData() {
 }
 
 /**
+ * 문의 정보 데이터 추가
+ */
+async function addInquiryData() {
+  const { inquiry } = defaultSiteData
+  
+  // 문의 정보 데이터 추가
+  await setDoc(doc(db, 'inquiry', 'main'), {
+    ...inquiry,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  })
+}
+
+/**
  * 카테고리별 기본 데이터 추가 메인 함수
  */
 export async function addDefaultDataByCategory(categoryId: string): Promise<void> {
@@ -184,6 +200,9 @@ export async function addDefaultDataByCategory(categoryId: string): Promise<void
       case 'home-config':
         await addHomeConfigData()
         break
+      case 'inquiry':
+        await addInquiryData()
+        break
       default:
         throw new Error(`Unknown category: ${categoryId}`)
     }
@@ -199,7 +218,7 @@ export async function addDefaultDataByCategory(categoryId: string): Promise<void
  * 모든 카테고리의 데이터 존재 여부 확인
  */
 export async function checkAllCategoriesDataStatus(): Promise<Record<string, boolean>> {
-  const categories = ['site-info', 'about-info', 'programs', 'team', 'community', 'home-config', 'site-assets']
+  const categories = ['site-info', 'about-info', 'programs', 'team', 'community', 'home-config', 'inquiry', 'site-assets']
   const results: Record<string, boolean> = {}
   
   for (const categoryId of categories) {
@@ -254,7 +273,7 @@ export async function deleteAllDefaultData(): Promise<void> {
     console.log('Starting to delete all default data')
     
     const allCollections = [
-      'siteInfo', 'aboutInfo', 'programs', 'team', 'community', 'homeConfig', 'siteAssets'
+      'siteInfo', 'aboutInfo', 'programs', 'team', 'community', 'homeConfig', 'inquiry', 'siteAssets'
     ]
     
     // 배치 처리로 성능 향상
@@ -281,7 +300,8 @@ export async function addAllDefaultData(onProgress?: (completed: number, total: 
       { id: 'programs', name: '프로그램 정보' },
       { id: 'team', name: '전문가 정보' },
       { id: 'community', name: '커뮤니티' },
-      { id: 'home-config', name: '홈페이지 설정' }
+      { id: 'home-config', name: '홈페이지 설정' },
+      { id: 'inquiry', name: '문의 정보' }
     ]
     
     for (let i = 0; i < categories.length; i++) {

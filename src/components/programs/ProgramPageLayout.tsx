@@ -8,6 +8,7 @@ interface ProgramPageLayoutProps {
     title?: string
     description?: string
     backgroundImage?: string
+    defaultImageUrl?: string
   }
   aboutData: {
     title?: string
@@ -27,7 +28,7 @@ export default function ProgramPageLayout({
       <section 
         className="relative h-96 bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage: `url('${heroData.backgroundImage || '/images/hero/defaultHero.jpg'}')`
+          backgroundImage: `url('${heroData.backgroundImage || heroData.defaultImageUrl}')`
         }}
       >
         <div className="absolute inset-0 bg-black/30" />

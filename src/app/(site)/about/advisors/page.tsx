@@ -17,6 +17,7 @@ export default function AdvisorsPage() {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   } | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -89,7 +90,7 @@ export default function AdvisorsPage() {
       <CommonHeroSection 
         title={hero?.title || "자문위원"}
         description={hero?.description || "상시와 사회서비스센터의 전문 자문위원들을 소개합니다"}
-        backgroundImage={hero?.imageUrl || '/images/hero/defaultHero.jpg'}
+        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
       />
       
       {/* 자문위원 목록 섹션 */}

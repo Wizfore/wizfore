@@ -23,7 +23,7 @@ const Footer = () => {
         const siteInfo = await getSiteInfo()
         const logoUrl = (siteInfo.headerLogoUrl && siteInfo.headerLogoUrl.trim() !== '') 
           ? siteInfo.headerLogoUrl 
-          : '/icons/withoutBackground.png'
+          : siteInfo.defaultHeaderLogoUrl
         setData({
           contact: siteInfo.contact,
           siteName: siteInfo.name,

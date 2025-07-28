@@ -30,6 +30,7 @@ export interface HeroSlide {
   categoryText: string
   categoryLink: string
   backgroundImage: string
+  defaultBackgroundImage?: string
   order: number
   enabled: boolean
 }
@@ -75,6 +76,7 @@ export interface HomeConfig {
       title?: string
       description?: string
       enabled?: boolean
+      defaultImageUrl?: string
     }
     programGrid?: {
       title?: string
@@ -124,9 +126,9 @@ export interface DefaultSiteData {
     history: HistoryInfo
     advisors: AdvisorsInfo
     location: LocationInfo
-    inquiry: InquiryInfo
     facilities: string[]
   }
+  inquiry: InquiryInfo
   programs: ProgramCategory[]
   team: TeamCategory[]
   community: {

@@ -24,6 +24,7 @@ export default function LocationPage() {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
@@ -109,7 +110,7 @@ export default function LocationPage() {
       <CommonHeroSection 
         title={hero?.title || "오시는길"}
         description={hero?.description || "상시와 사회서비스센터로 오시는 길을 안내해드립니다"}
-        backgroundImage={hero?.imageUrl || '/images/hero/defaultHero.jpg'}
+        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
       />
       <TransportationSection 
         contact={data.contact}

@@ -41,7 +41,8 @@ export const defaultHomeConfig: HomeConfig = {
     categoryCards: {
       title: "위즈포레 프로그램",
       description: "다양한 영역의 전문 프로그램을 제공합니다",
-      enabled: true
+      enabled: true,
+      defaultImageUrl: "/images/programs/defaultImage.jpg"
     },
     programGrid: {
       title: "세부 전문 프로그램",

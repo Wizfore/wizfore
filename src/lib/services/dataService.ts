@@ -271,12 +271,30 @@ export async function getLocationAboutMessage() {
 }
 
 /**
+ * 문의 정보 조회
+ */
+export async function getInquiryInfo() {
+  try {
+    const docRef = doc(db, 'inquiry', 'main')
+    const docSnap = await getDoc(docRef)
+    
+    if (docSnap.exists()) {
+      return docSnap.data()
+    } else {
+      throw new Error('Inquiry info not found in database')
+    }
+  } catch (error) {
+    console.error('Error fetching inquiry info:', error)
+    throw error
+  }
+}
+/**
  * 문의 히어로 메시지 조회
  */
 export async function getInquiryHero() {
   try {
-    const aboutInfo = await getAboutInfo()
-    return aboutInfo.inquiry?.hero
+    const inquiryInfo = await getInquiryInfo()
+    return inquiryInfo.hero
   } catch (error) {
     console.error('Error fetching inquiry hero message:', error)
     throw error
@@ -288,8 +306,8 @@ export async function getInquiryHero() {
  */
 export async function getInquiryAboutMessage() {
   try {
-    const aboutInfo = await getAboutInfo()
-    return aboutInfo.inquiry?.aboutMessage
+    const inquiryInfo = await getInquiryInfo()
+    return inquiryInfo.aboutMessage
   } catch (error) {
     console.error('Error fetching inquiry about message:', error)
     throw error
@@ -301,8 +319,8 @@ export async function getInquiryAboutMessage() {
  */
 export async function getInquiryCategories(): Promise<string[]> {
   try {
-    const aboutInfo = await getAboutInfo()
-    const categories = aboutInfo.inquiry?.categories
+    const inquiryInfo = await getInquiryInfo()
+    const categories = inquiryInfo.categories
     
     if (!Array.isArray(categories)) {
       throw new Error('Invalid categories format in database')

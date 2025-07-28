@@ -73,8 +73,13 @@ const CategoryImage = ({ categoryImageUrl, defaultImageUrl, alt }: CategoryImage
 
 const CategoryCards = () => {
   const [programCategories, setProgramCategories] = useState<CategoryWithFallback[]>([])
-  const [defaultImageUrl, setDefaultImageUrl] = useState<string>('/images/programs/defaultImage.jpg')
-  const [sectionConfig, setSectionConfig] = useState({
+  const [defaultImageUrl, setDefaultImageUrl] = useState<string>('')
+  const [sectionConfig, setSectionConfig] = useState<{
+    title?: string
+    description?: string
+    enabled?: boolean
+    defaultImageUrl?: string
+  }>({
     title: "위즈포레 프로그램",
     description: "다양한 영역의 전문 프로그램을 제공합니다",
     enabled: true
@@ -99,7 +104,8 @@ const CategoryCards = () => {
                                    }
         setSectionConfig(categoryCardsConfig)
         
-        const defaultImg = '/images/programs/defaultImage.jpg'
+        // 데이터베이스 기반 기본 이미지 URL 사용
+        const defaultImg = categoryCardsConfig.defaultImageUrl || '/images/programs/defaultImage.jpg'
         // 모든 카테고리를 순서대로 정렬
         const sortedCategories = categories
           .sort((a: ProgramCategory, b: ProgramCategory) => a.order - b.order)
@@ -118,14 +124,18 @@ const CategoryCards = () => {
           order: index + 1
         }))
         setProgramCategories(fallbackCategories)
-        setDefaultImageUrl('/images/programs/defaultImage.jpg')
+        
+        // 기본 홈 설정에서 defaultImageUrl 가져오기
+        const fallbackDefaultImg = defaultHomeConfig.sections?.categoryCards?.defaultImageUrl || '/images/programs/defaultImage.jpg'
+        setDefaultImageUrl(fallbackDefaultImg)
         
         // 기본 섹션 설정
-        setSectionConfig({
+        const fallbackSectionConfig = defaultHomeConfig.sections?.categoryCards || {
           title: "위즈포레 프로그램",
           description: "다양한 영역의 전문 프로그램을 제공합니다",
           enabled: true
-        })
+        }
+        setSectionConfig(fallbackSectionConfig)
       } finally {
         setLoading(false)
       }
@@ -238,8 +248,8 @@ const CategoryCards = () => {
               animation: 'heart-pulse 2s ease-in-out infinite'
             }}
           >
-            <span className="text-heart-body">{sectionConfig.title.split(' ')[0]}</span>{' '}
-            <span className="text-heart-primary">{sectionConfig.title.split(' ').slice(1).join(' ')}</span>
+            <span className="text-heart-body">{sectionConfig.title?.split(' ')[0] || "위즈포레"}</span>{' '}
+            <span className="text-heart-primary">{sectionConfig.title?.split(' ').slice(1).join(' ') || "프로그램"}</span>
           </h2>
           {sectionConfig.description && (
             <p className="text-heart-gray mt-4 text-lg max-w-2xl mx-auto">

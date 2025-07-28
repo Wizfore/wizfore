@@ -9,21 +9,21 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isNavExpanded, setIsNavExpanded] = useState(false)
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
-  const [headerLogoUrl, setHeaderLogoUrl] = useState('/icons/withoutBackground.png')
+  const [headerLogoUrl, setHeaderLogoUrl] = useState('')
 
   useEffect(() => {
     const fetchHeaderLogoUrl = async () => {
       try {
         const siteInfo = await getSiteInfo()
-        // DB에서 헤더 로고 URL이 있고 빈 문자열이 아니면 사용, 그렇지 않으면 기본값 사용
+        // DB에서 헤더 로고 URL이 있으면 사용, 없으면 defaultHeaderLogoUrl 사용
         const logoUrl = (siteInfo.headerLogoUrl && siteInfo.headerLogoUrl.trim() !== '') 
           ? siteInfo.headerLogoUrl 
-          : '/icons/withoutBackground.png'
+          : siteInfo.defaultHeaderLogoUrl
         setHeaderLogoUrl(logoUrl)
       } catch (error) {
         console.error('Failed to fetch header logo URL:', error)
-        // 기본값 사용
-        setHeaderLogoUrl('/icons/withoutBackground.png')
+        // DB 조회 실패시에도 빈 상태로 유지 (로딩 상태)
+        setHeaderLogoUrl('')
       }
     }
 
@@ -83,11 +83,15 @@ const Header = () => {
         <div className="relative flex items-center h-16 md:h-24 lg:h-28">
           {/* 로고 - 왼쪽 고정 */}
           <Link href="/" className="flex items-center space-x-3 flex-shrink-0">
-            <img 
-              src={headerLogoUrl} 
-              alt="위즈포레 로고" 
-              className="h-8 md:h-14 lg:h-18 w-auto object-contain"
-            />
+            {headerLogoUrl ? (
+              <img 
+                src={headerLogoUrl} 
+                alt="위즈포레 로고" 
+                className="h-8 md:h-14 lg:h-18 w-auto object-contain"
+              />
+            ) : (
+              <div className="h-8 md:h-14 lg:h-18 w-24 md:w-32 bg-gray-200 animate-pulse rounded"></div>
+            )}
           </Link>
 
           {/* 데스크톱 네비게이션 - 절대적 중앙 배치 */}

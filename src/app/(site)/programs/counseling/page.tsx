@@ -23,6 +23,7 @@ export default function CounselingPage() {
     title: string
     description: string
     imageUrl?: string
+    defaultImageUrl?: string
   } | null>(null)
   const [aboutMessage, setAboutMessage] = useState<{
     title: string
@@ -114,7 +115,7 @@ export default function CounselingPage() {
       <CommonHeroSection 
         title={hero?.title || "상담·검사"}
         description={hero?.description || "전문적인 심리 상담과 종합적인 발달 검사를 제공합니다"}
-        backgroundImage={hero?.imageUrl || '/images/hero/defaultHero.jpg'}
+        backgroundImage={hero?.imageUrl || hero?.defaultImageUrl}
       />
 
       {/* 개요 섹션 */}

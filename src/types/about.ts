@@ -136,6 +136,8 @@ export type TransportationType = '지하철' | '버스' | '차'
 export interface TransportationInfo {
   type: TransportationType
   description: string
+  iconPath?: string
+  defaultIconPath: string
 }
 
 export interface LocationImage {

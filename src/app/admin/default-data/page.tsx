@@ -13,7 +13,8 @@ import {
   Trash2,
   Download,
   Home,
-  Image
+  Image,
+  Mail
 } from 'lucide-react'
 
 import { 
@@ -83,6 +84,14 @@ const dataCategories: DataCategory[] = [
     icon: Home,
     collections: ['homeConfig'],
     color: 'indigo'
+  },
+  {
+    id: 'inquiry',
+    title: '문의 정보',
+    description: '온라인 문의 히어로, 메시지, 카테고리 정보를 추가합니다.',
+    icon: Mail,
+    collections: ['inquiry'],
+    color: 'teal'
   }
 ]
 
@@ -308,7 +317,7 @@ export default function DefaultDataPage() {
         title: '모든 데이터 추가 중...',
         current: '시작 중...',
         completed: 0,
-        total: 7,
+        total: 8,
         isCompleted: false
       })
       setShowProgress(true)
@@ -451,7 +460,7 @@ export default function DefaultDataPage() {
           onClose={() => setShowDeleteConfirm(false)}
           onConfirm={handleDeleteAll}
           title="모든 데이터 삭제"
-          message={`정말로 모든 기본 데이터를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없으며, 다음 컬렉션의 모든 데이터가 삭제됩니다:\n• 사이트 기본 정보 (siteInfo)\n• 센터 소개 (aboutInfo)\n• 프로그램 정보 (programs)\n• 전문가 소개 (team)\n• 커뮤니티 (community)\n• 홈페이지 설정 (homeConfig)\n• 사이트 에셋 (siteAssets)\n\n신중하게 결정해주세요.`}
+          message={`정말로 모든 기본 데이터를 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없으며, 다음 컬렉션의 모든 데이터가 삭제됩니다:\n• 사이트 기본 정보 (siteInfo)\n• 센터 소개 (aboutInfo)\n• 프로그램 정보 (programs)\n• 전문가 소개 (team)\n• 커뮤니티 (community)\n• 홈페이지 설정 (homeConfig)\n• 문의 정보 (inquiry)\n• 사이트 에셋 (siteAssets)\n\n신중하게 결정해주세요.`}
           confirmText="모든 데이터 삭제"
           cancelText="취소"
           type="danger"
@@ -463,7 +472,7 @@ export default function DefaultDataPage() {
           onClose={() => setShowAddConfirm(false)}
           onConfirm={handleAddAll}
           title="모든 데이터 추가"
-          message={`wizfore_archive.md의 모든 기본 데이터를 Firebase에 추가하시겠습니까?\n\n다음 카테고리의 데이터가 추가됩니다:\n• 사이트 기본 정보\n• 센터 소개\n• 프로그램 정보\n• 전문가 소개\n• 커뮤니티\n• 홈페이지 설정\n• 사이트 에셋\n\n이미 존재하는 데이터가 있는 카테고리는 건너뛰어집니다.`}
+          message={`wizfore_archive.md의 모든 기본 데이터를 Firebase에 추가하시겠습니까?\n\n다음 카테고리의 데이터가 추가됩니다:\n• 사이트 기본 정보\n• 센터 소개\n• 프로그램 정보\n• 전문가 소개\n• 커뮤니티\n• 홈페이지 설정\n• 문의 정보\n• 사이트 에셋\n\n이미 존재하는 데이터가 있는 카테고리는 건너뛰어집니다.`}
           confirmText="모든 데이터 추가"
           cancelText="취소"
           type="info"

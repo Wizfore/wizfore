@@ -326,31 +326,23 @@ export const defaultSiteData: DefaultSiteData = {
       transportation: [
         {
           type: "지하철",
-          description: "모라역 하차 후 도보 5분"
+          description: "모라역 하차 후 도보 5분",
+          iconPath: "",
+          defaultIconPath: "/icons/location/train.png"
         },
         {
           type: "버스",
-          description: "모라주공아파트 정류장 하차"
+          description: "모라주공아파트 정류장 하차",
+          iconPath: "",
+          defaultIconPath: "/icons/location/bus.png"
         },
         {
           type: "차",
-          description: "센터 입구 도로공용주차장 및 홈플러스 주차장 이용"
+          description: "센터 입구 도로공용주차장 및 홈플러스 주차장 이용",
+          iconPath: "",
+          defaultIconPath: "/icons/location/car.png"
         }
       ]
-    },
-
-    inquiry: {
-      hero: {
-        title: "1:1 문의",
-        description: "궁금한 사항이나 문의사항을 언제든지 남겨주세요",
-        imageUrl: "",
-        defaultImageUrl: "/images/hero/defaultHero.jpg"
-      },
-      aboutMessage: {
-        title: "문의하기",
-        description: "궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 방문 시일 내에 답변드리겠습니다."
-      },
-      categories: ["프로그램 문의", "상담 문의", "시설 이용 문의", "일반 문의", "기타"]
     },
 
     facilities: [
@@ -1049,6 +1041,20 @@ export const defaultSiteData: DefaultSiteData = {
         }
       }
     }
+  },
+
+  inquiry: {
+    hero: {
+      title: "1:1 문의",
+      description: "궁금한 사항이나 문의사항을 언제든지 남겨주세요",
+      imageUrl: "",
+      defaultImageUrl: "/images/hero/defaultHero.jpg"
+    },
+    aboutMessage: {
+      title: "문의하기",
+      description: "궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 방문 시일 내에 답변드리겠습니다."
+    },
+    categories: ["프로그램 문의", "상담 문의", "시설 이용 문의", "일반 문의", "기타"]
   },
 
   homeConfig: defaultHomeConfig

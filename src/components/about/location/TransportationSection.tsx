@@ -21,18 +21,11 @@ const TransportationSection: React.FC<TransportationSectionProps> = ({
   aboutMessage
 }) => {
 
-  // 교통수단별 아이콘 가져오기
-  const getTransportIcon = (type: string) => {
-    switch (type) {
-      case '지하철':
-        return '/icons/location/train.png'
-      case '버스':
-        return '/icons/location/bus.png'
-      case '차':
-        return '/icons/location/car.png'
-      default:
-        return '/icons/location/train.png'
-    }
+  // DB 기반 아이콘 경로 가져오기
+  const getTransportIcon = (transport: TransportationInfo) => {
+    return (transport.iconPath && transport.iconPath.trim() !== '') 
+      ? transport.iconPath 
+      : transport.defaultIconPath
   }
 
   return (
@@ -76,7 +69,7 @@ const TransportationSection: React.FC<TransportationSectionProps> = ({
               <div className="flex items-center mb-4">
                 <div className="w-8 h-8 mr-3">
                   <Image
-                    src={getTransportIcon(transport.type)}
+                    src={getTransportIcon(transport)}
                     alt={transport.type}
                     width={32}
                     height={32}
