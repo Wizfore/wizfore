@@ -223,6 +223,7 @@ export function AfterschoolManagementTab({
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateField('hero.imageUrl', url)}
               folder="hero-images"
+              defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
         </div>

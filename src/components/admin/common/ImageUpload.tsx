@@ -20,6 +20,7 @@ interface ImageUploadProps {
   previewSize?: string
   role?: string
   gender?: 'male' | 'female'
+  defaultImageUrl?: string
 }
 
 export function ImageUpload({
@@ -34,7 +35,8 @@ export function ImageUpload({
   previewLabel,
   previewSize = 'h-32 w-auto',
   role,
-  gender
+  gender,
+  defaultImageUrl
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -112,8 +114,8 @@ export function ImageUpload({
 
   const resetError = () => setError(null)
 
-  // Fallback 이미지 경로 계산
-  const fallbackImagePath = getFallbackImageForContext({
+  // Fallback 이미지 경로 계산 (defaultImageUrl이 있으면 우선 사용)
+  const fallbackImagePath = defaultImageUrl || getFallbackImageForContext({
     folder,
     role,
     gender

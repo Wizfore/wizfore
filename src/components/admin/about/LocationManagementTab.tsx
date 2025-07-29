@@ -79,6 +79,7 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateHero('imageUrl', url)}
               folder="hero-images"
+              defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
         </div>

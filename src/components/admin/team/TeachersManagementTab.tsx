@@ -198,6 +198,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
               value={teachersData.hero?.imageUrl || ''}
               onChange={(url: string) => updateField('hero.imageUrl', url)}
               folder="hero-images"
+              defaultImageUrl={teachersData.hero?.defaultImageUrl}
             />
           </div>
         </div>

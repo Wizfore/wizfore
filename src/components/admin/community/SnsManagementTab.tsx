@@ -78,6 +78,7 @@ export default function SnsManagementTab({ data: snsData, onUpdate }: SnsManagem
               value={snsData.hero?.imageUrl || ''}
               onChange={(url: string) => updateField('hero.imageUrl', url)}
               folder="hero-images"
+              defaultImageUrl={snsData.hero?.defaultImageUrl}
             />
           </div>
         </div>

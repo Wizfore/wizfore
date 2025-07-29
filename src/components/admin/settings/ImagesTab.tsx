@@ -1,6 +1,6 @@
 import React from 'react'
 import { Upload as UploadIcon } from 'lucide-react'
-import SingleImageUpload from '@/components/admin/common/SingleImageUpload'
+import { SimpleImageUpload } from '@/components/admin/common/SimpleImageUpload'
 import type { DefaultSiteData } from '@/types'
 
 type SiteInfoData = DefaultSiteData['siteInfo']
@@ -35,13 +35,13 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               파일 업로드
             </label>
-            <SingleImageUpload
-              imageUrl={siteInfo.faviconUrl}
-              onImageChange={(url) => handleImageChange('faviconUrl', url)}
-              category="favicon"
-              accept={['.ico', '.png']}
-              maxFileSize={1024 * 1024} // 1MB
-              previewLabel="현재 파비콘"
+            <SimpleImageUpload
+              value={siteInfo.faviconUrl}
+              onChange={(url) => handleImageChange('faviconUrl', url)}
+              folder="site-assets/favicon"
+              defaultImageUrl={siteInfo.defaultFaviconUrl}
+              placeholder="파비콘 파일을 드래그하거나 클릭하여 업로드"
+              imageClassName="w-16 h-16"
             />
           </div>
           
@@ -75,13 +75,13 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               파일 업로드
             </label>
-            <SingleImageUpload
-              imageUrl={siteInfo.headerLogoUrl}
-              onImageChange={(url) => handleImageChange('headerLogoUrl', url)}
-              category="logo"
-              accept={['.png', '.jpg', '.jpeg', '.svg']}
-              maxFileSize={2 * 1024 * 1024} // 2MB
-              previewLabel="현재 헤더 로고"
+            <SimpleImageUpload
+              value={siteInfo.headerLogoUrl}
+              onChange={(url) => handleImageChange('headerLogoUrl', url)}
+              folder="site-assets/logo"
+              defaultImageUrl={siteInfo.defaultHeaderLogoUrl}
+              placeholder="로고 파일을 드래그하거나 클릭하여 업로드"
+              imageClassName="h-16 w-auto"
             />
           </div>
           

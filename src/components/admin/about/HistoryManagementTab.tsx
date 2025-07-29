@@ -179,6 +179,7 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateHero('imageUrl', url)}
               folder="hero-images"
+              defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
         </div>

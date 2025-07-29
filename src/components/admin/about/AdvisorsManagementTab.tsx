@@ -132,6 +132,7 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateHero('imageUrl', url)}
               folder="hero-images"
+              defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
         </div>
