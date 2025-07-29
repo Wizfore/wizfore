@@ -1,4 +1,5 @@
 import type { TabComponentProps } from './HomeManagement'
+import { ImageUpload } from '@/components/admin/common/ImageUpload'
 
 export function HeroTab({ data, setData }: TabComponentProps) {
   return (
@@ -61,15 +62,76 @@ export function HeroTab({ data, setData }: TabComponentProps) {
                     <span className="text-xs">활성화</span>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* 텍스트 컨텐츠 */}
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium mb-1">제목</label>
+                      <input
+                        type="text"
+                        value={slide.title}
+                        onChange={(e) => {
+                          const newSlides = [...(data?.hero?.slides || [])]
+                          newSlides[index] = { ...newSlides[index], title: e.target.value }
+                          setData(prev => ({
+                            ...prev!,
+                            hero: {
+                              ...prev!.hero,
+                              slides: newSlides
+                            }
+                          }))
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1">버튼 텍스트</label>
+                      <input
+                        type="text"
+                        value={slide.categoryText}
+                        onChange={(e) => {
+                          const newSlides = [...(data?.hero?.slides || [])]
+                          newSlides[index] = { ...newSlides[index], categoryText: e.target.value }
+                          setData(prev => ({
+                            ...prev!,
+                            hero: {
+                              ...prev!.hero,
+                              slides: newSlides
+                            }
+                          }))
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1">설명</label>
+                      <textarea
+                        value={slide.description}
+                        onChange={(e) => {
+                          const newSlides = [...(data?.hero?.slides || [])]
+                          newSlides[index] = { ...newSlides[index], description: e.target.value }
+                          setData(prev => ({
+                            ...prev!,
+                            hero: {
+                              ...prev!.hero,
+                              slides: newSlides
+                            }
+                          }))
+                        }}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 배경 이미지 업로드 */}
                   <div>
-                    <label className="block text-xs font-medium mb-1">제목</label>
-                    <input
-                      type="text"
-                      value={slide.title}
-                      onChange={(e) => {
+                    <label className="block text-xs font-medium mb-1">배경 이미지</label>
+                    <ImageUpload
+                      value={slide.backgroundImage || ''}
+                      onChange={(url: string) => {
                         const newSlides = [...(data?.hero?.slides || [])]
-                        newSlides[index] = { ...newSlides[index], title: e.target.value }
+                        newSlides[index] = { ...newSlides[index], backgroundImage: url }
                         setData(prev => ({
                           ...prev!,
                           hero: {
@@ -78,47 +140,10 @@ export function HeroTab({ data, setData }: TabComponentProps) {
                           }
                         }))
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      folder={`home/hero/slide-${slide.id}`}
+                      defaultImageUrl={slide.defaultBackgroundImage}
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-medium mb-1">버튼 텍스트</label>
-                    <input
-                      type="text"
-                      value={slide.categoryText}
-                      onChange={(e) => {
-                        const newSlides = [...(data?.hero?.slides || [])]
-                        newSlides[index] = { ...newSlides[index], categoryText: e.target.value }
-                        setData(prev => ({
-                          ...prev!,
-                          hero: {
-                            ...prev!.hero,
-                            slides: newSlides
-                          }
-                        }))
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <label className="block text-xs font-medium mb-1">설명</label>
-                  <textarea
-                    value={slide.description}
-                    onChange={(e) => {
-                      const newSlides = [...(data?.hero?.slides || [])]
-                      newSlides[index] = { ...newSlides[index], description: e.target.value }
-                      setData(prev => ({
-                        ...prev!,
-                        hero: {
-                          ...prev!.hero,
-                          slides: newSlides
-                        }
-                      }))
-                    }}
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                  />
                 </div>
               </div>
             ))}
