@@ -403,6 +403,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
                   value={content}
                   onChange={setContent}
                   category={category}
+                  articleId={params.id}
                 />
               </div>
             </div>

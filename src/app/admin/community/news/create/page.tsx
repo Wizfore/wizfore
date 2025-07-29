@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Eye, X } from 'lucide-react'
 import { createArticle } from '@/lib/services/dataService'
+import { moveArticleImages } from '@/lib/services/storageService'
 import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
 import type { Article, CategoryItem } from '@/types'
@@ -12,6 +13,9 @@ export default function CreateNewsPage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
+
+  // 임시 기사 ID 생성 (새 기사 작성용)
+  const [tempArticleId] = useState(() => `temp_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`)
 
   // 폼 상태
   const [title, setTitle] = useState('')
@@ -87,6 +91,15 @@ export default function CreateNewsPage() {
       }
 
       const articleId = await createArticle(articleData)
+      
+      // 임시 폴더의 이미지들을 실제 기사 ID 폴더로 이동
+      try {
+        await moveArticleImages(tempArticleId, articleId)
+        console.log('기사 이미지 이동 완료:', tempArticleId, '→', articleId)
+      } catch (moveError) {
+        console.warn('이미지 이동 실패 (기사는 생성됨):', moveError)
+        // 이미지 이동 실패해도 기사 생성은 완료되었으므로 계속 진행
+      }
       
       console.log('게시글 생성 완료:', articleId)
       router.push('/admin/community/news')
@@ -274,6 +287,7 @@ export default function CreateNewsPage() {
                   value={content}
                   onChange={setContent}
                   category={category}
+                  articleId={tempArticleId}
                 />
               </div>
             </div>

@@ -88,6 +88,7 @@ interface TiptapEditorProps {
   value: string
   onChange: (value: string) => void
   category?: string
+  articleId?: string // 기사 ID 추가
   placeholder?: string
   className?: string
 }
@@ -96,6 +97,7 @@ export default function TiptapEditor({
   value,
   onChange,
   category = 'general',
+  articleId,
   placeholder = "내용을 작성하세요...",
   className = ""
 }: TiptapEditorProps) {
@@ -140,7 +142,9 @@ export default function TiptapEditor({
 
     setUploading(true)
     try {
-      const imageUrl = await uploadImage(file, { category })
+      // articleId가 있으면 커뮤니티 뉴스 전용 경로 사용
+      const uploadCategory = articleId ? `pages/community/news/${articleId}` : category
+      const imageUrl = await uploadImage(file, { category: uploadCategory })
       toast.success('이미지 업로드 완료!')
       return imageUrl
     } catch (error) {
@@ -150,7 +154,7 @@ export default function TiptapEditor({
     } finally {
       setUploading(false)
     }
-  }, [category])
+  }, [category, articleId])
 
   // 드래그 앤 드롭 핸들러
   const handleDragOver = (e: React.DragEvent) => {
@@ -174,7 +178,9 @@ export default function TiptapEditor({
 
         try {
           setUploading(true)
-          const imageUrl = await uploadImage(file)
+          // articleId가 있으면 커뮤니티 뉴스 전용 경로 사용
+          const uploadCategory = articleId ? `pages/community/news/${articleId}` : category
+          const imageUrl = await uploadImage(file, { category: uploadCategory })
           if (imageUrl && editor) {
             editor.chain().focus().setImage({ src: imageUrl }).run()
           }

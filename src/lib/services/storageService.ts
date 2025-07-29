@@ -486,3 +486,56 @@ export async function cleanupRemovedImages(
     // 정리 작업 실패는 치명적이지 않으므로 에러를 던지지 않음
   }
 }
+
+/**
+ * 임시 기사 폴더의 이미지들을 실제 기사 ID 폴더로 이동합니다.
+ * @param tempArticleId - 임시 기사 ID
+ * @param realArticleId - 실제 기사 ID
+ */
+export async function moveArticleImages(tempArticleId: string, realArticleId: string): Promise<void> {
+  try {
+    console.log(`기사 이미지 이동 시작: ${tempArticleId} → ${realArticleId}`)
+    
+    const tempFolderPath = `pages/community/news/${tempArticleId}`
+    const realFolderPath = `pages/community/news/${realArticleId}`
+    
+    // 임시 폴더의 모든 파일 목록 가져오기
+    const tempFolderRef = ref(storage, tempFolderPath)
+    const result = await listAll(tempFolderRef)
+    
+    if (result.items.length === 0) {
+      console.log(`이동할 이미지가 없습니다: ${tempFolderPath}`)
+      return
+    }
+    
+    // 각 파일을 새 위치로 복사하고 원본 삭제
+    const movePromises = result.items.map(async (item) => {
+      try {
+        // 원본 파일 다운로드
+        const downloadURL = await getDownloadURL(item)
+        const response = await fetch(downloadURL)
+        const blob = await response.blob()
+        
+        // 새 위치에 업로드
+        const fileName = item.name
+        const newRef = ref(storage, `${realFolderPath}/${fileName}`)
+        await uploadBytes(newRef, blob)
+        
+        // 원본 파일 삭제
+        await deleteObject(item)
+        
+        console.log(`파일 이동 완료: ${item.name}`)
+      } catch (error) {
+        console.error(`파일 이동 실패: ${item.name}`, error)
+        throw error
+      }
+    })
+    
+    await Promise.all(movePromises)
+    console.log(`기사 이미지 이동 완료: ${result.items.length}개 파일`)
+    
+  } catch (error) {
+    console.error(`기사 이미지 이동 오류: ${tempArticleId} → ${realArticleId}`, error)
+    throw new Error(`기사 이미지 이동에 실패했습니다: ${tempArticleId} → ${realArticleId}`)
+  }
+}

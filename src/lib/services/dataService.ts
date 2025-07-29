@@ -935,12 +935,11 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt
     const communityData = await getCommunity()
     const allArticles = communityData?.news?.articles || []
     
-    // 카테고리별로 ID 생성
-    const categoryArticles = allArticles.filter((article: Article) => article.category === articleData.category)
-    const maxId = categoryArticles.length > 0 
-      ? Math.max(...categoryArticles.map((article: Article) => parseInt(article.id.replace(`${articleData.category}_`, '')) || 0))
+    // 전체 기사에서 최대 숫자 ID 계산하여 연속 번호 생성 
+    const maxId = allArticles.length > 0 
+      ? Math.max(...allArticles.map((article: Article) => parseInt(article.id) || 0))
       : 0
-    const newId = `${articleData.category}_${maxId + 1}`
+    const newId = `${maxId + 1}`
     
     const newArticle: Article = {
       id: newId,

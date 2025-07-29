@@ -962,7 +962,7 @@ export const defaultSiteData: DefaultSiteData = {
       articles: [
         // 공지사항
         {
-          id: "notice_1",
+          id: "1",
           title: "공지사항 테스트 게시글",
           contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2024-01-15",
@@ -974,7 +974,7 @@ export const defaultSiteData: DefaultSiteData = {
         },
         // 파트너쉽
         {
-          id: "partnership_1",
+          id: "2",
           title: "협약(파트너쉽) 테스트 게시글",
           contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2021-09-07",
@@ -986,7 +986,7 @@ export const defaultSiteData: DefaultSiteData = {
         },
         // 소식
         {
-          id: "news_1",
+          id: "3",
           title: "소식 테스트 게시글",
           contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2021-11-26",
@@ -998,7 +998,7 @@ export const defaultSiteData: DefaultSiteData = {
         },
         // 행사
         {
-          id: "event_1",
+          id: "4",
           title: "행사 테스트 게시글",
           contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2021-11-19",
@@ -1010,7 +1010,7 @@ export const defaultSiteData: DefaultSiteData = {
         },
         // 수상
         {
-          id: "award_1",
+          id: "5",
           title: "수상 테스트 게시글",
           contentHtml: "<h1>제목1</h1><h2>제목2</h2><h3>제목3</h3><p><strong>글자 굵게</strong></p><p><em>기울임</em></p><p><u>밑줄</u></p><p><s>취소선</s></p><ul><li><p>순서 없는 목록</p><ul><li><p>하위 목록(tab)</p></li></ul></li></ul><ol><li><p>순서 있는 목록1</p><ol><li><p>하위 목록(tab)</p></li></ol></li><li><p>순서있는 목록2</p><ol><li><p>목록</p><ol><li><p>목록</p><ol><li><p>목록</p></li><li><p>목록</p></li></ol></li><li><p>목록</p></li></ol></li></ol></li></ol><blockquote><p>인용</p></blockquote><p>왼쪽 정렬</p><p style='text-align: center;'>가운데 정렬</p><p style='text-align: right;'>오른쪽 정렬</p><p style='text-align: left;'></p><p style='text-align: left;'><span style='color: rgb(59, 130, 246);'>글자색</span></p><p style='text-align: left;'><span style='color: rgb(0, 0, 0);'><mark class='custom-highlight' data-color='rgba(254, 240, 138, 0.5)' style='background-color: rgba(254, 240, 138, 0.5); color: inherit;'>배경색</mark></span></p><p style='text-align: left;'></p><p style='text-align: left;'>구분선(아래줄)</p><hr><p></p>",
           date: "2022-07-19",
