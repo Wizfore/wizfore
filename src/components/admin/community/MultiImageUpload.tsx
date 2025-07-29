@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { X, Upload, Image as ImageIcon } from 'lucide-react'
-import { uploadImage, deleteImage, UploadProgress } from '@/lib/services/storageService'
+import { uploadImage, deleteImage, UploadProgress, cleanupRemovedImages } from '@/lib/services/storageService'
 import { Button } from '@/components/ui/button'
 
 interface MultiImageUploadProps {
@@ -11,16 +11,29 @@ interface MultiImageUploadProps {
   onImagesChange: (images: string[]) => void
   maxImages?: number
   className?: string
+  articleId: string // 커뮤니티 뉴스 기사의 ID (필수)
+  previousImages?: string[] // 이전 이미지 목록 (자동 정리용)
 }
 
 export default function MultiImageUpload({
   images,
   onImagesChange,
   maxImages = 10,
-  className = ''
+  className = '',
+  articleId,
+  previousImages = []
 }: MultiImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({})
+
+  // 이미지 목록 변경 시 삭제된 이미지들을 자동으로 정리
+  useEffect(() => {
+    if (previousImages.length > 0 && images.length >= 0) {
+      cleanupRemovedImages(previousImages, images).catch(error => {
+        console.warn('이미지 자동 정리 실패:', error)
+      })
+    }
+  }, [images, previousImages])
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (images.length + acceptedFiles.length > maxImages) {
@@ -36,8 +49,11 @@ export default function MultiImageUpload({
         const fileName = `${Date.now()}-${file.name}`
         setUploadProgress(prev => ({ ...prev, [fileName]: 0 }))
 
+        // 해당 기사의 전용 폴더에 저장
+        const category = `pages/community/news/${articleId}`
+        
         const imageUrl = await uploadImage(file, {
-          category: 'articles',
+          category,
           onProgress: (progressData: UploadProgress) => {
             setUploadProgress(prev => ({ ...prev, [fileName]: progressData.progress }))
           }

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from 'react'
 import { 
   ref, 
@@ -5,7 +7,8 @@ import {
   getDownloadURL, 
   deleteObject,
   uploadBytesResumable,
-  UploadTaskSnapshot
+  UploadTaskSnapshot,
+  listAll
 } from 'firebase/storage'
 import { storage } from '@/lib/firebase'
 
@@ -157,7 +160,7 @@ export function generateUniqueFileName(originalName: string, category?: string):
 
 /**
  * 업로드 경로를 생성합니다.
- * @param category - 카테고리
+ * @param category - 카테고리 (예: 'pages/about/director/hero', 'pages/community/news/{articleId}', 'site-assets/favicon')
  * @param fileName - 파일명
  * @returns Firebase Storage 경로
  */
@@ -167,12 +170,65 @@ export function generateUploadPath(category: string, fileName: string): string {
     return `${category}/${fileName}`
   }
   
-  // 기존 news 이미지는 날짜별로 구분
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = String(now.getMonth() + 1).padStart(2, '0')
+  // 커뮤니티 뉴스 기사인 경우 articleId별로 저장
+  if (category.startsWith('pages/community/news/') && category.includes('{')) {
+    // category 형태: 'pages/community/news/{articleId}'
+    return `${category}/${fileName}`
+  }
   
-  return `news/images/${category}/${year}/${month}/${fileName}`
+  // 페이지별 콘텐츠인 경우 해당 경로에 저장
+  if (category.startsWith('pages/')) {
+    return `${category}/${fileName}`
+  }
+  
+  // 기존 호환성을 위한 legacy 경로 처리
+  const legacyMappings: Record<string, string> = {
+    // About 페이지 관련
+    'about-director-hero': 'pages/about/director/hero',
+    'about-director': 'pages/about/director',
+    'about-advisors-hero': 'pages/about/advisors/hero',
+    'about-advisors': 'pages/about/advisors',
+    'about-history': 'pages/about/history',
+    'about-location': 'pages/about/location',
+    
+    // Programs 페이지 관련
+    'programs-therapy-hero': 'pages/programs/therapy/hero',
+    'programs-therapy': 'pages/programs/therapy',
+    'programs-counseling-hero': 'pages/programs/counseling/hero',
+    'programs-counseling': 'pages/programs/counseling',
+    'programs-adult-day-hero': 'pages/programs/adult-day/hero',
+    'programs-adult-day': 'pages/programs/adult-day',
+    'programs-afterschool-hero': 'pages/programs/afterschool/hero',
+    'programs-afterschool': 'pages/programs/afterschool',
+    'programs-sports-hero': 'pages/programs/sports/hero',
+    'programs-sports': 'pages/programs/sports',
+    
+    // Team 페이지 관련
+    'team-therapists-hero': 'pages/team/therapists/hero',
+    'team-therapists': 'pages/team/therapists',
+    'team-teachers-hero': 'pages/team/teachers/hero',
+    'team-teachers': 'pages/team/teachers',
+    
+    // Community 페이지 관련
+    'community-hero': 'pages/community/news/hero',
+    'community': 'pages/community/news',
+    
+    // Contact 페이지 관련
+    'contact-hero': 'pages/contact/hero',
+    'contact': 'pages/contact',
+    
+    // Home 페이지 관련
+    'home-hero': 'pages/home/hero',
+    'home': 'pages/home'
+  }
+  
+  // Legacy 매핑이 있는 경우 새 경로로 변환
+  if (legacyMappings[category]) {
+    return `${legacyMappings[category]}/${fileName}`
+  }
+  
+  // 매핑되지 않은 legacy 카테고리는 기본 경로로 저장
+  return `legacy/${category}/${fileName}`
 }
 
 /**
@@ -344,5 +400,89 @@ export function useImageUpload(category?: string) {
     progress,
     error,
     reset
+  }
+}
+
+/**
+ * Firebase Storage 폴더 전체를 삭제합니다.
+ * @param folderPath - 삭제할 폴더 경로 (예: 'pages/community/news/article-123')
+ */
+export async function deleteFolder(folderPath: string): Promise<void> {
+  try {
+    console.log(`폴더 삭제 시작: ${folderPath}`)
+    
+    const folderRef = ref(storage, folderPath)
+    const result = await listAll(folderRef)
+    
+    if (result.items.length === 0) {
+      console.log(`폴더가 비어있거나 존재하지 않습니다: ${folderPath}`)
+      return
+    }
+    
+    // 모든 파일을 병렬로 삭제
+    const deletePromises = result.items.map(async (item) => {
+      try {
+        await deleteObject(item)
+        console.log(`파일 삭제 완료: ${item.name}`)
+      } catch (error) {
+        console.error(`파일 삭제 실패: ${item.name}`, error)
+        throw error
+      }
+    })
+    
+    await Promise.all(deletePromises)
+    console.log(`폴더 삭제 완료: ${folderPath} (${result.items.length}개 파일)`)
+    
+  } catch (error) {
+    console.error(`폴더 삭제 오류: ${folderPath}`, error)
+    throw new Error(`폴더 삭제에 실패했습니다: ${folderPath}`)
+  }
+}
+
+/**
+ * 커뮤니티 뉴스 기사의 모든 이미지를 삭제합니다.
+ * @param articleId - 기사 ID
+ */
+export async function deleteArticleImages(articleId: string): Promise<void> {
+  const folderPath = `pages/community/news/${articleId}`
+  await deleteFolder(folderPath)
+}
+
+/**
+ * 여러 이미지 URL 목록에서 삭제된 이미지들을 Storage에서 제거합니다.
+ * @param previousImages - 이전 이미지 URL 목록
+ * @param currentImages - 현재 이미지 URL 목록
+ */
+export async function cleanupRemovedImages(
+  previousImages: string[], 
+  currentImages: string[]
+): Promise<void> {
+  try {
+    const removedImages = previousImages.filter(prevUrl => 
+      !currentImages.includes(prevUrl)
+    )
+    
+    if (removedImages.length === 0) {
+      return
+    }
+    
+    console.log(`제거된 이미지 정리 시작: ${removedImages.length}개`)
+    
+    const deletePromises = removedImages.map(async (imageUrl) => {
+      try {
+        await deleteImage(imageUrl)
+        console.log(`제거된 이미지 정리 완료: ${imageUrl}`)
+      } catch (error) {
+        console.warn(`이미지 정리 실패 (무시됨): ${imageUrl}`, error)
+        // 이미 삭제된 이미지이거나 접근 불가능한 경우 무시
+      }
+    })
+    
+    await Promise.all(deletePromises)
+    console.log(`이미지 정리 작업 완료: ${removedImages.length}개 처리`)
+    
+  } catch (error) {
+    console.error('이미지 정리 작업 오류:', error)
+    // 정리 작업 실패는 치명적이지 않으므로 에러를 던지지 않음
   }
 }

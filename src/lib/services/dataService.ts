@@ -9,6 +9,7 @@ import {
 import { db } from '@/lib/firebase'
 import type { DefaultSiteData } from '@/types'
 import type { Article } from '@/types/community'
+import { deleteArticleImages } from './storageService'
 
 /**
  * 운영용 데이터 조회 서비스
@@ -661,9 +662,9 @@ export async function updateTeamCategory(categoryId: string, categoryData: any) 
       id: categoryId // ID는 변경되지 않도록 보장
     }
     
-    const siteInfoRef = doc(db, 'siteInfo', 'main')
-    await updateDoc(siteInfoRef, {
-      team: teamCategories,
+    const teamRef = doc(db, 'team', 'main')
+    await updateDoc(teamRef, {
+      categories: teamCategories,
       updatedAt: new Date().toISOString()
     })
     
@@ -1012,6 +1013,7 @@ export async function updateArticle(id: string, updates: Partial<Omit<Article, '
 
 /**
  * 게시글 삭제 (모든 카테고리)
+ * 데이터베이스와 Storage의 이미지를 모두 삭제합니다.
  */
 export async function deleteArticle(id: string): Promise<void> {
   try {
@@ -1023,11 +1025,24 @@ export async function deleteArticle(id: string): Promise<void> {
       throw new Error('삭제할 게시글을 찾을 수 없습니다.')
     }
 
-    // Firebase에서 게시글 제거
+    console.log(`기사 삭제 시작: ${id}`)
+
+    // 1. Storage에서 기사의 모든 이미지 삭제
+    try {
+      await deleteArticleImages(id)
+      console.log(`Storage 이미지 삭제 완료: ${id}`)
+    } catch (storageError) {
+      console.warn(`Storage 이미지 삭제 실패 (계속 진행): ${id}`, storageError)
+      // Storage 삭제 실패는 치명적이지 않으므로 계속 진행
+    }
+
+    // 2. Firebase에서 게시글 제거
     const docRef = doc(db, 'community', 'main')
     await updateDoc(docRef, {
       'news.articles': arrayRemove(articleToDelete)
     })
+
+    console.log(`기사 삭제 완료: ${id}`)
   } catch (error) {
     console.error('Error deleting article:', error)
     throw error
