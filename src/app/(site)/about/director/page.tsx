@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getAboutSectionData } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import type { DirectorInfo } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import DirectorMessageSection from '@/components/about/director/DirectorMessageSection'
@@ -72,7 +73,7 @@ const DirectorPage = () => {
       <CommonHeroSection 
         title={director.hero?.title || "센터장 소개"}
         description={director.hero?.description || "위즈포레를 이끌어가는 센터장을 소개합니다"}
-        backgroundImage={(director.hero?.imageUrl && director.hero.imageUrl.trim() !== '') ? director.hero.imageUrl : director.hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(director.hero?.imageUrl, director.hero?.defaultImageUrl)}
       />
       
       {/* 센터장 메시지 섹션 */}

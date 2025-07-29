@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { getCommunity } from '@/lib/services/dataService'
 import { findNewsByGlobalId } from '@/lib/utils/newsUtils'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
 import NewsDetailNavigationSection from '@/components/community/news/NewsDetailNavigationSection'
@@ -85,7 +86,7 @@ export default function NewsDetailPage() {
       <CommonHeroSection 
         title={newsMessages.hero?.title || "뉴스"}
         description={newsMessages.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
-        backgroundImage={(newsMessages.hero?.imageUrl && newsMessages.hero.imageUrl.trim() !== '') ? newsMessages.hero.imageUrl : newsMessages.hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(newsMessages.hero?.imageUrl, newsMessages.hero?.defaultImageUrl)}
       />
       <NewsDetailMainSection 
         article={article}

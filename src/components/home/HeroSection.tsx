@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Play } from 'lucide-react'
 import { getHomeConfig } from '@/lib/services/dataService'
 import { defaultHomeConfig } from '@/lib/data/defaultHomeConfig'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import type { HeroSlide } from '@/types'
 
 interface HeroSectionProps {
@@ -92,15 +93,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
 
   const currentSlideData = slides[currentSlide] || slides[0]
   
-  // 배경 이미지 URL 결정: backgroundImage가 있고 빈 문자열이 아니면 사용, 그렇지 않으면 defaultBackgroundImage 사용
-  const getBackgroundImageUrl = () => {
-    if (currentSlideData?.backgroundImage && currentSlideData.backgroundImage.trim() !== '') {
-      return currentSlideData.backgroundImage
-    }
-    return currentSlideData?.defaultBackgroundImage || ''
-  }
-  
-  const backgroundImageUrl = getBackgroundImageUrl()
+  // 배경 이미지 URL 결정: getImageWithFallback 사용
+  const backgroundImageUrl = getImageWithFallback(
+    currentSlideData?.backgroundImage, 
+    currentSlideData?.defaultBackgroundImage
+  )
 
   return (
     <section className="relative h-[60vh] md:h-[70vh] lg:h-[calc(100vh-5rem)] overflow-hidden px-4 md:px-8 lg:px-16 pb-24 md:pb-32 lg:pb-40">

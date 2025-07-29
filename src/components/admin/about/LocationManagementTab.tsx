@@ -121,27 +121,43 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
         <div className="space-y-4">
           {data.transportation?.map((transport, index) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">교통수단</label>
-                  <select
-                    value={transport.type}
-                    onChange={(e) => updateTransportation(index, 'type', e.target.value as any)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="지하철">지하철</option>
-                    <option value="버스">버스</option>
-                    <option value="차">차</option>
-                  </select>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* 좌측: 기본 정보 */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">교통수단</label>
+                    <select
+                      value={transport.type}
+                      onChange={(e) => updateTransportation(index, 'type', e.target.value as any)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="지하철">지하철</option>
+                      <option value="버스">버스</option>
+                      <option value="차">차</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
+                    <input
+                      type="text"
+                      value={transport.description}
+                      onChange={(e) => updateTransportation(index, 'description', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="교통편 설명"
+                    />
+                  </div>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
-                  <input
-                    type="text"
-                    value={transport.description}
-                    onChange={(e) => updateTransportation(index, 'description', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="교통편 설명"
+
+                {/* 우측: 아이콘 이미지 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">아이콘 이미지</label>
+                  <ImageUpload
+                    value={transport.iconPath || ''}
+                    onChange={(url: string) => updateTransportation(index, 'iconPath', url)}
+                    folder={`transportation/${transport.type}`}
+                    defaultImageUrl={transport.defaultIconPath}
+                    previewSize="h-20 w-20"
+                    placeholder="교통편 아이콘을 업로드하세요"
                   />
                 </div>
               </div>

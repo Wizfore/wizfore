@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getCommunity } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import NewsContentSection from '@/components/community/news/NewsContentSection'
 import { getAllNewsWithCategory, getNewsByCategory, separateNoticeAndNews, getEnglishCategory } from '@/lib/utils/newsUtils'
@@ -111,7 +112,7 @@ export default function NewsPage() {
       <CommonHeroSection 
         title={newsMessages.hero?.title || "뉴스"}
         description={newsMessages.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
-        backgroundImage={(newsMessages.hero?.imageUrl && newsMessages.hero.imageUrl.trim() !== '') ? newsMessages.hero.imageUrl : newsMessages.hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(newsMessages.hero?.imageUrl, newsMessages.hero?.defaultImageUrl)}
       />
       <NewsContentSection 
         aboutMessage={newsMessages.aboutMessage}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getLocationData, getLocationHero, getLocationAboutMessage } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import type { ContactInfo, TransportationInfo } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import TransportationSection from '@/components/about/location/TransportationSection'
@@ -110,7 +111,7 @@ export default function LocationPage() {
       <CommonHeroSection 
         title={hero?.title || "오시는길"}
         description={hero?.description || "상시와 사회서비스센터로 오시는 길을 안내해드립니다"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
       <TransportationSection 
         contact={data.contact}

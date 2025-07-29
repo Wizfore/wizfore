@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getAdvisors, getAdvisorsAboutMessage, getAdvisorsHero } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import type { AdvisorInfo } from '@/types'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import AdvisorsListSection from '@/components/about/advisors/AdvisorsListSection'
@@ -90,7 +91,7 @@ export default function AdvisorsPage() {
       <CommonHeroSection 
         title={hero?.title || "자문위원"}
         description={hero?.description || "상시와 사회서비스센터의 전문 자문위원들을 소개합니다"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
       
       {/* 자문위원 목록 섹션 */}

@@ -104,41 +104,22 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
     })
   }
 
-  // 통계 카드 추가
-  const addStatsCard = () => {
-    const newCard: StatsCard = {
-      id: `card_${Date.now()}`,
-      title: '',
-      description: '',
-      iconPath: '',
-      defaultIconPath: '/icons/stats/default.svg',
-      order: (data.stats?.cards?.length || 0) + 1,
-      enabled: true
-    }
-    
-    onUpdate({
-      ...data,
-      stats: {
-        ...data.stats,
-        title: data.stats?.title || '',
-        description: data.stats?.description || '',
-        cards: [...(data.stats?.cards || []), newCard]
-      }
-    })
-  }
 
-  // 통계 카드 삭제
-  const removeStatsCard = (cardId: string) => {
-    if (!data.stats?.cards) return
-    
-    const newCards = data.stats.cards.filter(card => card.id !== cardId)
-    onUpdate({
-      ...data,
-      stats: {
-        ...data.stats,
-        cards: newCards
-      }
-    })
+
+  // 카드별 카운팅 안내 메시지
+  const getCountingGuide = (cardId: string) => {
+    switch (cardId) {
+      case 'establishment':
+        return "연혁에서 '설립', '등록', '지정'이 포함된 항목의 개수로 계산됩니다"
+      case 'partnership':
+        return "연혁에서 '협약', '협력'이 포함된 항목의 개수로 계산됩니다"
+      case 'award':
+        return "연혁에서 '수상', '표창'이 포함된 항목의 개수로 계산됩니다"
+      case 'duration':
+        return "가장 이른 연혁 연도부터 현재까지의 년수로 계산됩니다"
+      default:
+        return "사용자 정의 통계입니다"
+    }
   }
 
   return (
@@ -221,12 +202,8 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
               </div>
             </div>
 
-            <div className="flex justify-between items-center mb-4">
+            <div className="mb-4">
               <h4 className="font-medium text-gray-900">통계 카드</h4>
-              <Button onClick={addStatsCard} size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                카드 추가
-              </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -243,13 +220,6 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
                         {card.enabled ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
                       </Button>
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeStatsCard(card.id)}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
                   </div>
                   
                   <div className="space-y-3">
@@ -267,13 +237,25 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
                       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="카드 설명"
                     />
-                    <input
-                      type="text"
-                      value={card.iconPath}
-                      onChange={(e) => updateStatsCard(card.id, 'iconPath', e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="아이콘 경로"
-                    />
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">아이콘 이미지</label>
+                      <ImageUpload
+                        value={card.iconPath}
+                        onChange={(url: string) => updateStatsCard(card.id, 'iconPath', url)}
+                        folder={`stats/icons`}
+                        defaultImageUrl={card.defaultIconPath}
+                        previewSize="h-16 w-16"
+                        placeholder="아이콘 이미지를 업로드하세요"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 카운팅 안내 */}
+                  <div className="bg-gray-50 p-3 rounded-md border border-gray-200">
+                    <div className="text-xs font-medium text-gray-700 mb-1">통계 계산 방식</div>
+                    <div className="text-xs text-gray-600">
+                      {getCountingGuide(card.id)}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -5,7 +5,6 @@ import { Plus, Trash2, Edit2, ArrowUp, ArrowDown } from 'lucide-react'
 import { AdvisorsInfo, AdvisorInfo } from '@/types/about'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/admin/common/ImageUpload'
-import { getAdvisorDefaultImage } from '@/lib/utils/advisorImageUtils'
 
 interface AdvisorsManagementTabProps {
   data: AdvisorsInfo
@@ -14,6 +13,15 @@ interface AdvisorsManagementTabProps {
 
 export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManagementTabProps) {
   const [editingAdvisor, setEditingAdvisor] = useState<number | null>(null)
+
+  // 기본 이미지 옵션 정의
+  const defaultImageOptions = [
+    { value: '/images/advisors/defaultProfessorM.png', label: '교수 (남성)' },
+    { value: '/images/advisors/defaultProfessorF.png', label: '교수 (여성)' },
+    { value: '/images/advisors/defaultDirectorF.png', label: '원장/대표 (여성)' },
+    { value: '/images/advisors/defaultPharmacistF.png', label: '약사 (여성)' },
+    { value: '/images/advisors/defaultPoliceM.png', label: '경찰 (남성)' }
+  ]
 
   // Hero 섹션 업데이트
   const updateHero = (field: string, value: string) => {
@@ -57,7 +65,8 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
       position: [],
       education: [],
       career: [],
-      order: data.list.length + 1
+      order: data.list.length + 1,
+      defaultImageUrl: '/images/advisors/defaultProfessorM.png' // 기본값
     }
     onUpdate({
       ...data,
@@ -308,35 +317,40 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
-                    <ImageUpload
-                      value={advisor.imageUrl}
-                      onChange={(url: string) => updateAdvisor(index, 'imageUrl', url)}
-                      folder="advisors"
-                      role={advisor.position?.join(' ') || ''}
-                    />
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">기본 이미지 선택</label>
+                      <select
+                        value={advisor.defaultImageUrl || '/images/advisors/defaultProfessorM.png'}
+                        onChange={(e) => updateAdvisor(index, 'defaultImageUrl', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        {defaultImageOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
+                      <ImageUpload
+                        value={advisor.imageUrl}
+                        onChange={(url: string) => updateAdvisor(index, 'imageUrl', url)}
+                        folder="advisors"
+                        role={advisor.position?.join(' ') || ''}
+                        defaultImageUrl={advisor.defaultImageUrl}
+                      />
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
-                    <img
-                      src={advisor.imageUrl || getAdvisorDefaultImage(advisor.position)}
-                      alt={advisor.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.src = getAdvisorDefaultImage(advisor.position)
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <h5 className="font-medium">{advisor.name || '이름 없음'}</h5>
-                    <p className="text-sm text-gray-600">
-                      {advisor.position?.join(', ') || '직책 없음'}
-                    </p>
-                  </div>
+                <div>
+                  <h5 className="font-medium">{advisor.name || '이름 없음'}</h5>
+                  <p className="text-sm text-gray-600">
+                    {advisor.position?.join(', ') || '직책 없음'}
+                  </p>
                 </div>
               )}
             </div>

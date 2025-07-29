@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Menu, X, ChevronDown, ChevronUp } from 'lucide-react'
 import { getSiteInfo } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -16,9 +17,7 @@ const Header = () => {
       try {
         const siteInfo = await getSiteInfo()
         // DB에서 헤더 로고 URL이 있으면 사용, 없으면 defaultHeaderLogoUrl 사용
-        const logoUrl = (siteInfo.headerLogoUrl && siteInfo.headerLogoUrl.trim() !== '') 
-          ? siteInfo.headerLogoUrl 
-          : siteInfo.defaultHeaderLogoUrl
+        const logoUrl = getImageWithFallback(siteInfo.headerLogoUrl, siteInfo.defaultHeaderLogoUrl)
         setHeaderLogoUrl(logoUrl)
       } catch (error) {
         console.error('Failed to fetch header logo URL:', error)

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getPrograms } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import TherapyOverviewSection from '@/components/programs/therapy/TherapyOverviewSection'
 import TherapyListSection from '@/components/programs/therapy/TherapyListSection'
@@ -115,7 +116,7 @@ export default function TherapyPage() {
       <CommonHeroSection 
         title={hero?.title || "치료·재활"}
         description={hero?.description || "전문적이고 개별화된 치료와 재활 서비스를 제공합니다"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
 
       {/* 개요 섹션 */}

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useMemo } from 'react'
 import type { Milestone, HistoryStats } from '@/types'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 
 interface StatsSectionProps {
   milestones?: Milestone[]
@@ -49,7 +50,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
         ).length)
       case 'partnership':
         return String(milestones.filter(m => 
-          m.event.includes('업무협약') || m.event.includes('산학협력')
+          m.event.includes('협약') || m.event.includes('협력')
         ).length)
       case 'award':
         return String(milestones.filter(m => 
@@ -60,11 +61,6 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
       default:
         return '0'
     }
-  }
-
-  // 아이콘 경로 결정 함수
-  const getIconPath = (card: any): string => {
-    return (card.iconPath && card.iconPath.trim() !== '') ? card.iconPath : card.defaultIconPath
   }
 
   return (
@@ -97,7 +93,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
             >
               <div className="w-16 h-16 border-2 border-gray-300 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Image 
-                  src={getIconPath(card)}
+                  src={getImageWithFallback(card.iconPath, card.defaultIconPath)}
                   alt={card.title}
                   width={32} 
                   height={32}

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getTherapists } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import TherapistsOverviewSection from '@/components/team/therapists/TherapistsOverviewSection'
 import TherapistsListSection from '@/components/team/therapists/TherapistsListSection'
@@ -97,7 +98,7 @@ export default function TherapistsPage() {
       <CommonHeroSection 
         title={hero?.title || "치료·상담사"}
         description={hero?.description || "전문적이고 따뜻한 마음으로 함께하는 치료 전문가들을 소개합니다"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
 
       {/* 개요 섹션 */}

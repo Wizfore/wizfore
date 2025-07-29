@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getPrograms } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import AdultDayOverviewSection from '@/components/programs/adult-day/AdultDayOverviewSection'
 import AdultDayListSection from '@/components/programs/adult-day/AdultDayListSection'
@@ -115,7 +116,7 @@ export default function AdultDayPage() {
       <CommonHeroSection 
         title={hero?.title || "성인 주간활동"}
         description={hero?.description || "성인 발달장애인을 위한 맞춤형 주간활동 프로그램을 제공합니다"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
 
       {/* 개요 섹션 */}

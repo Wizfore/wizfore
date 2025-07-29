@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { MapPin, Phone, Clock, Mail } from 'lucide-react'
 import { getSiteInfo } from '@/lib/services/dataService'
 import type { ContactInfo } from '@/types'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 
 interface FooterData {
   contact: ContactInfo
@@ -21,9 +22,7 @@ const Footer = () => {
     const fetchData = async () => {
       try {
         const siteInfo = await getSiteInfo()
-        const logoUrl = (siteInfo.headerLogoUrl && siteInfo.headerLogoUrl.trim() !== '') 
-          ? siteInfo.headerLogoUrl 
-          : siteInfo.defaultHeaderLogoUrl
+        const logoUrl = getImageWithFallback(siteInfo.headerLogoUrl, siteInfo.defaultHeaderLogoUrl)
         setData({
           contact: siteInfo.contact,
           siteName: siteInfo.name,

@@ -222,6 +222,7 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
               value={data.imageUrl}
               onChange={(url: string) => updateBasicInfo('imageUrl', url)}
               folder="director"
+              defaultImageUrl={data.defaultImageUrl}
             />
           </div>
         </div>

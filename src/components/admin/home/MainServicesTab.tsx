@@ -12,122 +12,33 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
       <div className="space-y-6">
         <h2 className="text-lg font-semibold text-gray-900">소개 메시지</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              제목
-            </label>
-            <input
-              type="text"
-              value={data?.sections?.mainServices?.aboutMessage?.title || ''}
-              onChange={(e) => setData(prev => ({
-                ...prev!,
-                sections: {
-                  ...prev!.sections,
-                  mainServices: {
-                    ...prev!.sections?.mainServices,
-                    aboutMessage: {
-                      title: e.target.value,
-                      description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-                      highlightKeywords: prev!.sections?.mainServices?.aboutMessage?.highlightKeywords || []
-                    },
-                    services: prev!.sections?.mainServices?.services || [],
-                    enabled: prev!.sections?.mainServices?.enabled ?? true,
-                    showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
-                  }
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            제목
+          </label>
+          <input
+            type="text"
+            value={data?.sections?.mainServices?.aboutMessage?.title || ''}
+            onChange={(e) => setData(prev => ({
+              ...prev!,
+              sections: {
+                ...prev!.sections,
+                mainServices: {
+                  ...prev!.sections?.mainServices,
+                  aboutMessage: {
+                    title: e.target.value,
+                    description: prev!.sections?.mainServices?.aboutMessage?.description || '',
+                    highlightKeywords: prev!.sections?.mainServices?.aboutMessage?.highlightKeywords || []
+                  },
+                  services: prev!.sections?.mainServices?.services || [],
+                  enabled: prev!.sections?.mainServices?.enabled ?? true,
+                  showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
                 }
-              }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="주요 사업 분야 제목"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              하이라이트 키워드
-            </label>
-            <div className="space-y-2">
-              {(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []).map((keyword, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <input
-                    type="text"
-                    value={keyword}
-                    onChange={(e) => {
-                      const newKeywords = [...(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || [])]
-                      newKeywords[index] = e.target.value
-                      setData(prev => ({
-                        ...prev!,
-                        sections: {
-                          ...prev!.sections,
-                          mainServices: {
-                            ...prev!.sections?.mainServices,
-                            aboutMessage: {
-                              ...prev!.sections?.mainServices?.aboutMessage,
-                              highlightKeywords: newKeywords
-                            }
-                          }
-                        }
-                      }))
-                    }}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="하이라이트할 키워드"
-                  />
-                  <button
-                    onClick={() => {
-                      const newKeywords = (data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []).filter((_, i) => i !== index)
-                      setData(prev => ({
-                        ...prev!,
-                        sections: {
-                          ...prev!.sections,
-                          mainServices: {
-                            ...prev!.sections?.mainServices,
-                            aboutMessage: {
-                              title: prev!.sections?.mainServices?.aboutMessage?.title || '',
-                              description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-                              highlightKeywords: newKeywords
-                            },
-                            services: prev!.sections?.mainServices?.services || [],
-                            enabled: prev!.sections?.mainServices?.enabled ?? true,
-                            showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
-                          }
-                        }
-                      }))
-                    }}
-                    className="text-red-600 hover:text-red-700 p-1"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-              ))}
-              <button
-                onClick={() => {
-                  const newKeywords = [...(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []), '']
-                  setData(prev => ({
-                    ...prev!,
-                    sections: {
-                      ...prev!.sections,
-                      mainServices: {
-                        ...prev!.sections?.mainServices,
-                        aboutMessage: {
-                          title: prev!.sections?.mainServices?.aboutMessage?.title || '',
-                          description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-                          highlightKeywords: newKeywords
-                        },
-                        services: prev!.sections?.mainServices?.services || [],
-                        enabled: prev!.sections?.mainServices?.enabled ?? true,
-                        showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
-                      }
-                    }
-                  }))
-                }}
-                className="text-blue-600 hover:text-blue-700 text-sm"
-              >
-                + 키워드 추가
-              </button>
-            </div>
-          </div>
+              }
+            }))}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="주요 사업 분야 제목"
+          />
         </div>
         
         <div>
@@ -157,6 +68,93 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="메인 서비스 소개 내용을 입력하세요. \\n\\n으로 문단을 구분할 수 있습니다."
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            하이라이트 키워드
+          </label>
+          <div className="space-y-2">
+            {(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []).map((keyword, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={keyword}
+                  onChange={(e) => {
+                    const newKeywords = [...(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || [])]
+                    newKeywords[index] = e.target.value
+                    setData(prev => ({
+                      ...prev!,
+                      sections: {
+                        ...prev!.sections,
+                        mainServices: {
+                          ...prev!.sections?.mainServices,
+                          aboutMessage: {
+                            ...prev!.sections?.mainServices?.aboutMessage,
+                            highlightKeywords: newKeywords
+                          }
+                        }
+                      }
+                    }))
+                  }}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="하이라이트할 키워드"
+                />
+                <button
+                  onClick={() => {
+                    const newKeywords = (data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []).filter((_, i) => i !== index)
+                    setData(prev => ({
+                      ...prev!,
+                      sections: {
+                        ...prev!.sections,
+                        mainServices: {
+                          ...prev!.sections?.mainServices,
+                          aboutMessage: {
+                            title: prev!.sections?.mainServices?.aboutMessage?.title || '',
+                            description: prev!.sections?.mainServices?.aboutMessage?.description || '',
+                            highlightKeywords: newKeywords
+                          },
+                          services: prev!.sections?.mainServices?.services || [],
+                          enabled: prev!.sections?.mainServices?.enabled ?? true,
+                          showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
+                        }
+                      }
+                    }))
+                  }}
+                  className="text-red-600 hover:text-red-700 p-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const newKeywords = [...(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []), '']
+                setData(prev => ({
+                  ...prev!,
+                  sections: {
+                    ...prev!.sections,
+                    mainServices: {
+                      ...prev!.sections?.mainServices,
+                      aboutMessage: {
+                        title: prev!.sections?.mainServices?.aboutMessage?.title || '',
+                        description: prev!.sections?.mainServices?.aboutMessage?.description || '',
+                        highlightKeywords: newKeywords
+                      },
+                      services: prev!.sections?.mainServices?.services || [],
+                      enabled: prev!.sections?.mainServices?.enabled ?? true,
+                      showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
+                    }
+                  }
+                }))
+              }}
+              className="text-blue-600 hover:text-blue-700 text-sm"
+            >
+              + 키워드 추가
+            </button>
+          </div>
         </div>
       </div>
 

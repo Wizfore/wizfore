@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { getSiteInfo } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,15 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
     }
   }
 
-  const faviconUrl = (siteInfo.faviconUrl && siteInfo.faviconUrl.trim() !== '') 
-    ? siteInfo.faviconUrl 
-    : siteInfo.defaultFaviconUrl
+  const faviconUrl = getImageWithFallback(siteInfo.faviconUrl, siteInfo.defaultFaviconUrl)
 
   return {
     title: `${siteInfo.enName} - ${siteInfo.name}`,
     description: '아동 발달 지원을 위한 전문적인 치료 및 상담 서비스를 제공하는 위즈포레 사회서비스센터입니다.',
     keywords: ['위즈포레', '사회서비스센터', '언어치료', '인지치료', '아동발달', '심리상담'],
-    authors: [{ name: `${siteInfo.name} 사회서비스센터` }],
+    authors: [{ name: `${siteInfo.name}` }],
     viewport: 'width=device-width, initial-scale=1',
     robots: 'index, follow',
     icons: {

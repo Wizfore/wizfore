@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { getInquiryHero, getInquiryAboutMessage, getInquiryCategories } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import OnlineInquirySection from '@/components/contact/OnlineInquirySection'
 
@@ -60,7 +61,7 @@ export default function OnlineInquiryPage() {
       <CommonHeroSection 
         title={hero?.title || "온라인 문의"}
         description={hero?.description || "궁금한 사항이나 문의사항을 언제든지 남겨주세요"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
       
       {/* 온라인 문의 폼 섹션 */}

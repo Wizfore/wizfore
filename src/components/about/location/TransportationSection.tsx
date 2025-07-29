@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import type { ContactInfo, TransportationInfo } from '@/types'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 
 interface TransportationSectionProps {
   contact?: ContactInfo
@@ -21,12 +22,6 @@ const TransportationSection: React.FC<TransportationSectionProps> = ({
   aboutMessage
 }) => {
 
-  // DB 기반 아이콘 경로 가져오기
-  const getTransportIcon = (transport: TransportationInfo) => {
-    return (transport.iconPath && transport.iconPath.trim() !== '') 
-      ? transport.iconPath 
-      : transport.defaultIconPath
-  }
 
   return (
     <section className="pt-16 pb-0 bg-white">
@@ -69,7 +64,7 @@ const TransportationSection: React.FC<TransportationSectionProps> = ({
               <div className="flex items-center mb-4">
                 <div className="w-8 h-8 mr-3">
                   <Image
-                    src={getTransportIcon(transport)}
+                    src={getImageWithFallback(transport.iconPath, transport.defaultIconPath)}
                     alt={transport.type}
                     width={32}
                     height={32}

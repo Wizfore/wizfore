@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getPrograms } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import AfterschoolOverviewSection from '@/components/programs/afterschool/AfterschoolOverviewSection'
 import AfterschoolListSection from '@/components/programs/afterschool/AfterschoolListSection'
@@ -115,7 +116,7 @@ export default function AfterschoolPage() {
       <CommonHeroSection 
         title={hero?.title || "방과후 프로그램"}
         description={hero?.description || "아동·청소년을 위한 특별한 방과후 프로그램을 제공합니다"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
 
       {/* 개요 섹션 */}

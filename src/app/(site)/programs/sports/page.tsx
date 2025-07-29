@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getPrograms } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import SportsOverviewSection from '@/components/programs/sports/SportsOverviewSection'
 import SportsListSection from '@/components/programs/sports/SportsListSection'
@@ -115,7 +116,7 @@ export default function SportsPage() {
       <CommonHeroSection 
         title={hero?.title || "특수 스포츠"}
         description={hero?.description || "장애인을 위한 특별한 스포츠 프로그램을 제공합니다"}
-        backgroundImage={(hero?.imageUrl && hero.imageUrl.trim() !== '') ? hero.imageUrl : hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(hero?.imageUrl, hero?.defaultImageUrl)}
       />
 
       {/* 개요 섹션 */}

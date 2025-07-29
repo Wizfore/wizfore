@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getCommunity } from '@/lib/services/dataService'
+import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import SNSYouTubeSection from '@/components/community/sns/SNSYouTubeSection'
 
@@ -80,7 +81,7 @@ export default function SNSPage() {
       <CommonHeroSection 
         title={snsData.hero?.title || "SNS"}
         description={snsData.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}
-        backgroundImage={(snsData.hero?.imageUrl && snsData.hero.imageUrl.trim() !== '') ? snsData.hero.imageUrl : snsData.hero?.defaultImageUrl}
+        backgroundImage={getImageWithFallback(snsData.hero?.imageUrl, snsData.hero?.defaultImageUrl)}
       />
       <SNSYouTubeSection 
         aboutMessage={snsData.aboutMessage} 
