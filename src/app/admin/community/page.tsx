@@ -31,7 +31,7 @@ const DEFAULT_COMMUNITY_DATA: CommunityData = {
 }
 
 export default function CommunityManagePage() {
-  const [activeTab, setActiveTab] = useState<CommunityTab>('sns')
+  const [activeTab, setActiveTab] = useState<CommunityTab>('news')
   const [showUnsavedDialog, setShowUnsavedDialog] = useState(false)
   const [pendingTab, setPendingTab] = useState<CommunityTab | null>(null)
   const [dialogSaving, setDialogSaving] = useState(false)
