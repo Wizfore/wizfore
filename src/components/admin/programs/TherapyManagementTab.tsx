@@ -222,7 +222,7 @@ export function TherapyManagementTab({
             <ImageUpload
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateField('hero.imageUrl', url)}
-              folder="hero-images"
+              folder="pages/programs/therapy/hero"
               defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>

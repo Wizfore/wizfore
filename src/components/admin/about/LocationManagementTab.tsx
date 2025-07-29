@@ -78,7 +78,7 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
             <ImageUpload
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateHero('imageUrl', url)}
-              folder="hero-images"
+              folder="pages/about/location/hero"
               defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
@@ -154,7 +154,7 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
                   <ImageUpload
                     value={transport.iconPath || ''}
                     onChange={(url: string) => updateTransportation(index, 'iconPath', url)}
-                    folder={`transportation/${transport.type}`}
+                    folder={`pages/about/location/transportation/${transport.type}`}
                     defaultImageUrl={transport.defaultIconPath}
                     previewSize="h-20 w-20"
                     placeholder="교통편 아이콘을 업로드하세요"

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { getIconComponent } from '@/utils/iconMapper'
+import { getIconComponent } from '@/lib/utils/iconMapper'
 import { BlurFade } from '@/components/ui/blur-fade'
 import type { TeamFeature } from '@/types'
 

@@ -140,7 +140,7 @@ export function HeroTab({ data, setData }: TabComponentProps) {
                           }
                         }))
                       }}
-                      folder={`home/hero/slide-${slide.id}`}
+                      folder={`pages/home/hero/slide-${slide.id}`}
                       defaultImageUrl={slide.defaultBackgroundImage}
                     />
                   </div>

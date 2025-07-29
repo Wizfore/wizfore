@@ -61,15 +61,6 @@ export function useAdminForm<T>({
 
   const hasChanges = JSON.stringify(data) !== JSON.stringify(originalData)
   
-  // 디버깅용 로그
-  if (typeof window !== 'undefined') {
-    console.log('useAdminForm 상태:', {
-      hasChanges,
-      data: JSON.stringify(data),
-      originalData: JSON.stringify(originalData),
-      dataEqual: JSON.stringify(data) === JSON.stringify(originalData)
-    })
-  }
 
   const handleSave = async () => {
     try {

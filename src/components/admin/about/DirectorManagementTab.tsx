@@ -136,7 +136,7 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
               <ImageUpload
                 value={data.hero.imageUrl || ''}
                 onChange={(url: string) => updateNestedObject('hero', 'imageUrl', url)}
-                folder="hero-images"
+                folder="pages/about/director/hero"
                 defaultImageUrl={data.hero?.defaultImageUrl}
               />
             </div>
@@ -221,7 +221,7 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
             <ImageUpload
               value={data.imageUrl}
               onChange={(url: string) => updateBasicInfo('imageUrl', url)}
-              folder="director"
+              folder="pages/about/director"
               defaultImageUrl={data.defaultImageUrl}
             />
           </div>

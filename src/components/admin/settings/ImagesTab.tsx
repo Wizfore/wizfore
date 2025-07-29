@@ -1,6 +1,6 @@
 import React from 'react'
 import { Upload as UploadIcon } from 'lucide-react'
-import { SimpleImageUpload } from '@/components/admin/common/SimpleImageUpload'
+import { ImageUpload } from '@/components/admin/common/ImageUpload'
 import type { DefaultSiteData } from '@/types'
 
 type SiteInfoData = DefaultSiteData['siteInfo']
@@ -35,13 +35,14 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               파일 업로드
             </label>
-            <SimpleImageUpload
+            <ImageUpload
               value={siteInfo.faviconUrl}
               onChange={(url) => handleImageChange('faviconUrl', url)}
               folder="site-assets/favicon"
               defaultImageUrl={siteInfo.defaultFaviconUrl}
               placeholder="파비콘 파일을 드래그하거나 클릭하여 업로드"
-              imageClassName="w-16 h-16"
+              previewSize="w-16 h-16"
+              previewLabel="파비콘 미리보기"
             />
           </div>
           
@@ -75,13 +76,14 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               파일 업로드
             </label>
-            <SimpleImageUpload
+            <ImageUpload
               value={siteInfo.headerLogoUrl}
               onChange={(url) => handleImageChange('headerLogoUrl', url)}
               folder="site-assets/logo"
               defaultImageUrl={siteInfo.defaultHeaderLogoUrl}
               placeholder="로고 파일을 드래그하거나 클릭하여 업로드"
-              imageClassName="h-16 w-auto"
+              previewSize="h-16 w-auto"
+              previewLabel="헤더 로고 미리보기"
             />
           </div>
           

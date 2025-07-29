@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit2, User, ArrowUp, ArrowDown, Star, Target, Graduation
 import { TeamCategory, TeamMember, TeamFeature } from '@/types/expert'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/admin/common/ImageUpload'
+import IconDropdown from '@/components/admin/common/IconDropdown'
 
 interface TherapistsManagementTabProps {
   data: TeamCategory
@@ -108,9 +109,11 @@ export default function TherapistsManagementTab({ data: therapistsData, onUpdate
   const updateFeature = (id: string, field: keyof TeamFeature, value: any) => {
     const newData = JSON.parse(JSON.stringify(therapistsData)) // 깊은 복사
     const featureIndex = newData.features?.findIndex((feature: TeamFeature) => feature.id === id)
+    
     if (featureIndex !== undefined && featureIndex >= 0) {
       newData.features[featureIndex][field] = value
     }
+    
     onUpdate(newData)
   }
 
@@ -274,6 +277,15 @@ export default function TherapistsManagementTab({ data: therapistsData, onUpdate
                       onChange={(e) => updateFeature(feature.id, 'title', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="특징 제목"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      아이콘
+                    </label>
+                    <IconDropdown
+                      value={feature.iconName}
+                      onChange={(iconName) => updateFeature(feature.id, 'iconName', iconName)}
                     />
                   </div>
                   <div>

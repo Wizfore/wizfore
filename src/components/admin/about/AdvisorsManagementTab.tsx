@@ -140,7 +140,7 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
             <ImageUpload
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateHero('imageUrl', url)}
-              folder="hero-images"
+              folder="pages/about/advisors/hero"
               defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
@@ -338,7 +338,7 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
                       <ImageUpload
                         value={advisor.imageUrl}
                         onChange={(url: string) => updateAdvisor(index, 'imageUrl', url)}
-                        folder="advisors"
+                        folder="pages/about/advisors"
                         role={advisor.position?.join(' ') || ''}
                         defaultImageUrl={advisor.defaultImageUrl}
                       />

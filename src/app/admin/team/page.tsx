@@ -67,12 +67,14 @@ export default function TeamManagementPage() {
   } = useAdminForm({
     fetchData,
     saveData: async (data: TeamData) => {
-      // 각 섹션별로 개별 저장 (기존 API 구조 유지)
+      // 현재 활성 탭에 해당하는 데이터만 저장
       const { updateTherapists, updateTeachers } = await import('@/lib/services/dataService')
-      await Promise.all([
-        updateTherapists(data.therapists),
-        updateTeachers(data.teachers)
-      ])
+      
+      if (activeTab === 'therapists') {
+        await updateTherapists(data.therapists)
+      } else if (activeTab === 'teachers') {
+        await updateTeachers(data.teachers)
+      }
     },
     defaultData: DEFAULT_TEAM_DATA
   })

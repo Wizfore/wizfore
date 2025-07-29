@@ -159,7 +159,7 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
             <ImageUpload
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateHero('imageUrl', url)}
-              folder="hero-images"
+              folder="pages/about/history/hero"
               defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
@@ -242,7 +242,7 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
                       <ImageUpload
                         value={card.iconPath}
                         onChange={(url: string) => updateStatsCard(card.id, 'iconPath', url)}
-                        folder={`stats/icons`}
+                        folder={`pages/about/history/stats`}
                         defaultImageUrl={card.defaultIconPath}
                         previewSize="h-16 w-16"
                         placeholder="아이콘 이미지를 업로드하세요"

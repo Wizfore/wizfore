@@ -7,6 +7,18 @@ import {
   Star,
   MessageCircle,
   Activity,
+  User,
+  GraduationCap,
+  Award,
+  FileText,
+  Shield,
+  CheckCircle,
+  Clock,
+  BookOpen,
+  Zap,
+  Settings,
+  Smile,
+  ThumbsUp,
   LucideIcon
 } from 'lucide-react'
 import type { ProgramIconMapping } from '@/types'
@@ -20,8 +32,44 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Lightbulb,
   Star,
   MessageCircle,
-  Activity
+  Activity,
+  User,
+  GraduationCap,
+  Award,
+  FileText,
+  Shield,
+  CheckCircle,
+  Clock,
+  BookOpen,
+  Zap,
+  Settings,
+  Smile,
+  ThumbsUp
 }
+
+// 드롭다운에서 사용할 아이콘 목록
+export const AVAILABLE_ICONS = [
+  { name: 'Brain', component: Brain, label: '뇌' },
+  { name: 'Heart', component: Heart, label: '하트' },
+  { name: 'Users', component: Users, label: '사용자들' },
+  { name: 'Target', component: Target, label: '타겟' },
+  { name: 'Lightbulb', component: Lightbulb, label: '전구' },
+  { name: 'Star', component: Star, label: '별' },
+  { name: 'MessageCircle', component: MessageCircle, label: '메시지' },
+  { name: 'Activity', component: Activity, label: '활동' },
+  { name: 'User', component: User, label: '사용자' },
+  { name: 'GraduationCap', component: GraduationCap, label: '졸업모자' },
+  { name: 'Award', component: Award, label: '상장' },
+  { name: 'FileText', component: FileText, label: '문서' },
+  { name: 'Shield', component: Shield, label: '방패' },
+  { name: 'CheckCircle', component: CheckCircle, label: '체크' },
+  { name: 'Clock', component: Clock, label: '시계' },
+  { name: 'BookOpen', component: BookOpen, label: '책' },
+  { name: 'Zap', component: Zap, label: '번개' },
+  { name: 'Settings', component: Settings, label: '설정' },
+  { name: 'Smile', component: Smile, label: '웃음' },
+  { name: 'ThumbsUp', component: ThumbsUp, label: '좋아요' }
+]
 
 /**
  * 아이콘 이름으로 실제 아이콘 컴포넌트를 반환

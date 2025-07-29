@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit2, User, ArrowUp, ArrowDown, Star, Target, Graduation
 import { TeamCategory, TeamMember, TeamFeature } from '@/types/expert'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/admin/common/ImageUpload'
+import IconDropdown from '@/components/admin/common/IconDropdown'
 
 interface TeachersManagementTabProps {
   data: TeamCategory
@@ -197,7 +198,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
             <ImageUpload
               value={teachersData.hero?.imageUrl || ''}
               onChange={(url: string) => updateField('hero.imageUrl', url)}
-              folder="hero-images"
+              folder="pages/team/teachers/hero"
               defaultImageUrl={teachersData.hero?.defaultImageUrl}
             />
           </div>
@@ -274,6 +275,15 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate }: 
                       onChange={(e) => updateFeature(feature.id, 'title', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="특징 제목"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      아이콘
+                    </label>
+                    <IconDropdown
+                      value={feature.iconName}
+                      onChange={(iconName) => updateFeature(feature.id, 'iconName', iconName)}
                     />
                   </div>
                   <div>

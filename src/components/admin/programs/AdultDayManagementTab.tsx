@@ -222,7 +222,7 @@ export function AdultDayManagementTab({
             <ImageUpload
               value={data.hero?.imageUrl || ''}
               onChange={(url: string) => updateField('hero.imageUrl', url)}
-              folder="hero-images"
+              folder="pages/programs/adult-day/hero"
               defaultImageUrl={data.hero?.defaultImageUrl}
             />
           </div>
