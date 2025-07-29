@@ -198,6 +198,7 @@ export default function TherapistsManagementTab({ data: therapistsData, onUpdate
               value={therapistsData.hero?.imageUrl || ''}
               onChange={(url) => updateField('hero.imageUrl', url)}
               folder="team/therapists/hero"
+              defaultImageUrl={therapistsData.hero?.defaultImageUrl}
             />
           </div>
         </div>
