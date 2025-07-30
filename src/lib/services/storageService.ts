@@ -154,6 +154,11 @@ export function generateUniqueFileName(originalName: string, category?: string):
   const extension = originalName.split('.').pop()
   const baseName = originalName.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_')
   
+  // 커뮤니티 뉴스 기사의 경우 카테고리를 파일명에 포함하지 않음 (경로에서 관리)
+  if (category && category.startsWith('pages/community/news/')) {
+    return `${baseName}_${timestamp}_${random}.${extension}`
+  }
+  
   const prefix = category ? `${category}_` : ''
   return `${prefix}${baseName}_${timestamp}_${random}.${extension}`
 }
@@ -171,8 +176,8 @@ export function generateUploadPath(category: string, fileName: string): string {
   }
   
   // 커뮤니티 뉴스 기사인 경우 articleId별로 저장
-  if (category.startsWith('pages/community/news/') && category.includes('{')) {
-    // category 형태: 'pages/community/news/{articleId}'
+  if (category.startsWith('pages/community/news/')) {
+    // category 형태: 'pages/community/news/{articleId}' 또는 'pages/community/news/1'
     return `${category}/${fileName}`
   }
   
@@ -492,50 +497,19 @@ export async function cleanupRemovedImages(
  * @param tempArticleId - 임시 기사 ID
  * @param realArticleId - 실제 기사 ID
  */
-export async function moveArticleImages(tempArticleId: string, realArticleId: string): Promise<void> {
+/**
+ * 예약된 게시글 ID의 Storage 폴더를 삭제합니다.
+ * 게시글 작성 취소 시 사용됩니다.
+ */
+export async function cleanupReservedArticleId(reservedId: string): Promise<void> {
   try {
-    console.log(`기사 이미지 이동 시작: ${tempArticleId} → ${realArticleId}`)
-    
-    const tempFolderPath = `pages/community/news/${tempArticleId}`
-    const realFolderPath = `pages/community/news/${realArticleId}`
-    
-    // 임시 폴더의 모든 파일 목록 가져오기
-    const tempFolderRef = ref(storage, tempFolderPath)
-    const result = await listAll(tempFolderRef)
-    
-    if (result.items.length === 0) {
-      console.log(`이동할 이미지가 없습니다: ${tempFolderPath}`)
-      return
-    }
-    
-    // 각 파일을 새 위치로 복사하고 원본 삭제
-    const movePromises = result.items.map(async (item) => {
-      try {
-        // 원본 파일 다운로드
-        const downloadURL = await getDownloadURL(item)
-        const response = await fetch(downloadURL)
-        const blob = await response.blob()
-        
-        // 새 위치에 업로드
-        const fileName = item.name
-        const newRef = ref(storage, `${realFolderPath}/${fileName}`)
-        await uploadBytes(newRef, blob)
-        
-        // 원본 파일 삭제
-        await deleteObject(item)
-        
-        console.log(`파일 이동 완료: ${item.name}`)
-      } catch (error) {
-        console.error(`파일 이동 실패: ${item.name}`, error)
-        throw error
-      }
-    })
-    
-    await Promise.all(movePromises)
-    console.log(`기사 이미지 이동 완료: ${result.items.length}개 파일`)
-    
+    const folderPath = `pages/community/news/${reservedId}`
+    console.log(`🧹 예약된 ID Storage 정리 시작: ${reservedId}`)
+    await deleteFolder(folderPath)
+    console.log(`✅ 예약된 ID Storage 정리 완료: ${reservedId}`)
   } catch (error) {
-    console.error(`기사 이미지 이동 오류: ${tempArticleId} → ${realArticleId}`, error)
-    throw new Error(`기사 이미지 이동에 실패했습니다: ${tempArticleId} → ${realArticleId}`)
+    console.warn(`⚠️  예약된 ID Storage 정리 실패 (무시됨): ${reservedId}`, error)
+    // 정리 실패는 무시 (이미 없을 수도 있음)
   }
 }
+

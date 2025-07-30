@@ -927,7 +927,64 @@ export async function getPublishedNotices(): Promise<Article[]> {
  */
 
 /**
- * 새 게시글 생성 (모든 카테고리)
+ * 다음에 생성될 게시글의 ID를 미리 예약합니다.
+ * 새 게시글 작성 시 이미지 저장 경로를 위해 사용됩니다.
+ */
+export async function reserveNextArticleId(): Promise<string> {
+  try {
+    const communityData = await getCommunity()
+    const allArticles = communityData?.news?.articles || []
+    
+    // 전체 기사에서 최대 숫자 ID 계산하여 다음 번호 예약
+    const maxId = allArticles.length > 0 
+      ? Math.max(...allArticles.map((article: Article) => parseInt(article.id) || 0))
+      : 0
+    const nextId = `${maxId + 1}`
+    
+    console.log(`📝 게시글 ID 예약: ${nextId}`)
+    return nextId
+  } catch (error) {
+    console.error('게시글 ID 예약 실패:', error)
+    throw new Error('게시글 ID 예약에 실패했습니다.')
+  }
+}
+
+/**
+ * 예약된 ID로 새 게시글 생성 (새 게시글 작성 시 사용)
+ */
+export async function createArticleWithReservedId(
+  articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>, 
+  reservedId: string
+): Promise<string> {
+  try {
+    const now = new Date().toISOString()
+    
+    const newArticle: Article = {
+      id: reservedId, // 예약된 ID 사용
+      ...articleData,
+      createdAt: now,
+      updatedAt: now,
+      ...(articleData.status === 'published' && { publishedAt: now })
+    }
+
+    const communityData = await getCommunity()
+    const updatedArticles = [...(communityData?.news?.articles || []), newArticle]
+
+    await updateDoc(doc(db, 'community', 'main'), {
+      'news.articles': updatedArticles,
+      'news.lastUpdated': now
+    })
+
+    console.log(`✅ 예약된 ID로 게시글 생성 완료: ${reservedId}`)
+    return reservedId
+  } catch (error) {
+    console.error('예약된 ID로 게시글 생성 실패:', error)
+    throw new Error('게시글 생성에 실패했습니다.')
+  }
+}
+
+/**
+ * 새 게시글 생성 (모든 카테고리) - 기존 방식
  */
 export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
   try {

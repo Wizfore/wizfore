@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Eye, X } from 'lucide-react'
-import { createArticle } from '@/lib/services/dataService'
-import { moveArticleImages } from '@/lib/services/storageService'
+import { createArticleWithReservedId, reserveNextArticleId } from '@/lib/services/dataService'
+import { cleanupReservedArticleId } from '@/lib/services/storageService'
 import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
+import toast from 'react-hot-toast'
 import type { Article, CategoryItem } from '@/types'
 
 export default function CreateNewsPage() {
@@ -14,8 +15,9 @@ export default function CreateNewsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
 
-  // 임시 기사 ID 생성 (새 기사 작성용)
-  const [tempArticleId] = useState(() => `temp_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`)
+  // 게시글 ID 예약 (새 기사 작성용)
+  const [reservedId, setReservedId] = useState<string>('')
+  const [isIdReserved, setIsIdReserved] = useState(false)
 
   // 폼 상태
   const [title, setTitle] = useState('')
@@ -45,6 +47,47 @@ export default function CreateNewsPage() {
     updatedAt: new Date().toISOString()
   }
 
+  // ID 예약 (컴포넌트 마운트 시)
+  useEffect(() => {
+    const reserveId = async () => {
+      try {
+        const id = await reserveNextArticleId()
+        setReservedId(id)
+        setIsIdReserved(true)
+        console.log(`🎫 게시글 ID 예약 완료: ${id}`)
+      } catch (error) {
+        console.error('게시글 ID 예약 실패:', error)
+        toast.error('게시글 ID 예약에 실패했습니다.')
+      }
+    }
+    
+    reserveId()
+  }, [])
+
+  // 페이지 이탈 시 Storage 정리
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasChanges() && reservedId) {
+        // 변경사항이 있으면 Storage 정리
+        cleanupReservedArticleId(reservedId).catch(console.error)
+      }
+    }
+
+    const handlePopState = () => {
+      if (hasChanges() && reservedId) {
+        cleanupReservedArticleId(reservedId).catch(console.error)
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    window.addEventListener('popstate', handlePopState)
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [reservedId])
+
   // 변경 사항 확인 함수 (빈 값에서 변경되었는지 확인)
   const hasChanges = () => {
     return title.trim() !== '' || 
@@ -55,12 +98,20 @@ export default function CreateNewsPage() {
   }
 
   // 취소 핸들러
-  const handleCancel = () => {
+  const handleCancel = async () => {
     if (hasChanges()) {
       if (confirm('작성 중인 내용이 저장되지 않습니다. 정말 나가시겠습니까?')) {
+        // Storage 정리 후 페이지 이동
+        if (reservedId) {
+          await cleanupReservedArticleId(reservedId)
+        }
         router.push('/admin/community/news')
       }
     } else {
+      // 변경사항이 없어도 예약된 ID 정리
+      if (reservedId) {
+        await cleanupReservedArticleId(reservedId)
+      }
       router.push('/admin/community/news')
     }
   }
@@ -79,6 +130,11 @@ export default function CreateNewsPage() {
       return
     }
 
+    if (!reservedId) {
+      toast.error('게시글 ID가 예약되지 않았습니다. 페이지를 새로고침해주세요.')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -90,22 +146,19 @@ export default function CreateNewsPage() {
         date: date,
       }
 
-      const articleId = await createArticle(articleData)
+      console.log(`📝 예약된 ID로 기사 생성 시작: ${reservedId}`)
+      await createArticleWithReservedId(articleData, reservedId)
       
-      // 임시 폴더의 이미지들을 실제 기사 ID 폴더로 이동
-      try {
-        await moveArticleImages(tempArticleId, articleId)
-        console.log('기사 이미지 이동 완료:', tempArticleId, '→', articleId)
-      } catch (moveError) {
-        console.warn('이미지 이동 실패 (기사는 생성됨):', moveError)
-        // 이미지 이동 실패해도 기사 생성은 완료되었으므로 계속 진행
-      }
+      console.log(`🎉 게시글 생성 완료: ${reservedId}`)
+      toast.success('게시글이 성공적으로 생성되었습니다!')
       
-      console.log('게시글 생성 완료:', articleId)
-      router.push('/admin/community/news')
+      // 페이지 이동
+      setTimeout(() => {
+        router.push('/admin/community/news')
+      }, 1000)
     } catch (error) {
-      console.error('게시글 생성 실패:', error)
-      alert('게시글 생성에 실패했습니다.')
+      console.error('💥 게시글 생성 실패:', error)
+      toast.error('게시글 생성에 실패했습니다.')
     } finally {
       setIsSubmitting(false)
     }
@@ -201,11 +254,18 @@ export default function CreateNewsPage() {
             </button>
             <button
               onClick={handleSubmit}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isIdReserved}
               className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               <Save size={20} />
-              {isSubmitting ? '저장 중...' : status === 'published' ? '게시' : '저장'}
+              {!isIdReserved 
+                ? `ID 예약 중... (${reservedId || '대기'})` 
+                : isSubmitting 
+                  ? `저장 중... (ID: ${reservedId})` 
+                  : status === 'published' 
+                    ? `게시 (ID: ${reservedId})` 
+                    : `저장 (ID: ${reservedId})`
+              }
             </button>
           </div>
         </div>
@@ -287,7 +347,7 @@ export default function CreateNewsPage() {
                   value={content}
                   onChange={setContent}
                   category={category}
-                  articleId={tempArticleId}
+                  articleId={reservedId || undefined}
                 />
               </div>
             </div>

@@ -36,8 +36,30 @@ import {
   Palette,
   Highlighter
 } from 'lucide-react'
-import { uploadImage } from '@/lib/services/storageService'
+import { uploadImage, cleanupRemovedImages } from '@/lib/services/storageService'
 import toast from 'react-hot-toast'
+
+/**
+ * HTML 콘텐츠에서 Firebase Storage 이미지 URL들을 추출합니다.
+ * @param htmlContent - HTML 콘텐츠
+ * @returns Firebase Storage 이미지 URL 배열
+ */
+function extractFirebaseImageUrls(htmlContent: string): string[] {
+  if (!htmlContent) return []
+  
+  try {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(htmlContent, 'text/html')
+    const images = doc.querySelectorAll('img')
+    
+    return Array.from(images)
+      .map(img => img.src)
+      .filter(src => src && src.includes('firebasestorage.googleapis.com'))
+  } catch (error) {
+    console.warn('이미지 URL 추출 중 오류:', error)
+    return []
+  }
+}
 
 // 색상 팔레트 데이터
 const TEXT_COLORS = [
@@ -112,6 +134,9 @@ export default function TiptapEditor({
   const [selectedTextColor, setSelectedTextColor] = useState('#000000')
   const [selectedHighlightColor, setSelectedHighlightColor] = useState('#FEF08A')
   
+  // 실시간 이미지 정리를 위한 상태
+  const [previousImages, setPreviousImages] = useState<string[]>([])
+  
   // 외부 클릭 감지를 위한 ref
   const textColorRef = useRef<HTMLDivElement>(null)
   const highlightColorRef = useRef<HTMLDivElement>(null)
@@ -132,6 +157,47 @@ export default function TiptapEditor({
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  // 초기 이미지 목록 설정 (컴포넌트 마운트 시)
+  useEffect(() => {
+    const initialImages = extractFirebaseImageUrls(value)
+    setPreviousImages(initialImages)
+  }, []) // 한 번만 실행
+
+  // 실시간 이미지 정리 (content 변경 시)
+  useEffect(() => {
+    // 새 기사 작성 중이거나 articleId가 없으면 정리하지 않음
+    if (!articleId || articleId.startsWith('temp_')) {
+      return
+    }
+    
+    const currentImages = extractFirebaseImageUrls(value)
+    
+    // 현재 이미지와 이전 이미지가 동일하면 처리하지 않음
+    const currentImagesStr = JSON.stringify(currentImages.sort())
+    const previousImagesStr = JSON.stringify(previousImages.sort())
+    
+    if (currentImagesStr === previousImagesStr) {
+      return
+    }
+    
+    // 이전 이미지 목록이 있고, 삭제된 이미지가 있는 경우에만 정리 실행
+    if (previousImages.length > 0) {
+      const removedImages = previousImages.filter(prevUrl => 
+        !currentImages.includes(prevUrl)
+      )
+      
+      if (removedImages.length > 0) {
+        console.log(`TiptapEditor: ${removedImages.length}개 이미지 삭제 감지, Storage 정리 시작`)
+        cleanupRemovedImages(previousImages, currentImages).catch(error => {
+          console.warn('TiptapEditor 이미지 정리 실패 (무시됨):', error)
+        })
+      }
+    }
+    
+    // 현재 이미지 목록을 이전 목록으로 업데이트
+    setPreviousImages(currentImages)
+  }, [value, articleId, previousImages])
 
   // 이미지 업로드 함수
   const handleImageUpload = useCallback(async (file: File) => {
