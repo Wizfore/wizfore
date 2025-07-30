@@ -236,6 +236,7 @@ export default function NewsManagePage() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>ID</TableHead>
                     <TableHead>제목</TableHead>
                     <TableHead>카테고리</TableHead>
                     <TableHead>상태</TableHead>
@@ -248,6 +249,7 @@ export default function NewsManagePage() {
                 <TableBody>
                   {filteredArticles.map((article) => (
                     <TableRow key={article.id}>
+                      <TableCell className="text-sm text-gray-600 font-mono">{article.id}</TableCell>
                       <TableCell className="max-w-xs">
                         <div className="flex items-center gap-2">
                           <span className="font-medium truncate">{article.title}</span>
