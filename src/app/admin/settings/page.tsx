@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { getSiteInfo, updateSiteInfo } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
 import { Settings, Loader2, XCircle } from 'lucide-react'
 import { useAdminForm } from '@/hooks/useAdminForm'
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning'
+import { useNavigation } from '@/contexts/NavigationContext'
 import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabsWithUnsavedChanges'
 import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
 import { TabItem } from '@/components/admin/common/AdminTabs'
@@ -72,6 +74,17 @@ export default function SettingsPage() {
     validate: validateSiteInfo,
     cleanData: cleanSiteInfo
   })
+
+  // 브라우저 이탈 경고 훅 사용
+  useUnsavedChangesWarning(hasChanges)
+  
+  // 네비게이션 컨텍스트와 동기화
+  const { setHasUnsavedChanges } = useNavigation()
+  
+  // hasChanges 상태가 변경될 때마다 네비게이션 컨텍스트 업데이트
+  React.useEffect(() => {
+    setHasUnsavedChanges(hasChanges)
+  }, [hasChanges, setHasUnsavedChanges])
 
   // 탭 전환 핸들러
   const handleTabChange = (nextTab: TabKey) => {
