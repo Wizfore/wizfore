@@ -1,4 +1,6 @@
 
+import type { CategoryItem } from './common'
+
 // 커뮤니티 관련 타입들
 export interface Article {
   id: string
@@ -62,6 +64,7 @@ export interface NewsInfo {
     title?: string
     description?: string
   }
+  categories?: CategoryItem[]
   articles: Article[]
 }
 

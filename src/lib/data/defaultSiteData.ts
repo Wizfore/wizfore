@@ -959,6 +959,13 @@ export const defaultSiteData: DefaultSiteData = {
         title: "전체 소식",
         description: "위즈포레 사회서비스센터의 다양한 협력 활동, 수상 내역, 행사 참여 등 주요 소식들을 시간순으로 확인하실 수 있습니다."
       },
+      categories: [
+        { english: 'notices', korean: '공지사항' },
+        { english: 'partnership', korean: '협약' },
+        { english: 'news', korean: '소식' },
+        { english: 'events', korean: '행사' },
+        { english: 'awards', korean: '수상' }
+      ],
       articles: [
         // 공지사항
         {
