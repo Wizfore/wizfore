@@ -138,9 +138,12 @@ export default function DashboardPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">최근 문의</h2>
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <Link 
+              href="/admin/contact"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
               전체 보기
-            </button>
+            </Link>
           </div>
           <div className="space-y-4">
             {recentInquiries.length > 0 ? (
@@ -179,9 +182,12 @@ export default function DashboardPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">최근 게시글</h2>
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <Link 
+              href="/admin/community"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            >
               전체 보기
-            </button>
+            </Link>
           </div>
           <div className="space-y-4">
             {recentNews.length > 0 ? (

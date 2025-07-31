@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Plus, Edit, Trash2, Filter, Search, Tag, ChevronDown, ChevronUp } from 'lucide-react'
+import { Plus, Edit, Trash2, Filter, Search, Tag, ChevronDown, ChevronUp, Info } from 'lucide-react'
 import { Article, NewsInfo } from '@/types/community'
 import { CategoryItem } from '@/types/common'
 import { deleteArticle, updateCommunity } from '@/lib/services/dataService'
@@ -37,6 +37,7 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
   // 카테고리 관리 상태
   const [showCategoryManagement, setShowCategoryManagement] = useState(false)
   const [categories, setCategories] = useState<CategoryItem[]>([])
+  const [originalCategories, setOriginalCategories] = useState<CategoryItem[]>([])
   const [editingCategory, setEditingCategory] = useState<string | null>(null)
   const [newCategory, setNewCategory] = useState({ english: '', korean: '' })
 
@@ -60,6 +61,7 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
       try {
         const categoryData = await getCategoryOptions()
         setCategories(categoryData)
+        setOriginalCategories(JSON.parse(JSON.stringify(categoryData))) // 깊은 복사로 원본 보관
       } catch (error) {
         console.error('카테고리 데이터 로딩 실패:', error)
       }
@@ -273,6 +275,18 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
     }
   }
 
+  const handleCancelCategoryEdit = () => {
+    // 원본 데이터로 복원
+    setCategories(JSON.parse(JSON.stringify(originalCategories)))
+    setEditingCategory(null)
+  }
+
+  const handleStartCategoryEdit = (englishName: string) => {
+    // 편집 시작 시 현재 상태를 원본으로 저장
+    setOriginalCategories(JSON.parse(JSON.stringify(categories)))
+    setEditingCategory(englishName)
+  }
+
   const handleSaveCategory = async (originalEnglishName: string) => {
     try {
       const categoryToSave = categories.find(cat => cat.english === originalEnglishName)
@@ -322,6 +336,7 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
 
       await updateCategories(updatedCategories, updatedArticles)
       setEditingCategory(null)
+      setOriginalCategories(JSON.parse(JSON.stringify(updatedCategories))) // 저장 성공 시 원본 업데이트
       alert('카테고리가 성공적으로 수정되었습니다.')
 
     } catch (error) {
@@ -466,13 +481,26 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
                               )
                               setCategories(updatedCategories)
                             }}
-                            className="px-2 py-1 border border-gray-300 rounded text-sm w-full"
+                            className={`px-2 py-1 border rounded text-sm w-full ${
+                              category.english === 'notices' 
+                                ? 'border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed' 
+                                : 'border-gray-300'
+                            }`}
+                            disabled={category.english === 'notices'}
                             autoFocus
                           />
                         ) : (
                           <span 
-                            className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
-                            onDoubleClick={() => setEditingCategory(category.english)}
+                            className={`px-2 py-1 rounded ${
+                              category.english === 'notices'
+                                ? 'bg-gray-50 text-gray-600'
+                                : 'cursor-pointer hover:bg-gray-100'
+                            }`}
+                            onDoubleClick={() => {
+                              if (category.english !== 'notices') {
+                                handleStartCategoryEdit(category.english)
+                              }
+                            }}
                           >
                             {category.english}
                           </span>
@@ -496,7 +524,7 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
                         ) : (
                           <span 
                             className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
-                            onDoubleClick={() => setEditingCategory(category.english)}
+                            onDoubleClick={() => handleStartCategoryEdit(category.english)}
                           >
                             {category.korean}
                           </span>
@@ -522,7 +550,7 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => setEditingCategory(null)}
+                                onClick={handleCancelCategoryEdit}
                                 className="text-gray-600 hover:text-gray-700"
                               >
                                 취소
@@ -533,7 +561,7 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => setEditingCategory(category.english)}
+                                onClick={() => handleStartCategoryEdit(category.english)}
                               >
                                 <Edit className="h-3 w-3" />
                               </Button>
@@ -599,7 +627,7 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
 
             <div className="text-sm text-gray-500 pt-2 border-t space-y-1">
               <div>💡 팁: 카테고리명을 더블클릭하면 바로 편집할 수 있습니다.</div>
-              <div>📌 공지사항 카테고리의 게시글은 목록 상단에 고정됩니다.</div>
+              <div>📌 notices(영어명) 카테고리의 게시글은 목록 상단에 고정됩니다.</div>
             </div>
           </div>
         )}
@@ -661,6 +689,13 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
             <h3 className="text-lg font-semibold text-gray-900">게시글 목록</h3>
             <p className="text-sm text-gray-600">
               총 {filteredArticles.length}개의 게시글이 있습니다.
+            </p>
+            <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+              <Info className="h-3 w-3" />
+              표 제목을 클릭하여 정렬할 수 있습니다 (기본: 수정일 최신순)
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              ※ 일반 사용자 페이지에서는 발행일 최신순으로 정렬됩니다
             </p>
           </div>
           <Button onClick={() => router.push('/admin/community/news/create')}>
