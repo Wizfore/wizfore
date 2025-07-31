@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Newspaper, Share, Loader2 } from 'lucide-react'
 import { getCommunity, updateCommunity } from '@/lib/services/dataService'
 import { useAdminForm } from '@/hooks/useAdminForm'
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning'
+import { useNavigation } from '@/contexts/NavigationContext'
 import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabsWithUnsavedChanges'
 import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
 import { TabItem } from '@/components/admin/common/AdminTabs'
@@ -96,6 +98,16 @@ export default function CommunityManagePage() {
     },
     defaultData: DEFAULT_COMMUNITY_DATA
   })
+
+  // 브라우저 이탈 경고 훅 사용
+  useUnsavedChangesWarning(hasChanges)
+  
+  // 네비게이션 컨텍스트와 동기화
+  const { setHasUnsavedChanges } = useNavigation()
+  
+  React.useEffect(() => {
+    setHasUnsavedChanges(hasChanges)
+  }, [hasChanges, setHasUnsavedChanges])
 
   // 탭 정의
   const tabs: TabItem<CommunityTab>[] = [
