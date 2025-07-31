@@ -46,22 +46,9 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
             />
           </div>
           
-          {/* 또는 URL 직접 입력 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              또는 URL 직접 입력
-            </label>
-            <input
-              type="url"
-              value={siteInfo.faviconUrl || ''}
-              onChange={(e) => handleImageChange('faviconUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/favicon.ico"
-            />
-            <p className="mt-1 text-sm text-gray-500">
-              브라우저 탭에 표시되는 작은 아이콘 이미지 URL
-            </p>
-          </div>
+          <p className="mt-1 text-sm text-gray-500">
+            브라우저 탭에 표시되는 작은 아이콘 이미지 URL
+          </p>
         </div>
         
         {/* 헤더 로고 설정 */}
@@ -86,23 +73,10 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
               previewLabel="헤더 로고 미리보기"
             />
           </div>
-          
-          {/* 또는 URL 직접 입력 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              또는 URL 직접 입력
-            </label>
-            <input
-              type="url"
-              value={siteInfo.headerLogoUrl || ''}
-              onChange={(e) => handleImageChange('headerLogoUrl', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="https://example.com/logo.png"
-            />
-            <p className="mt-1 text-sm text-gray-500">
-              웹사이트 상단에 표시되는 로고 이미지 URL
-            </p>
-          </div>
+
+          <p className="mt-1 text-sm text-gray-500">
+            웹사이트 상단에 표시되는 로고 이미지 URL
+          </p>
         </div>
       </div>
       

@@ -52,12 +52,20 @@ export const defaultHomeConfig: HomeConfig = {
       enabled: true,
       iconMappings: [
         {
+          id: "star",
+          categoryKeywords: ["특성화", "특별", "전문", "특수"],
+          iconName: "Star",
+          bgColor: "bg-wizfore-light-beige",
+          hoverColor: "bg-wizfore-light-beige",
+          order: 1
+        },
+        {
           id: "brain",
           categoryKeywords: ["인지", "학습", "인지학습", "학습능력"],
           iconName: "Brain",
           bgColor: "bg-wizfore-light-beige",
           hoverColor: "bg-wizfore-light-beige",
-          order: 1
+          order: 2
         },
         {
           id: "heart",
@@ -65,7 +73,7 @@ export const defaultHomeConfig: HomeConfig = {
           iconName: "Heart",
           bgColor: "bg-wizfore-light-beige",
           hoverColor: "bg-wizfore-light-beige",
-          order: 2
+          order: 3
         },
         {
           id: "users",
@@ -73,7 +81,7 @@ export const defaultHomeConfig: HomeConfig = {
           iconName: "Users",
           bgColor: "bg-wizfore-light-beige",
           hoverColor: "bg-wizfore-light-beige",
-          order: 3
+          order: 4
         },
         {
           id: "target",
@@ -81,20 +89,12 @@ export const defaultHomeConfig: HomeConfig = {
           iconName: "Target",
           bgColor: "bg-wizfore-light-beige",
           hoverColor: "bg-wizfore-light-beige",
-          order: 4
+          order: 5
         },
         {
           id: "lightbulb",
           categoryKeywords: ["창의", "창의성", "아이디어", "사고"],
           iconName: "Lightbulb",
-          bgColor: "bg-wizfore-light-beige",
-          hoverColor: "bg-wizfore-light-beige",
-          order: 5
-        },
-        {
-          id: "star",
-          categoryKeywords: ["특성화", "특별", "전문", "특수"],
-          iconName: "Star",
           bgColor: "bg-wizfore-light-beige",
           hoverColor: "bg-wizfore-light-beige",
           order: 6
