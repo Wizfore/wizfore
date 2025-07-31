@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Eye, X } from 'lucide-react'
 import { createArticleWithReservedId, reserveNextArticleId } from '@/lib/services/dataService'
 import { cleanupReservedArticleId } from '@/lib/services/storageService'
+import { getCategoryOptions } from '@/lib/utils/categoryUtils'
 import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
 import toast from 'react-hot-toast'
@@ -27,13 +28,20 @@ export default function CreateNewsPage() {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
 
   // 카테고리 데이터
-  const categories: CategoryItem[] = [
-    { english: 'notices', korean: '공지사항' },
-    { english: 'partnership', korean: '협약' },
-    { english: 'news', korean: '소식' },
-    { english: 'events', korean: '행사' },
-    { english: 'awards', korean: '수상' }
-  ]
+  const [categories, setCategories] = useState<CategoryItem[]>([])
+  
+  // 카테고리 데이터 로딩
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const categoryOptions = await getCategoryOptions()
+        setCategories(categoryOptions)
+      } catch (error) {
+        console.error('카테고리 로딩 실패:', error)
+      }
+    }
+    loadCategories()
+  }, [])
 
   // 미리보기용 Article 객체 생성
   const previewArticle: Article & { category: string } = {
@@ -105,14 +113,14 @@ export default function CreateNewsPage() {
         if (reservedId) {
           await cleanupReservedArticleId(reservedId)
         }
-        router.push('/admin/community/news')
+        router.push('/admin/community')
       }
     } else {
       // 변경사항이 없어도 예약된 ID 정리
       if (reservedId) {
         await cleanupReservedArticleId(reservedId)
       }
-      router.push('/admin/community/news')
+      router.push('/admin/community')
     }
   }
 
@@ -154,7 +162,7 @@ export default function CreateNewsPage() {
       
       // 페이지 이동
       setTimeout(() => {
-        router.push('/admin/community/news')
+        router.push('/admin/community')
       }, 1000)
     } catch (error) {
       console.error('💥 게시글 생성 실패:', error)

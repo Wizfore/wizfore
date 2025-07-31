@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Save, Eye, Trash2, X } from 'lucide-react'
 import { getArticleById, updateArticle, deleteArticle } from '@/lib/services/dataService'
+import { getCategoryOptions } from '@/lib/utils/categoryUtils'
 import TiptapEditor from '@/components/admin/community/TiptapEditor'
 import NewsDetailMainSection from '@/components/community/news/NewsDetailMainSection'
 import type { Article, CategoryItem } from '@/types'
@@ -39,13 +40,20 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
   })
 
   // 카테고리 데이터
-  const categories: CategoryItem[] = [
-    { english: 'notices', korean: '공지사항' },
-    { english: 'partnership', korean: '협약' },
-    { english: 'news', korean: '소식' },
-    { english: 'events', korean: '행사' },
-    { english: 'awards', korean: '수상' }
-  ]
+  const [categories, setCategories] = useState<CategoryItem[]>([])
+  
+  // 카테고리 데이터 로딩
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const categoryOptions = await getCategoryOptions()
+        setCategories(categoryOptions)
+      } catch (error) {
+        console.error('카테고리 로딩 실패:', error)
+      }
+    }
+    loadCategories()
+  }, [])
 
   // 미리보기용 Article 객체 생성
   const previewArticle: Article & { category: string } = {
@@ -129,7 +137,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
       await updateArticle(params.id, updateData)
       
       console.log('뉴스 업데이트 완료:', params.id)
-      router.push('/admin/community/news')
+      router.push('/admin/community')
     } catch (error) {
       console.error('뉴스 업데이트 실패:', error)
       alert('뉴스 업데이트에 실패했습니다.')
@@ -151,10 +159,10 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
   const handleCancel = () => {
     if (hasChanges()) {
       if (confirm('변경 사항이 저장되지 않습니다. 정말 나가시겠습니까?')) {
-        router.push('/admin/community/news')
+        router.push('/admin/community')
       }
     } else {
-      router.push('/admin/community/news')
+      router.push('/admin/community')
     }
   }
 
@@ -168,7 +176,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
 
     try {
       await deleteArticle(params.id)
-      router.push('/admin/community/news')
+      router.push('/admin/community')
     } catch (error) {
       console.error('뉴스 삭제 실패:', error)
       alert('뉴스 삭제에 실패했습니다.')
@@ -203,7 +211,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">뉴스를 찾을 수 없습니다</h1>
           <p className="text-gray-600 mb-6">요청하신 뉴스가 삭제되었거나 존재하지 않습니다.</p>
           <button
-            onClick={() => router.push('/admin/community/news')}
+            onClick={() => router.push('/admin/community')}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             뉴스 목록으로 돌아가기
@@ -371,11 +379,11 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
                       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       required
                     >
-                      <option value="notices">공지사항</option>
-                      <option value="partnership">협약</option>
-                      <option value="news">소식</option>
-                      <option value="events">행사</option>
-                      <option value="awards">수상</option>
+                      {categories.map((cat) => (
+                        <option key={cat.english} value={cat.english}>
+                          {cat.korean}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
