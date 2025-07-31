@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { useNavigation } from '@/contexts/NavigationContext'
 import { 
   LayoutDashboard, 
   Building2, 
@@ -91,6 +92,7 @@ export default function AdminSidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const { userProfile } = useAuth()
+  const { safeNavigate } = useNavigation()
   const [logoutLoading, setLogoutLoading] = useState(false)
 
   const handleLogout = async () => {
@@ -128,7 +130,10 @@ export default function AdminSidebar() {
     <div className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 z-50">
       {/* 로고 영역 */}
       <div className="p-6 border-b border-gray-200">
-        <Link href="/admin/dashboard" className="flex items-center space-x-3">
+        <button 
+          onClick={() => safeNavigate('/admin/dashboard')}
+          className="flex items-center space-x-3 w-full text-left"
+        >
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <Building2 className="w-5 h-5 text-white" />
           </div>
@@ -136,16 +141,16 @@ export default function AdminSidebar() {
             <h1 className="text-lg font-bold text-gray-900">위즈포레</h1>
             <p className="text-xs text-gray-500">관리자 페이지</p>
           </div>
-        </Link>
+        </button>
       </div>
 
       {/* 메뉴 영역 */}
       <nav className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-200px)]">
         {menuItems.map((item) => (
           <div key={item.href}>
-            <Link
-              href={item.href}
-              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+            <button
+              onClick={() => safeNavigate(item.href)}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 pathname === item.href
                   ? 'bg-blue-50 text-blue-700'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
@@ -153,23 +158,23 @@ export default function AdminSidebar() {
             >
               <item.icon className="w-5 h-5" />
               <span>{item.title}</span>
-            </Link>
+            </button>
             
             {/* 서브메뉴 */}
             {item.subItems && pathname.startsWith(item.href) && (
               <div className="ml-8 mt-2 space-y-1">
                 {item.subItems.map((subItem) => (
-                  <Link
+                  <button
                     key={subItem.href}
-                    href={subItem.href}
-                    className={`block px-3 py-1.5 text-sm rounded-md transition-colors ${
+                    onClick={() => safeNavigate(subItem.href)}
+                    className={`w-full text-left block px-3 py-1.5 text-sm rounded-md transition-colors ${
                       pathname === subItem.href
                         ? 'bg-blue-50 text-blue-700 font-medium'
                         : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                     }`}
                   >
                     {subItem.title}
-                  </Link>
+                  </button>
                 ))}
               </div>
             )}
