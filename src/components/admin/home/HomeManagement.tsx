@@ -1,10 +1,12 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Monitor, Grid3X3, Settings, Briefcase, User, Loader2 } from 'lucide-react'
 import { getHomeConfig, updateHomeConfig } from '@/lib/services/dataService'
 import { defaultHomeConfig } from '@/lib/data/defaultHomeConfig'
 import { useAdminForm } from '@/hooks/useAdminForm'
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning'
+import { useNavigation } from '@/contexts/NavigationContext'
 import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabsWithUnsavedChanges'
 import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
 import { TabItem } from '@/components/admin/common/AdminTabs'
@@ -119,6 +121,16 @@ export default function HomeManagement() {
     defaultData: defaultHomeConfig,
     validate: validateHomeConfig
   })
+
+  // 브라우저 이탈 경고 훅 사용
+  useUnsavedChangesWarning(hasChanges)
+  
+  // 네비게이션 컨텍스트와 동기화
+  const { setHasUnsavedChanges } = useNavigation()
+  
+  React.useEffect(() => {
+    setHasUnsavedChanges(hasChanges)
+  }, [hasChanges, setHasUnsavedChanges])
 
   const handleTabChange = useCallback((newTab: HomeTab) => {
     if (hasChanges) {
