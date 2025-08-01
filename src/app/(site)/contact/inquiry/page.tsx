@@ -56,7 +56,7 @@ export default function OnlineInquiryPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
         title={hero?.title || "온라인 문의"}

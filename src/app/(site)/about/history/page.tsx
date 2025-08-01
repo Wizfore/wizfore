@@ -99,7 +99,7 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <CommonHeroSection 
         title={hero?.title || "센터 연혁"}
         description={hero?.description || "상시와 사회서비스센터의 역사와 발전 과정을 만나보세요"}

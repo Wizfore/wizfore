@@ -93,7 +93,7 @@ export default function TeachersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
         title={hero?.title || "주간·방과후 교사"}

@@ -68,7 +68,7 @@ const DirectorPage = () => {
   const { director } = data
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-hidden">
+    <div className="min-h-screen bg-white overflow-hidden">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
         title={director.hero?.title || "센터장 소개"}

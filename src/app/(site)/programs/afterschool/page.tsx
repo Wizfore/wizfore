@@ -111,7 +111,7 @@ export default function AfterschoolPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
         title={hero?.title || "방과후 프로그램"}

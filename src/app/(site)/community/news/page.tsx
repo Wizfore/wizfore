@@ -82,7 +82,7 @@ export default function NewsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-wizfore-warm-brown mx-auto mb-4"></div>
           <p className="text-wizfore-text-secondary">뉴스를 불러오는 중...</p>
@@ -93,7 +93,7 @@ export default function NewsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error}</p>
           <button 
@@ -108,7 +108,7 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <CommonHeroSection 
         title={newsMessages.hero?.title || "뉴스"}
         description={newsMessages.hero?.description || "상시와 사회서비스센터의 다양한 소식을 만나보세요"}

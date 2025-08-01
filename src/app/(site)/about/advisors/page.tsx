@@ -86,7 +86,7 @@ export default function AdvisorsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
         title={hero?.title || "자문위원"}

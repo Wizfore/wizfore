@@ -10,7 +10,7 @@ interface DirectorProfileSectionProps {
 
 const DirectorProfileSection: React.FC<DirectorProfileSectionProps> = ({ director }) => {
   return (
-    <section className="relative py-24 bg-gradient-to-b from-white to-wizfore-light-beige overflow-hidden">
+    <section className="relative py-24 bg-white overflow-hidden">
       <div className="container-custom mx-auto px-4">
         {/* 통합된 큰 박스 */}
         <motion.div

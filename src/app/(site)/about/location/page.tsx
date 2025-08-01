@@ -107,7 +107,7 @@ export default function LocationPage() {
   }
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-white">
       <CommonHeroSection 
         title={hero?.title || "오시는길"}
         description={hero?.description || "상시와 사회서비스센터로 오시는 길을 안내해드립니다"}

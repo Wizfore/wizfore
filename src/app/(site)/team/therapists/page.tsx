@@ -93,7 +93,7 @@ export default function TherapistsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* 히어로 섹션 */}
       <CommonHeroSection 
         title={hero?.title || "치료·상담사"}

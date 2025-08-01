@@ -107,7 +107,7 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
   }
 
   return (
-    <section className="py-24 bg-gray-50">
+    <section className="py-24 bg-white">
       <div className="container-custom mx-auto px-4">
         {/* 섹션 헤더 */}
         <motion.div

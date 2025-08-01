@@ -45,7 +45,7 @@ export default function ProgramOverviewSection({
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                className="text-center p-6 bg-gray-50 rounded-lg"
+                className="text-center p-6 bg-white rounded-lg"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}

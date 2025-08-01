@@ -85,7 +85,7 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
     ? [...noticeItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()), ...paginatedNews]
     : paginatedNews
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-white">
       <div className="container-custom mx-auto px-4">
         <motion.div 
           className="text-center mb-12"

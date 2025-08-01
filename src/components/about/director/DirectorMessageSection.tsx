@@ -11,7 +11,7 @@ const DirectorMessageSection: React.FC<DirectorMessageSectionProps> = ({ directo
   if (!director.aboutMessage) return null
 
   return (
-    <section className="relative py-24 bg-gradient-to-br from-wizfore-light-beige to-white overflow-hidden">
+    <section className="relative py-24 bg-white overflow-hidden">
       {/* 배경 패턴 */}
       <div className="absolute inset-0 opacity-5">
         <svg className="w-full h-full" viewBox="0 0 100 100">

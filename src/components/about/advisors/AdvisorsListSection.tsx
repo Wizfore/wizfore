@@ -17,7 +17,7 @@ interface AdvisorsListSectionProps {
 const AdvisorsListSection: React.FC<AdvisorsListSectionProps> = ({ advisors = [], aboutMessage, loading = false }) => {
 
   return (
-    <section className="relative py-24 bg-gray-50 overflow-hidden">
+    <section className="relative py-24 bg-white overflow-hidden">
       <div className="container-custom mx-auto px-4">
         {/* 섹션 헤더 */}
         <motion.div 

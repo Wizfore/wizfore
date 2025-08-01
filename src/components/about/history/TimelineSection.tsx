@@ -23,7 +23,7 @@ const TimelineSection: React.FC<TimelineSectionProps> = ({ milestones = [] }) =>
   const years = Object.keys(groupedMilestones).sort((a, b) => parseInt(b) - parseInt(a))
 
   return (
-    <section className="py-16 bg-gradient-to-b from-wizfore-light-beige to-white">
+    <section className="py-16 bg-white">
       <div className="container-custom mx-auto px-4">
         <motion.div 
           className="text-center mb-16"
