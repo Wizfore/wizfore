@@ -21,7 +21,7 @@ interface ProgramListSectionProps {
 
 export default function ProgramListSection({ programs, programType }: ProgramListSectionProps) {
   return (
-    <section className="py-20 bg-white">
+    <section className="pb-16 bg-white">
       <div className="container-custom mx-auto px-6">
         {/* 프로그램 목록 */}
         <div className="space-y-12 max-w-5xl mx-auto">

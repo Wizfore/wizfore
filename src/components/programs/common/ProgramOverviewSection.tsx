@@ -19,7 +19,7 @@ export default function ProgramOverviewSection({
   features = []
 }: ProgramOverviewSectionProps) {
   return (
-    <section className="py-16 bg-white">
+    <section className="pt-16 pb-8 bg-white">
       <div className="container-custom mx-auto px-4">
         {/* About Message */}
         {aboutMessage && (
