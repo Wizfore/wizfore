@@ -4,8 +4,14 @@ import { useState } from 'react'
 import { Plus, Edit, Trash2, Users, FileText, Target, ArrowUp, ArrowDown, Hash } from 'lucide-react'
 import type { ProgramCategory, ProgramDetail } from '@/types/program'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ImageUpload } from '@/components/admin/common/ImageUpload'
+import { 
+  AdminSection, 
+  AdminInput, 
+  AdminTextarea, 
+  AdminImageUploadField,
+  AdminCard,
+  AdminArrayField
+} from '@/components/admin/ui'
 
 interface AfterschoolManagementTabProps {
   data: ProgramCategory
@@ -120,176 +126,80 @@ export function AfterschoolManagementTab({
     updateProgram(programIndex, field, updatedArray)
   }
 
-  // 배열 필드 관리 컴포넌트
-  const ArrayFieldManager = ({ 
-    items, 
-    onAdd, 
-    onRemove, 
-    onUpdate, 
-    placeholder 
-  }: {
-    items: string[]
-    onAdd: (item: string) => void
-    onRemove: (index: number) => void
-    onUpdate: (index: number, value: string) => void
-    placeholder: string
-  }) => {
-    const [newItem, setNewItem] = useState('')
-
-    return (
-      <div className="space-y-2">
-        {items.map((item, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <input
-              type="text"
-              value={item}
-              onChange={(e) => onUpdate(index, e.target.value)}
-              className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onRemove(index)}
-            >
-              <Trash2 className="h-3 w-3" />
-            </Button>
-          </div>
-        ))}
-        
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            placeholder={placeholder}
-            className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                onAdd(newItem)
-                setNewItem('')
-              }
-            }}
-          />
-          <Button
-            size="sm"
-            onClick={() => {
-              onAdd(newItem)
-              setNewItem('')
-            }}
-            disabled={!newItem.trim()}
-          >
-            <Plus className="h-3 w-3" />
-          </Button>
-        </div>
-      </div>
-    )
-  }
+  // AdminArrayField로 대체됨
 
   return (
     <div className="space-y-6">
       {/* 히어로 섹션 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">히어로 섹션</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              페이지 제목
-            </label>
-            <input
-              type="text"
-              value={data.hero?.title || ''}
-              onChange={(e) => updateField('hero.title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="페이지 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              페이지 설명
-            </label>
-            <textarea
-              value={data.hero?.description || ''}
-              onChange={(e) => updateField('hero.description', e.target.value)}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="페이지 설명"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              배경 이미지 (선택사항)
-            </label>
-            <ImageUpload
-              value={data.hero?.imageUrl || ''}
-              onChange={(url: string) => updateField('hero.imageUrl', url)}
-              folder="pages/programs/afterschool/hero"
-              defaultImageUrl={data.hero?.defaultImageUrl}
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSection title="히어로 섹션" description="방과후 프로그램 페이지의 히어로 섹션을 관리합니다.">
+        <AdminInput
+          label="페이지 제목"
+          value={data.hero?.title || ''}
+          onChange={(value) => updateField('hero.title', value)}
+          placeholder="페이지 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="페이지 설명"
+          value={data.hero?.description || ''}
+          onChange={(value) => updateField('hero.description', value)}
+          rows={3}
+          placeholder="페이지 설명"
+        />
+        
+        <AdminImageUploadField
+          label="배경 이미지 (선택사항)"
+          value={data.hero?.imageUrl}
+          onChange={(url) => updateField('hero.imageUrl', url)}
+          folder="pages/programs/afterschool/hero"
+          defaultImageUrl={data.hero?.defaultImageUrl}
+          helper="히어로 섹션 배경으로 사용할 이미지를 업로드하세요"
+        />
+      </AdminSection>
 
       {/* 소개 메시지 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">소개 메시지</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              제목
-            </label>
-            <input
-              type="text"
-              value={data.aboutMessage?.title || ''}
-              onChange={(e) => updateField('aboutMessage.title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="소개 메시지 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              설명
-            </label>
-            <textarea
-              value={data.aboutMessage?.description || ''}
-              onChange={(e) => updateField('aboutMessage.description', e.target.value)}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="소개 메시지 설명"
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSection title="소개 메시지" description="방과후 프로그램 소개 메시지를 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data.aboutMessage?.title || ''}
+          onChange={(value) => updateField('aboutMessage.title', value)}
+          placeholder="소개 메시지 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="설명"
+          value={data.aboutMessage?.description || ''}
+          onChange={(value) => updateField('aboutMessage.description', value)}
+          rows={3}
+          placeholder="소개 메시지 설명"
+        />
+      </AdminSection>
 
       {/* 프로그램 관리 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
-            프로그램 관리 ({data.programs.length}개)
-          </h3>
-          <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
-            <Plus className="w-4 h-4" />
+      <AdminSection 
+        title={`프로그램 관리 (${data.programs.length}개)`}
+        description="방과후 프로그램 목록을 관리합니다."
+        headerActions={
+          <Button onClick={() => setShowAddForm(true)}>
+            <Plus className="w-4 h-4 mr-2" />
             프로그램 추가
           </Button>
-        </div>
+        }
+      >
 
         {/* 프로그램 추가 폼 */}
         {showAddForm && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h4 className="font-medium mb-3">새 프로그램 추가</h4>
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  프로그램명
-                </label>
-                <input
-                  type="text"
-                  value={newProgram.title}
-                  onChange={(e) => setNewProgram({ ...newProgram, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="프로그램명을 입력하세요"
-                />
-              </div>
-            </div>
+          <AdminCard>
+            <h4 className="font-medium mb-4">새 프로그램 추가</h4>
+            <AdminInput
+              label="프로그램명"
+              value={newProgram.title}
+              onChange={(value) => setNewProgram({ ...newProgram, title: value })}
+              placeholder="프로그램명을 입력하세요"
+              required
+            />
             
             <div className="flex gap-2 mt-4">
               <Button onClick={addProgram} disabled={!newProgram.title.trim()}>
@@ -302,7 +212,7 @@ export function AfterschoolManagementTab({
                 취소
               </Button>
             </div>
-          </div>
+          </AdminCard>
         )}
 
         {/* 프로그램 목록 */}
@@ -315,7 +225,7 @@ export function AfterschoolManagementTab({
             </div>
           ) : (
             data.programs.map((program, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+              <AdminCard key={index}>
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
                     <Users className="h-6 w-6 text-blue-500" />
@@ -369,17 +279,13 @@ export function AfterschoolManagementTab({
                         <FileText className="h-5 w-5 text-gray-600" />
                         <h5 className="text-sm font-semibold text-gray-900">기본 정보</h5>
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          프로그램명
-                        </label>
-                        <input
-                          type="text"
-                          value={program.title}
-                          onChange={(e) => updateProgram(index, 'title', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
+                      <AdminInput
+                        label="프로그램명"
+                        value={program.title}
+                        onChange={(value) => updateProgram(index, 'title', value)}
+                        placeholder="프로그램명"
+                        required
+                      />
                     </div>
 
                     {/* 대상 */}
@@ -388,12 +294,14 @@ export function AfterschoolManagementTab({
                         <Target className="h-5 w-5 text-blue-600" />
                         <h5 className="text-sm font-semibold text-gray-900">대상</h5>
                       </div>
-                      <ArrayFieldManager
+                      <AdminArrayField
+                        label=""
                         items={program.target || []}
                         onAdd={(item) => addArrayItem(index, 'target', item)}
                         onRemove={(itemIndex) => removeArrayItem(index, 'target', itemIndex)}
                         onUpdate={(itemIndex, value) => updateArrayItem(index, 'target', itemIndex, value)}
                         placeholder="대상을 입력하세요"
+                        newItemDefault=""
                       />
                     </div>
 
@@ -403,12 +311,14 @@ export function AfterschoolManagementTab({
                         <Target className="h-5 w-5 text-green-600" />
                         <h5 className="text-sm font-semibold text-gray-900">목표</h5>
                       </div>
-                      <ArrayFieldManager
+                      <AdminArrayField
+                        label=""
                         items={program.goal || []}
                         onAdd={(item) => addArrayItem(index, 'goal', item)}
                         onRemove={(itemIndex) => removeArrayItem(index, 'goal', itemIndex)}
                         onUpdate={(itemIndex, value) => updateArrayItem(index, 'goal', itemIndex, value)}
                         placeholder="목표를 입력하세요"
+                        newItemDefault=""
                       />
                     </div>
 
@@ -418,12 +328,14 @@ export function AfterschoolManagementTab({
                         <FileText className="h-5 w-5 text-purple-600" />
                         <h5 className="text-sm font-semibold text-gray-900">내용</h5>
                       </div>
-                      <ArrayFieldManager
+                      <AdminArrayField
+                        label=""
                         items={program.content || []}
                         onAdd={(item) => addArrayItem(index, 'content', item)}
                         onRemove={(itemIndex) => removeArrayItem(index, 'content', itemIndex)}
                         onUpdate={(itemIndex, value) => updateArrayItem(index, 'content', itemIndex, value)}
                         placeholder="내용을 입력하세요"
+                        newItemDefault=""
                       />
                     </div>
 
@@ -433,12 +345,14 @@ export function AfterschoolManagementTab({
                         <Target className="h-5 w-5 text-orange-600" />
                         <h5 className="text-sm font-semibold text-gray-900">유형</h5>
                       </div>
-                      <ArrayFieldManager
+                      <AdminArrayField
+                        label=""
                         items={program.types || []}
                         onAdd={(item) => addArrayItem(index, 'types', item)}
                         onRemove={(itemIndex) => removeArrayItem(index, 'types', itemIndex)}
                         onUpdate={(itemIndex, value) => updateArrayItem(index, 'types', itemIndex, value)}
                         placeholder="유형을 입력하세요"
+                        newItemDefault=""
                       />
                     </div>
                   </div>
@@ -531,11 +445,11 @@ export function AfterschoolManagementTab({
                     </div>
                   </div>
                 )}
-              </div>
+              </AdminCard>
             ))
           )}
         </div>
-      </div>
+      </AdminSection>
     </div>
   )
 }

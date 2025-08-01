@@ -1,5 +1,6 @@
 import React from 'react'
 import type { DefaultSiteData } from '@/types'
+import { AdminSection, AdminInput, AdminTextarea, AdminFormField, AdminUITokens } from '@/components/admin/ui'
 
 type SiteInfoData = DefaultSiteData['siteInfo']
 
@@ -52,63 +53,46 @@ export function BasicInfoTab({ siteInfo, onUpdate }: BasicInfoTabProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-lg font-semibold text-gray-900">기본 정보</h2>
-      
+    <AdminSection 
+      title="기본 정보" 
+      description="사이트의 기본 정보를 설정합니다."
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            사이트명
-          </label>
-          <input
-            type="text"
-            value={siteInfo.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="사이트명"
+          value={siteInfo.name}
+          onChange={(value) => handleInputChange('name', value)}
+          placeholder="사이트명을 입력하세요"
+          required
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            영문명
-          </label>
-          <input
-            type="text"
-            value={siteInfo.enName}
-            onChange={(e) => handleInputChange('enName', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="영문명"
+          value={siteInfo.enName}
+          onChange={(value) => handleInputChange('enName', value)}
+          placeholder="영문명을 입력하세요"
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            설립일
-          </label>
+        <AdminFormField
+          label="설립일"
+          helper={siteInfo.establishedDate ? `저장된 형식: ${siteInfo.establishedDate}` : undefined}
+        >
           <input
             type="date"
             value={formatDateForInput(siteInfo.establishedDate)}
             onChange={(e) => handleDateChange(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={AdminUITokens.input.base}
           />
-          {siteInfo.establishedDate && (
-            <p className="text-xs text-gray-500 mt-1">
-              저장된 형식: {siteInfo.establishedDate}
-            </p>
-          )}
-        </div>
+        </AdminFormField>
       </div>
       
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          설립 목적
-        </label>
-        <textarea
-          value={siteInfo.purpose}
-          onChange={(e) => handleInputChange('purpose', e.target.value)}
-          rows={4}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-    </div>
+      <AdminTextarea
+        label="설립 목적"
+        value={siteInfo.purpose}
+        onChange={(value) => handleInputChange('purpose', value)}
+        rows={4}
+        placeholder="설립 목적을 입력하세요"
+      />
+    </AdminSection>
   )
 }

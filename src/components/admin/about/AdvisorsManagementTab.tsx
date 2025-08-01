@@ -1,10 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Trash2, Edit2, ArrowUp, ArrowDown } from 'lucide-react'
+import { Plus, Trash2, Edit2 } from 'lucide-react'
 import { AdvisorsInfo, AdvisorInfo } from '@/types/about'
 import { Button } from '@/components/ui/button'
-import { ImageUpload } from '@/components/admin/common/ImageUpload'
+import { 
+  AdminSection, 
+  AdminInput, 
+  AdminTextarea, 
+  AdminArrayField, 
+  AdminImageUploadField,
+  AdminCard
+} from '@/components/admin/ui'
 
 interface AdvisorsManagementTabProps {
   data: AdvisorsInfo
@@ -89,106 +96,77 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
   }
 
   // 배열 필드 업데이트
-  const updateAdvisorArrayField = (advisorIndex: number, field: 'position' | 'education' | 'career', itemIndex: number, value: string) => {
-    const currentArray = data.list[advisorIndex][field] || []
-    const newArray = [...currentArray]
-    newArray[itemIndex] = value
-    updateAdvisor(advisorIndex, field, newArray)
-  }
-
-  // 배열 필드에 항목 추가
-  const addAdvisorArrayItem = (advisorIndex: number, field: 'position' | 'education' | 'career') => {
-    const currentArray = data.list[advisorIndex][field] || []
-    updateAdvisor(advisorIndex, field, [...currentArray, ''])
-  }
-
-  // 배열 필드에서 항목 제거
-  const removeAdvisorArrayItem = (advisorIndex: number, field: 'position' | 'education' | 'career', itemIndex: number) => {
-    const currentArray = data.list[advisorIndex][field] || []
-    const newArray = currentArray.filter((_, i) => i !== itemIndex)
-    updateAdvisor(advisorIndex, field, newArray)
+  const updateAdvisorArrayField = (advisorIndex: number, field: 'position' | 'education' | 'career', items: string[]) => {
+    updateAdvisor(advisorIndex, field, items)
   }
 
   return (
     <div className="space-y-6">
       {/* Hero 섹션 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Hero 섹션</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
-            <input
-              type="text"
-              value={data.hero?.title || ''}
-              onChange={(e) => updateHero('title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Hero 섹션 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
-            <textarea
-              value={data.hero?.description || ''}
-              onChange={(e) => updateHero('description', e.target.value)}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Hero 섹션 설명"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">배경 이미지</label>
-            <ImageUpload
-              value={data.hero?.imageUrl || ''}
-              onChange={(url: string) => updateHero('imageUrl', url)}
-              folder="pages/about/advisors/hero"
-              defaultImageUrl={data.hero?.defaultImageUrl}
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSection title="Hero 섹션" description="자문위원 Hero 섹션의 내용을 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data.hero?.title || ''}
+          onChange={(value) => updateHero('title', value)}
+          placeholder="Hero 섹션 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="설명"
+          value={data.hero?.description || ''}
+          onChange={(value) => updateHero('description', value)}
+          rows={3}
+          placeholder="Hero 섹션 설명"
+          required
+        />
+        
+        <AdminImageUploadField
+          label="배경 이미지"
+          value={data.hero?.imageUrl}
+          onChange={(url) => updateHero('imageUrl', url)}
+          folder="pages/about/advisors/hero"
+          defaultImageUrl={data.hero?.defaultImageUrl}
+          helper="Hero 섹션 배경으로 사용할 이미지를 업로드하세요"
+        />
+      </AdminSection>
 
       {/* About 메시지 섹션 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">소개 메시지</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
-            <input
-              type="text"
-              value={data.aboutMessage?.title || ''}
-              onChange={(e) => updateAboutMessage('title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="소개 메시지 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
-            <textarea
-              value={data.aboutMessage?.description || ''}
-              onChange={(e) => updateAboutMessage('description', e.target.value)}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="소개 메시지 설명"
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSection title="소개 메시지" description="자문위원 소개 메시지 내용을 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data.aboutMessage?.title || ''}
+          onChange={(value) => updateAboutMessage('title', value)}
+          placeholder="소개 메시지 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="설명"
+          value={data.aboutMessage?.description || ''}
+          onChange={(value) => updateAboutMessage('description', value)}
+          rows={4}
+          placeholder="소개 메시지 설명"
+          required
+        />
+      </AdminSection>
 
       {/* 자문위원 목록 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">자문위원 목록</h3>
+      <AdminSection 
+        title="자문위원 목록" 
+        description="자문위원들의 정보를 관리합니다."
+        headerActions={
           <Button onClick={addAdvisor}>
             <Plus className="h-4 w-4 mr-2" />
             자문위원 추가
           </Button>
-        </div>
-
+        }
+      >
         <div className="space-y-4">
           {data.list?.map((advisor, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4">
+            <AdminCard key={index}>
               <div className="flex items-center justify-between mb-4">
-                <h4 className="font-medium">자문위원 #{advisor.order}</h4>
+                <h4 className="font-medium text-gray-900">자문위원 #{advisor.order}</h4>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
@@ -210,111 +188,55 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
               {editingAdvisor === index ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">이름</label>
-                      <input
-                        type="text"
-                        value={advisor.name}
-                        onChange={(e) => updateAdvisor(index, 'name', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="자문위원 이름"
-                      />
-                    </div>
+                    <AdminInput
+                      label="이름"
+                      value={advisor.name}
+                      onChange={(value) => updateAdvisor(index, 'name', value)}
+                      placeholder="자문위원 이름"
+                      required
+                    />
 
-                    {/* 직책 */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">직책</label>
-                      {advisor.position?.map((position, posIndex) => (
-                        <div key={posIndex} className="flex gap-2 mb-2">
-                          <input
-                            type="text"
-                            value={position}
-                            onChange={(e) => updateAdvisorArrayField(index, 'position', posIndex, e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeAdvisorArrayItem(index, 'position', posIndex)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => addAdvisorArrayItem(index, 'position')}
-                        className="w-full"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        직책 추가
-                      </Button>
-                    </div>
+                    <AdminArrayField
+                      label="직책"
+                      items={advisor.position || []}
+                      onAdd={(item) => updateAdvisorArrayField(index, 'position', [...(advisor.position || []), item])}
+                      onRemove={(itemIndex) => updateAdvisorArrayField(index, 'position', (advisor.position || []).filter((_, i) => i !== itemIndex))}
+                      onUpdate={(itemIndex, item) => {
+                        const newPosition = [...(advisor.position || [])]
+                        newPosition[itemIndex] = item
+                        updateAdvisorArrayField(index, 'position', newPosition)
+                      }}
+                      newItemDefault=""
+                      placeholder="직책을 입력하세요"
+                    />
 
-                    {/* 학력 */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">학력</label>
-                      {advisor.education?.map((education, eduIndex) => (
-                        <div key={eduIndex} className="flex gap-2 mb-2">
-                          <input
-                            type="text"
-                            value={education}
-                            onChange={(e) => updateAdvisorArrayField(index, 'education', eduIndex, e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="예: 서울대학교 의과대학 졸업"
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeAdvisorArrayItem(index, 'education', eduIndex)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => addAdvisorArrayItem(index, 'education')}
-                        className="w-full"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        학력 추가
-                      </Button>
-                    </div>
+                    <AdminArrayField
+                      label="학력"
+                      items={advisor.education || []}
+                      onAdd={(item) => updateAdvisorArrayField(index, 'education', [...(advisor.education || []), item])}
+                      onRemove={(itemIndex) => updateAdvisorArrayField(index, 'education', (advisor.education || []).filter((_, i) => i !== itemIndex))}
+                      onUpdate={(itemIndex, item) => {
+                        const newEducation = [...(advisor.education || [])]
+                        newEducation[itemIndex] = item
+                        updateAdvisorArrayField(index, 'education', newEducation)
+                      }}
+                      newItemDefault=""
+                      placeholder="예: 서울대학교 의과대학 졸업"
+                    />
 
-                    {/* 경력 */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">경력</label>
-                      {advisor.career?.map((career, carIndex) => (
-                        <div key={carIndex} className="flex gap-2 mb-2">
-                          <input
-                            type="text"
-                            value={career}
-                            onChange={(e) => updateAdvisorArrayField(index, 'career', carIndex, e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="예: 서울대학교병원 소아과 교수"
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeAdvisorArrayItem(index, 'career', carIndex)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => addAdvisorArrayItem(index, 'career')}
-                        className="w-full"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        경력 추가
-                      </Button>
-                    </div>
+                    <AdminArrayField
+                      label="경력"
+                      items={advisor.career || []}
+                      onAdd={(item) => updateAdvisorArrayField(index, 'career', [...(advisor.career || []), item])}
+                      onRemove={(itemIndex) => updateAdvisorArrayField(index, 'career', (advisor.career || []).filter((_, i) => i !== itemIndex))}
+                      onUpdate={(itemIndex, item) => {
+                        const newCareer = [...(advisor.career || [])]
+                        newCareer[itemIndex] = item
+                        updateAdvisorArrayField(index, 'career', newCareer)
+                      }}
+                      newItemDefault=""
+                      placeholder="예: 서울대학교병원 소아과 교수"
+                    />
                   </div>
 
                   <div className="space-y-4">
@@ -333,30 +255,28 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
                       </select>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">프로필 이미지</label>
-                      <ImageUpload
-                        value={advisor.imageUrl}
-                        onChange={(url: string) => updateAdvisor(index, 'imageUrl', url)}
-                        folder="pages/about/advisors"
-                        role={advisor.position?.join(' ') || ''}
-                        defaultImageUrl={advisor.defaultImageUrl}
-                      />
-                    </div>
+                    <AdminImageUploadField
+                      label="프로필 이미지"
+                      value={advisor.imageUrl}
+                      onChange={(url) => updateAdvisor(index, 'imageUrl', url)}
+                      folder="pages/about/advisors"
+                      defaultImageUrl={advisor.defaultImageUrl}
+                      helper={`${advisor.position?.join(' ') || '자문위원'} 프로필 이미지를 업로드하세요`}
+                    />
                   </div>
                 </div>
               ) : (
                 <div>
-                  <h5 className="font-medium">{advisor.name || '이름 없음'}</h5>
+                  <h5 className="font-medium text-gray-900">{advisor.name || '이름 없음'}</h5>
                   <p className="text-sm text-gray-600">
                     {advisor.position?.join(', ') || '직책 없음'}
                   </p>
                 </div>
               )}
-            </div>
+            </AdminCard>
           ))}
         </div>
-      </div>
+      </AdminSection>
     </div>
   )
 }

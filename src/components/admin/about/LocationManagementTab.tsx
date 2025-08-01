@@ -1,9 +1,13 @@
 'use client'
 
-import { Plus, Trash2 } from 'lucide-react'
 import { LocationInfo, TransportationInfo } from '@/types/about'
-import { Button } from '@/components/ui/button'
-import { ImageUpload } from '@/components/admin/common/ImageUpload'
+import { 
+  AdminSection, 
+  AdminInput, 
+  AdminTextarea, 
+  AdminImageUploadField,
+  AdminCard
+} from '@/components/admin/ui'
 
 interface LocationManagementTabProps {
   data: LocationInfo
@@ -50,77 +54,59 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
   return (
     <div className="space-y-6">
       {/* Hero 섹션 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Hero 섹션</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
-            <input
-              type="text"
-              value={data.hero?.title || ''}
-              onChange={(e) => updateHero('title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Hero 섹션 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
-            <textarea
-              value={data.hero?.description || ''}
-              onChange={(e) => updateHero('description', e.target.value)}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Hero 섹션 설명"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">배경 이미지</label>
-            <ImageUpload
-              value={data.hero?.imageUrl || ''}
-              onChange={(url: string) => updateHero('imageUrl', url)}
-              folder="pages/about/location/hero"
-              defaultImageUrl={data.hero?.defaultImageUrl}
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSection title="Hero 섹션" description="오시는 길 Hero 섹션의 내용을 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data.hero?.title || ''}
+          onChange={(value) => updateHero('title', value)}
+          placeholder="Hero 섹션 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="설명"
+          value={data.hero?.description || ''}
+          onChange={(value) => updateHero('description', value)}
+          rows={3}
+          placeholder="Hero 섹션 설명"
+          required
+        />
+        
+        <AdminImageUploadField
+          label="배경 이미지"
+          value={data.hero?.imageUrl}
+          onChange={(url) => updateHero('imageUrl', url)}
+          folder="pages/about/location/hero"
+          defaultImageUrl={data.hero?.defaultImageUrl}
+          helper="Hero 섹션 배경으로 사용할 이미지를 업로드하세요"
+        />
+      </AdminSection>
 
       {/* About 메시지 섹션 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">소개 메시지</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
-            <input
-              type="text"
-              value={data.aboutMessage?.title || ''}
-              onChange={(e) => updateAboutMessage('title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="소개 메시지 제목"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
-            <textarea
-              value={data.aboutMessage?.description || ''}
-              onChange={(e) => updateAboutMessage('description', e.target.value)}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="소개 메시지 설명"
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSection title="소개 메시지" description="오시는 길 소개 메시지 내용을 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data.aboutMessage?.title || ''}
+          onChange={(value) => updateAboutMessage('title', value)}
+          placeholder="소개 메시지 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="설명"
+          value={data.aboutMessage?.description || ''}
+          onChange={(value) => updateAboutMessage('description', value)}
+          rows={4}
+          placeholder="소개 메시지 설명"
+          required
+        />
+      </AdminSection>
 
       {/* 교통편 정보 */}
-      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">교통편 정보</h3>
-        </div>
-
+      <AdminSection title="교통편 정보" description="센터까지의 교통편 정보를 관리합니다.">
         <div className="space-y-4">
           {data.transportation?.map((transport, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4">
+            <AdminCard key={index}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* 좌측: 기본 정보 */}
                 <div className="space-y-4">
@@ -136,35 +122,30 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
                       <option value="차">차</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">설명</label>
-                    <input
-                      type="text"
-                      value={transport.description}
-                      onChange={(e) => updateTransportation(index, 'description', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="교통편 설명"
-                    />
-                  </div>
+                  
+                  <AdminInput
+                    label="설명"
+                    value={transport.description}
+                    onChange={(value) => updateTransportation(index, 'description', value)}
+                    placeholder="교통편 설명"
+                    required
+                  />
                 </div>
 
                 {/* 우측: 아이콘 이미지 */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">아이콘 이미지</label>
-                  <ImageUpload
-                    value={transport.iconPath || ''}
-                    onChange={(url: string) => updateTransportation(index, 'iconPath', url)}
-                    folder={`pages/about/location/transportation/${transport.type}`}
-                    defaultImageUrl={transport.defaultIconPath}
-                    previewSize="h-20 w-20"
-                    placeholder="교통편 아이콘을 업로드하세요"
-                  />
-                </div>
+                <AdminImageUploadField
+                  label="아이콘 이미지"
+                  value={transport.iconPath}
+                  onChange={(url) => updateTransportation(index, 'iconPath', url)}
+                  folder={`pages/about/location/transportation/${transport.type}`}
+                  defaultImageUrl={transport.defaultIconPath}
+                  helper={`${transport.type} 교통편 아이콘을 업로드하세요`}
+                />
               </div>
-            </div>
+            </AdminCard>
           ))}
         </div>
-      </div>
+      </AdminSection>
     </div>
   )
 }

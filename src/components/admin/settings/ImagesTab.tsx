@@ -1,7 +1,7 @@
 import React from 'react'
 import { Upload as UploadIcon } from 'lucide-react'
-import { ImageUpload } from '@/components/admin/common/ImageUpload'
 import type { DefaultSiteData } from '@/types'
+import { AdminSection, AdminCard, AdminImageUploadField } from '@/components/admin/ui'
 
 type SiteInfoData = DefaultSiteData['siteInfo']
 
@@ -19,76 +19,57 @@ export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-lg font-semibold text-gray-900">이미지 설정</h2>
-      
+    <AdminSection 
+      title="이미지 설정" 
+      description="사이트에서 사용되는 기본 이미지들을 설정합니다."
+    >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* 파비콘 설정 */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-800 flex items-center space-x-2">
-            <UploadIcon className="w-5 h-5" />
-            <span>파비콘</span>
-          </h3>
-          
-          {/* 파일 업로드 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              파일 업로드
-            </label>
-            <ImageUpload
-              value={siteInfo.faviconUrl}
-              onChange={(url) => handleImageChange('faviconUrl', url)}
-              folder="site-assets/favicon"
-              defaultImageUrl={siteInfo.defaultFaviconUrl}
-              placeholder="파비콘 파일을 드래그하거나 클릭하여 업로드"
-              previewSize="w-16 h-16"
-              previewLabel="파비콘 미리보기"
-            />
+        <AdminCard>
+          <div className="flex items-center space-x-2 mb-4">
+            <UploadIcon className="w-5 h-5 text-blue-500" />
+            <h3 className="text-lg font-medium text-gray-800">파비콘</h3>
           </div>
           
-          <p className="mt-1 text-sm text-gray-500">
-            브라우저 탭에 표시되는 작은 아이콘 이미지 URL
-          </p>
-        </div>
+          <AdminImageUploadField
+            label="파비콘 이미지"
+            value={siteInfo.faviconUrl}
+            onChange={(url) => handleImageChange('faviconUrl', url)}
+            folder="site-assets/favicon"
+            defaultImageUrl={siteInfo.defaultFaviconUrl}
+            helper="브라우저 탭에 표시되는 작은 아이콘 이미지 (권장 크기: 16x16, 32x32px)"
+            required
+          />
+        </AdminCard>
         
         {/* 헤더 로고 설정 */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-800 flex items-center space-x-2">
-            <UploadIcon className="w-5 h-5" />
-            <span>헤더 로고</span>
-          </h3>
-          
-          {/* 파일 업로드 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              파일 업로드
-            </label>
-            <ImageUpload
-              value={siteInfo.headerLogoUrl}
-              onChange={(url) => handleImageChange('headerLogoUrl', url)}
-              folder="site-assets/logo"
-              defaultImageUrl={siteInfo.defaultHeaderLogoUrl}
-              placeholder="로고 파일을 드래그하거나 클릭하여 업로드"
-              previewSize="h-16 w-auto"
-              previewLabel="헤더 로고 미리보기"
-            />
+        <AdminCard>
+          <div className="flex items-center space-x-2 mb-4">
+            <UploadIcon className="w-5 h-5 text-blue-500" />
+            <h3 className="text-lg font-medium text-gray-800">헤더 로고</h3>
           </div>
-
-          <p className="mt-1 text-sm text-gray-500">
-            웹사이트 상단에 표시되는 로고 이미지 URL
-          </p>
-        </div>
+          
+          <AdminImageUploadField
+            label="헤더 로고 이미지"
+            value={siteInfo.headerLogoUrl}
+            onChange={(url) => handleImageChange('headerLogoUrl', url)}
+            folder="site-assets/logo"
+            defaultImageUrl={siteInfo.defaultHeaderLogoUrl}
+            helper="웹사이트 상단에 표시되는 로고 이미지 (권장 높이: 40-60px)"
+            required
+          />
+        </AdminCard>
       </div>
       
-      {/* 전체 안내 */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <AdminCard className="bg-blue-50 border-blue-200">
         <h3 className="text-sm font-medium text-blue-800 mb-2">💡 이미지 업로드 방법</h3>
         <div className="text-sm text-blue-700 space-y-2">
           <p><strong>파일 업로드:</strong> 드래그 앤 드롭 또는 클릭하여 파일을 선택하면 자동으로 Firebase Storage에 업로드됩니다.</p>
           <p><strong>URL 입력:</strong> 외부 호스팅 서비스의 이미지 URL을 직접 입력할 수 있습니다.</p>
           <p><strong>자동 최적화:</strong> 업로드된 이미지는 자동으로 적절한 크기로 리사이즈됩니다.</p>
+          <p><strong>지원 형식:</strong> JPG, PNG, WebP, SVG 파일을 지원합니다.</p>
         </div>
-      </div>
-    </div>
+      </AdminCard>
+    </AdminSection>
   )
 }

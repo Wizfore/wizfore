@@ -4,6 +4,12 @@ import type { ProgramIconMapping } from '@/types'
 import { AVAILABLE_ICONS } from '@/lib/utils/iconMapper'
 import { ChevronDown, ChevronUp, Plus, Edit2, Trash2, Save, X, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { 
+  AdminSection, 
+  AdminInput, 
+  AdminTextarea, 
+  AdminCard
+} from '@/components/admin/ui'
 
 export function ProgramGridTab({ data, setData }: TabComponentProps) {
   // 아이콘 매핑 관리 상태
@@ -124,6 +130,22 @@ export function ProgramGridTab({ data, setData }: TabComponentProps) {
     setIsAddingMapping(false)
   }
 
+  // 깊은 복사를 사용한 필드 업데이트 함수
+  const updateField = (field: 'title' | 'description' | 'enabled', value: string | boolean) => {
+    setData(prev => ({
+      ...prev!,
+      sections: {
+        ...prev!.sections,
+        programGrid: {
+          title: field === 'title' ? value as string : prev!.sections?.programGrid?.title || '',
+          description: field === 'description' ? value as string : prev!.sections?.programGrid?.description || '',
+          enabled: field === 'enabled' ? value as boolean : prev!.sections?.programGrid?.enabled || false,
+          iconMappings: prev!.sections?.programGrid?.iconMappings || []
+        }
+      }
+    }))
+  }
+
   // 추가 시작 함수
   const startAdding = () => {
     console.log('startAdding 함수가 호출되었습니다')
@@ -139,104 +161,64 @@ export function ProgramGridTab({ data, setData }: TabComponentProps) {
         <p className="text-gray-600 mb-4">12개 세부 프로그램 목록 영역의 설정을 관리합니다.</p>
       </div>
 
-      {/* 실제 편집 폼 */}
-      <div className="border border-gray-200 rounded-lg p-4">
-        <h4 className="font-medium mb-3">프로그램 그리드 섹션 설정</h4>
-        
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">섹션 활성화</label>
-            <input 
-              type="checkbox"
-              checked={data?.sections?.programGrid?.enabled || false}
-              onChange={(e) => setData(prev => ({
-                ...prev!,
-                sections: {
-                  ...prev!.sections,
-                  programGrid: {
-                    title: prev!.sections?.programGrid?.title || '',
-                    description: prev!.sections?.programGrid?.description || '',
-                    enabled: e.target.checked,
-                    iconMappings: prev!.sections?.programGrid?.iconMappings || []
-                  }
-                }
-              }))}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-          </div>
+      {/* 기본 섹션 설정 */}
+      <AdminSection title="프로그램 그리드 섹션 설정" description="홈페이지의 세부 프로그램 그리드 섹션을 관리합니다.">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-medium text-gray-700">섹션 활성화</label>
+          <input 
+            type="checkbox"
+            checked={data?.sections?.programGrid?.enabled || false}
+            onChange={(e) => updateField('enabled', e.target.checked)}
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">섹션 제목</label>
-            <input
-              type="text"
-              value={data?.sections?.programGrid?.title || ''}
-              onChange={(e) => setData(prev => ({
-                ...prev!,
-                sections: {
-                  ...prev!.sections,
-                  programGrid: {
-                    title: e.target.value,
-                    description: prev!.sections?.programGrid?.description || '',
-                    enabled: prev!.sections?.programGrid?.enabled || false,
-                    iconMappings: prev!.sections?.programGrid?.iconMappings || []
-                  }
-                }
-              }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              placeholder="세부 전문 프로그램"
-            />
-          </div>
+        <AdminInput
+          label="섹션 제목"
+          value={data?.sections?.programGrid?.title || ''}
+          onChange={(value) => updateField('title', value)}
+          placeholder="세부 전문 프로그램"
+          required
+        />
 
-          <div>
-            <label className="block text-sm font-medium mb-2">섹션 설명</label>
-            <textarea
-              value={data?.sections?.programGrid?.description || ''}
-              onChange={(e) => setData(prev => ({
-                ...prev!,
-                sections: {
-                  ...prev!.sections,
-                  programGrid: {
-                    title: prev!.sections?.programGrid?.title || '',
-                    description: e.target.value,
-                    enabled: prev!.sections?.programGrid?.enabled || false,
-                    iconMappings: prev!.sections?.programGrid?.iconMappings || []
-                  }
-                }
-              }))}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              placeholder="개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다"
-            />
-          </div>
+        <AdminTextarea
+          label="섹션 설명"
+          value={data?.sections?.programGrid?.description || ''}
+          onChange={(value) => updateField('description', value)}
+          rows={3}
+          placeholder="개별적 특성과 발달 단계에 맞춘 체계적이고 전문적인 치료 프로그램을 제공합니다"
+        />
+      </AdminSection>
 
-          {/* 아이콘 매핑 관리 섹션 */}
-          <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Settings className="h-5 w-5 text-gray-500" />
-                <h3 className="text-lg font-semibold text-gray-900">아이콘 매핑 관리</h3>
-                <span className="text-sm text-gray-500">
-                  ({currentMappings.length}개 매핑)
-                </span>
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => setIsIconMappingExpanded(!isIconMappingExpanded)}
-                className="flex items-center gap-2"
-              >
-                {isIconMappingExpanded ? (
-                  <>
-                    <ChevronUp className="h-4 w-4" />
-                    접기
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown className="h-4 w-4" />
-                    펼치기
-                  </>
-                )}
-              </Button>
+      {/* 아이콘 매핑 관리 섹션 */}
+      <AdminSection title="아이콘 매핑 관리" description="프로그램 카테고리별 아이콘 매핑을 관리합니다.">
+        <AdminCard>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Settings className="h-5 w-5 text-gray-500" />
+              <h4 className="text-lg font-semibold text-gray-900">아이콘 매핑 설정</h4>
+              <span className="text-sm text-gray-500">
+                ({currentMappings.length}개 매핑)
+              </span>
             </div>
+            <Button
+              variant="outline"
+              onClick={() => setIsIconMappingExpanded(!isIconMappingExpanded)}
+              className="flex items-center gap-2"
+            >
+              {isIconMappingExpanded ? (
+                <>
+                  <ChevronUp className="h-4 w-4" />
+                  접기
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-4 w-4" />
+                  펼치기
+                </>
+              )}
+            </Button>
+          </div>
             
             {!isIconMappingExpanded && (
               <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded">
@@ -441,21 +423,32 @@ export function ProgramGridTab({ data, setData }: TabComponentProps) {
                 )}
               </div>
             )}
-          </div>
+        </AdminCard>
+      </AdminSection>
 
-          
-        </div>
-      </div>
-
-      {/* 다른 곳에서 관리하는 데이터 */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="font-medium text-blue-800 mb-2">ℹ️ 다른 페이지에서 관리</h4>
-        <ul className="text-sm text-blue-700 space-y-1">
-          <li>• 프로그램 이름, 목표, 내용 → <strong>프로그램 관리</strong> 페이지</li>
-          <li>• 프로그램 카테고리 분류 → <strong>프로그램 관리</strong> 페이지</li>
-          <li>• 프로그램 순서 → <strong>프로그램 관리</strong> 페이지</li>
-        </ul>
-      </div>
+      {/* 관련 설정 안내 */}
+      <AdminSection title="관련 설정" description="프로그램 그리드와 관련된 다른 설정들은 별도 페이지에서 관리됩니다.">
+        <AdminCard>
+          <h4 className="font-medium text-blue-800 mb-3 flex items-center gap-2">
+            <span className="text-blue-600">ℹ️</span>
+            다른 페이지에서 관리
+          </h4>
+          <ul className="text-sm text-blue-700 space-y-2">
+            <li className="flex items-start gap-2">
+              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+              <span>프로그램 이름, 목표, 내용 → <strong>프로그램 관리</strong> 페이지</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+              <span>프로그램 카테고리 분류 → <strong>프로그램 관리</strong> 페이지</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></span>
+              <span>프로그램 순서 → <strong>프로그램 관리</strong> 페이지</span>
+            </li>
+          </ul>
+        </AdminCard>
+      </AdminSection>
     </div>
   )
 }

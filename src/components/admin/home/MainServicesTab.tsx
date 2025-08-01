@@ -1,162 +1,100 @@
 import type { TabComponentProps } from './HomeManagement'
+import { 
+  AdminSection, 
+  AdminInput, 
+  AdminTextarea, 
+  AdminCard,
+  AdminArrayField
+} from '@/components/admin/ui'
 
 export function MainServicesTab({ data, setData }: TabComponentProps) {
+  // 깊은 복사를 사용한 필드 업데이트 함수
+  const updateAboutMessage = (field: 'title' | 'description', value: string) => {
+    setData(prev => ({
+      ...prev!,
+      sections: {
+        ...prev!.sections,
+        mainServices: {
+          ...prev!.sections?.mainServices,
+          aboutMessage: {
+            title: field === 'title' ? value : prev!.sections?.mainServices?.aboutMessage?.title || '',
+            description: field === 'description' ? value : prev!.sections?.mainServices?.aboutMessage?.description || '',
+            highlightKeywords: prev!.sections?.mainServices?.aboutMessage?.highlightKeywords || []
+          },
+          services: prev!.sections?.mainServices?.services || [],
+          enabled: prev!.sections?.mainServices?.enabled ?? true,
+          showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
+        }
+      }
+    }))
+  }
+
+  // 하이라이트 키워드 업데이트 함수
+  const updateHighlightKeywords = (keywords: string[]) => {
+    setData(prev => ({
+      ...prev!,
+      sections: {
+        ...prev!.sections,
+        mainServices: {
+          ...prev!.sections?.mainServices,
+          aboutMessage: {
+            title: prev!.sections?.mainServices?.aboutMessage?.title || '',
+            description: prev!.sections?.mainServices?.aboutMessage?.description || '',
+            highlightKeywords: keywords
+          },
+          services: prev!.sections?.mainServices?.services || [],
+          enabled: prev!.sections?.mainServices?.enabled ?? true,
+          showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
+        }
+      }
+    }))
+  }
+
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-6">
       <div>
         <h3 className="text-lg font-semibold mb-2">주요 사업 분야 섹션</h3>
         <p className="text-gray-600 mb-4">홈페이지 하단의 주요 사업 분야 영역을 완전히 관리합니다.</p>
       </div>
 
       {/* 소개 메시지 섹션 */}
-      <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900">소개 메시지</h2>
+      <AdminSection title="소개 메시지" description="주요 사업 분야 섹션의 소개 메시지를 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data?.sections?.mainServices?.aboutMessage?.title || ''}
+          onChange={(value) => updateAboutMessage('title', value)}
+          placeholder="주요 사업 분야 제목"
+          required
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            제목
-          </label>
-          <input
-            type="text"
-            value={data?.sections?.mainServices?.aboutMessage?.title || ''}
-            onChange={(e) => setData(prev => ({
-              ...prev!,
-              sections: {
-                ...prev!.sections,
-                mainServices: {
-                  ...prev!.sections?.mainServices,
-                  aboutMessage: {
-                    title: e.target.value,
-                    description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-                    highlightKeywords: prev!.sections?.mainServices?.aboutMessage?.highlightKeywords || []
-                  },
-                  services: prev!.sections?.mainServices?.services || [],
-                  enabled: prev!.sections?.mainServices?.enabled ?? true,
-                  showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
-                }
-              }
-            }))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="주요 사업 분야 제목"
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            설명
-          </label>
-          <textarea
-            value={data?.sections?.mainServices?.aboutMessage?.description || ''}
-            onChange={(e) => setData(prev => ({
-              ...prev!,
-              sections: {
-                ...prev!.sections,
-                mainServices: {
-                  ...prev!.sections?.mainServices,
-                  aboutMessage: {
-                    title: prev!.sections?.mainServices?.aboutMessage?.title || '',
-                    description: e.target.value,
-                    highlightKeywords: prev!.sections?.mainServices?.aboutMessage?.highlightKeywords || []
-                  },
-                  services: prev!.sections?.mainServices?.services || [],
-                  enabled: prev!.sections?.mainServices?.enabled ?? true,
-                  showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
-                }
-              }
-            }))}
-            rows={6}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="메인 서비스 소개 내용을 입력하세요. \\n\\n으로 문단을 구분할 수 있습니다."
-          />
-        </div>
+        <AdminTextarea
+          label="설명"
+          value={data?.sections?.mainServices?.aboutMessage?.description || ''}
+          onChange={(value) => updateAboutMessage('description', value)}
+          rows={6}
+          placeholder="메인 서비스 소개 내용을 입력하세요. \\n\\n으로 문단을 구분할 수 있습니다."
+        />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            하이라이트 키워드
-          </label>
-          <div className="space-y-2">
-            {(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []).map((keyword, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={keyword}
-                  onChange={(e) => {
-                    const newKeywords = [...(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || [])]
-                    newKeywords[index] = e.target.value
-                    setData(prev => ({
-                      ...prev!,
-                      sections: {
-                        ...prev!.sections,
-                        mainServices: {
-                          ...prev!.sections?.mainServices,
-                          aboutMessage: {
-                            ...prev!.sections?.mainServices?.aboutMessage,
-                            highlightKeywords: newKeywords
-                          }
-                        }
-                      }
-                    }))
-                  }}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="하이라이트할 키워드"
-                />
-                <button
-                  onClick={() => {
-                    const newKeywords = (data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []).filter((_, i) => i !== index)
-                    setData(prev => ({
-                      ...prev!,
-                      sections: {
-                        ...prev!.sections,
-                        mainServices: {
-                          ...prev!.sections?.mainServices,
-                          aboutMessage: {
-                            title: prev!.sections?.mainServices?.aboutMessage?.title || '',
-                            description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-                            highlightKeywords: newKeywords
-                          },
-                          services: prev!.sections?.mainServices?.services || [],
-                          enabled: prev!.sections?.mainServices?.enabled ?? true,
-                          showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
-                        }
-                      }
-                    }))
-                  }}
-                  className="text-red-600 hover:text-red-700 p-1"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </div>
-            ))}
-            <button
-              onClick={() => {
-                const newKeywords = [...(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []), '']
-                setData(prev => ({
-                  ...prev!,
-                  sections: {
-                    ...prev!.sections,
-                    mainServices: {
-                      ...prev!.sections?.mainServices,
-                      aboutMessage: {
-                        title: prev!.sections?.mainServices?.aboutMessage?.title || '',
-                        description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-                        highlightKeywords: newKeywords
-                      },
-                      services: prev!.sections?.mainServices?.services || [],
-                      enabled: prev!.sections?.mainServices?.enabled ?? true,
-                      showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
-                    }
-                  }
-                }))
-              }}
-              className="text-blue-600 hover:text-blue-700 text-sm"
-            >
-              + 키워드 추가
-            </button>
-          </div>
-        </div>
-      </div>
+        <AdminArrayField
+          label="하이라이트 키워드"
+          items={data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []}
+          onAdd={(keyword) => {
+            const currentKeywords = data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []
+            updateHighlightKeywords([...currentKeywords, keyword])
+          }}
+          onRemove={(index) => {
+            const currentKeywords = data?.sections?.mainServices?.aboutMessage?.highlightKeywords || []
+            updateHighlightKeywords(currentKeywords.filter((_, i) => i !== index))
+          }}
+          onUpdate={(index, keyword) => {
+            const currentKeywords = [...(data?.sections?.mainServices?.aboutMessage?.highlightKeywords || [])]
+            currentKeywords[index] = keyword
+            updateHighlightKeywords(currentKeywords)
+          }}
+          newItemDefault=""
+          placeholder="하이라이트할 키워드"
+        />
+      </AdminSection>
 
       {/* 서비스 목록 섹션 */}
       <div className="space-y-6">
@@ -396,59 +334,55 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
       </div>
 
       {/* 표시 설정 섹션 */}
-      <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900">표시 설정</h2>
-        
-        <div className="border border-gray-200 rounded-lg p-4">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">섹션 표시</label>
-              <input 
-                type="checkbox"
-                checked={data?.sections?.mainServices?.enabled || false}
-                onChange={(e) => setData(prev => ({
-                  ...prev!,
-                  sections: {
-                    ...prev!.sections,
-                    mainServices: {
-                      ...prev!.sections?.mainServices,
-                      enabled: e.target.checked
-                    }
+      <AdminSection title="표시 설정" description="주요 사업 분야 섹션의 표시 옵션을 관리합니다.">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-700">섹션 표시</label>
+            <input 
+              type="checkbox"
+              checked={data?.sections?.mainServices?.enabled || false}
+              onChange={(e) => setData(prev => ({
+                ...prev!,
+                sections: {
+                  ...prev!.sections,
+                  mainServices: {
+                    ...prev!.sections?.mainServices,
+                    enabled: e.target.checked
                   }
-                }))}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-            </div>
+                }
+              }))}
+              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+          </div>
 
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-medium">하위 프로그램 표시</label>
-              <input 
-                type="checkbox"
-                checked={data?.sections?.mainServices?.showSubPrograms || false}
-                onChange={(e) => setData(prev => ({
-                  ...prev!,
-                  sections: {
-                    ...prev!.sections,
-                    mainServices: {
-                      ...prev!.sections?.mainServices,
-                      showSubPrograms: e.target.checked
-                    }
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-700">하위 프로그램 표시</label>
+            <input 
+              type="checkbox"
+              checked={data?.sections?.mainServices?.showSubPrograms || false}
+              onChange={(e) => setData(prev => ({
+                ...prev!,
+                sections: {
+                  ...prev!.sections,
+                  mainServices: {
+                    ...prev!.sections?.mainServices,
+                    showSubPrograms: e.target.checked
                   }
-                }))}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h5 className="font-medium mb-2">설정 안내</h5>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p>• <strong>섹션 표시</strong>: 홈페이지에서 주요 사업 분야 섹션을 보여줄지 설정합니다.</p>
-                <p>• <strong>하위 프로그램 표시</strong>: 각 사업 분야의 세부 프로그램 목록을 함께 표시할지 설정합니다.</p>
-              </div>
-            </div>
+                }
+              }))}
+              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
           </div>
         </div>
-      </div>
+
+        <AdminCard>
+          <h5 className="font-medium mb-2">설정 안내</h5>
+          <div className="text-sm text-gray-600 space-y-1">
+            <p>• <strong>섹션 표시</strong>: 홈페이지에서 주요 사업 분야 섹션을 보여줄지 설정합니다.</p>
+            <p>• <strong>하위 프로그램 표시</strong>: 각 사업 분야의 세부 프로그램 목록을 함께 표시할지 설정합니다.</p>
+          </div>
+        </AdminCard>
+      </AdminSection>
     </div>
   )
 }

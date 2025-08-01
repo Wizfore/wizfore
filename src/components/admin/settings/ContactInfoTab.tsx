@@ -1,5 +1,6 @@
 import React from 'react'
 import type { DefaultSiteData } from '@/types'
+import { AdminSection, AdminInput, AdminTextarea, AdminCard } from '@/components/admin/ui'
 
 type SiteInfoData = DefaultSiteData['siteInfo']
 
@@ -27,142 +28,100 @@ export function ContactInfoTab({ siteInfo, onUpdate }: ContactInfoTabProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-lg font-semibold text-gray-900">연락처 정보</h2>
-      
+    <AdminSection 
+      title="연락처 정보" 
+      description="센터의 연락처와 운영 정보를 설정합니다."
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            주소
-          </label>
-          <textarea
-            value={siteInfo.contact.address}
-            onChange={(e) => handleContactChange('address', e.target.value)}
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminTextarea
+          label="주소"
+          value={siteInfo.contact.address}
+          onChange={(value) => handleContactChange('address', value)}
+          rows={3}
+          placeholder="센터 주소를 입력하세요"
+          required
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            전화번호
-          </label>
-          <input
-            type="text"
-            value={siteInfo.contact.phone}
-            onChange={(e) => handleContactChange('phone', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="전화번호"
+          value={siteInfo.contact.phone}
+          onChange={(value) => handleContactChange('phone', value)}
+          placeholder="02-1234-5678"
+          required
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            팩스
-          </label>
-          <input
-            type="text"
-            value={siteInfo.contact.fax}
-            onChange={(e) => handleContactChange('fax', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="팩스"
+          value={siteInfo.contact.fax}
+          onChange={(value) => handleContactChange('fax', value)}
+          placeholder="02-1234-5679"
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            이메일
-          </label>
-          <input
-            type="email"
-            value={siteInfo.contact.email}
-            onChange={(e) => handleContactChange('email', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="이메일"
+          type="email"
+          value={siteInfo.contact.email}
+          onChange={(value) => handleContactChange('email', value)}
+          placeholder="contact@example.com"
+          required
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            웹사이트
-          </label>
-          <input
-            type="text"
-            value={siteInfo.contact.website}
-            onChange={(e) => handleContactChange('website', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="웹사이트"
+          type="url"
+          value={siteInfo.contact.website}
+          onChange={(value) => handleContactChange('website', value)}
+          placeholder="https://example.com"
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            사업자번호
-          </label>
-          <input
-            type="text"
-            value={siteInfo.contact.businessNumber}
-            onChange={(e) => handleContactChange('businessNumber', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="사업자번호"
+          value={siteInfo.contact.businessNumber}
+          onChange={(value) => handleContactChange('businessNumber', value)}
+          placeholder="123-45-67890"
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            계좌정보
-          </label>
-          <input
-            type="text"
-            value={siteInfo.contact.accountInfo}
-            onChange={(e) => handleContactChange('accountInfo', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="계좌정보"
+          value={siteInfo.contact.accountInfo}
+          onChange={(value) => handleContactChange('accountInfo', value)}
+          placeholder="은행명 계좌번호 예금주"
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            평일 운영시간
-          </label>
-          <input
-            type="text"
-            value={siteInfo.contact.operatingHours.weekday}
-            onChange={(e) => handleOperatingHoursChange('weekday', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="평일 운영시간"
+          value={siteInfo.contact.operatingHours.weekday}
+          onChange={(value) => handleOperatingHoursChange('weekday', value)}
+          placeholder="09:00 - 18:00"
+        />
         
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            주말 운영시간
-          </label>
-          <input
-            type="text"
-            value={siteInfo.contact.operatingHours.weekend}
-            onChange={(e) => handleOperatingHoursChange('weekend', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <AdminInput
+          label="주말 운영시간"
+          value={siteInfo.contact.operatingHours.weekend}
+          onChange={(value) => handleOperatingHoursChange('weekend', value)}
+          placeholder="09:00 - 17:00"
+        />
       </div>
       
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          지도 URL
-        </label>
+      <AdminInput
+        label="지도 URL"
+        type="url"
+        value={siteInfo.contact.mapUrl}
+        onChange={(value) => handleContactChange('mapUrl', value)}
+        placeholder="구글 지도 임베드 URL을 입력하세요"
+        helper="아래 안내에 따라 구글 지도 URL을 가져와 입력하세요"
+      />
 
-        <input
-          type="url"
-          value={siteInfo.contact.mapUrl}
-          onChange={(e) => handleContactChange('mapUrl', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-        />
-
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-3">
-          <h4 className="text-sm font-medium text-blue-800 mb-2">💡 구글 지도 URL 가져오는 방법</h4>
-          <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
-            <li>구글 지도에서 원하는 위치를 검색합니다</li>
-            <li>'공유' 버튼을 클릭합니다</li>
-            <li>'지도 퍼가기' 탭을 선택합니다</li>
-            <li>나타나는 iframe 코드에서 <code className="bg-blue-100 px-1 rounded">src="..."</code> 부분의 URL을 복사합니다</li>
-            <li>복사한 URL을 위 입력창에 붙여넣기 합니다</li>
-          </ol>
-        </div>
-      </div>
-    </div>
+      <AdminCard className="bg-blue-50 border-blue-200">
+        <h4 className="text-sm font-medium text-blue-800 mb-2">💡 구글 지도 URL 가져오는 방법</h4>
+        <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+          <li>구글 지도에서 원하는 위치를 검색합니다</li>
+          <li>'공유' 버튼을 클릭합니다</li>
+          <li>'지도 퍼가기' 탭을 선택합니다</li>
+          <li>나타나는 iframe 코드에서 <code className="bg-blue-100 px-1 rounded">src="..."</code> 부분의 URL을 복사합니다</li>
+          <li>복사한 URL을 위 입력창에 붙여넣기 합니다</li>
+        </ol>
+      </AdminCard>
+    </AdminSection>
   )
 }
