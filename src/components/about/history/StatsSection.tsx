@@ -85,11 +85,13 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
           {enabledCards.map((card, index) => (
             <motion.div
               key={card.id}
-              className="bg-white rounded-2xl p-8 text-center shadow-sm hover:shadow-md transition-all duration-300"
+              className="group text-center p-8 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-wizfore-coral-primary/10 shadow-sm transition-all duration-500 hover:shadow-lg hover:-translate-y-2 hover:border-wizfore-coral-primary/40 hover:ring-2 hover:ring-wizfore-coral-primary hover:ring-opacity-30 focus-within:ring-2 focus-within:ring-wizfore-coral-primary focus-within:ring-opacity-50 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:hover:scale-100"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}
-              viewport={{ once: true }}
+              tabIndex={0}
+              role="article"
             >
               <div className="w-16 h-16 border-2 border-gray-300 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Image 

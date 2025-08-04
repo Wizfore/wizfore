@@ -29,13 +29,27 @@ export default function ProgramCard({
     >
       <div className="space-y-6">
         {/* 1행: 프로그램 제목 */}
-        <div className="flex items-center gap-4 flex-wrap pb-4 border-b border-wizfore-coral-primary/30">
+        <div className="pb-4 border-b border-wizfore-coral-primary/30">
           <h3 
             id={`program-title-${index}`}
-            className="text-2xl lg:text-3xl font-black text-wizfore-text-primary"
+            className="text-2xl lg:text-3xl font-black text-wizfore-text-primary mb-3"
           >
             {program.title}
           </h3>
+          
+          {/* 프로그램 유형 배지 */}
+          {program.types && program.types.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {program.types.map((type, typeIndex) => (
+                <span
+                  key={typeIndex}
+                  className="px-3 py-1 bg-wizfore-coral-primary/10 text-wizfore-coral-primary text-xs font-medium rounded-full border border-wizfore-coral-primary/20"
+                >
+                  {type}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* 2행: 3개 섹션을 가로 배치 */}
@@ -96,14 +110,14 @@ export default function ProgramCard({
             </div>
           )}
 
-          {/* 주요 내용 또는 프로그램 종류 */}
-          {(program.content || program.types) && (
+          {/* 주요 내용 */}
+          {program.content && (
             <div>
               <h4 className="text-lg font-semibold text-wizfore-text-primary mb-3">
-                {program.content ? '주요 내용' : '프로그램 종류'}
+                주요 내용
               </h4>
               <div className="space-y-1">
-                {(program.content || program.types)?.map((item, itemIndex) => (
+                {program.content.map((item, itemIndex) => (
                   <div key={itemIndex} className="flex items-start">
                     <div className="w-1 h-1 bg-wizfore-coral-primary rounded-full mr-2 mt-1.5 flex-shrink-0" />
                     <p className="text-sm text-wizfore-text-primary leading-relaxed">
