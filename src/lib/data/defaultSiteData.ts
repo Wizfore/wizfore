@@ -345,18 +345,114 @@ export const defaultSiteData: DefaultSiteData = {
       ]
     },
 
-    facilities: [
-      "언어치료실",
-      "인지치료실", 
-      "놀이치료실",
-      "미술치료실",
-      "음악치료실",
-      "감각통합치료실",
-      "특수체육실",
-      "심리운동실",
-      "집단치료실",
-      "상담실"
-    ]
+    facilities: {
+      hero: {
+        title: "센터 둘러보기",
+        description: "다양한 시설과 환경을 만나보세요",
+        imageUrl: "",
+        defaultImageUrl: "/images/hero/defaultHero.jpg"
+      },
+      categories: [
+        {
+          id: "therapy",
+          name: "치료실",
+          order: 1
+        },
+        {
+          id: "counseling",
+          name: "상담실",
+          order: 2
+        }
+      ],
+      images: [
+        // 치료실 이미지들
+        {
+          id: "1",
+          description: "언어치료, 인지치료를 위한 개별 치료 공간",
+          imageUrl: "/images/facilities/therapy-room-1.jpg",
+          categoryId: "therapy",
+          order: 1
+        },
+        {
+          id: "2",
+          description: "조용하고 집중할 수 있는 개별 치료 환경",
+          imageUrl: "/images/facilities/therapy-room-2.jpg",
+          categoryId: "therapy",
+          order: 2
+        },
+        {
+          id: "3",
+          description: "감각통합 치료를 위한 전문 장비를 갖춘 공간",
+          imageUrl: "/images/facilities/therapy-room-3.jpg",
+          categoryId: "therapy",
+          order: 3
+        },
+        {
+          id: "4",
+          description: "물리치료와 운동치료를 위한 넓은 공간",
+          imageUrl: "/images/facilities/therapy-room-4.jpg",
+          categoryId: "therapy",
+          order: 4
+        },
+        {
+          id: "5",
+          description: "소그룹 활동과 집단 치료를 위한 공간",
+          imageUrl: "/images/facilities/therapy-room-5.jpg",
+          categoryId: "therapy",
+          order: 5
+        },
+        {
+          id: "6",
+          description: "아동을 위한 놀이치료 전용 공간",
+          imageUrl: "/images/facilities/therapy-room-6.jpg",
+          categoryId: "therapy",
+          order: 6
+        },
+        // 상담실 이미지들  
+        {
+          id: "7",
+          description: "프라이버시가 보장되는 개별 상담 공간",
+          imageUrl: "/images/facilities/counseling-room-1.jpg",
+          categoryId: "counseling",
+          order: 1
+        },
+        {
+          id: "8",
+          description: "편안하고 안전한 상담 환경을 제공하는 공간",
+          imageUrl: "/images/facilities/counseling-room-2.jpg",
+          categoryId: "counseling",
+          order: 2
+        },
+        {
+          id: "9",
+          description: "가족 단위 상담을 위한 넓은 공간",
+          imageUrl: "/images/facilities/counseling-room-3.jpg",
+          categoryId: "counseling",
+          order: 3
+        },
+        {
+          id: "10",
+          description: "집단 상담과 프로그램 진행을 위한 공간",
+          imageUrl: "/images/facilities/counseling-room-4.jpg",
+          categoryId: "counseling",
+          order: 4
+        },
+        {
+          id: "11",
+          description: "상담 전 편안하게 기다릴 수 있는 공간",
+          imageUrl: "/images/facilities/counseling-room-5.jpg",
+          categoryId: "counseling",
+          order: 5
+        },
+        {
+          id: "12",
+          description: "초기 상담과 접수를 위한 공간",
+          imageUrl: "/images/facilities/counseling-room-6.jpg",
+          categoryId: "counseling",
+          order: 6
+        }
+      ]
+    }
   },
 
   programs: [

@@ -3,6 +3,7 @@ import { DirectorInfo, HistoryInfo, AdvisorsInfo, LocationInfo, InquiryInfo } fr
 import { ProgramCategory } from './program'
 import { TeamCategory } from './expert'
 import { NewsInfo, SnsInfo } from './community'
+import { FacilityCategory, FacilityImage } from './facility'
 
 // 사이트 구성 관련 타입들
 export interface SiteConfig {
@@ -126,7 +127,16 @@ export interface DefaultSiteData {
     history: HistoryInfo
     advisors: AdvisorsInfo
     location: LocationInfo
-    facilities: string[]
+    facilities: {
+      hero: {
+        title: string
+        description: string
+        imageUrl: string
+        defaultImageUrl: string
+      }
+      categories: FacilityCategory[]
+      images: FacilityImage[]
+    }
   }
   inquiry: InquiryInfo
   programs: ProgramCategory[]

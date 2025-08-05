@@ -37,6 +37,7 @@ const Header = () => {
         { name: '센터장 소개', href: '/about/director' },
         { name: '센터 발자취', href: '/about/history' },
         { name: '자문위원', href: '/about/advisors' },
+        { name: '센터 둘러보기', href: '/about/center-tour' },
         { name: '오시는길', href: '/about/location' },
       ]
     },
