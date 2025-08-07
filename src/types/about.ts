@@ -1,4 +1,5 @@
 // 소개 관련 타입들
+import { FacilityCategory, FacilityImage } from './facility'
 export interface DirectorInfo {
   name: string
   position: string[]
@@ -146,10 +147,23 @@ export interface LocationImage {
   imageUrl: string
 }
 
+// 시설 정보 구조
+export interface FacilitiesInfo {
+  hero: {
+    title: string
+    description: string
+    imageUrl: string
+    defaultImageUrl: string
+  }
+  categories: FacilityCategory[]
+  images: FacilityImage[]
+}
+
 // 센터소개 관리 통합 데이터 구조
 export interface AboutData {
   director: DirectorInfo
   history: HistoryInfo
   advisors: AdvisorsInfo
   location: LocationInfo
+  facilities: FacilitiesInfo
 }
