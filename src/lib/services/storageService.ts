@@ -159,6 +159,11 @@ export function generateUniqueFileName(originalName: string, category?: string):
     return `${baseName}_${timestamp}_${random}.${extension}`
   }
   
+  // 시설 이미지의 경우 카테고리를 파일명에 포함하지 않음 (경로에서 관리)
+  if (category && category.startsWith('pages/about/facilities/image/')) {
+    return `${baseName}_${timestamp}_${random}.${extension}`
+  }
+  
   const prefix = category ? `${category}_` : ''
   return `${prefix}${baseName}_${timestamp}_${random}.${extension}`
 }
@@ -193,8 +198,12 @@ export function generateUploadPath(category: string, fileName: string): string {
     'about-director': 'pages/about/director',
     'about-advisors-hero': 'pages/about/advisors/hero',
     'about-advisors': 'pages/about/advisors',
+    'about-history-hero': 'pages/about/history/hero',
     'about-history': 'pages/about/history',
+    'about-location-hero': 'pages/about/location/hero',
     'about-location': 'pages/about/location',
+    'about-facilities-hero': 'pages/about/facilities/hero',
+    'about-facilities': 'pages/about/facilities',
     
     // Programs 페이지 관련
     'programs-therapy-hero': 'pages/programs/therapy/hero',
@@ -509,6 +518,38 @@ export async function cleanupReservedArticleId(reservedId: string): Promise<void
     console.log(`✅ 예약된 ID Storage 정리 완료: ${reservedId}`)
   } catch (error) {
     console.warn(`⚠️  예약된 ID Storage 정리 실패 (무시됨): ${reservedId}`, error)
+    // 정리 실패는 무시 (이미 없을 수도 있음)
+  }
+}
+
+/**
+ * 시설 이미지의 Storage 폴더를 삭제합니다.
+ * @param imageId - 시설 이미지 ID
+ */
+export async function deleteFacilityImageFolder(imageId: string): Promise<void> {
+  try {
+    const folderPath = `pages/about/facilities/image/${imageId}`
+    console.log(`🧹 시설 이미지 Storage 정리 시작: ${imageId}`)
+    await deleteFolder(folderPath)
+    console.log(`✅ 시설 이미지 Storage 정리 완료: ${imageId}`)
+  } catch (error) {
+    console.warn(`⚠️  시설 이미지 Storage 정리 실패 (무시됨): ${imageId}`, error)
+    // 정리 실패는 무시 (이미 없을 수도 있음)
+  }
+}
+
+/**
+ * 임시 시설 이미지의 Storage 폴더를 삭제합니다.
+ * @param tempId - 임시 이미지 ID
+ */
+export async function cleanupTempFacilityImage(tempId: string): Promise<void> {
+  try {
+    const folderPath = `pages/about/facilities/temp-${tempId}`
+    console.log(`🧹 임시 시설 이미지 Storage 정리 시작: ${tempId}`)
+    await deleteFolder(folderPath)
+    console.log(`✅ 임시 시설 이미지 Storage 정리 완료: ${tempId}`)
+  } catch (error) {
+    console.warn(`⚠️  임시 시설 이미지 Storage 정리 실패 (무시됨): ${tempId}`, error)
     // 정리 실패는 무시 (이미 없을 수도 있음)
   }
 }
