@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useCallback } from 'react'
-import { User, Calendar, Users, MapPin, Loader2 } from 'lucide-react'
+import { User, Calendar, Users, MapPin, Camera, Loader2 } from 'lucide-react'
 import { getAboutInfo } from '@/lib/services/dataService'
 import { useAdminForm } from '@/hooks/useAdminForm'
 import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning'
@@ -13,9 +13,10 @@ import DirectorManagementTab from '@/components/admin/about/DirectorManagementTa
 import HistoryManagementTab from '@/components/admin/about/HistoryManagementTab'
 import AdvisorsManagementTab from '@/components/admin/about/AdvisorsManagementTab'
 import LocationManagementTab from '@/components/admin/about/LocationManagementTab'
+import FacilityManagementTab from '@/components/admin/about/FacilityManagementTab'
 import type { AboutData } from '@/types/about'
 
-type AboutTab = 'director' | 'history' | 'advisors' | 'location'
+type AboutTab = 'director' | 'history' | 'advisors' | 'facilities' | 'location'
 
 // defaultData를 컴포넌트 외부로 이동하여 재생성 방지
 const DEFAULT_ABOUT_DATA: AboutData = {
@@ -36,6 +37,16 @@ const DEFAULT_ABOUT_DATA: AboutData = {
     hero: { title: '', description: '' },
     list: []
   },
+  facilities: {
+    hero: {
+      title: '센터 둘러보기',
+      description: '다양한 시설과 환경을 만나보세요',
+      imageUrl: '',
+      defaultImageUrl: '/images/hero/defaultHero.jpg'
+    },
+    categories: [],
+    images: []
+  },
   location: {
     hero: { title: '', description: '' },
     aboutMessage: { title: '', description: '' },
@@ -52,10 +63,14 @@ export default function AboutPage() {
   // fetchData 함수를 메모이제이션하여 불필요한 리렌더링 방지
   const fetchData = useCallback(async (): Promise<AboutData> => {
     const data = await getAboutInfo()
+    const { facilityService } = await import('@/lib/services/facilityService')
+    const facilitiesData = await facilityService.getFacilities()
+    
     return {
       director: data.director,
       history: data.history,
       advisors: data.advisors,
+      facilities: facilitiesData,
       location: data.location
     }
   }, [])
@@ -64,6 +79,7 @@ export default function AboutPage() {
   const {
     data: aboutData,
     setData: setAboutData,
+    originalData,
     loading,
     saving,
     saveStatus,
@@ -74,27 +90,57 @@ export default function AboutPage() {
   } = useAdminForm({
     fetchData,
     saveData: async (data: AboutData) => {
-      // 각 섹션별로 개별 저장 (기존 API 구조 유지)
+      // 각 섹션별로 개별 저장 (facilities는 hero만 저장)
       const { updateDirectorInfo, updateHistoryInfo, updateAdvisorsInfo, updateLocationInfo } = await import('@/lib/services/dataService')
+      const { facilityService } = await import('@/lib/services/facilityService')
+      
       await Promise.all([
         updateDirectorInfo(data.director),
         updateHistoryInfo(data.history),
         updateAdvisorsInfo(data.advisors),
+        facilityService.updateFacilities(data.facilities), // 전체 facilities 데이터 저장
         updateLocationInfo(data.location)
       ])
     },
     defaultData: DEFAULT_ABOUT_DATA
   })
 
+  // 시설 데이터 새로고침 함수
+  const refreshFacilitiesData = useCallback(async () => {
+    const { facilityService } = await import('@/lib/services/facilityService')
+    const facilitiesData = await facilityService.getFacilities()
+    setAboutData(prev => ({ 
+      ...prev, 
+      facilities: {
+        ...facilitiesData,
+        // hero는 현재 상태 유지 (사용자가 수정 중일 수 있음)
+        hero: prev.facilities.hero
+      }
+    }))
+  }, [setAboutData])
+
+  // facility 탭에서는 전체 facilities 데이터 변경 감지
+  const facilityHasChanges = React.useMemo(() => {
+    if (activeTab !== 'facilities') return hasChanges
+    
+    // facility 탭일 때는 전체 facilities 데이터 비교
+    const originalFacilities = originalData?.facilities
+    const currentFacilities = aboutData.facilities
+    
+    if (!originalFacilities || !currentFacilities) return false
+    
+    return JSON.stringify(originalFacilities) !== JSON.stringify(currentFacilities)
+  }, [activeTab, hasChanges, originalData?.facilities, aboutData.facilities])
+
   // 브라우저 이탈 경고 훅 사용
-  useUnsavedChangesWarning(hasChanges)
+  useUnsavedChangesWarning(facilityHasChanges)
   
   // 네비게이션 컨텍스트와 동기화
   const { setHasUnsavedChanges } = useNavigation()
   
   React.useEffect(() => {
-    setHasUnsavedChanges(hasChanges)
-  }, [hasChanges, setHasUnsavedChanges])
+    setHasUnsavedChanges(facilityHasChanges)
+  }, [facilityHasChanges, setHasUnsavedChanges])
 
   // 탭 정의
   const tabs: TabItem<AboutTab>[] = [
@@ -114,6 +160,11 @@ export default function AboutPage() {
       icon: Users
     },
     {
+      key: 'facilities' as const,
+      label: '센터 둘러보기',
+      icon: Camera
+    },
+    {
       key: 'location' as const,
       label: '오시는 길',
       icon: MapPin
@@ -122,7 +173,7 @@ export default function AboutPage() {
 
   // 탭 전환 핸들러
   const handleTabChange = (nextTab: AboutTab) => {
-    if (hasChanges) {
+    if (facilityHasChanges) {
       setPendingTab(nextTab)
       setShowUnsavedDialog(true)
     } else {
@@ -197,6 +248,21 @@ export default function AboutPage() {
             onUpdate={(advisorsData) => setAboutData(prev => ({ ...prev, advisors: advisorsData }))} 
           />
         )
+      case 'facilities':
+        return (
+          <FacilityManagementTab 
+            data={aboutData.facilities} 
+            onHeroUpdate={(heroData) => setAboutData(prev => ({ 
+              ...prev, 
+              facilities: { ...prev.facilities, hero: heroData } 
+            }))} 
+            onDataUpdate={(facilitiesData) => setAboutData(prev => ({
+              ...prev,
+              facilities: facilitiesData
+            }))}
+            onDataRefresh={refreshFacilitiesData}
+          />
+        )
       case 'location':
         return (
           <LocationManagementTab 
@@ -216,7 +282,7 @@ export default function AboutPage() {
         description="센터에 대한 정보와 소개 콘텐츠를 관리합니다"
         error={error}
         saveStatus={saveStatus}
-        hasChanges={hasChanges}
+        hasChanges={facilityHasChanges}
         saving={saving}
         onSave={handleSave}
         onReset={handleReset}
@@ -226,7 +292,7 @@ export default function AboutPage() {
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={handleTabChange}
-        hasChanges={hasChanges}
+        hasChanges={facilityHasChanges}
         showUnsavedDialog={showUnsavedDialog}
         onDialogSave={handleDialogSave}
         onDialogDiscard={handleDialogDiscard}
