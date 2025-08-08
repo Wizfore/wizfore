@@ -165,9 +165,9 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-lg text-wizfore-text-secondary leading-relaxed max-w-2xl mx-auto"
+                className="text-lg text-wizfore-text-secondary leading-relaxed max-w-2xl mx-auto min-h-[1.75rem]"
               >
-                {currentImage?.description}
+                {currentImage?.description || ''}
               </motion.p>
             </div>
           </div>

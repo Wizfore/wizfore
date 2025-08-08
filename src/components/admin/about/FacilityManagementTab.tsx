@@ -316,7 +316,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
   // 새 이미지 추가 (통합 폼에서)
   const addNewImage = async () => {
     const categoryId = newImageForm.categoryId || selectedCategoryTab
-    if (!categoryId || !newImageForm.description.trim() || !newImageForm.imageUrl.trim() || !newImageId) return
+    if (!categoryId || !newImageForm.imageUrl.trim() || !newImageId) return
 
     // 해당 카테고리 이미지들의 마지막 순서 계산
     const categoryImages = (data.images || []).filter(img => img.categoryId === categoryId)
@@ -326,7 +326,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
 
     const newImage: FacilityImage = {
       id: newImageId,
-      description: newImageForm.description.trim(),
+      description: newImageForm.description || '',
       imageUrl: newImageForm.imageUrl.trim(),
       categoryId: categoryId,
       order: nextOrder
@@ -917,7 +917,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                                     />
                                   ) : (
                                     <div className="py-2 px-3 text-sm">
-                                      {image.description || '설명 없음'}
+                                      {image.description || ''}
                                     </div>
                                   )}
                                 </TableCell>

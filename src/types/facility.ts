@@ -33,7 +33,7 @@ export interface FacilityCategory {
 
 export interface FacilityImage {
   id: string
-  description: string
+  description?: string
   imageUrl: string
   categoryId: string
   order: number
