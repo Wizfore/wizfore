@@ -234,21 +234,26 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
     const categoryToDelete = data.categories?.[index]
     if (!categoryToDelete) return
 
-    const confirmMessage = `'${categoryToDelete.name}' 카테고리를 삭제하시겠습니까?\n이 카테고리에 속한 모든 이미지도 함께 삭제됩니다.`
+    // 해당 카테고리에 속한 이미지가 있는지 확인
+    const categoryImages = (data.images || []).filter(img => img.categoryId === categoryToDelete.id)
+    
+    if (categoryImages.length > 0) {
+      alert(`'${categoryToDelete.name}' 카테고리에 ${categoryImages.length}개의 이미지가 있습니다.\n먼저 이미지를 모두 삭제한 후 카테고리를 삭제해주세요.`)
+      return
+    }
+
+    const confirmMessage = `'${categoryToDelete.name}' 카테고리를 삭제하시겠습니까?`
     if (!window.confirm(confirmMessage)) return
 
-    // 카테고리 제거
+    // 카테고리 제거 (이미지는 이미 없음이 확인됨)
     const updatedCategories = (data.categories || []).filter((_, i) => i !== index)
     
-    // 해당 카테고리에 속한 이미지들도 제거
-    const updatedImages = (data.images || []).filter(img => img.categoryId !== categoryToDelete.id)
-
     onDataUpdate({
       ...data,
-      categories: updatedCategories,
-      images: updatedImages
+      categories: updatedCategories
     })
   }
+
 
   // 카테고리 업데이트
   const updateCategory = (index: number, updatedCategory: FacilityCategory) => {
@@ -270,7 +275,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
     categories[index] = {
       ...updatedCategory,
       id: newCategoryId,
-      name: updatedCategory.name.trim()
+      name: updatedCategory.name
     }
     
     // 카테고리 ID가 변경된 경우, 해당 카테고리에 속한 이미지들의 categoryId도 업데이트
@@ -282,8 +287,6 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
           : image
       )
       
-      console.log(`카테고리 ID 변경: ${oldCategoryId} → ${newCategoryId}`)
-      console.log(`업데이트된 이미지 개수: ${updatedImages.filter(img => img.categoryId === newCategoryId).length}`)
     }
     
     // 카테고리와 이미지를 함께 업데이트
@@ -377,19 +380,13 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
 
   // 카테고리 내에서 이미지 순서 위로 이동
   const moveImageUpInCategory = (imageId: string, categoryId: string) => {
-    console.log('moveImageUpInCategory 호출:', imageId, categoryId)
-    
     const categoryImages = (data.images || [])
       .filter(img => img.categoryId === categoryId)
       .sort((a, b) => a.order - b.order)
     
-    console.log('카테고리 이미지들:', categoryImages.map(img => ({ id: img.id, order: img.order })))
-    
     const currentIndex = categoryImages.findIndex(img => img.id === imageId)
-    console.log('현재 인덱스:', currentIndex)
     
     if (currentIndex <= 0) {
-      console.log('이동 불가: 첫 번째 항목이거나 찾을 수 없음')
       return
     }
     
@@ -404,34 +401,24 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
       order: idx + 1
     }))
     
-    console.log('업데이트된 카테고리 이미지들:', updatedCategoryImages.map(img => ({ id: img.id, order: img.order })))
-    
     // 전체 이미지 배열에서 해당 카테고리 이미지들만 업데이트
     const allImages = (data.images || []).map(img => {
       const updatedImg = updatedCategoryImages.find(catImg => catImg.id === img.id)
       return updatedImg || img
     })
     
-    console.log('최종 전체 이미지:', allImages.map(img => ({ id: img.id, categoryId: img.categoryId, order: img.order })))
-    
     updateImages(allImages)
   }
 
   // 카테고리 내에서 이미지 순서 아래로 이동
   const moveImageDownInCategory = (imageId: string, categoryId: string) => {
-    console.log('moveImageDownInCategory 호출:', imageId, categoryId)
-    
     const categoryImages = (data.images || [])
       .filter(img => img.categoryId === categoryId)
       .sort((a, b) => a.order - b.order)
     
-    console.log('카테고리 이미지들:', categoryImages.map(img => ({ id: img.id, order: img.order })))
-    
     const currentIndex = categoryImages.findIndex(img => img.id === imageId)
-    console.log('현재 인덱스:', currentIndex)
     
     if (currentIndex === -1 || currentIndex >= categoryImages.length - 1) {
-      console.log('이동 불가: 마지막 항목이거나 찾을 수 없음')
       return
     }
     
@@ -446,15 +433,11 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
       order: idx + 1
     }))
     
-    console.log('업데이트된 카테고리 이미지들:', updatedCategoryImages.map(img => ({ id: img.id, order: img.order })))
-    
     // 전체 이미지 배열에서 해당 카테고리 이미지들만 업데이트
     const allImages = (data.images || []).map(img => {
       const updatedImg = updatedCategoryImages.find(catImg => catImg.id === img.id)
       return updatedImg || img
     })
-    
-    console.log('최종 전체 이미지:', allImages.map(img => ({ id: img.id, categoryId: img.categoryId, order: img.order })))
     
     updateImages(allImages)
   }
@@ -483,7 +466,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
     images[index] = {
       ...images[index],
       ...updatedData,
-      description: updatedData.description?.trim() || images[index].description
+      description: updatedData.description !== undefined ? updatedData.description : images[index].description
     }
     
     updateImages(images)
@@ -632,7 +615,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                     const categoryImageCount = (data.images || []).filter(img => img.categoryId === category.id).length
                     
                     return (
-                      <div key={category.id || index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <div key={`category-${index}`} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2">
@@ -703,7 +686,9 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                             <input
                               type="text"
                               value={category.name}
-                              onChange={(e) => updateCategory(index, { ...category, name: e.target.value })}
+                              onChange={(e) => {
+                                updateCategory(index, { ...category, name: e.target.value })
+                              }}
                               placeholder="카테고리명을 입력하세요"
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
@@ -921,12 +906,14 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                                 </TableCell>
                                 <TableCell className="max-w-xs">
                                   {editingImageId === image.id ? (
-                                    <AdminInput
-                                      label=""
+                                    <input
+                                      type="text"
                                       value={image.description}
-                                      onChange={(value) => updateImageById(image.id, { description: value })}
+                                      onChange={(e) => {
+                                        updateImageById(image.id, { description: e.target.value })
+                                      }}
                                       placeholder="이미지 설명"
-                                      className="!mb-0"
+                                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                     />
                                   ) : (
                                     <div className="py-2 px-3 text-sm">

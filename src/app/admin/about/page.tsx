@@ -119,6 +119,7 @@ export default function AboutPage() {
     }))
   }, [setAboutData])
 
+
   // facility 데이터 변경사항 감지 (모든 탭에서 확인)
   const facilityHasChanges = React.useMemo(() => {
     // 다른 탭의 변경사항 확인

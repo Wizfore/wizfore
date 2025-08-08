@@ -113,7 +113,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
           {/* 메인 이미지 영역 */}
           <div className="relative mb-8">
             <div 
-              className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-gray-100 shadow-lg"
+              className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-white shadow-lg"
               role="img"
               aria-label={currentImage?.description || ''}
             >
@@ -130,7 +130,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                     src={currentImage?.imageUrl || ''}
                     alt={currentImage?.description || ''}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"
                     priority
                   />
@@ -193,7 +193,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                       src={image.imageUrl}
                       alt={image.description}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       sizes="96px"
                     />
                     {index !== activeImageIndex && (
