@@ -119,21 +119,43 @@ export default function AboutPage() {
     }))
   }, [setAboutData])
 
-  // facility 탭에서는 전체 facilities 데이터 변경 감지
+  // facility 데이터 변경사항 감지 (모든 탭에서 확인)
   const facilityHasChanges = React.useMemo(() => {
-    if (activeTab !== 'facilities') return hasChanges
+    // 다른 탭의 변경사항 확인
+    const otherTabsHaveChanges = activeTab !== 'facilities' ? hasChanges : false
     
-    // facility 탭일 때는 전체 facilities 데이터 비교
+    // facility 탭의 변경사항 확인
     const originalFacilities = originalData?.facilities
     const currentFacilities = aboutData.facilities
     
-    if (!originalFacilities || !currentFacilities) return false
+    if (!originalFacilities || !currentFacilities) return otherTabsHaveChanges
     
-    return JSON.stringify(originalFacilities) !== JSON.stringify(currentFacilities)
+    const facilityDataChanged = JSON.stringify(originalFacilities) !== JSON.stringify(currentFacilities)
+    
+    // 어느 탭에서든 변경사항이 있으면 true
+    return otherTabsHaveChanges || facilityDataChanged
   }, [activeTab, hasChanges, originalData?.facilities, aboutData.facilities])
 
+  // 클린업 함수 정의
+  const handleCleanupBeforeLeave = async () => {
+    // facility 데이터에 변경사항이 있으면 클린업 실행 (현재 탭과 관계없이)
+    const originalFacilities = originalData?.facilities
+    const currentFacilities = aboutData.facilities
+    const hasFacilityChanges = originalFacilities && currentFacilities && 
+      JSON.stringify(originalFacilities) !== JSON.stringify(currentFacilities)
+    
+    if (hasFacilityChanges && (window as any).__facilityCleanup) {
+      try {
+        await (window as any).__facilityCleanup()
+        console.log('페이지 이탈 시 이미지 클린업 완료')
+      } catch (error) {
+        console.warn('페이지 이탈 시 클린업 실패:', error)
+      }
+    }
+  }
+
   // 브라우저 이탈 경고 훅 사용
-  useUnsavedChangesWarning(facilityHasChanges)
+  useUnsavedChangesWarning(facilityHasChanges, true, handleCleanupBeforeLeave)
   
   // 네비게이션 컨텍스트와 동기화
   const { setHasUnsavedChanges } = useNavigation()
@@ -198,7 +220,22 @@ export default function AboutPage() {
     }
   }
 
-  const handleDialogDiscard = () => {
+  const handleDialogDiscard = async () => {
+    // facility 데이터에 변경사항이 있으면 클린업 수행 (현재 탭과 관계없이)
+    const originalFacilities = originalData?.facilities
+    const currentFacilities = aboutData.facilities
+    const hasFacilityChanges = originalFacilities && currentFacilities && 
+      JSON.stringify(originalFacilities) !== JSON.stringify(currentFacilities)
+    
+    if (hasFacilityChanges && (window as any).__facilityCleanup) {
+      try {
+        await (window as any).__facilityCleanup()
+        console.log('저장하지 않음 시 이미지 클린업 완료')
+      } catch (error) {
+        console.warn('클린업 실패:', error)
+      }
+    }
+    
     handleReset()
     setShowUnsavedDialog(false)
     if (pendingTab) {
@@ -252,6 +289,7 @@ export default function AboutPage() {
         return (
           <FacilityManagementTab 
             data={aboutData.facilities} 
+            originalData={originalData?.facilities}
             onHeroUpdate={(heroData) => setAboutData(prev => ({ 
               ...prev, 
               facilities: { ...prev.facilities, hero: heroData } 

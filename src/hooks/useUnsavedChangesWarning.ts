@@ -6,8 +6,13 @@ import { useRouter } from 'next/navigation'
  * 
  * @param hasChanges - 변경사항 여부
  * @param enabled - 훅 활성화 여부 (기본값: true)
+ * @param onBeforeLeave - 페이지를 떠나기 전에 실행할 클린업 콜백 (선택사항)
  */
-export function useUnsavedChangesWarning(hasChanges: boolean, enabled: boolean = true) {
+export function useUnsavedChangesWarning(
+  hasChanges: boolean, 
+  enabled: boolean = true, 
+  onBeforeLeave?: () => Promise<void> | void
+) {
   const router = useRouter()
 
   useEffect(() => {
@@ -16,6 +21,15 @@ export function useUnsavedChangesWarning(hasChanges: boolean, enabled: boolean =
     // 브라우저 이탈 시 경고 (새로고침, 탭 닫기, 뒤로가기 등)
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasChanges) {
+        // 클린업 콜백이 있으면 실행 (비동기이지만 beforeunload에서는 제한적)
+        if (onBeforeLeave) {
+          try {
+            onBeforeLeave()
+          } catch (error) {
+            console.warn('페이지 이탈 시 클린업 실패:', error)
+          }
+        }
+        
         // 최신 브라우저에서는 커스텀 메시지가 표시되지 않고 기본 메시지가 표시됩니다
         e.preventDefault()
         e.returnValue = '' // Chrome requires returnValue to be set
@@ -24,7 +38,7 @@ export function useUnsavedChangesWarning(hasChanges: boolean, enabled: boolean =
     }
 
     // popstate 이벤트로 뒤로가기/앞으로가기 감지
-    const handlePopState = (e: PopStateEvent) => {
+    const handlePopState = async (e: PopStateEvent) => {
       if (hasChanges) {
         const shouldProceed = window.confirm(
           '저장하지 않은 변경사항이 있습니다. 페이지를 떠나시겠습니까?'
@@ -33,6 +47,13 @@ export function useUnsavedChangesWarning(hasChanges: boolean, enabled: boolean =
         if (!shouldProceed) {
           // 사용자가 취소한 경우 원래 위치로 돌아가기
           window.history.pushState(null, '', window.location.href)
+        } else if (onBeforeLeave) {
+          // 사용자가 확인한 경우 클린업 실행
+          try {
+            await onBeforeLeave()
+          } catch (error) {
+            console.warn('페이지 이탈 시 클린업 실패:', error)
+          }
         }
       }
     }
@@ -57,7 +78,7 @@ export function useUnsavedChangesWarning(hasChanges: boolean, enabled: boolean =
       window.removeEventListener('popstate', handlePopState)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [hasChanges, enabled])
+  }, [hasChanges, enabled, onBeforeLeave])
 
   // Next.js App Router를 위한 라우터 이벤트 처리
   useEffect(() => {
