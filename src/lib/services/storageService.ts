@@ -159,8 +159,8 @@ export function generateUniqueFileName(originalName: string, category?: string):
     return `${baseName}_${timestamp}_${random}.${extension}`
   }
   
-  // 시설 이미지의 경우 카테고리를 파일명에 포함하지 않음 (경로에서 관리)
-  if (category && category.startsWith('pages/about/facilities/image/')) {
+  // 시설 관련 이미지의 경우 카테고리를 파일명에 포함하지 않음 (경로에서 관리)
+  if (category && category.startsWith('pages/about/facilities/')) {
     return `${baseName}_${timestamp}_${random}.${extension}`
   }
   
