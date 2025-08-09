@@ -105,7 +105,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
             </div>
             <div className="flex flex-wrap gap-2">
               {member.certifications.map((cert, certIndex) => (
-                <span key={certIndex} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-wizfore-warm-brown/10 text-wizfore-text-primary border border-wizfore-warm-brown/20">
+                <span key={certIndex} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium text-wizfore-text-primary border border-wizfore-warm-brown/20">
                   {cert}
                 </span>
               ))}
