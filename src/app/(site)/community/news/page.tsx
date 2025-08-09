@@ -121,7 +121,6 @@ export default function NewsPage() {
         categories={categories}
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
-        filteredNews={filteredNews}
         newsByYear={newsByYear}
         years={years}
         currentPage={currentPage}

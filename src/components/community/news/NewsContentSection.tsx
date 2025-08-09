@@ -33,7 +33,6 @@ interface NewsContentSectionProps {
   categories: CategoryItem[]
   selectedCategory: string
   onCategoryChange: (categoryEnglish: string) => void
-  filteredNews: Article[]
   newsByYear: Record<string, Article[]>
   years: string[]
   currentPage: number
@@ -49,7 +48,6 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
   categories,
   selectedCategory,
   onCategoryChange,
-  filteredNews,
   newsByYear,
   years,
   currentPage,
@@ -76,7 +74,8 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
     ? regularNews
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-    : filteredNews
+    : publishedArticles
+        .filter(article => article.category === selectedCategory)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
   
@@ -157,7 +156,9 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
                       displayNumber = <Megaphone className="w-5 h-5 text-wizfore-coral-primary" />
                     } else {
                       // 일반 뉴스의 경우 전체 일반 뉴스에서의 순서 계산
-                      const allRegularNews = selectedCategory === 'all' ? regularNews : filteredNews
+                      const allRegularNews = selectedCategory === 'all' 
+                        ? regularNews 
+                        : publishedArticles.filter(article => article.category === selectedCategory)
                       const sortedByDateAsc = [...allRegularNews].sort((a, b) => {
                         const dateCompare = new Date(a.date).getTime() - new Date(b.date).getTime();
                         if (dateCompare === 0) {
