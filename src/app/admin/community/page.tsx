@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { Newspaper, Share, Loader2 } from 'lucide-react'
 import { getCommunity, updateCommunity } from '@/lib/services/dataService'
 import { useAdminForm } from '@/hooks/useAdminForm'
@@ -84,11 +84,12 @@ export default function CommunityManagePage() {
   const {
     data: communityData,
     setData: setCommunityData,
+    originalData,
     loading,
     saving,
     saveStatus,
     error,
-    hasChanges,
+    hasChanges: _,
     handleSave,
     handleReset
   } = useAdminForm({
@@ -98,6 +99,30 @@ export default function CommunityManagePage() {
     },
     defaultData: DEFAULT_COMMUNITY_DATA
   })
+
+  // 커스텀 hasChanges 로직: 게시글 배열 변경은 제외하고 설정 변경만 감지
+  const hasChanges = useMemo(() => {
+    if (!originalData || !communityData) return false
+    
+    // 게시글 배열을 제외한 비교를 위해 객체를 복사하고 articles 제거
+    const currentWithoutArticles = {
+      ...communityData,
+      news: {
+        ...communityData.news,
+        articles: [] // 게시글 배열은 비교에서 제외
+      }
+    }
+    
+    const originalWithoutArticles = {
+      ...originalData,
+      news: {
+        ...originalData.news,
+        articles: [] // 게시글 배열은 비교에서 제외
+      }
+    }
+    
+    return JSON.stringify(currentWithoutArticles) !== JSON.stringify(originalWithoutArticles)
+  }, [originalData, communityData])
 
   // 브라우저 이탈 경고 훅 사용
   useUnsavedChangesWarning(hasChanges)
@@ -185,10 +210,20 @@ export default function CommunityManagePage() {
           <NewsManagementTab 
             data={communityData.news} 
             onUpdate={(newsData: NewsInfo) => {
-              console.log('News onUpdate 호출됨, 새 데이터:', newsData)
+              console.log('News onUpdate 호출됨 (설정 변경), 새 데이터:', newsData)
               setCommunityData(prev => {
                 const newData = { ...prev, news: newsData }
-                console.log('setCommunityData 호출, 새 커뮤니티 데이터:', newData)
+                console.log('setCommunityData 호출 (설정 변경), 새 커뮤니티 데이터:', newData)
+                return newData
+              })
+            }}
+            onArticleChange={(newsData: NewsInfo) => {
+              console.log('News onArticleChange 호출됨 (게시글 실시간 변경), 새 데이터:', newsData)
+              // 게시글 실시간 변경은 단순히 현재 데이터만 업데이트
+              // 변경사항 경고는 카테고리 등 설정 변경에만 적용
+              setCommunityData(prev => {
+                const newData = { ...prev, news: newsData }
+                console.log('setCommunityData 호출 (게시글 실시간 변경), 새 커뮤니티 데이터:', newData)
                 return newData
               })
             }} 

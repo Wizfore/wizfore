@@ -19,10 +19,11 @@ const statusOptions = [
 
 interface NewsManagementTabProps {
   data: NewsInfo
-  onUpdate: (data: NewsInfo) => void
+  onUpdate: (data: NewsInfo) => void // 설정 변경용 (카테고리 관리)
+  onArticleChange?: (data: NewsInfo) => void // 게시글 CRUD용 (실시간 변경)
 }
 
-export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabProps) {
+export default function NewsManagementTab({ data, onUpdate, onArticleChange }: NewsManagementTabProps) {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
@@ -182,10 +183,18 @@ export default function NewsManagementTab({ data, onUpdate }: NewsManagementTabP
         await deleteArticle(id)
         // 상태에서 삭제된 게시글 제거
         const updatedArticles = articles.filter(article => article.id !== id)
-        onUpdate({
+        const updatedData = {
           ...data,
           articles: updatedArticles
-        })
+        }
+        
+        // 게시글 실시간 변경은 onArticleChange 사용 (hasChanges에 영향 없음)
+        if (onArticleChange) {
+          onArticleChange(updatedData)
+        } else {
+          // fallback to onUpdate if onArticleChange is not provided
+          onUpdate(updatedData)
+        }
       } catch (error) {
         console.error('게시글 삭제 실패:', error)
         alert('게시글 삭제에 실패했습니다.')
