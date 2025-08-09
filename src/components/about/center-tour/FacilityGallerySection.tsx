@@ -191,7 +191,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                   <div className="w-24 h-16 relative">
                     <Image
                       src={image.imageUrl}
-                      alt={image.description}
+                      alt={image.description || ''}
                       fill
                       className="object-contain"
                       sizes="96px"
