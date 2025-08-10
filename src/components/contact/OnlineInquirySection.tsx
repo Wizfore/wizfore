@@ -107,27 +107,27 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
   }
 
   return (
-    <section className="py-16 md:py-20 lg:py-24 bg-white">
-      <div className="container-custom mx-auto px-4">
+    <section className="py-8 md:py-12 lg:py-16 xl:py-20 bg-white">
+      <div className="container-custom mx-auto px-4 md:px-6 lg:px-8">
         {/* 섹션 헤더 */}
         <motion.div
-          className="text-center mb-8 md:mb-12 lg:mb-16"
+          className="text-center mb-6 md:mb-8 lg:mb-12 xl:mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-wizfore-text-primary mb-4">
+          <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-wizfore-text-primary mb-3 md:mb-4">
             {aboutMessage?.title || "문의하기"}
           </h2>
           <div className="text-sm md:text-base lg:text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
-            <p className="whitespace-pre-line">
+            <p className="whitespace-pre-line leading-relaxed">
               {aboutMessage?.description || "궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 빠른 시일 내에 답변드리겠습니다."}
             </p>
           </div>
         </motion.div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl md:max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -137,38 +137,38 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
             <MagicCard className="max-w-2xl mx-auto">
               {isSubmitted ? (
                 <motion.div
-                  className="text-center py-12"
+                  className="text-center py-8 md:py-10 lg:py-12"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="w-12 h-12 md:w-16 md:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-                    <Check className="w-6 h-6 md:w-8 md:h-8 text-green-600" />
+                  <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 lg:mb-6">
+                    <Check className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-green-600" />
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-wizfore-text-primary mb-4">
+                  <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-wizfore-text-primary mb-3 md:mb-4">
                     문의가 접수되었습니다
                   </h3>
-                  <p className="text-sm md:text-base text-wizfore-text-secondary">
+                  <p className="text-sm md:text-base text-wizfore-text-secondary leading-relaxed">
                     빠른 시일 내에 답변드리겠습니다.<br />
                     감사합니다.
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-5 lg:space-y-6">
                   {/* 이름 */}
                   <div>
-                    <label className="block text-sm font-medium text-wizfore-text-primary mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-wizfore-text-primary mb-1.5 md:mb-2">
                       이름 <span className="text-red-500">*</span>
                     </label>
                     <input
                       {...register('name')}
                       type="text"
-                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
+                      className="w-full px-3 md:px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                       placeholder="이름을 입력해주세요"
                     />
                     {errors.name && (
-                      <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-                        <AlertCircle className="w-4 h-4" />
+                      <p className="mt-1 text-xs md:text-sm text-red-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />
                         {errors.name.message}
                       </p>
                     )}
@@ -176,18 +176,18 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
 
                   {/* 전화번호 */}
                   <div>
-                    <label className="block text-sm font-medium text-wizfore-text-primary mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-wizfore-text-primary mb-1.5 md:mb-2">
                       전화번호 <span className="text-red-500">*</span>
                     </label>
                     <input
                       {...register('phone')}
                       type="tel"
-                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
+                      className="w-full px-3 md:px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                       placeholder="010-0000-0000"
                     />
                     {errors.phone && (
-                      <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-                        <AlertCircle className="w-4 h-4" />
+                      <p className="mt-1 text-xs md:text-sm text-red-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />
                         {errors.phone.message}
                       </p>
                     )}
@@ -195,18 +195,18 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
 
                   {/* 이메일 */}
                   <div>
-                    <label className="block text-sm font-medium text-wizfore-text-primary mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-wizfore-text-primary mb-1.5 md:mb-2">
                       이메일 <span className="text-red-500">*</span>
                     </label>
                     <input
                       {...register('email')}
                       type="email"
-                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
+                      className="w-full px-3 md:px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                       placeholder="example@email.com"
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-                        <AlertCircle className="w-4 h-4" />
+                      <p className="mt-1 text-xs md:text-sm text-red-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />
                         {errors.email.message}
                       </p>
                     )}
@@ -214,12 +214,12 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
 
                   {/* 문의 분류 */}
                   <div>
-                    <label className="block text-sm font-medium text-wizfore-text-primary mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-wizfore-text-primary mb-1.5 md:mb-2">
                       문의 분류 <span className="text-red-500">*</span>
                     </label>
                     <select
                       {...register('category')}
-                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
+                      className="w-full px-3 md:px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                     >
                       <option value="">문의 분류를 선택해주세요</option>
                       {inquiryCategories.map((category, index) => (
@@ -229,8 +229,8 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                       ))}
                     </select>
                     {errors.category && (
-                      <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-                        <AlertCircle className="w-4 h-4" />
+                      <p className="mt-1 text-xs md:text-sm text-red-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />
                         {errors.category.message}
                       </p>
                     )}
@@ -238,25 +238,25 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
 
                   {/* 문의 내용 */}
                   <div>
-                    <label className="block text-sm font-medium text-wizfore-text-primary mb-2">
+                    <label className="block text-xs md:text-sm font-medium text-wizfore-text-primary mb-1.5 md:mb-2">
                       문의 내용 <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       {...register('message')}
-                      rows={6}
-                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all resize-none text-sm md:text-base"
+                      rows={5}
+                      className="w-full px-3 md:px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all resize-none text-sm md:text-base md:rows-6"
                       placeholder="문의하실 내용을 자세히 작성해주세요"
                     />
                     {errors.message && (
-                      <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
-                        <AlertCircle className="w-4 h-4" />
+                      <p className="mt-1 text-xs md:text-sm text-red-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />
                         {errors.message.message}
                       </p>
                     )}
                   </div>
 
                   {/* 제출 버튼 */}
-                  <div className="pt-4">
+                  <div className="pt-3 md:pt-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}

@@ -43,7 +43,7 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
       
       {/* 뒤로가기 버튼 */}
       {showBackButton && (
-        <div className="relative z-10 container-custom mx-auto px-4 md:px-6 pt-6 md:pt-8">
+        <div className="relative z-10 container-custom mx-auto px-4 md:px-6 lg:px-8 pt-4 md:pt-6 lg:pt-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -51,9 +51,9 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
           >
             <button
               onClick={() => router.push('/community/news')}
-              className="inline-flex items-center px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+              className="inline-flex items-center px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2" />
               목록으로 돌아가기
             </button>
           </motion.div>
@@ -61,7 +61,7 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
       )}
 
       {/* 통합 메인 섹션 */}
-      <div className="relative container-custom mx-auto px-4 md:px-6 py-8 md:py-12 z-10">
+      <div className="relative container-custom mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 lg:py-12 z-10">
         <motion.div
           className="max-w-5xl mx-auto"
           initial={{ opacity: 0, y: 30 }}
@@ -69,7 +69,7 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <MagicCard
-            className="relative bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
+            className="relative bg-white rounded-lg md:rounded-xl lg:rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
             gradientColor="#f1f5f9"
             gradientFrom="#f97316"
             gradientTo="#fb7185"
@@ -84,15 +84,15 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
             />
             
             {/* 헤더 영역 */}
-            <div className="pt-6 md:pt-10 lg:pt-12 px-6 md:px-10 lg:px-12">
-              <div className="flex items-start justify-between mb-8">
+            <div className="pt-4 md:pt-6 lg:pt-8 xl:pt-12 px-4 md:px-6 lg:px-8 xl:px-12">
+              <div className="flex items-start justify-between mb-6 md:mb-8">
                 {/* 카테고리 태그 */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  <span className="inline-block px-4 py-2 bg-wizfore-coral-primary text-white text-sm font-medium rounded-full">
+                  <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-wizfore-coral-primary text-white text-xs md:text-sm font-medium rounded-full">
                     <TextAnimate
                       animation="slideLeft"
                       by="character"
@@ -107,7 +107,7 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
                 
                 {/* 날짜 */}
                 <motion.div
-                  className="text-sm text-gray-500"
+                  className="text-xs md:text-sm text-gray-500"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
@@ -129,27 +129,27 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
               </div>
               
               {/* 제목 */}
-              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-6">
+              <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-800 mb-4 md:mb-6">
                 {article.title}
               </h1>
             </div>
             
             {/* 구분선 */}
-            <div className="px-6 md:px-10 lg:px-12">
-              <hr className="border-gray-600 border-t-2 mb-14" />
+            <div className="px-4 md:px-6 lg:px-8 xl:px-12">
+              <hr className="border-gray-600 border-t-2 mb-8 md:mb-12 lg:mb-14" />
             </div>
             
             {/* 본문 영역 */}
-            <div className="px-6 md:px-10 lg:px-12 pb-6 md:pb-10 lg:pb-12 min-h-[400px]">
+            <div className="px-4 md:px-6 lg:px-8 xl:px-12 pb-4 md:pb-6 lg:pb-8 xl:pb-12 min-h-[300px] md:min-h-[400px]">
               <div className="prose max-w-none">
                 {article.contentHtml ? (
                   <div 
-                    className="markdown-content text-lg md:text-xl leading-relaxed md:leading-loose text-gray-700"
+                    className="markdown-content text-sm md:text-base lg:text-lg leading-relaxed md:leading-relaxed lg:leading-loose text-gray-700"
                     dangerouslySetInnerHTML={{ __html: article.contentHtml }}
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-64 text-gray-400">
-                    <p className="text-lg md:text-xl">본문 내용이 준비 중입니다.</p>
+                  <div className="flex items-center justify-center h-48 md:h-64 text-gray-400">
+                    <p className="text-base md:text-lg lg:text-xl">본문 내용이 준비 중입니다.</p>
                   </div>
                 )}
               </div>
