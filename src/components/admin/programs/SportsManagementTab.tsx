@@ -93,7 +93,7 @@ export function SportsManagementTab({
 
   const updateProgram = (index: number, field: keyof ProgramDetail, value: any) => {
     // 이미지 URL 필드 업데이트 시 추적 시작
-    if (field === 'imageUrl' && typeof value === 'string' && value) {
+    if (field === 'image' && typeof value === 'string' && value) {
       trackUploadedImage(value)
     }
     
