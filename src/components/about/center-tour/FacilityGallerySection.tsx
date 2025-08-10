@@ -60,11 +60,11 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
   // 데이터가 없는 경우
   if (facilityCategories.length === 0 || facilityImages.length === 0) {
     return (
-      <section className="pt-24 pb-16 bg-white">
-        <div className="container-custom mx-auto px-4">
-          <div className="flex items-center justify-center py-32">
+      <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <div className="container-custom mx-auto px-4 md:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-16 md:py-20 lg:py-24">
             <div className="text-center">
-              <p className="text-wizfore-text-secondary text-lg">시설 이미지가 없습니다.</p>
+              <p className="text-wizfore-text-secondary text-sm md:text-base lg:text-lg">시설 이미지가 없습니다.</p>
             </div>
           </div>
         </div>
@@ -73,10 +73,10 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
   }
 
   return (
-    <section className="pt-16 pb-16 bg-white">
-      <div className="container-custom mx-auto px-4">
+    <section className="py-8 md:py-12 lg:py-16 bg-white">
+      <div className="container-custom mx-auto px-4 md:px-6 lg:px-8">
         {/* 탭 메뉴 */}
-        <div className="flex justify-center mb-16" role="tablist" aria-label="시설 종류">
+        <div className="flex justify-center mb-6 md:mb-8 lg:mb-12" role="tablist" aria-label="시설 종류">
           <div className="flex bg-white rounded-xl p-1 md:p-2 shadow-lg border border-gray-200">
             {facilityCategories
               .sort((a, b) => a.order - b.order)
@@ -84,7 +84,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
               <button
                 key={category.id}
                 onClick={() => handleTabChange(category.id)}
-                className={`px-3 py-2 md:px-6 lg:px-8 md:py-3 rounded-lg font-semibold text-sm md:text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-wizfore-coral-primary focus:ring-offset-2 ${
+                className={`px-3 py-2 md:px-4 lg:px-6 md:py-3 rounded-lg font-semibold text-xs md:text-sm lg:text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-wizfore-coral-primary focus:ring-offset-2 ${
                   activeTab === category.id
                     ? 'bg-wizfore-coral-primary text-white shadow-md'
                     : 'text-wizfore-text-secondary hover:text-wizfore-coral-primary hover:bg-gray-50'
@@ -111,9 +111,9 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
         >
           
           {/* 메인 이미지 영역 */}
-          <div className="relative mb-8">
+          <div className="relative mb-4 md:mb-6 lg:mb-8">
             <div 
-              className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-white shadow-lg"
+              className="relative h-48 md:h-56 lg:h-64 rounded-2xl overflow-hidden bg-white shadow-lg"
               role="img"
               aria-label={currentImage?.description || ''}
             >
@@ -142,30 +142,30 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                 <>
                   <button
                     onClick={prevImage}
-                    className="absolute left-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-2 drop-shadow-lg"
+                    className="absolute left-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-1 md:p-2 drop-shadow-lg"
                     aria-label={`이전 이미지로 이동 (현재 ${activeImageIndex + 1}/${currentImages.length})`}
                   >
-                    <ChevronLeft className="w-8 h-8 md:w-10 lg:w-12 md:h-10 lg:h-12 filter drop-shadow-md" strokeWidth={3} />
+                    <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 filter drop-shadow-md" strokeWidth={3} />
                   </button>
                   <button
                     onClick={nextImage}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-2 drop-shadow-lg"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-1 md:p-2 drop-shadow-lg"
                     aria-label={`다음 이미지로 이동 (현재 ${activeImageIndex + 1}/${currentImages.length})`}
                   >
-                    <ChevronRight className="w-8 h-8 md:w-10 lg:w-12 md:h-10 lg:h-12 filter drop-shadow-md" strokeWidth={3} />
+                    <ChevronRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 filter drop-shadow-md" strokeWidth={3} />
                   </button>
                 </>
               )}
             </div>
             
             {/* 이미지 정보 */}
-            <div className="mt-6 text-center">
+            <div className="mt-3 md:mt-4 lg:mt-6 text-center">
               <motion.p 
                 key={`desc-${activeTab}-${activeImageIndex}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-sm md:text-base lg:text-lg text-wizfore-text-secondary leading-relaxed max-w-2xl mx-auto min-h-[1.75rem]"
+                className="text-xs md:text-sm lg:text-base text-wizfore-text-secondary leading-relaxed max-w-2xl mx-auto min-h-[1.5rem] md:min-h-[1.75rem]"
               >
                 {currentImage?.description || ''}
               </motion.p>
@@ -174,7 +174,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
 
           {/* 썸네일 네비게이션 */}
           <div className="relative" aria-label="이미지 썸네일 목록">
-            <div className="flex justify-center gap-3 overflow-x-auto pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div className="flex justify-center gap-2 md:gap-3 overflow-x-auto pb-3 md:pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {currentImages.map((image, index) => (
                 <motion.button
                   key={image.id}
@@ -188,13 +188,13 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                   whileTap={{ scale: 0.95 }}
                   aria-label={`${image.description} 썸네일 (${index + 1}/${currentImages.length})`}
                 >
-                  <div className="w-16 h-12 md:w-20 lg:w-24 md:h-14 lg:h-16 relative">
+                  <div className="w-12 h-9 md:w-16 md:h-12 lg:w-20 lg:h-15 relative">
                     <Image
                       src={image.imageUrl}
                       alt={image.description || ''}
                       fill
                       className="object-contain"
-                      sizes="(max-width: 768px) 64px, (max-width: 1024px) 80px, 96px"
+                      sizes="(max-width: 768px) 48px, (max-width: 1024px) 64px, 80px"
                     />
                     {index !== activeImageIndex && (
                       <div className="absolute inset-0 bg-black/20" />
@@ -205,8 +205,8 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
             </div>
             
             {/* 이미지 카운터 */}
-            <div className="text-center mt-4" role="status" aria-live="polite">
-              <span className="text-sm text-wizfore-text-light">
+            <div className="text-center mt-2 md:mt-3 lg:mt-4" role="status" aria-live="polite">
+              <span className="text-xs md:text-sm text-wizfore-text-light">
                 {activeImageIndex + 1} / {currentImages.length}
               </span>
               <span className="sr-only">

@@ -11,7 +11,7 @@ const DirectorMessageSection: React.FC<DirectorMessageSectionProps> = ({ directo
   if (!director.aboutMessage) return null
 
   return (
-    <section className="relative py-24 bg-white overflow-hidden">
+    <section className="relative py-8 md:py-12 lg:py-16 bg-white overflow-hidden">
       {/* 배경 패턴 */}
       <div className="absolute inset-0 opacity-5">
         <svg className="w-full h-full" viewBox="0 0 100 100">
@@ -24,7 +24,7 @@ const DirectorMessageSection: React.FC<DirectorMessageSectionProps> = ({ directo
         </svg>
       </div>
 
-      <div className="container-custom mx-auto px-4 relative z-10">
+      <div className="container-custom mx-auto px-4 md:px-6 lg:px-8 relative z-10">
         <motion.div
           className="max-w-4xl mx-auto text-center"
           initial={{ opacity: 0, y: 30 }}
@@ -32,15 +32,15 @@ const DirectorMessageSection: React.FC<DirectorMessageSectionProps> = ({ directo
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-black text-wizfore-text-primary mb-8">
+          <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-black text-wizfore-text-primary mb-4 md:mb-6 lg:mb-8">
             {director.aboutMessage.title}
           </h2>
           
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {director.aboutMessage.description.split('\n\n').map((message, index) => (
               <motion.p
                 key={index}
-                className="text-lg md:text-xl text-wizfore-text-secondary leading-relaxed"
+                className="text-sm md:text-base lg:text-lg text-wizfore-text-secondary leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
