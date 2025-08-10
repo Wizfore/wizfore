@@ -90,11 +90,11 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold heart-text-dark gcf-float mb-6 md:mb-8">
+            <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-bold heart-text-dark gcf-float mb-4 md:mb-6 lg:mb-8">
               {title}
             </h2>
             
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg heart-text-body leading-relaxed">
+            <div className="space-y-3 md:space-y-4 lg:space-y-6 text-sm md:text-base lg:text-lg heart-text-body leading-relaxed">
               {messages.map((message, index) => (
                 <motion.p
                   key={index}
@@ -123,13 +123,13 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
               viewport={{ once: true }}
-              className="mt-8 md:mt-12 text-right pr-4 md:pr-8"
+              className="mt-6 md:mt-8 lg:mt-12 text-right pr-2 md:pr-4 lg:pr-8"
             >
               <div className="text-right">
-                <p className="text-2xl md:text-3xl font-bold text-mindstory-gray-text mb-1">
+                <p className="text-lg md:text-2xl lg:text-3xl font-bold text-mindstory-gray-text mb-1">
                   {directorName}
                 </p>
-                <p className="text-base md:text-lg text-mindstory-gray-text">
+                <p className="text-sm md:text-base lg:text-lg text-mindstory-gray-text">
                   {siteName} 원장
                 </p>
               </div>

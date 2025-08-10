@@ -295,8 +295,19 @@ const CategoryCards = () => {
                       <h2 className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-1 md:ml-2">
                         {category.hero?.title}
                       </h2>
-                      <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-2 ml-1 md:ml-2">
-                        {category.hero?.description}
+                      <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-1 md:line-clamp-2 ml-1 md:ml-2">
+                        {(() => {
+                          const desc = category.hero?.description || '';
+                          // 모바일에서는 35자, 데스크톱에서는 80자로 제한
+                          const mobileDesc = desc.length > 35 ? desc.substring(0, 35).trim() + '...' : desc;
+                          const desktopDesc = desc.length > 80 ? desc.substring(0, 80).trim() + '...' : desc;
+                          return (
+                            <>
+                              <span className="md:hidden">{mobileDesc}</span>
+                              <span className="hidden md:inline">{desktopDesc}</span>
+                            </>
+                          );
+                        })()}
                       </p>
                     </div>
                   </div>
@@ -342,8 +353,19 @@ const CategoryCards = () => {
                                 <h2 className="text-white text-sm md:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-1 md:ml-2">
                                   {category.hero?.title}
                                 </h2>
-                                <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-2 ml-1 md:ml-2">
-                                  {category.hero?.description}
+                                <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-1 md:line-clamp-2 ml-1 md:ml-2">
+                                  {(() => {
+                                    const desc = category.hero?.description || '';
+                                    // 모바일에서는 35자, 데스크톱에서는 80자로 제한
+                                    const mobileDesc = desc.length > 35 ? desc.substring(0, 35).trim() + '...' : desc;
+                                    const desktopDesc = desc.length > 80 ? desc.substring(0, 80).trim() + '...' : desc;
+                                    return (
+                                      <>
+                                        <span className="md:hidden">{mobileDesc}</span>
+                                        <span className="hidden md:inline">{desktopDesc}</span>
+                                      </>
+                                    );
+                                  })()}
                                 </p>
                               </div>
                             </div>

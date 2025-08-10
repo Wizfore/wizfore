@@ -266,16 +266,16 @@ const ProgramGrid = () => {
           viewport={{ once: true }}
           className="text-center mb-16 md:mb-20 lg:mb-24"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-wizfore-text-primary mb-4 gcf-float">
+          <h2 className="text-xl md:text-3xl lg:text-4xl font-bold text-wizfore-text-primary mb-3 md:mb-4 gcf-float">
             {gridConfig.title}
           </h2>
-          <p className="text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
+          <p className="text-sm md:text-base lg:text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
             {gridConfig.description}
           </p>
         </motion.div>
 
         {/* 프로그램 마키 레이아웃 */}
-        <div className="relative w-full px-4 space-y-6 overflow-hidden">
+        <div className="relative w-full px-2 md:px-4 space-y-4 md:space-y-6 overflow-hidden">
           {/* 첫 번째 마키 - 정방향 */}
           <div 
             ref={row1Ref}
@@ -293,7 +293,7 @@ const ProgramGrid = () => {
             onTouchEnd={() => handleTouchEnd('row1')}
           >
             <div 
-              className={`flex gap-4 py-8 ${isAnimationPaused.row1 ? '' : 'animate-marquee-scroll'}`}
+              className={`flex gap-2 md:gap-4 py-6 md:py-8 ${isAnimationPaused.row1 ? '' : 'animate-marquee-scroll'}`}
               style={{ 
                 width: 'max-content',
                 animationDuration: '60s',
@@ -334,17 +334,17 @@ const ProgramGrid = () => {
                         duration: 0.2, 
                         ease: "easeOut"
                       }}
-                      className="bg-gcf-card border border-gcf-border hover:border-gcf-accent rounded-2xl p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-gcf-sm hover:shadow-gcf-lg transition-all duration-300 select-none gcf-float"
+                      className="bg-gcf-card border border-gcf-border hover:border-gcf-accent rounded-2xl p-3 md:p-4 lg:p-6 w-56 md:w-64 lg:w-80 h-18 md:h-20 lg:h-24 flex items-center gap-2 md:gap-3 lg:gap-4 shadow-gcf-sm hover:shadow-gcf-lg transition-all duration-300 select-none gcf-float"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-xl flex items-center justify-center transition-colors duration-300 shadow-gcf-sm`}>
-                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-gcf-primary-foreground" />
+                      <div className={`flex-shrink-0 w-8 md:w-10 lg:w-12 h-8 md:h-10 lg:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-xl flex items-center justify-center transition-colors duration-300 shadow-gcf-sm`}>
+                        <IconComponent className="w-4 md:w-5 lg:w-6 h-4 md:h-5 lg:h-6 text-gcf-primary-foreground" />
                       </div>
 
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-xs md:text-sm lg:text-base font-semibold text-wizfore-text-primary group-hover:text-gcf-accent transition-colors duration-300 mb-0.5 md:mb-1 truncate">
                           {program.title}
                         </h3>
                         
@@ -378,7 +378,7 @@ const ProgramGrid = () => {
             onTouchEnd={() => handleTouchEnd('row2')}
           >
             <div 
-              className={`flex gap-4 py-8 ${isAnimationPaused.row2 ? '' : 'animate-marquee-scroll-reverse'}`}
+              className={`flex gap-2 md:gap-4 py-6 md:py-8 ${isAnimationPaused.row2 ? '' : 'animate-marquee-scroll-reverse'}`}
               style={{ 
                 width: 'max-content',
                 animationDuration: '70s',
@@ -419,17 +419,17 @@ const ProgramGrid = () => {
                         duration: 0.2, 
                         ease: "easeOut"
                       }}
-                      className="bg-gcf-card border border-gcf-border hover:border-gcf-accent rounded-2xl p-4 md:p-6 w-64 md:w-80 h-20 md:h-24 flex items-center gap-3 md:gap-4 shadow-gcf-sm hover:shadow-gcf-lg transition-all duration-300 select-none gcf-float"
+                      className="bg-gcf-card border border-gcf-border hover:border-gcf-accent rounded-2xl p-3 md:p-4 lg:p-6 w-56 md:w-64 lg:w-80 h-18 md:h-20 lg:h-24 flex items-center gap-2 md:gap-3 lg:gap-4 shadow-gcf-sm hover:shadow-gcf-lg transition-all duration-300 select-none gcf-float"
                     >
                       {/* 왼쪽 아이콘 영역 */}
-                      <div className={`flex-shrink-0 w-10 md:w-12 h-10 md:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-xl flex items-center justify-center transition-colors duration-300 shadow-gcf-sm`}>
-                        <IconComponent className="w-5 md:w-6 h-5 md:h-6 text-gcf-primary-foreground" />
+                      <div className={`flex-shrink-0 w-8 md:w-10 lg:w-12 h-8 md:h-10 lg:h-12 ${program.bgColor} group-hover:${program.hoverColor} rounded-xl flex items-center justify-center transition-colors duration-300 shadow-gcf-sm`}>
+                        <IconComponent className="w-4 md:w-5 lg:w-6 h-4 md:h-5 lg:h-6 text-gcf-primary-foreground" />
                       </div>
 
                       {/* 오른쪽 텍스트 영역 */}
                       <div className="flex-1 min-w-0">
                         {/* 프로그램 제목 */}
-                        <h3 className="text-sm md:text-base font-semibold text-wizfore-text-primary group-hover:text-gcf-accent transition-colors duration-300 mb-1 truncate">
+                        <h3 className="text-xs md:text-sm lg:text-base font-semibold text-wizfore-text-primary group-hover:text-gcf-accent transition-colors duration-300 mb-0.5 md:mb-1 truncate">
                           {program.title}
                         </h3>
                         
