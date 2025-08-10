@@ -17,15 +17,15 @@ const CommonHeroSection: React.FC<CommonHeroSectionProps> = ({
 }) => {
   return (
     <section 
-      className={`relative h-96 bg-cover bg-center flex items-center justify-center ${className}`}
+      className={`relative h-64 md:h-80 lg:h-96 bg-cover bg-center flex items-center justify-center ${className}`}
       style={{
         backgroundImage: `url('${backgroundImage}')`
       }}
     >
       <div className="absolute inset-0 bg-black/30" />
-      <div className="relative z-10 text-center text-white">
+      <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
         <motion.h1 
-          className="text-5xl font-bold mb-4"
+          className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -33,7 +33,7 @@ const CommonHeroSection: React.FC<CommonHeroSectionProps> = ({
           {title}
         </motion.h1>
         <motion.p 
-          className="text-xl"
+          className="text-sm md:text-lg lg:text-xl leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}

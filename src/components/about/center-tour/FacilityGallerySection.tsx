@@ -77,14 +77,14 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
       <div className="container-custom mx-auto px-4">
         {/* 탭 메뉴 */}
         <div className="flex justify-center mb-16" role="tablist" aria-label="시설 종류">
-          <div className="flex bg-white rounded-xl p-2 shadow-lg border border-gray-200">
+          <div className="flex bg-white rounded-xl p-1 md:p-2 shadow-lg border border-gray-200">
             {facilityCategories
               .sort((a, b) => a.order - b.order)
               .map((category) => (
               <button
                 key={category.id}
                 onClick={() => handleTabChange(category.id)}
-                className={`px-8 py-3 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-wizfore-coral-primary focus:ring-offset-2 ${
+                className={`px-3 py-2 md:px-6 lg:px-8 md:py-3 rounded-lg font-semibold text-sm md:text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-wizfore-coral-primary focus:ring-offset-2 ${
                   activeTab === category.id
                     ? 'bg-wizfore-coral-primary text-white shadow-md'
                     : 'text-wizfore-text-secondary hover:text-wizfore-coral-primary hover:bg-gray-50'
@@ -145,14 +145,14 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                     className="absolute left-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-2 drop-shadow-lg"
                     aria-label={`이전 이미지로 이동 (현재 ${activeImageIndex + 1}/${currentImages.length})`}
                   >
-                    <ChevronLeft className="w-12 h-12 filter drop-shadow-md" strokeWidth={3} />
+                    <ChevronLeft className="w-8 h-8 md:w-10 lg:w-12 md:h-10 lg:h-12 filter drop-shadow-md" strokeWidth={3} />
                   </button>
                   <button
                     onClick={nextImage}
                     className="absolute right-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-2 drop-shadow-lg"
                     aria-label={`다음 이미지로 이동 (현재 ${activeImageIndex + 1}/${currentImages.length})`}
                   >
-                    <ChevronRight className="w-12 h-12 filter drop-shadow-md" strokeWidth={3} />
+                    <ChevronRight className="w-8 h-8 md:w-10 lg:w-12 md:h-10 lg:h-12 filter drop-shadow-md" strokeWidth={3} />
                   </button>
                 </>
               )}
@@ -165,7 +165,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="text-lg text-wizfore-text-secondary leading-relaxed max-w-2xl mx-auto min-h-[1.75rem]"
+                className="text-sm md:text-base lg:text-lg text-wizfore-text-secondary leading-relaxed max-w-2xl mx-auto min-h-[1.75rem]"
               >
                 {currentImage?.description || ''}
               </motion.p>
@@ -188,13 +188,13 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                   whileTap={{ scale: 0.95 }}
                   aria-label={`${image.description} 썸네일 (${index + 1}/${currentImages.length})`}
                 >
-                  <div className="w-24 h-16 relative">
+                  <div className="w-16 h-12 md:w-20 lg:w-24 md:h-14 lg:h-16 relative">
                     <Image
                       src={image.imageUrl}
                       alt={image.description || ''}
                       fill
                       className="object-contain"
-                      sizes="96px"
+                      sizes="(max-width: 768px) 64px, (max-width: 1024px) 80px, 96px"
                     />
                     {index !== activeImageIndex && (
                       <div className="absolute inset-0 bg-black/20" />

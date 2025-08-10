@@ -26,15 +26,15 @@ export default function ProgramPageLayout({
     <div className="min-h-screen bg-gray-50">
       {/* 히어로 섹션 */}
       <section 
-        className="relative h-96 bg-cover bg-center flex items-center justify-center"
+        className="relative h-64 md:h-80 lg:h-96 bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: `url('${(heroData.backgroundImage && heroData.backgroundImage.trim() !== '') ? heroData.backgroundImage : heroData.defaultImageUrl}')`
         }}
       >
         <div className="absolute inset-0 bg-black/30" />
-        <div className="relative z-10 text-center text-white">
+        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
           <motion.h1 
-            className="text-5xl font-bold mb-4"
+            className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -42,7 +42,7 @@ export default function ProgramPageLayout({
             {heroData.title}
           </motion.h1>
           <motion.p 
-            className="text-xl"
+            className="text-sm md:text-lg lg:text-xl leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -62,10 +62,10 @@ export default function ProgramPageLayout({
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-bold text-wizfore-text-primary mb-6">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-wizfore-text-primary mb-6">
               {aboutData.title}
             </h2>
-            <p className="text-lg text-wizfore-text-secondary leading-relaxed">
+            <p className="text-sm md:text-base lg:text-lg text-wizfore-text-secondary leading-relaxed">
               {aboutData.description}
             </p>
           </motion.div>

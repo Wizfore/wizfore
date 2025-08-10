@@ -93,10 +93,10 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold text-wizfore-text-primary mb-4">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-wizfore-text-primary mb-4">
             {aboutMessage?.title || "전체 소식"}
           </h2>
-          <p className="text-wizfore-text-secondary mb-8">
+          <p className="text-sm md:text-base text-wizfore-text-secondary mb-8">
             {aboutMessage?.description || "위즈포레 사회서비스센터의 다양한 협력 활동, 수상 내역, 행사 참여 등 주요 소식들을 시간순으로 확인하실 수 있습니다."} 
           </p>
 
@@ -104,20 +104,20 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
           <div className="flex flex-wrap justify-center gap-3 mb-8">
             <button
               onClick={() => onCategoryChange('all')}
-              className={`inline-flex items-center px-4 py-2 rounded-full text-sm border transition-colors ${
+              className={`inline-flex items-center px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm border transition-colors ${
                 selectedCategory === 'all' 
                   ? 'bg-wizfore-coral-primary/20 text-wizfore-coral-primary border-wizfore-coral-primary' 
                   : 'bg-white text-wizfore-text-secondary border-gray-200 hover:border-wizfore-coral-primary'
               }`}
             >
-              <Filter className="w-4 h-4 mr-2" />
+              <Filter className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               전체 ({allNews.filter(article => article.status === 'published').length})
             </button>
             {categories.map((category) => (
               <button
                 key={category.english}
                 onClick={() => onCategoryChange(category.english)}
-                className={`inline-flex items-center px-4 py-2 rounded-full text-sm border transition-colors ${
+                className={`inline-flex items-center px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm border transition-colors ${
                   selectedCategory === category.english 
                     ? 'bg-wizfore-coral-primary/20 text-wizfore-coral-primary border-wizfore-coral-primary' 
                     : 'bg-white text-wizfore-text-secondary border-gray-200 hover:border-wizfore-coral-primary'
@@ -141,9 +141,9 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50">
-                  <TableHead className="text-center font-bold text-wizfore-text-primary w-16">번호</TableHead>
-                  <TableHead className="font-bold text-wizfore-text-primary">제목</TableHead>
-                  <TableHead className="text-center font-bold text-wizfore-text-primary w-32">날짜</TableHead>
+                  <TableHead className="text-center font-bold text-wizfore-text-primary w-12 md:w-16 text-xs md:text-sm">번호</TableHead>
+                  <TableHead className="font-bold text-wizfore-text-primary text-xs md:text-sm">제목</TableHead>
+                  <TableHead className="text-center font-bold text-wizfore-text-primary w-20 md:w-32 text-xs md:text-sm">날짜</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -180,17 +180,17 @@ const NewsContentSection: React.FC<NewsContentSectionProps> = ({
                       }`}
                       onClick={() => handleNewsClick(item)}
                     >
-                      <TableCell className="text-center text-sm font-medium text-wizfore-text-secondary">
+                      <TableCell className="text-center text-xs md:text-sm font-medium text-wizfore-text-secondary p-2 md:p-4">
                         <div className="flex justify-center items-center">
                           {displayNumber}
                         </div>
                       </TableCell>
-                      <TableCell className="py-4">
-                        <p className="text-sm font-semibold leading-tight hover:text-wizfore-coral-primary transition-colors text-wizfore-text-primary">
+                      <TableCell className="py-2 md:py-4 px-2 md:px-4">
+                        <p className="text-xs md:text-sm font-semibold leading-tight hover:text-wizfore-coral-primary transition-colors text-wizfore-text-primary">
                           {item.title}
                         </p>
                       </TableCell>
-                      <TableCell className="text-center text-sm text-wizfore-text-secondary">
+                      <TableCell className="text-center text-xs md:text-sm text-wizfore-text-secondary p-2 md:p-4">
                         {new Date(item.date).toLocaleDateString('ko-KR', {
                           year: 'numeric',
                           month: '2-digit',

@@ -78,10 +78,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
         >
           <div className="h-full flex items-center justify-center">
             <div className="text-center max-w-4xl mx-auto px-4">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-wizfore-text-primary">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight text-wizfore-text-primary">
                 위즈포레 사회서비스센터
               </h1>
-              <p className="text-lg md:text-xl text-wizfore-text-secondary leading-relaxed">
+              <p className="text-sm md:text-lg lg:text-xl text-wizfore-text-secondary leading-relaxed">
                 함께 어우러지는 지혜의 숲에서 전문적인 사회서비스를 제공합니다.
               </p>
             </div>
@@ -126,10 +126,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="text-left"
                   >
-                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-3 sm:mb-4 text-white font-bold drop-shadow-lg leading-tight">
+                  <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-3 sm:mb-4 text-white font-bold drop-shadow-lg leading-tight">
                     {currentSlideData.title}
                   </h1>
-                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 leading-relaxed drop-shadow-lg">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed drop-shadow-lg">
                     {currentSlideData.description}
                   </p>
                   </motion.div>

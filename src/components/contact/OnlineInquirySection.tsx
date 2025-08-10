@@ -26,7 +26,7 @@ const MagicCard: React.FC<{
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl border border-gray-200 bg-white p-8 shadow-lg transition-all duration-300 ${className}`}
+      className={`relative overflow-hidden rounded-xl border border-gray-200 bg-white p-4 md:p-6 lg:p-8 shadow-lg transition-all duration-300 ${className}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -107,20 +107,20 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
   }
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-16 md:py-20 lg:py-24 bg-white">
       <div className="container-custom mx-auto px-4">
         {/* 섹션 헤더 */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-12 lg:mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-bold text-wizfore-text-primary mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-wizfore-text-primary mb-4">
             {aboutMessage?.title || "문의하기"}
           </h2>
-          <div className="text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
+          <div className="text-sm md:text-base lg:text-lg text-wizfore-text-secondary max-w-2xl mx-auto">
             <p className="whitespace-pre-line">
               {aboutMessage?.description || "궁금한 사항이나 상담을 원하시는 내용을 자세히 적어주시면, 빠른 시일 내에 답변드리겠습니다."}
             </p>
@@ -142,19 +142,19 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Check className="w-8 h-8 text-green-600" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+                    <Check className="w-6 h-6 md:w-8 md:h-8 text-green-600" />
                   </div>
-                  <h3 className="text-2xl font-bold text-wizfore-text-primary mb-4">
+                  <h3 className="text-xl md:text-2xl font-bold text-wizfore-text-primary mb-4">
                     문의가 접수되었습니다
                   </h3>
-                  <p className="text-wizfore-text-secondary">
+                  <p className="text-sm md:text-base text-wizfore-text-secondary">
                     빠른 시일 내에 답변드리겠습니다.<br />
                     감사합니다.
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
                   {/* 이름 */}
                   <div>
                     <label className="block text-sm font-medium text-wizfore-text-primary mb-2">
@@ -163,7 +163,7 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                     <input
                       {...register('name')}
                       type="text"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                       placeholder="이름을 입력해주세요"
                     />
                     {errors.name && (
@@ -182,7 +182,7 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                     <input
                       {...register('phone')}
                       type="tel"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                       placeholder="010-0000-0000"
                     />
                     {errors.phone && (
@@ -201,7 +201,7 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                     <input
                       {...register('email')}
                       type="email"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                       placeholder="example@email.com"
                     />
                     {errors.email && (
@@ -219,7 +219,7 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                     </label>
                     <select
                       {...register('category')}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all text-sm md:text-base"
                     >
                       <option value="">문의 분류를 선택해주세요</option>
                       {inquiryCategories.map((category, index) => (
@@ -244,7 +244,7 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                     <textarea
                       {...register('message')}
                       rows={6}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all resize-none"
+                      className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-wizfore-coral-primary focus:border-transparent outline-none transition-all resize-none text-sm md:text-base"
                       placeholder="문의하실 내용을 자세히 작성해주세요"
                     />
                     {errors.message && (
@@ -260,16 +260,16 @@ const OnlineInquirySection: React.FC<OnlineInquirySectionProps> = ({ aboutMessag
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-wizfore-coral-primary hover:bg-wizfore-coral-primary/90 disabled:bg-gray-400 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+                      className="w-full bg-wizfore-coral-primary hover:bg-wizfore-coral-primary/90 disabled:bg-gray-400 text-white font-semibold py-3 md:py-4 px-4 md:px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm md:text-base"
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           문의 접수 중...
                         </>
                       ) : (
                         <>
-                          <Send className="w-5 h-5" />
+                          <Send className="w-4 h-4 md:w-5 md:h-5" />
                           문의 접수하기
                         </>
                       )}

@@ -129,7 +129,7 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
               </div>
               
               {/* 제목 */}
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-6">
                 {article.title}
               </h1>
             </div>

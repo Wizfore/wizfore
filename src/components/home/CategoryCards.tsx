@@ -188,7 +188,7 @@ const CategoryCards = () => {
           <div className="grid grid-cols-2 gap-3 md:gap-12 max-w-sm md:max-w-6xl mx-auto">
             {[...Array(5)].map((_, index) => (
                 <div key={index}>
-                  <div className="relative h-32 md:h-56 shadow-heart-card overflow-hidden rounded-heart-lg bg-heart-primary/30 animate-pulse w-full">
+                  <div className="relative h-28 sm:h-32 md:h-48 lg:h-56 shadow-heart-card overflow-hidden rounded-heart-lg bg-heart-primary/30 animate-pulse w-full">
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6">
                       <div className="h-4 md:h-6 bg-white/30 rounded-heart-md w-3/4 mb-1 md:mb-2 ml-1 md:ml-2"></div>
                       <div className="h-3 md:h-4 bg-white/20 rounded-heart-sm w-5/6 ml-1 md:ml-2"></div>
@@ -241,7 +241,7 @@ const CategoryCards = () => {
         {/* 섹션 제목 */}
         <div className="text-center mb-16">
           <h2 
-            className="text-3xl md:text-4xl font-bold"
+            className="text-2xl md:text-3xl lg:text-4xl font-bold"
             style={{
               animation: 'heart-pulse 2s ease-in-out infinite'
             }}
@@ -250,7 +250,7 @@ const CategoryCards = () => {
             <span className="text-heart-primary">{sectionConfig.title?.split(' ').slice(1).join(' ') || "프로그램"}</span>
           </h2>
           {sectionConfig.description && (
-            <p className="text-heart-gray mt-4 text-lg max-w-2xl mx-auto">
+            <p className="text-heart-gray mt-4 text-sm md:text-base lg:text-lg max-w-2xl mx-auto">
               {sectionConfig.description}
             </p>
           )}
@@ -280,7 +280,7 @@ const CategoryCards = () => {
                 className="group"
               >
                 <Link href={`/programs/${category.id}`}>
-                  <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full`}>
+                  <div className={`relative h-28 sm:h-32 md:h-48 lg:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full`}>
                     {/* 배경 이미지 */}
                     <CategoryImage 
                       categoryImageUrl={category.hero?.imageUrl}
@@ -292,7 +292,7 @@ const CategoryCards = () => {
                     
                     {/* 왼쪽 하단 텍스트 오버레이 */}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-6 z-10">
-                      <h2 className="text-white text-sm md:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-1 md:ml-2">
+                      <h2 className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-bold mb-1 md:mb-2 drop-shadow-lg ml-1 md:ml-2">
                         {category.hero?.title}
                       </h2>
                       <p className="text-white/90 text-xs md:text-sm drop-shadow-md line-clamp-2 ml-1 md:ml-2">
@@ -327,7 +327,7 @@ const CategoryCards = () => {
                           className="group"
                         >
                           <Link href={`/programs/${category.id}`}>
-                            <div className={`relative h-32 md:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full`}>
+                            <div className={`relative h-28 sm:h-32 md:h-48 lg:h-56 shadow-heart-card hover:shadow-heart-elevated transition-all duration-300 group-hover:scale-105 overflow-hidden rounded-heart-xl ${fallbackGradient} w-full`}>
                               {/* 배경 이미지 */}
                               <CategoryImage 
                                 categoryImageUrl={category.hero?.imageUrl}

@@ -73,10 +73,10 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold text-wizfore-text-primary mb-4">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-wizfore-text-primary mb-4">
             {stats.title}
           </h2>
-          <p className="text-wizfore-text-secondary">
+          <p className="text-sm md:text-base text-wizfore-text-secondary">
             {stats.description}
           </p>
         </motion.div>
@@ -85,7 +85,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
           {enabledCards.map((card, index) => (
             <motion.div
               key={card.id}
-              className="group text-center p-8 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-wizfore-coral-primary/10 shadow-sm transition-all duration-500 hover:shadow-lg hover:-translate-y-2 hover:border-wizfore-coral-primary/40 hover:ring-2 hover:ring-wizfore-coral-primary hover:ring-opacity-30 focus-within:ring-2 focus-within:ring-wizfore-coral-primary focus-within:ring-opacity-50 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:hover:scale-100"
+              className="group text-center p-4 md:p-6 lg:p-8 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-wizfore-coral-primary/10 shadow-sm transition-all duration-500 hover:shadow-lg hover:-translate-y-2 hover:border-wizfore-coral-primary/40 hover:ring-2 hover:ring-wizfore-coral-primary hover:ring-opacity-30 focus-within:ring-2 focus-within:ring-wizfore-coral-primary focus-within:ring-opacity-50 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:hover:scale-100"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               initial={{ opacity: 0, y: 30 }}
@@ -93,22 +93,22 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
               tabIndex={0}
               role="article"
             >
-              <div className="w-16 h-16 border-2 border-gray-300 rounded-xl flex items-center justify-center mx-auto mb-6">
+              <div className="w-12 h-12 md:w-14 lg:w-16 md:h-14 lg:h-16 border-2 border-gray-300 rounded-xl flex items-center justify-center mx-auto mb-4 md:mb-6">
                 <Image 
                   src={getImageWithFallback(card.iconPath, card.defaultIconPath)}
                   alt={card.title}
-                  width={32} 
-                  height={32}
-                  className="opacity-70"
+                  width={24} 
+                  height={24}
+                  className="opacity-70 w-6 h-6 md:w-7 lg:w-8 md:h-7 lg:h-8"
                 />
               </div>
-              <div className="text-4xl font-bold text-wizfore-text-primary mb-3">
+              <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-wizfore-text-primary mb-2 md:mb-3">
                 {getStatValue(card.id)}
               </div>
-              <h3 className="text-wizfore-coral-primary font-semibold text-lg mb-2">
+              <h3 className="text-wizfore-coral-primary font-semibold text-base md:text-lg mb-2">
                 {card.title}
               </h3>
-              <p className="text-wizfore-text-secondary text-sm leading-relaxed">
+              <p className="text-wizfore-text-secondary text-xs md:text-sm leading-relaxed">
                 {card.description}
               </p>
             </motion.div>
