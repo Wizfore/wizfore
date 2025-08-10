@@ -11,18 +11,28 @@ import {
   AdminImageUploadField,
   AdminCard
 } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 interface HistoryManagementTabProps {
   data: HistoryInfo
   onUpdate: (data: HistoryInfo) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
-export default function HistoryManagementTab({ data, onUpdate }: HistoryManagementTabProps) {
+export default function HistoryManagementTab({ data, onUpdate, onUnsavedChanges }: HistoryManagementTabProps) {
   const [editingMilestone, setEditingMilestone] = useState<number | null>(null)
   const [editingStatsCard, setEditingStatsCard] = useState<string | null>(null)
+  
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
 
   // Hero 섹션 업데이트
   const updateHero = (field: string, value: string) => {
+    // 이미지 URL이 업데이트될 때 추적 시작
+    if (field === 'imageUrl' && value) {
+      trackUploadedImage(value)
+    }
+    
     onUpdate({
       ...data,
       hero: {
@@ -97,6 +107,11 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
   const updateStatsCard = (cardId: string, field: keyof StatsCard, value: string | number | boolean) => {
     if (!data.stats?.cards) return
     
+    // 아이콘 이미지 URL이 업데이트될 때 추적 시작
+    if (field === 'iconPath' && typeof value === 'string' && value) {
+      trackUploadedImage(value)
+    }
+    
     const newCards = data.stats.cards.map(card =>
       card.id === cardId ? { ...card, [field]: value } : card
     )
@@ -111,6 +126,18 @@ export default function HistoryManagementTab({ data, onUpdate }: HistoryManageme
   }
 
 
+
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
+  }
 
   // 카드별 카운팅 안내 메시지
   const getCountingGuide = (cardId: string) => {

@@ -12,17 +12,23 @@ import {
   AdminCard,
   AdminArrayField
 } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 interface SportsManagementTabProps {
   data: ProgramCategory
   onUpdate: (data: ProgramCategory) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
 export function SportsManagementTab({
   data,
-  onUpdate
+  onUpdate,
+  onUnsavedChanges
 }: SportsManagementTabProps) {
   const [editingProgram, setEditingProgram] = useState<number | null>(null)
+  
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
   const [showAddForm, setShowAddForm] = useState(false)
   const [newProgram, setNewProgram] = useState<Omit<ProgramDetail, 'order'>>({
     title: '',
@@ -34,6 +40,11 @@ export function SportsManagementTab({
 
   // SnsManagementTab 패턴 적용: 깊은 복사를 사용한 필드 업데이트
   const updateField = (path: string, value: string) => {
+    // 이미지 URL 업데이트 시 추적 시작
+    if (path.endsWith('.imageUrl') && value) {
+      trackUploadedImage(value)
+    }
+    
     const keys = path.split('.')
     const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
     let current: any = newData
@@ -81,6 +92,11 @@ export function SportsManagementTab({
   }
 
   const updateProgram = (index: number, field: keyof ProgramDetail, value: any) => {
+    // 이미지 URL 필드 업데이트 시 추적 시작
+    if (field === 'imageUrl' && typeof value === 'string' && value) {
+      trackUploadedImage(value)
+    }
+    
     const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
     newData.programs[index][field] = value
     onUpdate(newData)
@@ -127,6 +143,18 @@ export function SportsManagementTab({
   }
 
   // AdminArrayField로 대체됨
+
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
+  }
 
   return (
     <div className="space-y-6">

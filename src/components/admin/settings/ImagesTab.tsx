@@ -2,20 +2,42 @@ import React from 'react'
 import { Upload as UploadIcon } from 'lucide-react'
 import type { DefaultSiteData } from '@/types'
 import { AdminSection, AdminCard, AdminImageUploadField } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 type SiteInfoData = DefaultSiteData['siteInfo']
 
 interface ImagesTabProps {
   siteInfo: SiteInfoData
   onUpdate: (data: SiteInfoData) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
-export function ImagesTab({ siteInfo, onUpdate }: ImagesTabProps) {
+export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges }: ImagesTabProps) {
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+
   const handleImageChange = (field: keyof SiteInfoData, url: string) => {
+    // 이미지 URL 업데이트 시 추적 시작
+    if (url && (field === 'faviconUrl' || field === 'headerLogoUrl')) {
+      trackUploadedImage(url)
+    }
+    
     onUpdate({
       ...siteInfo,
       [field]: url
     })
+  }
+
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
   }
 
   return (

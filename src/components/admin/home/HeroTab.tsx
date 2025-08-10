@@ -6,8 +6,11 @@ import {
   AdminImageUploadField,
   AdminCard
 } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
-export function HeroTab({ data, setData }: TabComponentProps) {
+export function HeroTab({ data, setData, onUnsavedChanges }: TabComponentProps & { onUnsavedChanges?: (hasChanges: boolean) => void }) {
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
   // 자동재생 설정 업데이트
   const updateAutoPlay = (autoPlay: boolean) => {
     setData(prev => ({
@@ -21,6 +24,11 @@ export function HeroTab({ data, setData }: TabComponentProps) {
 
   // 슬라이드 필드 업데이트
   const updateSlideField = (index: number, field: string, value: string | boolean) => {
+    // 배경 이미지 URL 업데이트 시 추적 시작
+    if (field === 'backgroundImage' && typeof value === 'string' && value) {
+      trackUploadedImage(value)
+    }
+    
     const newSlides = [...(data?.hero?.slides || [])]
     newSlides[index] = { ...newSlides[index], [field]: value }
     setData(prev => ({
@@ -30,6 +38,18 @@ export function HeroTab({ data, setData }: TabComponentProps) {
         slides: newSlides
       }
     }))
+  }
+
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
   }
 
   return (

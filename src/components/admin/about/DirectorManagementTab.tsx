@@ -8,13 +8,17 @@ import {
   AdminArrayField, 
   AdminImageUploadField 
 } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 interface DirectorManagementTabProps {
   data: DirectorInfo
   onUpdate: (data: DirectorInfo) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
-export default function DirectorManagementTab({ data, onUpdate }: DirectorManagementTabProps) {
+export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges }: DirectorManagementTabProps) {
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
   // 기본 정보 업데이트 함수
   const updateBasicInfo = (field: keyof DirectorInfo, value: string) => {
     onUpdate({
@@ -33,6 +37,11 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
 
   // 중첩 객체 업데이트 함수
   const updateNestedObject = (parentField: 'aboutMessage' | 'hero', field: string, value: string | string[]) => {
+    // Hero 이미지 URL이 업데이트될 때 추적 시작
+    if (parentField === 'hero' && field === 'imageUrl' && typeof value === 'string' && value) {
+      trackUploadedImage(value)
+    }
+    
     onUpdate({
       ...data,
       [parentField]: {
@@ -40,6 +49,18 @@ export default function DirectorManagementTab({ data, onUpdate }: DirectorManage
         [field]: value
       }
     })
+  }
+
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
   }
 
   return (

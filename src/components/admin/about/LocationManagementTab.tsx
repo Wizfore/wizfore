@@ -8,15 +8,24 @@ import {
   AdminImageUploadField,
   AdminCard
 } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 interface LocationManagementTabProps {
   data: LocationInfo
   onUpdate: (data: LocationInfo) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
-export default function LocationManagementTab({ data, onUpdate }: LocationManagementTabProps) {
+export default function LocationManagementTab({ data, onUpdate, onUnsavedChanges }: LocationManagementTabProps) {
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
   // Hero 섹션 업데이트
   const updateHero = (field: string, value: string) => {
+    // 이미지 URL이 업데이트될 때 추적 시작
+    if (field === 'imageUrl' && value) {
+      trackUploadedImage(value)
+    }
+    
     onUpdate({
       ...data,
       hero: {
@@ -39,6 +48,11 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
 
   // 교통편 정보 업데이트
   const updateTransportation = (index: number, field: keyof TransportationInfo, value: string) => {
+    // 아이콘 이미지 URL이 업데이트될 때 추적 시작
+    if (field === 'iconPath' && value) {
+      trackUploadedImage(value)
+    }
+    
     const newTransportation = [...(data.transportation || [])]
     newTransportation[index] = {
       ...newTransportation[index],
@@ -50,6 +64,17 @@ export default function LocationManagementTab({ data, onUpdate }: LocationManage
     })
   }
 
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
+  }
 
   return (
     <div className="space-y-6">

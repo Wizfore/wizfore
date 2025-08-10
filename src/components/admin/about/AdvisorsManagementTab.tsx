@@ -12,14 +12,19 @@ import {
   AdminImageUploadField,
   AdminCard
 } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 interface AdvisorsManagementTabProps {
   data: AdvisorsInfo
   onUpdate: (data: AdvisorsInfo) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
-export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManagementTabProps) {
+export default function AdvisorsManagementTab({ data, onUpdate, onUnsavedChanges }: AdvisorsManagementTabProps) {
   const [editingAdvisor, setEditingAdvisor] = useState<number | null>(null)
+  
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
 
   // 기본 이미지 옵션 정의
   const defaultImageOptions = [
@@ -32,6 +37,11 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
 
   // Hero 섹션 업데이트
   const updateHero = (field: string, value: string) => {
+    // 이미지 URL이 업데이트될 때 추적 시작
+    if (field === 'imageUrl' && value) {
+      trackUploadedImage(value)
+    }
+    
     onUpdate({
       ...data,
       hero: {
@@ -54,6 +64,11 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
 
   // 자문위원 업데이트
   const updateAdvisor = (index: number, field: keyof AdvisorInfo, value: string | string[]) => {
+    // 이미지 URL이 업데이트될 때 추적 시작
+    if (field === 'imageUrl' && typeof value === 'string' && value) {
+      trackUploadedImage(value)
+    }
+    
     const newList = [...data.list]
     newList[index] = {
       ...newList[index],
@@ -98,6 +113,18 @@ export default function AdvisorsManagementTab({ data, onUpdate }: AdvisorsManage
   // 배열 필드 업데이트
   const updateAdvisorArrayField = (advisorIndex: number, field: 'position' | 'education' | 'career', items: string[]) => {
     updateAdvisor(advisorIndex, field, items)
+  }
+
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
   }
 
   return (

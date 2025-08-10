@@ -9,16 +9,25 @@ import {
   AdminImageUploadField,
   AdminCard
 } from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 interface SnsManagementTabProps {
   data: SnsInfo
   onUpdate: (data: SnsInfo) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
 }
 
-export default function SnsManagementTab({ data: snsData, onUpdate }: SnsManagementTabProps) {
+export default function SnsManagementTab({ data: snsData, onUpdate, onUnsavedChanges }: SnsManagementTabProps) {
   console.log('SnsManagementTab 렌더링, 받은 데이터:', snsData)
 
+  // 이미지 정리 훅
+  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+
   const updateField = (path: string, value: string) => {
+    // 이미지 URL 업데이트 시 추적 시작
+    if (path.endsWith('.imageUrl') && value) {
+      trackUploadedImage(value)
+    }
     console.log(`필드 업데이트: ${path} = "${value}"`)
     
     const keys = path.split('.')
@@ -38,6 +47,18 @@ export default function SnsManagementTab({ data: snsData, onUpdate }: SnsManagem
     
     console.log('업데이트된 데이터:', newData)
     onUpdate(newData)
+  }
+
+  // 저장 성공 시 모든 이미지 추적 중단
+  const handleSaveSuccess = () => {
+    stopTrackingAllImages()
+    onUnsavedChanges?.(false)
+  }
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = async () => {
+    await performCleanup()
+    onUnsavedChanges?.(false)
   }
 
   return (
