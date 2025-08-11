@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -14,6 +14,7 @@ interface FacilityGallerySectionProps {
 const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionProps) => {
   const [activeTab, setActiveTab] = useState('')
   const [activeImageIndex, setActiveImageIndex] = useState(0)
+  const thumbnailContainerRef = useRef<HTMLDivElement>(null)
 
   // props로 받은 데이터 사용
   const facilityCategories = categories
@@ -31,6 +32,17 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
   const currentImages = facilityImages
     .filter(image => image.categoryId === activeTab)
     .sort((a, b) => a.order - b.order)
+
+  // 탭 변경 시 스크롤 위치를 처음으로 리셋
+  useEffect(() => {
+    if (currentImages.length > 0 && activeTab && thumbnailContainerRef.current) {
+      // 탭 변경 시 스크롤을 맨 처음으로 리셋
+      thumbnailContainerRef.current.scrollTo({
+        left: 0,
+        behavior: 'smooth'
+      })
+    }
+  }, [activeTab])
   
   const currentImage = currentImages[activeImageIndex] || currentImages[0]
 
@@ -40,19 +52,53 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
     setActiveImageIndex(0)
   }
 
+  // 썸네일 자동 중앙 정렬
+  const scrollToActiveThumbnail = (index: number) => {
+    if (!thumbnailContainerRef.current) return
+    
+    const container = thumbnailContainerRef.current
+    const thumbnails = container.children
+    if (!thumbnails[index]) return
+    
+    // 썸네일 총 너비 계산
+    const containerWidth = container.clientWidth
+    const scrollWidth = container.scrollWidth
+    
+    // 스크롤이 필요하지 않은 경우 (모든 썸네일이 화면에 다 들어가는 경우)
+    if (scrollWidth <= containerWidth) {
+      return // 스크롤하지 않고 기본 중앙 정렬 유지
+    }
+    
+    const thumbnail = thumbnails[index] as HTMLElement
+    const thumbnailLeft = thumbnail.offsetLeft
+    const thumbnailWidth = thumbnail.clientWidth
+    
+    // 썸네일이 컨테이너 중앙에 오도록 스크롤 위치 계산
+    const scrollLeft = thumbnailLeft - (containerWidth / 2) + (thumbnailWidth / 2)
+    
+    // 부드러운 스크롤
+    container.scrollTo({
+      left: scrollLeft,
+      behavior: 'smooth'
+    })
+  }
+
   // 이미지 네비게이션
   const goToImage = (index: number) => {
     setActiveImageIndex(index)
+    scrollToActiveThumbnail(index)
   }
 
   const nextImage = () => {
     const nextIndex = (activeImageIndex + 1) % currentImages.length
     setActiveImageIndex(nextIndex)
+    scrollToActiveThumbnail(nextIndex)
   }
 
   const prevImage = () => {
     const prevIndex = (activeImageIndex - 1 + currentImages.length) % currentImages.length
     setActiveImageIndex(prevIndex)
+    scrollToActiveThumbnail(prevIndex)
   }
 
 
@@ -113,7 +159,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
           {/* 메인 이미지 영역 */}
           <div className="relative mb-4 md:mb-6 lg:mb-8">
             <div 
-              className="relative h-48 md:h-56 lg:h-64 rounded-2xl overflow-hidden bg-white shadow-lg"
+              className="relative aspect-video rounded-2xl overflow-hidden bg-white shadow-lg"
               role="img"
               aria-label={currentImage?.description || ''}
             >
@@ -142,20 +188,28 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                 <>
                   <button
                     onClick={prevImage}
-                    className="absolute left-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-1 md:p-2 drop-shadow-lg"
+                    className="absolute -left-1 md:-left-2 lg:-left-3 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 p-2 md:p-3 transition-all duration-200 focus:outline-none drop-shadow-lg"
                     aria-label={`이전 이미지로 이동 (현재 ${activeImageIndex + 1}/${currentImages.length})`}
                   >
-                    <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 filter drop-shadow-md" strokeWidth={3} />
+                    <ChevronLeft className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 filter drop-shadow-md" strokeWidth={3.5} />
                   </button>
                   <button
                     onClick={nextImage}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-all duration-200 focus:outline-none p-1 md:p-2 drop-shadow-lg"
+                    className="absolute -right-1 md:-right-2 lg:-right-3 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 p-2 md:p-3 transition-all duration-200 focus:outline-none drop-shadow-lg"
                     aria-label={`다음 이미지로 이동 (현재 ${activeImageIndex + 1}/${currentImages.length})`}
                   >
-                    <ChevronRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 filter drop-shadow-md" strokeWidth={3} />
+                    <ChevronRight className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 filter drop-shadow-md" strokeWidth={3.5} />
                   </button>
                 </>
               )}
+
+              {/* 이미지 카운터 - 가운데 하단 */}
+              <div className="absolute bottom-3 md:bottom-4 lg:bottom-6 left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1.5 rounded-full text-xs md:text-sm font-medium backdrop-blur-sm" role="status" aria-live="polite">
+                <span>{activeImageIndex + 1} / {currentImages.length}</span>
+                <span className="sr-only">
+                  {currentImages.length}개 이미지 중 {activeImageIndex + 1}번째 이미지
+                </span>
+              </div>
             </div>
             
             {/* 이미지 정보 */}
@@ -174,7 +228,11 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
 
           {/* 썸네일 네비게이션 */}
           <div className="relative" aria-label="이미지 썸네일 목록">
-            <div className="flex justify-center gap-2 md:gap-3 overflow-x-auto pb-3 md:pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div 
+              ref={thumbnailContainerRef}
+              className="flex justify-start gap-2 md:gap-3 overflow-x-auto pb-3 md:pb-4 pt-2 px-2" 
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {currentImages.map((image, index) => (
                 <motion.button
                   key={image.id}
@@ -202,16 +260,6 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
                   </div>
                 </motion.button>
               ))}
-            </div>
-            
-            {/* 이미지 카운터 */}
-            <div className="text-center mt-2 md:mt-3 lg:mt-4" role="status" aria-live="polite">
-              <span className="text-xs md:text-sm text-wizfore-text-light">
-                {activeImageIndex + 1} / {currentImages.length}
-              </span>
-              <span className="sr-only">
-                {currentImages.length}개 이미지 중 {activeImageIndex + 1}번째 이미지
-              </span>
             </div>
           </div>
         </div>
