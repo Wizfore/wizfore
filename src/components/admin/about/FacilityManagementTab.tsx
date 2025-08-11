@@ -778,7 +778,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                           defaultImageUrl="/images/facilities/defaultFacility.jpg"
                         />
                         <AdminInput
-                          label="이미지 설명"
+                          label="이미지 설명 (선택사항)"
                           value={newImageForm.description}
                           onChange={(value) => {
                             setNewImageForm(prev => ({ ...prev, description: value }))
@@ -788,7 +788,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                               _hasNewImageFormChanges: true
                             } as any)
                           }}
-                          placeholder="이미지 설명을 입력하세요"
+                          placeholder="이미지 설명을 입력하세요 (선택사항)"
                           className="!mb-0"
                         />
                         <div>
@@ -826,7 +826,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                         <Button
                           type="button"
                           onClick={addNewImage}
-                          disabled={!newImageForm.categoryId || !newImageForm.description.trim() || !newImageForm.imageUrl.trim()}
+                          disabled={!newImageForm.categoryId || !newImageForm.imageUrl.trim()}
                           className="flex items-center gap-2"
                         >
                           <Plus className="h-4 w-4" />
