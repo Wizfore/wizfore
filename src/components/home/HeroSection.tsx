@@ -154,14 +154,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
             </div>
       </div>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
+        <div className="absolute bottom-6 sm:bottom-8 md:bottom-2 lg:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2 sm:space-x-3">
           {slides.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 sm:w-3 sm:h-3 md:w-3 md:h-3 lg:w-3 lg:h-3 rounded-full transition-all duration-300 ${
                 index === currentSlide 
                   ? 'bg-wizfore-warm-brown scale-125' 
                   : 'bg-wizfore-text-light hover:bg-wizfore-text-secondary'
