@@ -78,33 +78,33 @@ const Header = () => {
   ]
 
   return (
-    <header className="bg-white sticky top-0 z-50">
-      <div className="mx-auto px-4 md:px-8 lg:px-16 pt-2 md:pt-4">
-        <div className="relative flex items-center h-16 md:h-24 lg:h-28">
+    <header className="bg-white sticky top-0 z-50 shadow-sm">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-16 pt-2 md:pt-4">
+        <div className="relative flex items-center h-14 sm:h-16 md:h-20 lg:h-24 xl:h-28">
           {/* 로고 - 왼쪽 고정 */}
-          <Link href="/" className="flex items-center space-x-3 flex-shrink-0">
+          <Link href="/" className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
             {headerLogoUrl ? (
               <img 
                 src={headerLogoUrl} 
                 alt="위즈포레 로고" 
-                className="h-8 md:h-14 lg:h-18 w-auto object-contain"
+                className="h-6 sm:h-8 md:h-12 lg:h-16 xl:h-20 w-auto object-contain"
               />
             ) : (
-              <div className="h-8 md:h-14 lg:h-18 w-24 md:w-32 bg-gray-200 animate-pulse rounded"></div>
+              <div className="h-6 sm:h-8 md:h-12 lg:h-16 xl:h-20 w-20 sm:w-24 md:w-28 lg:w-32 bg-gray-200 animate-pulse rounded"></div>
             )}
           </Link>
 
           {/* 데스크톱 네비게이션 - 절대적 중앙 배치 */}
           <nav 
-            className="hidden md:flex absolute left-1/2 transform -translate-x-1/2"
+            className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2"
             onMouseEnter={() => setIsNavExpanded(true)}
             onMouseLeave={() => setIsNavExpanded(false)}
           >
-            <ul className="flex space-x-4 md:space-x-8 lg:space-x-12">
+            <ul className="flex space-x-3 lg:space-x-6 xl:space-x-8">
               {navigation.map((item) => (
                 <li key={item.name} className="relative">
                   <div
-                    className="block py-4 text-base md:text-lg text-wizfore-text-primary hover:text-wizfore-text-brand font-semibold transition-colors border-b-2 border-transparent hover:border-wizfore-warm-brown cursor-default whitespace-nowrap"
+                    className="block py-3 lg:py-4 text-sm lg:text-base xl:text-lg text-wizfore-text-primary hover:text-wizfore-text-brand font-semibold transition-colors border-b-2 border-transparent hover:border-wizfore-warm-brown cursor-default whitespace-nowrap"
                   >
                     {item.name}
                   </div>
@@ -115,7 +115,7 @@ const Header = () => {
 
           {/* 모바일 메뉴 버튼 - 오른쪽 */}
           <button
-            className="md:hidden ml-auto"
+            className="lg:hidden ml-auto p-2 rounded-md hover:bg-gray-100 transition-colors"
             onClick={() => {
               setIsMenuOpen(!isMenuOpen)
               if (isMenuOpen) {
@@ -124,13 +124,13 @@ const Header = () => {
             }}
             aria-label="메뉴 토글"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <Menu size={20} className="sm:w-6 sm:h-6" />}
           </button>
         </div>
 
         {/* 데스크톱 서브메뉴 드롭다운 - 오버레이 형태 */}
         <div 
-          className={`hidden md:block absolute top-full left-0 right-0 z-40 bg-white shadow-lg border-gray-200 transition-all duration-300 overflow-hidden ${
+          className={`hidden lg:block absolute top-full left-0 right-0 z-40 bg-white shadow-lg border-gray-200 transition-all duration-300 overflow-hidden ${
             isNavExpanded 
               ? 'max-h-64 opacity-100 pt-3 pb-6' 
               : 'max-h-0 opacity-0 pt-0 pb-0'
@@ -138,20 +138,20 @@ const Header = () => {
           onMouseEnter={() => setIsNavExpanded(true)}
           onMouseLeave={() => setIsNavExpanded(false)}
         >
-          <div className="mx-auto px-4 md:px-8 lg:px-16">
-            <div className="grid grid-cols-5 gap-0 justify-items-center">
+          <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-16">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-0 justify-items-center">
               {navigation.map((item) => (
-                <div key={item.name} className="space-y-1">
-                  <h3 className="font-semibold text-wizfore-text-primary text-base border-b border-wizfore-warm-brown pb-2">
+                <div key={item.name} className="space-y-1 min-w-0">
+                  <h3 className="font-semibold text-wizfore-text-primary text-sm lg:text-base border-b border-wizfore-warm-brown pb-1 lg:pb-2 truncate">
                     {item.name}
                   </h3>
                   {item.submenu && (
-                    <ul className="space-y-2">
+                    <ul className="space-y-1 lg:space-y-2">
                       {item.submenu.map((subItem) => (
                         <li key={subItem.name}>
                           <Link
                             href={subItem.href}
-                            className="text-base text-wizfore-text-secondary hover:text-wizfore-text-brand transition-colors block py-1"
+                            className="text-xs lg:text-sm xl:text-base text-wizfore-text-secondary hover:text-wizfore-text-brand transition-colors block py-0.5 lg:py-1 truncate"
                             onClick={() => {
                               setIsMenuOpen(false)
                               setIsNavExpanded(false)
@@ -171,10 +171,10 @@ const Header = () => {
 
         {/* 모바일 네비게이션 메뉴 */}
         <nav 
-          className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden border-t border-gray-200 transition-all duration-300`}
+          className={`${isMenuOpen ? 'block' : 'hidden'} lg:hidden border-t border-gray-200 transition-all duration-300 bg-white`}
         >
           {/* 모바일 메인 네비게이션 - 상위 카테고리만 */}
-          <ul className="flex flex-col py-4 space-y-2">
+          <ul className="flex flex-col py-2 sm:py-4 space-y-1 sm:space-y-2">
             {navigation.map((item) => (
               <li key={item.name} className="relative">
                 <button
@@ -185,24 +185,24 @@ const Header = () => {
                       setExpandedCategory(item.name)
                     }
                   }}
-                  className="w-full flex items-center justify-between px-4 py-3 text-wizfore-text-primary hover:text-wizfore-text-brand font-medium transition-colors text-left"
+                  className="w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base text-wizfore-text-primary hover:text-wizfore-text-brand hover:bg-gray-50 font-medium transition-colors text-left rounded-md mx-2"
                 >
                   <span>{item.name}</span>
                   {item.submenu && (
                     expandedCategory === item.name ? 
-                      <ChevronUp size={20} /> : 
-                      <ChevronDown size={20} />
+                      <ChevronUp size={18} className="sm:w-5 sm:h-5" /> : 
+                      <ChevronDown size={18} className="sm:w-5 sm:h-5" />
                   )}
                 </button>
                 
                 {/* 하위 메뉴 - 선택된 카테고리만 표시 */}
                 {expandedCategory === item.name && item.submenu && (
-                  <ul className="bg-gray-50 border-t border-gray-200">
+                  <ul className="bg-gray-50 border-t border-gray-200 mx-2 rounded-b-md overflow-hidden">
                     {item.submenu.map((subItem) => (
                       <li key={subItem.name}>
                         <Link
                           href={subItem.href}
-                          className="block px-8 py-2 text-wizfore-text-secondary hover:text-wizfore-text-brand hover:bg-gray-100 transition-colors"
+                          className="block px-6 sm:px-8 py-2 text-xs sm:text-sm text-wizfore-text-secondary hover:text-wizfore-text-brand hover:bg-gray-100 transition-colors border-l-2 border-transparent hover:border-wizfore-coral-primary"
                           onClick={() => {
                             setIsMenuOpen(false)
                             setExpandedCategory(null)
