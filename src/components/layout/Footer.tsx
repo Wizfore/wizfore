@@ -97,7 +97,7 @@ const Footer = () => {
           {/* 우측: 센터 정보 */}
           <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 text-center lg:text-left lg:pl-4 xl:pl-8">
             {/* 센터 로고 */}
-            <div className="flex justify-center lg:justify-start mb-3 sm:mb-4">
+            <div className="flex justify-center mb-3 sm:mb-4">
               <img 
                 src={footerLogoUrl} 
                 alt={siteName}

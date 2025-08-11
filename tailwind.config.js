@@ -135,7 +135,9 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		fontFamily: {
-  			sans: [
+  			'sc-dream': ['var(--font-sc-dream)', 'sans-serif'],
+    			sans: [
+  				'var(--font-sc-dream)',
   				'Pretendard Variable',
   				'Pretendard',
   				'Noto Sans KR',
