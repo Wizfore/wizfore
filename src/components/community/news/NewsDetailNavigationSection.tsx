@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { ShimmerButton } from '@/components/magicui/shimmer-button'
 
 const NewsDetailNavigationSection = () => {
   const router = useRouter()
@@ -17,15 +16,13 @@ const NewsDetailNavigationSection = () => {
         transition={{ duration: 0.8, delay: 0.4 }}
       >
         <div className="text-center">
-          <ShimmerButton
+          <button
             onClick={() => router.push('/community/news')}
-            className="inline-flex items-center px-6 py-3 bg-wizfore-coral-primary text-white rounded-lg hover:bg-wizfore-coral-secondary transition-colors"
-            shimmerColor="#FFFFFF"
-            shimmerSize="md"
+            className="group inline-flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 bg-white hover:bg-wizfore-coral-primary text-wizfore-coral-primary hover:text-white border-2 border-wizfore-coral-primary rounded-lg md:rounded-xl font-medium text-sm md:text-base transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:-translate-x-1" />
             목록으로 돌아가기
-          </ShimmerButton>
+          </button>
         </div>
       </motion.div>
     </div>

@@ -27,7 +27,7 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
 
 
   return (
-    <div className="relative bg-gray-50">
+    <div className="relative bg-white">
       {/* 배경 패턴 */}
       <DotPattern
         className={cn(
@@ -51,9 +51,9 @@ const NewsDetailMainSection = ({ article, categories, showBackButton = true }: N
           >
             <button
               onClick={() => router.push('/community/news')}
-              className="inline-flex items-center px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+              className="group inline-flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 bg-white hover:bg-wizfore-coral-primary text-wizfore-coral-primary hover:text-white border-2 border-wizfore-coral-primary rounded-lg md:rounded-xl font-medium text-sm md:text-base transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
             >
-              <ArrowLeft className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2" />
+              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:-translate-x-1" />
               목록으로 돌아가기
             </button>
           </motion.div>
