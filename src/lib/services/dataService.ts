@@ -36,6 +36,10 @@ type CategoryType = {
  */
 export async function getSiteInfo() {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'siteInfo', 'main')
     const docSnap = await getDoc(docRef)
     
@@ -55,6 +59,10 @@ export async function getSiteInfo() {
  */
 export async function updateSiteInfo(updates: Partial<DefaultSiteData['siteInfo']>) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'siteInfo', 'main')
     await updateDoc(docRef, updates)
   } catch (error) {
@@ -68,6 +76,10 @@ export async function updateSiteInfo(updates: Partial<DefaultSiteData['siteInfo'
  */
 export async function getAboutInfo() {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'aboutInfo', 'main')
     const docSnap = await getDoc(docRef)
     
