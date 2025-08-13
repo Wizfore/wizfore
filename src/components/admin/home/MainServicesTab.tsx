@@ -10,23 +10,26 @@ import {
 export function MainServicesTab({ data, setData }: TabComponentProps) {
   // 깊은 복사를 사용한 필드 업데이트 함수
   const updateAboutMessage = (field: 'title' | 'description', value: string) => {
-    setData(prev => ({
-      ...prev!,
-      sections: {
-        ...prev!.sections,
-        mainServices: {
-          ...prev!.sections?.mainServices,
-          aboutMessage: {
-            title: field === 'title' ? value : prev!.sections?.mainServices?.aboutMessage?.title || '',
-            description: field === 'description' ? value : prev!.sections?.mainServices?.aboutMessage?.description || '',
-            highlightKeywords: prev!.sections?.mainServices?.aboutMessage?.highlightKeywords || []
-          },
-          services: prev!.sections?.mainServices?.services || [],
-          enabled: prev!.sections?.mainServices?.enabled ?? true,
-          showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
+    setData(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        sections: {
+          ...prev.sections,
+          mainServices: {
+            ...prev.sections?.mainServices,
+            aboutMessage: {
+              title: field === 'title' ? value : prev.sections?.mainServices?.aboutMessage?.title || '',
+              description: field === 'description' ? value : prev.sections?.mainServices?.aboutMessage?.description || '',
+              highlightKeywords: prev.sections?.mainServices?.aboutMessage?.highlightKeywords || []
+            },
+            services: prev.sections?.mainServices?.services || [],
+            enabled: prev.sections?.mainServices?.enabled ?? true,
+            showSubPrograms: prev.sections?.mainServices?.showSubPrograms ?? true
+          }
         }
       }
-    }))
+    })
   }
 
   // 하이라이트 키워드 업데이트 함수

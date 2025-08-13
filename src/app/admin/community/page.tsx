@@ -89,7 +89,7 @@ export default function CommunityManagePage() {
     saving,
     saveStatus,
     error,
-    hasChanges: _,
+    hasChanges: hasFormChanges,
     handleSave,
     handleReset
   } = useAdminForm({

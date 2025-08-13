@@ -94,7 +94,7 @@ export default function CreateNewsPage() {
       window.removeEventListener('beforeunload', handleBeforeUnload)
       window.removeEventListener('popstate', handlePopState)
     }
-  }, [reservedId])
+  }, [reservedId, title, content, category, status, date])
 
   // 변경 사항 확인 함수 (빈 값에서 변경되었는지 확인)
   const hasChanges = () => {

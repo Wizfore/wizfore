@@ -13,13 +13,16 @@ export function HeroTab({ data, setData, onUnsavedChanges }: TabComponentProps &
   const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
   // 자동재생 설정 업데이트
   const updateAutoPlay = (autoPlay: boolean) => {
-    setData(prev => ({
-      ...prev!,
-      hero: {
-        ...prev!.hero,
-        autoPlay
+    setData(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        hero: {
+          ...prev.hero,
+          autoPlay
+        }
       }
-    }))
+    })
   }
 
   // 슬라이드 필드 업데이트
@@ -31,13 +34,16 @@ export function HeroTab({ data, setData, onUnsavedChanges }: TabComponentProps &
     
     const newSlides = [...(data?.hero?.slides || [])]
     newSlides[index] = { ...newSlides[index], [field]: value }
-    setData(prev => ({
-      ...prev!,
-      hero: {
-        ...prev!.hero,
-        slides: newSlides
+    setData(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        hero: {
+          ...prev.hero,
+          slides: newSlides
+        }
       }
-    }))
+    })
   }
 
   // 저장 성공 시 모든 이미지 추적 중단

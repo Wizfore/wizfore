@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, Building2, Loader2, AlertCircle, Database } from 'lucide-react'
+import { Eye, EyeOff, Building2, Loader2, AlertCircle } from 'lucide-react'
 import { loginWithEmail } from '@/lib/services/authService'
 
 export default function LoginPage() {

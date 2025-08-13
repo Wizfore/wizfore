@@ -9,17 +9,20 @@ import {
 export function CategoryCardsTab({ data, setData }: TabComponentProps) {
   // 깊은 복사를 사용한 필드 업데이트 함수
   const updateField = (field: 'title' | 'description' | 'enabled', value: string | boolean) => {
-    setData(prev => ({
-      ...prev!,
-      sections: {
-        ...prev!.sections,
-        categoryCards: {
-          title: field === 'title' ? value as string : prev!.sections?.categoryCards?.title || '',
-          description: field === 'description' ? value as string : prev!.sections?.categoryCards?.description || '',
-          enabled: field === 'enabled' ? value as boolean : prev!.sections?.categoryCards?.enabled || false
+    setData(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        sections: {
+          ...prev.sections,
+          categoryCards: {
+            title: field === 'title' ? value as string : prev.sections?.categoryCards?.title || '',
+            description: field === 'description' ? value as string : prev.sections?.categoryCards?.description || '',
+            enabled: field === 'enabled' ? value as boolean : prev.sections?.categoryCards?.enabled || false
+          }
         }
       }
-    }))
+    })
   }
 
   return (

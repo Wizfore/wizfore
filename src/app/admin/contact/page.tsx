@@ -315,7 +315,9 @@ export default function InquiriesPage() {
                         value={inquiry.status}
                         onChange={(e) => {
                           e.stopPropagation()
-                          handleStatusChange(inquiry.id!, e.target.value as Inquiry['status'])
+                          if (inquiry.id) {
+                            handleStatusChange(inquiry.id, e.target.value as Inquiry['status'])
+                          }
                         }}
                         onClick={(e) => e.stopPropagation()}
                         className="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -327,7 +329,9 @@ export default function InquiriesPage() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleDelete(inquiry.id!)
+                          if (inquiry.id) {
+                            handleDelete(inquiry.id)
+                          }
                         }}
                         className="text-red-600 hover:text-red-900 transition-colors"
                         title="삭제"

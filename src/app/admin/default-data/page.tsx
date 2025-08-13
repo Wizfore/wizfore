@@ -13,7 +13,6 @@ import {
   Trash2,
   Download,
   Home,
-  Image,
   Mail
 } from 'lucide-react'
 
@@ -99,8 +98,8 @@ interface DataCategoryCardProps {
   category: DataCategory
   hasData: boolean
   isLoading: boolean
-  onAddData: (categoryId: string) => void
-  onDeleteData: (categoryId: string) => void
+  onAddData: (_categoryId: string) => void
+  onDeleteData: (_categoryId: string) => void
 }
 
 function DataCategoryCard({ category, hasData, isLoading, onAddData, onDeleteData }: DataCategoryCardProps) {
