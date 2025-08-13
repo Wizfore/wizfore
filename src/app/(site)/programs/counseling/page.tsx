@@ -43,7 +43,7 @@ export default function CounselingPage() {
       try {
         setLoading(true)
         const programsData = await getPrograms()
-        const counselingProgram = programsData.find((p: any) => p.id === 'counseling')
+        const counselingProgram = programsData.find((p: ProgramCategory) => p.id === 'counseling')
         
         if (counselingProgram) {
           setPrograms(counselingProgram.programs || [])

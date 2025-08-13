@@ -43,7 +43,7 @@ export default function AdultDayPage() {
       try {
         setLoading(true)
         const programsData = await getPrograms()
-        const adultDayProgram = programsData.find((p: any) => p.id === 'adult-day')
+        const adultDayProgram = programsData.find((p: ProgramCategory) => p.id === 'adult-day')
         
         if (adultDayProgram) {
           setPrograms(adultDayProgram.programs || [])

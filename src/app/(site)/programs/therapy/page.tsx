@@ -43,7 +43,7 @@ export default function TherapyPage() {
       try {
         setLoading(true)
         const programsData = await getPrograms()
-        const therapyProgram = programsData.find((p: any) => p.id === 'therapy')
+        const therapyProgram = programsData.find((p: ProgramCategory) => p.id === 'therapy')
         
         if (therapyProgram) {
           setPrograms(therapyProgram.programs || [])

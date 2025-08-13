@@ -136,7 +136,14 @@ export async function getRecentNews(limitCount: number = 5): Promise<RecentNews[
     }
     
     // 모든 articles 수집
-    const allArticles: any[] = []
+    interface Article {
+      id: string
+      title: string
+      date?: string
+      createdAt: string
+      status?: string
+    }
+    const allArticles: Article[] = []
     querySnapshot.forEach(doc => {
       const data = doc.data()
       if (data.news?.articles) {
@@ -153,7 +160,7 @@ export async function getRecentNews(limitCount: number = 5): Promise<RecentNews[
       id: article.id,
       title: article.title,
       publishDate: new Date(article.date || article.createdAt).toLocaleDateString('ko-KR'),
-      status: article.status || 'draft'
+      status: (article.status === 'published' ? 'published' : 'draft') as 'published' | 'draft'
     }))
   } catch (error) {
     console.error('최근 게시글 조회 오류:', error)

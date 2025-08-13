@@ -43,7 +43,7 @@ export default function AfterschoolPage() {
       try {
         setLoading(true)
         const programsData = await getPrograms()
-        const afterschoolProgram = programsData.find((p: any) => p.id === 'afterschool')
+        const afterschoolProgram = programsData.find((p: ProgramCategory) => p.id === 'afterschool')
         
         if (afterschoolProgram) {
           setPrograms(afterschoolProgram.programs || [])

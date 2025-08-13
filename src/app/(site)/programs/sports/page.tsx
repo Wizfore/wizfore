@@ -43,7 +43,7 @@ export default function SportsPage() {
       try {
         setLoading(true)
         const programsData = await getPrograms()
-        const sportsProgram = programsData.find((p: any) => p.id === 'special-sports')
+        const sportsProgram = programsData.find((p: ProgramCategory) => p.id === 'special-sports')
         
         if (sportsProgram) {
           setPrograms(sportsProgram.programs || [])

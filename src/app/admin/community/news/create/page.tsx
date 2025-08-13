@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye, X } from 'lucide-react'
+import { Save, Eye, X } from 'lucide-react'
 import { createArticleWithReservedId, reserveNextArticleId } from '@/lib/services/dataService'
 import { cleanupReservedArticleId } from '@/lib/services/storageService'
 import { getCategoryOptions } from '@/lib/utils/categoryUtils'

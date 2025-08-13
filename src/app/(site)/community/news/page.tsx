@@ -5,7 +5,7 @@ import { getCommunity } from '@/lib/services/dataService'
 import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
 import NewsContentSection from '@/components/community/news/NewsContentSection'
-import { getAllNewsWithCategory, getNewsByCategory, separateNoticeAndNews, getEnglishCategory } from '@/lib/utils/newsUtils'
+import { getAllNewsWithCategory, getNewsByCategory, separateNoticeAndNews } from '@/lib/utils/newsUtils'
 import type { Article, CategoryItem } from '@/types'
 
 export default function NewsPage() {
@@ -50,7 +50,7 @@ export default function NewsPage() {
     : getNewsByCategory(articlesData, selectedCategory)
 
   // 페이지네이션 계산 (공지사항 제외)
-  const { noticeItems, regularNews } = separateNoticeAndNews(articlesData)
+  const { regularNews } = separateNoticeAndNews(articlesData)
   const paginationTargetNews = selectedCategory === 'all' ? regularNews : filteredNews
   const totalPages = Math.ceil(paginationTargetNews.length / itemsPerPage)
   

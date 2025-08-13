@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye, Trash2, X } from 'lucide-react'
+import { Save, Eye, Trash2, X } from 'lucide-react'
 import { getArticleById, updateArticle, deleteArticle } from '@/lib/services/dataService'
 import { getCategoryOptions } from '@/lib/utils/categoryUtils'
 import TiptapEditor from '@/components/admin/community/TiptapEditor'
@@ -72,9 +72,9 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     if (params.id) {
       loadArticle()
     }
-  }, [params.id])
+  }, [params.id, loadArticle])
 
-  const loadArticle = async () => {
+  const loadArticle = useCallback(async () => {
     try {
       setIsLoading(true)
       const article = await getArticleById(params.id)
@@ -105,7 +105,7 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [params.id])
 
 
 

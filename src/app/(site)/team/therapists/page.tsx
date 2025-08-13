@@ -22,7 +22,7 @@ export default function TherapistsPage() {
     title: string
     description: string
   } | null>(null)
-  const [features, setFeatures] = useState<any[]>([])
+  const [features, setFeatures] = useState<TeamFeature[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
