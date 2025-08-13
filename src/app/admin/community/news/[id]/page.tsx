@@ -67,13 +67,6 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     updatedAt: new Date().toISOString()
   }
 
-  // 뉴스 데이터 로드
-  useEffect(() => {
-    if (params.id) {
-      loadArticle()
-    }
-  }, [params.id, loadArticle])
-
   const loadArticle = useCallback(async () => {
     try {
       setIsLoading(true)
@@ -107,7 +100,12 @@ export default function EditNewsPage({ params }: EditNewsPageProps) {
     }
   }, [params.id])
 
-
+  // 뉴스 데이터 로드
+  useEffect(() => {
+    if (params.id) {
+      loadArticle()
+    }
+  }, [params.id, loadArticle])
 
   // 폼 제출
   const handleSubmit = async (e: React.FormEvent) => {

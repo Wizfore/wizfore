@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getTherapists } from '@/lib/services/dataService'
+import type { TeamFeature } from '@/types'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
 import { getImageWithFallback } from '@/lib/utils/imageUtils'
 import CommonHeroSection from '@/components/layout/CommonHeroSection'
