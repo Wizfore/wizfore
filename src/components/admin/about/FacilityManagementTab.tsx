@@ -153,11 +153,11 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
   useEffect(() => {
     if (onCleanupRequested) {
       // 부모 컴포넌트에서 클린업 함수를 호출할 수 있도록 참조 전달
-      (window as any).__facilityCleanup = performCleanup
+      (window as { __facilityCleanup?: () => Promise<void> }).__facilityCleanup = performCleanup
     }
     
     return () => {
-      delete (window as any).__facilityCleanup
+      delete (window as { __facilityCleanup?: () => Promise<void> }).__facilityCleanup
     }
   }, [])
   
@@ -338,7 +338,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
       images: [...(data.images || []), newImage]
     }
     // _hasNewImageFormChanges 마커 제거
-    delete (updatedData as any)._hasNewImageFormChanges
+    delete (updatedData as typeof updatedData & { _hasNewImageFormChanges?: boolean })._hasNewImageFormChanges
     onDataUpdate(updatedData)
     
     // 폼 초기화 및 폼 숨기기
@@ -364,7 +364,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
     
     // 폼 취소 시 임시 변경사항 마커 제거
     const updatedData = { ...data }
-    delete (updatedData as any)._hasNewImageFormChanges
+    delete (updatedData as typeof updatedData & { _hasNewImageFormChanges?: boolean })._hasNewImageFormChanges
     onDataUpdate(updatedData)
     
     setNewImageForm({
@@ -742,7 +742,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                       onDataUpdate({
                         ...data,
                         _hasNewImageFormChanges: true
-                      } as any)
+                      } as typeof data & { _hasNewImageFormChanges?: boolean })
                     }}
                     className="flex items-center gap-2"
                   >
@@ -771,7 +771,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                                 ...data,
                                 // 임시 변경사항 마커 추가 (실제로는 저장되지 않음)
                                 _hasNewImageFormChanges: true
-                              } as any)
+                              } as typeof data & { _hasNewImageFormChanges?: boolean })
                             }
                           }}
                           folder={newImageId ? `pages/about/facilities/image/${newImageId}` : 'pages/about/facilities/temp'}
@@ -786,7 +786,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                             onDataUpdate({
                               ...data,
                               _hasNewImageFormChanges: true
-                            } as any)
+                            } as typeof data & { _hasNewImageFormChanges?: boolean })
                           }}
                           placeholder="이미지 설명을 입력하세요 (선택사항)"
                           className="!mb-0"
@@ -801,7 +801,7 @@ export default function FacilityManagementTab({ data, onHeroUpdate, onDataUpdate
                               onDataUpdate({
                                 ...data,
                                 _hasNewImageFormChanges: true
-                              } as any)
+                              } as typeof data & { _hasNewImageFormChanges?: boolean })
                             }}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           >

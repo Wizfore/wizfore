@@ -42,7 +42,7 @@ const FacilityGallerySection = ({ categories, images }: FacilityGallerySectionPr
         behavior: 'smooth'
       })
     }
-  }, [activeTab])
+  }, [activeTab, currentImages.length])
   
   const currentImage = currentImages[activeImageIndex] || currentImages[0]
 

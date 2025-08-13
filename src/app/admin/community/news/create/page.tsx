@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Save, Eye, X } from 'lucide-react'
 import { createArticleWithReservedId, reserveNextArticleId } from '@/lib/services/dataService'
@@ -72,9 +72,18 @@ export default function CreateNewsPage() {
     reserveId()
   }, [])
 
+  // 변경 사항 확인 함수 (빈 값에서 변경되었는지 확인)
+  const hasChanges = useCallback(() => {
+    return title.trim() !== '' || 
+           content.trim() !== '' || 
+           category !== 'news' || 
+           status !== 'draft' || 
+           date !== new Date().toISOString().split('T')[0]
+  }, [title, content, category, status, date])
+
   // 페이지 이탈 시 Storage 정리
   useEffect(() => {
-    const handleBeforeUnload = (_e: BeforeUnloadEvent) => {
+    const handleBeforeUnload = () => {
       if (hasChanges() && reservedId) {
         // 변경사항이 있으면 Storage 정리
         cleanupReservedArticleId(reservedId).catch(console.error)
@@ -94,16 +103,7 @@ export default function CreateNewsPage() {
       window.removeEventListener('beforeunload', handleBeforeUnload)
       window.removeEventListener('popstate', handlePopState)
     }
-  }, [reservedId, title, content, category, status, date])
-
-  // 변경 사항 확인 함수 (빈 값에서 변경되었는지 확인)
-  const hasChanges = () => {
-    return title.trim() !== '' || 
-           content.trim() !== '' || 
-           category !== 'news' || 
-           status !== 'draft' || 
-           date !== new Date().toISOString().split('T')[0]
-  }
+  }, [reservedId, hasChanges])
 
   // 취소 핸들러
   const handleCancel = async () => {

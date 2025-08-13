@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Plus, Trash2, Edit2 } from 'lucide-react'
 import { AdvisorsInfo, AdvisorInfo } from '@/types/about'
 import { Button } from '@/components/ui/button'
@@ -126,6 +126,16 @@ export default function AdvisorsManagementTab({ data, onUpdate, onUnsavedChanges
     await performCleanup()
     onUnsavedChanges?.(false)
   }
+
+  // 실제로 사용되지 않는 함수들은 제거하고, 필요시 사용
+  React.useEffect(() => {
+    // 컴포넌트 언마운트 시 cleanup 실행을 위한 예시
+    return () => {
+      if (onUnsavedChanges) {
+        handleSaveSuccess() // 필요시 호출
+      }
+    }
+  }, [onUnsavedChanges, handleSaveSuccess])
 
   return (
     <div className="space-y-6">

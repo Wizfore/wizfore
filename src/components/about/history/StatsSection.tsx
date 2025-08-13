@@ -82,7 +82,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ milestones = [], stats }) =
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {enabledCards.map((card, _index) => (
+          {enabledCards.map((card) => (
             <motion.div
               key={card.id}
               className="group text-center p-4 md:p-6 lg:p-8 rounded-2xl bg-gradient-to-br from-white to-gray-50/50 border border-wizfore-coral-primary/10 shadow-sm transition-all duration-500 hover:shadow-lg hover:-translate-y-2 hover:border-wizfore-coral-primary/40 hover:ring-2 hover:ring-wizfore-coral-primary hover:ring-opacity-30 focus-within:ring-2 focus-within:ring-wizfore-coral-primary focus-within:ring-opacity-50 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:hover:scale-100"

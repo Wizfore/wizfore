@@ -7,7 +7,7 @@ import {
   writeBatch
 } from 'firebase/firestore'
 import { getFirebaseDb } from '@/lib/firebase'
-import type { DefaultSiteData } from '@/types'
+import type { DefaultSiteData, CommunityData, TeamCategory, DirectorInfo, HistoryInfo, AdvisorsInfo, LocationInfo, ProgramCategory } from '@/types'
 import type { Article } from '@/types/community'
 import { deleteArticleImages } from './storageService'
 
@@ -195,7 +195,7 @@ export async function getAllProgramsFlattened() {
 /**
  * 프로그램 데이터 업데이트
  */
-export async function updatePrograms(programsData: any) {
+export async function updatePrograms(programsData: ProgramCategory[]) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -441,7 +441,7 @@ export async function getCommunity() {
 /**
  * SNS 정보 업데이트
  */
-export async function updateSnsData(snsData: any) {
+export async function updateSnsData(snsData: Record<string, unknown>) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -461,7 +461,7 @@ export async function updateSnsData(snsData: any) {
 /**
  * 커뮤니티 정보 통합 업데이트
  */
-export async function updateCommunity(communityData: any) {
+export async function updateCommunity(communityData: Partial<CommunityData>) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -584,7 +584,7 @@ export async function updateHomeConfig(updates: Partial<any>) {
 /**
  * 프로그램 아이콘 매핑 업데이트
  */
-export async function updateProgramIconMappings(iconMappings: any[]) {
+export async function updateProgramIconMappings(iconMappings: Record<string, unknown>[]) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -696,7 +696,7 @@ export async function getLocationData() {
 export async function getTeamCategory(categoryId: string) {
   try {
     const teamCategories = await getTeam()
-    const category = teamCategories.find((cat: any) => cat.id === categoryId)
+    const category = teamCategories.find((cat: { id: string }) => cat.id === categoryId)
     
     if (!category) {
       throw new Error(`Team category '${categoryId}' not found`)
@@ -756,14 +756,14 @@ export async function getTherapists() {
 /**
  * 팀 카테고리 정보 업데이트
  */
-export async function updateTeamCategory(categoryId: string, categoryData: any) {
+export async function updateTeamCategory(categoryId: string, categoryData: TeamCategory) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
     const teamCategories = await getTeam()
-    const categoryIndex = teamCategories.findIndex((cat: any) => cat.id === categoryId)
+    const categoryIndex = teamCategories.findIndex((cat: { id: string }) => cat.id === categoryId)
     
     if (categoryIndex === -1) {
       throw new Error(`Team category '${categoryId}' not found`)
@@ -791,7 +791,7 @@ export async function updateTeamCategory(categoryId: string, categoryData: any) 
 /**
  * 치료사진 정보 업데이트
  */
-export async function updateTherapists(therapistsData: any) {
+export async function updateTherapists(therapistsData: TeamCategory) {
   try {
     return await updateTeamCategory('therapists', therapistsData)
   } catch (error) {
@@ -803,7 +803,7 @@ export async function updateTherapists(therapistsData: any) {
 /**
  * 교사진 정보 업데이트
  */
-export async function updateTeachers(teachersData: any) {
+export async function updateTeachers(teachersData: TeamCategory) {
   try {
     return await updateTeamCategory('teachers', teachersData)
   } catch (error) {
@@ -827,8 +827,8 @@ export async function getHeroData() {
     const slides = heroData?.slides || []
     
     const enabledSlides = slides
-      .filter((slide: any) => slide.enabled)
-      .sort((a: any, b: any) => a.order - b.order)
+      .filter((slide: { enabled: boolean }) => slide.enabled)
+      .sort((a: { order: number }, b: { order: number }) => a.order - b.order)
     
     return {
       slides: enabledSlides,
@@ -1288,7 +1288,7 @@ export async function getMainServices() {
 /**
  * 센터장 정보 업데이트
  */
-export async function updateDirectorInfo(directorData: any) {
+export async function updateDirectorInfo(directorData: DirectorInfo) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -1307,7 +1307,7 @@ export async function updateDirectorInfo(directorData: any) {
 /**
  * 센터 발자취 정보 업데이트
  */
-export async function updateHistoryInfo(historyData: any) {
+export async function updateHistoryInfo(historyData: HistoryInfo) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -1326,7 +1326,7 @@ export async function updateHistoryInfo(historyData: any) {
 /**
  * 전문 자문위원 정보 업데이트
  */
-export async function updateAdvisorsInfo(advisorsData: any) {
+export async function updateAdvisorsInfo(advisorsData: AdvisorsInfo) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -1345,7 +1345,7 @@ export async function updateAdvisorsInfo(advisorsData: any) {
 /**
  * 오시는 길 정보 업데이트
  */
-export async function updateLocationInfo(locationData: any) {
+export async function updateLocationInfo(locationData: LocationInfo) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -1381,7 +1381,7 @@ export async function getHistoryStats() {
 /**
  * 센터 발자취 통계 정보 업데이트
  */
-export async function updateHistoryStats(statsData: any) {
+export async function updateHistoryStats(statsData: Record<string, unknown>) {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')

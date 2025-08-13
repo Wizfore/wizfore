@@ -84,10 +84,11 @@ export const enableOfflinePersistence = async (): Promise<void> => {
   try {
     await enableIndexedDbPersistence(db);
     console.log('Firestore 오프라인 지속성 활성화됨');
-  } catch (err: any) {
-    if (err.code === 'failed-precondition') {
+  } catch (err: unknown) {
+    const error = err as { code?: string }
+    if (error.code === 'failed-precondition') {
       console.warn('다중 탭이 열려있어 오프라인 지속성을 활성화할 수 없습니다');
-    } else if (err.code === 'unimplemented') {
+    } else if (error.code === 'unimplemented') {
       console.warn('현재 브라우저는 오프라인 지속성을 지원하지 않습니다');
     } else {
       console.error('Firestore 지속성 활성화 오류:', err);

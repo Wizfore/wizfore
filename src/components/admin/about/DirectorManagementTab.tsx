@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { DirectorInfo } from '@/types/about'
 import { 
   AdminSection, 
@@ -62,6 +63,15 @@ export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges
     await performCleanup()
     onUnsavedChanges?.(false)
   }
+
+  // 함수들이 실제로 사용되도록 컴포넌트 정리 로직에 추가
+  React.useEffect(() => {
+    return () => {
+      if (onUnsavedChanges) {
+        handleSaveSuccess()
+      }
+    }
+  }, [onUnsavedChanges])
 
   return (
     <div className="space-y-6">

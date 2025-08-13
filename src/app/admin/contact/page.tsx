@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { 
   Search, 
   Filter, 
@@ -38,14 +38,6 @@ export default function InquiriesPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
-  useEffect(() => {
-    fetchInquiries()
-  }, [])
-
-  useEffect(() => {
-    filterInquiries()
-  }, [inquiries, filterStatus, searchTerm])
-
   const fetchInquiries = async () => {
     try {
       setLoading(true)
@@ -59,7 +51,7 @@ export default function InquiriesPage() {
     }
   }
 
-  const filterInquiries = () => {
+  const filterInquiries = useCallback(() => {
     let filtered = inquiries
 
     // 상태별 필터링
@@ -79,7 +71,15 @@ export default function InquiriesPage() {
 
     setFilteredInquiries(filtered)
     setCurrentPage(1)
-  }
+  }, [inquiries, filterStatus, searchTerm])
+
+  useEffect(() => {
+    fetchInquiries()
+  }, [])
+
+  useEffect(() => {
+    filterInquiries()
+  }, [filterInquiries])
 
   const handleStatusChange = async (id: string, newStatus: Inquiry['status']) => {
     try {

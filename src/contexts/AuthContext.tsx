@@ -17,14 +17,7 @@ interface AuthContextType {
   isStaff: boolean
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  userProfile: null,
-  loading: true,
-  isAuthenticated: false,
-  isAdmin: false,
-  isStaff: false
-})
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 interface AuthProviderProps {
   children: ReactNode
