@@ -114,7 +114,7 @@ export default function InquiriesPage() {
 
   const formatDate = (timestamp: { toDate?: () => Date } | Date | string | null) => {
     if (!timestamp) return '-'
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
+    const date = (timestamp as { toDate?: () => Date })?.toDate ? (timestamp as { toDate: () => Date }).toDate() : new Date(timestamp as string | Date)
     return date.toLocaleDateString('ko-KR', {
       year: 'numeric',
       month: 'short',
@@ -306,7 +306,7 @@ export default function InquiriesPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-3 h-3" />
-                      <span>{formatDate(inquiry.createdAt)}</span>
+                      <span>{formatDate(inquiry.createdAt || null)}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
