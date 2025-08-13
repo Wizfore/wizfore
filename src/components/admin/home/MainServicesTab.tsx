@@ -34,23 +34,26 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
 
   // 하이라이트 키워드 업데이트 함수
   const updateHighlightKeywords = (keywords: string[]) => {
-    setData(prev => ({
-      ...prev!,
-      sections: {
-        ...prev!.sections,
-        mainServices: {
-          ...prev!.sections?.mainServices,
-          aboutMessage: {
-            title: prev!.sections?.mainServices?.aboutMessage?.title || '',
-            description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-            highlightKeywords: keywords
-          },
-          services: prev!.sections?.mainServices?.services || [],
-          enabled: prev!.sections?.mainServices?.enabled ?? true,
-          showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
+    setData(prev => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        sections: {
+          ...prev.sections,
+          mainServices: {
+            ...prev.sections?.mainServices,
+            aboutMessage: {
+              title: prev.sections?.mainServices?.aboutMessage?.title || '',
+              description: prev.sections?.mainServices?.aboutMessage?.description || '',
+              highlightKeywords: keywords
+            },
+            services: prev.sections?.mainServices?.services || [],
+            enabled: prev.sections?.mainServices?.enabled ?? true,
+            showSubPrograms: prev.sections?.mainServices?.showSubPrograms ?? true
+          }
         }
       }
-    }))
+    })
   }
 
   return (
@@ -112,23 +115,26 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                 startYear: '',
                 order: (data?.sections?.mainServices?.services?.length || 0) + 1
               }
-              setData(prev => ({
-                ...prev!,
-                sections: {
-                  ...prev!.sections,
-                  mainServices: {
-                    ...prev!.sections?.mainServices,
-                    aboutMessage: {
-                      title: prev!.sections?.mainServices?.aboutMessage?.title || '',
-                      description: prev!.sections?.mainServices?.aboutMessage?.description || '',
-                      highlightKeywords: prev!.sections?.mainServices?.aboutMessage?.highlightKeywords || []
-                    },
-                    services: [...(prev!.sections?.mainServices?.services || []), newService],
-                    enabled: prev!.sections?.mainServices?.enabled ?? true,
-                    showSubPrograms: prev!.sections?.mainServices?.showSubPrograms ?? true
+              setData(prev => {
+                if (!prev) return prev
+                return {
+                  ...prev,
+                  sections: {
+                    ...prev.sections,
+                    mainServices: {
+                      ...prev.sections?.mainServices,
+                      aboutMessage: {
+                        title: prev.sections?.mainServices?.aboutMessage?.title || '',
+                        description: prev.sections?.mainServices?.aboutMessage?.description || '',
+                        highlightKeywords: prev.sections?.mainServices?.aboutMessage?.highlightKeywords || []
+                      },
+                      services: [...(prev.sections?.mainServices?.services || []), newService],
+                      enabled: prev.sections?.mainServices?.enabled ?? true,
+                      showSubPrograms: prev.sections?.mainServices?.showSubPrograms ?? true
+                    }
                   }
                 }
-              }))
+              })
             }}
             className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
           >
@@ -154,16 +160,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                   <button
                     onClick={() => {
                       const newServices = (data?.sections?.mainServices?.services || []).filter((_, i) => i !== originalIndex)
-                      setData(prev => ({
-                        ...prev!,
-                        sections: {
-                          ...prev!.sections,
-                          mainServices: {
-                            ...prev!.sections?.mainServices,
-                            services: newServices
+                      setData(prev => {
+                        if (!prev) return prev
+                        return {
+                          ...prev,
+                          sections: {
+                            ...prev.sections,
+                            mainServices: {
+                              ...prev.sections?.mainServices,
+                              services: newServices
+                            }
                           }
                         }
-                      }))
+                      })
                     }}
                     className="text-red-600 hover:text-red-700 p-1"
                   >
@@ -184,16 +193,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                       onChange={(e) => {
                         const newServices = [...(data?.sections?.mainServices?.services || [])]
                         newServices[originalIndex] = { ...newServices[originalIndex], title: e.target.value }
-                        setData(prev => ({
-                          ...prev!,
-                          sections: {
-                            ...prev!.sections,
-                            mainServices: {
-                              ...prev!.sections?.mainServices,
-                              services: newServices
+                        setData(prev => {
+                          if (!prev) return prev
+                          return {
+                            ...prev,
+                            sections: {
+                              ...prev.sections,
+                              mainServices: {
+                                ...prev.sections?.mainServices,
+                                services: newServices
+                              }
                             }
                           }
-                        }))
+                        })
                       }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="서비스 제목을 입력하세요"
@@ -210,16 +222,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                       onChange={(e) => {
                         const newServices = [...(data?.sections?.mainServices?.services || [])]
                         newServices[originalIndex] = { ...newServices[originalIndex], startYear: e.target.value }
-                        setData(prev => ({
-                          ...prev!,
-                          sections: {
-                            ...prev!.sections,
-                            mainServices: {
-                              ...prev!.sections?.mainServices,
-                              services: newServices
+                        setData(prev => {
+                          if (!prev) return prev
+                          return {
+                            ...prev,
+                            sections: {
+                              ...prev.sections,
+                              mainServices: {
+                                ...prev.sections?.mainServices,
+                                services: newServices
+                              }
                             }
                           }
-                        }))
+                        })
                       }}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="예: 2016"
@@ -236,16 +251,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                     onChange={(e) => {
                       const newServices = [...(data?.sections?.mainServices?.services || [])]
                       newServices[originalIndex] = { ...newServices[originalIndex], description: e.target.value }
-                      setData(prev => ({
-                        ...prev!,
-                        sections: {
-                          ...prev!.sections,
-                          mainServices: {
-                            ...prev!.sections?.mainServices,
-                            services: newServices
+                      setData(prev => {
+                        if (!prev) return prev
+                        return {
+                          ...prev,
+                          sections: {
+                            ...prev.sections,
+                            mainServices: {
+                              ...prev.sections?.mainServices,
+                              services: newServices
+                            }
                           }
                         }
-                      }))
+                      })
                     }}
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -269,16 +287,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                               const newDetails = [...(newServices[originalIndex].details || [])]
                               newDetails[detailIndex] = e.target.value
                               newServices[originalIndex] = { ...newServices[originalIndex], details: newDetails }
-                              setData(prev => ({
-                                ...prev!,
-                                sections: {
-                                  ...prev!.sections,
-                                  mainServices: {
-                                    ...prev!.sections?.mainServices,
-                                    services: newServices
+                              setData(prev => {
+                                if (!prev) return prev
+                                return {
+                                  ...prev,
+                                  sections: {
+                                    ...prev.sections,
+                                    mainServices: {
+                                      ...prev.sections?.mainServices,
+                                      services: newServices
+                                    }
                                   }
                                 }
-                              }))
+                              })
                             }}
                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="세부사항을 입력하세요"
@@ -288,16 +309,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                               const newServices = [...(data?.sections?.mainServices?.services || [])]
                               const newDetails = (newServices[originalIndex].details || []).filter((_, i) => i !== detailIndex)
                               newServices[originalIndex] = { ...newServices[originalIndex], details: newDetails }
-                              setData(prev => ({
-                                ...prev!,
-                                sections: {
-                                  ...prev!.sections,
-                                  mainServices: {
-                                    ...prev!.sections?.mainServices,
-                                    services: newServices
+                              setData(prev => {
+                                if (!prev) return prev
+                                return {
+                                  ...prev,
+                                  sections: {
+                                    ...prev.sections,
+                                    mainServices: {
+                                      ...prev.sections?.mainServices,
+                                      services: newServices
+                                    }
                                   }
                                 }
-                              }))
+                              })
                             }}
                             className="text-red-600 hover:text-red-700 p-1"
                           >
@@ -312,16 +336,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
                           const newServices = [...(data?.sections?.mainServices?.services || [])]
                           const newDetails = [...(newServices[originalIndex].details || []), '']
                           newServices[originalIndex] = { ...newServices[originalIndex], details: newDetails }
-                          setData(prev => ({
-                            ...prev!,
-                            sections: {
-                              ...prev!.sections,
-                              mainServices: {
-                                ...prev!.sections?.mainServices,
-                                services: newServices
+                          setData(prev => {
+                            if (!prev) return prev
+                            return {
+                              ...prev,
+                              sections: {
+                                ...prev.sections,
+                                mainServices: {
+                                  ...prev.sections?.mainServices,
+                                  services: newServices
+                                }
                               }
                             }
-                          }))
+                          })
                         }}
                         className="text-blue-600 hover:text-blue-700 text-sm"
                       >
@@ -344,16 +371,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
             <input 
               type="checkbox"
               checked={data?.sections?.mainServices?.enabled || false}
-              onChange={(e) => setData(prev => ({
-                ...prev!,
-                sections: {
-                  ...prev!.sections,
-                  mainServices: {
-                    ...prev!.sections?.mainServices,
-                    enabled: e.target.checked
+              onChange={(e) => setData(prev => {
+                if (!prev) return prev
+                return {
+                  ...prev,
+                  sections: {
+                    ...prev.sections,
+                    mainServices: {
+                      ...prev.sections?.mainServices,
+                      enabled: e.target.checked
+                    }
                   }
                 }
-              }))}
+              })}
               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
           </div>
@@ -363,16 +393,19 @@ export function MainServicesTab({ data, setData }: TabComponentProps) {
             <input 
               type="checkbox"
               checked={data?.sections?.mainServices?.showSubPrograms || false}
-              onChange={(e) => setData(prev => ({
-                ...prev!,
-                sections: {
-                  ...prev!.sections,
-                  mainServices: {
-                    ...prev!.sections?.mainServices,
-                    showSubPrograms: e.target.checked
+              onChange={(e) => setData(prev => {
+                if (!prev) return prev
+                return {
+                  ...prev,
+                  sections: {
+                    ...prev.sections,
+                    mainServices: {
+                      ...prev.sections?.mainServices,
+                      showSubPrograms: e.target.checked
+                    }
                   }
                 }
-              }))}
+              })}
               className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
           </div>

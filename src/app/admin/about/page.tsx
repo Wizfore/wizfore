@@ -145,9 +145,9 @@ export default function AboutPage() {
     const hasFacilityChanges = originalFacilities && currentFacilities && 
       JSON.stringify(originalFacilities) !== JSON.stringify(currentFacilities)
     
-    if (hasFacilityChanges && (window as any).__facilityCleanup) {
+    if (hasFacilityChanges && (window as { __facilityCleanup?: () => Promise<void> }).__facilityCleanup) {
       try {
-        await (window as any).__facilityCleanup()
+        await (window as { __facilityCleanup?: () => Promise<void> }).__facilityCleanup?.()
         console.log('페이지 이탈 시 이미지 클린업 완료')
       } catch (error) {
         console.warn('페이지 이탈 시 클린업 실패:', error)
@@ -228,9 +228,9 @@ export default function AboutPage() {
     const hasFacilityChanges = originalFacilities && currentFacilities && 
       JSON.stringify(originalFacilities) !== JSON.stringify(currentFacilities)
     
-    if (hasFacilityChanges && (window as any).__facilityCleanup) {
+    if (hasFacilityChanges && (window as { __facilityCleanup?: () => Promise<void> }).__facilityCleanup) {
       try {
-        await (window as any).__facilityCleanup()
+        await (window as { __facilityCleanup?: () => Promise<void> }).__facilityCleanup?.()
         console.log('저장하지 않음 시 이미지 클린업 완료')
       } catch (error) {
         console.warn('클린업 실패:', error)

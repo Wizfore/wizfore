@@ -64,7 +64,7 @@ export default function ProgramsManagementPage() {
       const programsData: ProgramsData = { ...DEFAULT_PROGRAMS_DATA }
       
       // API에서 받은 데이터를 구조화
-      categories.forEach((category: any) => {
+      categories.forEach((category: ProgramCategory) => {
         // special-sports를 sports로 매핑
         const mappedId = category.id === 'special-sports' ? 'sports' : category.id
         

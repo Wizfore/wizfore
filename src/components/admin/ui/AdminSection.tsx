@@ -1,4 +1,4 @@
-import { AdminSectionProps, AdminUITokens, cn } from '@/types/admin-ui'
+import { AdminSectionProps, AdminUITokens } from '@/types/admin-ui'
 import { AdminCard } from './AdminCard'
 
 /**

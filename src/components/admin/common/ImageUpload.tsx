@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { X, Upload, ImageIcon, AlertCircle, CheckCircle } from 'lucide-react'
+import { X, Upload, AlertCircle, CheckCircle } from 'lucide-react'
 import { uploadImage, deleteImage } from '@/lib/services/storageService'
 import { ImagePreview } from './ImagePreview'
 import { getFallbackImageForContext } from './utils/fallbackImages'

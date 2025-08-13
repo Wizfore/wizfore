@@ -16,7 +16,7 @@ interface TransportationSectionProps {
 }
 
 const TransportationSection: React.FC<TransportationSectionProps> = ({ 
-  contact,
+  contact: _contact,
   transportation,
   siteName = '센터',
   aboutMessage

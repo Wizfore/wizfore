@@ -98,8 +98,8 @@ interface DataCategoryCardProps {
   category: DataCategory
   hasData: boolean
   isLoading: boolean
-  onAddData: (_categoryId: string) => void
-  onDeleteData: (_categoryId: string) => void
+  onAddData: (categoryId: string) => void
+  onDeleteData: (categoryId: string) => void
 }
 
 function DataCategoryCard({ category, hasData, isLoading, onAddData, onDeleteData }: DataCategoryCardProps) {

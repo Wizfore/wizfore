@@ -74,7 +74,7 @@ export default function CreateNewsPage() {
 
   // 페이지 이탈 시 Storage 정리
   useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    const handleBeforeUnload = (_e: BeforeUnloadEvent) => {
       if (hasChanges() && reservedId) {
         // 변경사항이 있으면 Storage 정리
         cleanupReservedArticleId(reservedId).catch(console.error)

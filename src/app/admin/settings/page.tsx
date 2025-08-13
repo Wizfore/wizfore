@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react'
 import { getSiteInfo, updateSiteInfo } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
-import { Settings, Loader2, XCircle } from 'lucide-react'
+import { Settings, Loader2 } from 'lucide-react'
 import { useAdminForm } from '@/hooks/useAdminForm'
 import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning'
 import { useNavigation } from '@/contexts/NavigationContext'

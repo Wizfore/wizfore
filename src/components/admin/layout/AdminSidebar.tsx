@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useNavigation } from '@/contexts/NavigationContext'
 import { 
@@ -13,7 +12,6 @@ import {
   Settings,
   HelpCircle,
   LogOut,
-  BarChart3,
   Database,
   Home,
   Upload,
@@ -31,7 +29,7 @@ interface SubMenuItem {
 interface MenuItem {
   title: string
   href: string
-  icon: any
+  icon: React.ElementType
   subItems?: SubMenuItem[]
 }
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import { LucideIcon } from 'lucide-react'
 import { AdminTabs, TabItem } from './AdminTabs'
 import { UnsavedChangesDialog } from './UnsavedChangesDialog'
 
