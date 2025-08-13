@@ -14,6 +14,10 @@ export const facilityService = {
    */
   async getFacilities() {
     try {
+      if (!db) {
+        throw new Error('Firebase not initialized')
+      }
+      
       const docRef = doc(db, COLLECTION_NAME, DOCUMENT_ID)
       const docSnap = await getDoc(docRef)
       
@@ -51,6 +55,10 @@ export const facilityService = {
    */
   async getHeroData() {
     try {
+      if (!db) {
+        throw new Error('Firebase not initialized')
+      }
+      
       const docRef = doc(db, COLLECTION_NAME, DOCUMENT_ID)
       const docSnap = await getDoc(docRef)
       
@@ -286,6 +294,10 @@ export const facilityService = {
     images: FacilityImage[] 
   }) {
     try {
+      if (!db) {
+        throw new Error('Firebase not initialized')
+      }
+      
       const docRef = doc(db, COLLECTION_NAME, DOCUMENT_ID)
       await updateDoc(docRef, {
         'facilities.hero': facilities.hero,

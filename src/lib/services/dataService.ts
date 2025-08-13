@@ -122,6 +122,10 @@ export async function getAboutSectionData(): Promise<{
  */
 export async function getPrograms() {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'programs', 'main')
     const docSnap = await getDoc(docRef)
     
@@ -192,6 +196,10 @@ export async function getAllProgramsFlattened() {
  */
 export async function updatePrograms(programsData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'programs', 'main')
     await updateDoc(docRef, {
       categories: programsData,
@@ -209,6 +217,10 @@ export async function updatePrograms(programsData: any) {
  * 자문위원 정보 조회
  */
 export async function getAdvisors() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfo = await getAboutInfo()
     return aboutInfo.advisors?.list
@@ -222,6 +234,10 @@ export async function getAdvisors() {
  * 자문위원 소개 메시지 조회
  */
 export async function getAdvisorsAboutMessage() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfo = await getAboutInfo()
     return aboutInfo.advisors?.aboutMessage
@@ -235,6 +251,10 @@ export async function getAdvisorsAboutMessage() {
  * 자문위원 히어로 메시지 조회
  */
 export async function getAdvisorsHero() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfo = await getAboutInfo()
     return aboutInfo.advisors?.hero
@@ -248,6 +268,10 @@ export async function getAdvisorsHero() {
  * 히스토리 히어로 메시지 조회
  */
 export async function getHistoryHero() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfo = await getAboutInfo()
     return aboutInfo.history?.hero
@@ -261,6 +285,10 @@ export async function getHistoryHero() {
  * 위치 히어로 메시지 조회
  */
 export async function getLocationHero() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfo = await getAboutInfo()
     return aboutInfo.location?.hero
@@ -274,6 +302,10 @@ export async function getLocationHero() {
  * 위치 소개 메시지 조회
  */
 export async function getLocationAboutMessage() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfo = await getAboutInfo()
     return aboutInfo.location?.aboutMessage
@@ -288,6 +320,10 @@ export async function getLocationAboutMessage() {
  */
 export async function getInquiryInfo() {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'inquiry', 'main')
     const docSnap = await getDoc(docRef)
     
@@ -305,6 +341,10 @@ export async function getInquiryInfo() {
  * 문의 히어로 메시지 조회
  */
 export async function getInquiryHero() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const inquiryInfo = await getInquiryInfo()
     return inquiryInfo.hero
@@ -318,6 +358,10 @@ export async function getInquiryHero() {
  * 문의 소개 메시지 조회
  */
 export async function getInquiryAboutMessage() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const inquiryInfo = await getInquiryInfo()
     return inquiryInfo.aboutMessage
@@ -351,6 +395,10 @@ export async function getInquiryCategories(): Promise<string[]> {
  */
 export async function getTeam() {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'team', 'main')
     const docSnap = await getDoc(docRef)
     
@@ -370,6 +418,10 @@ export async function getTeam() {
  * 커뮤니티 정보 조회
  */
 export async function getCommunity() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const docRef = doc(db, 'community', 'main')
     const docSnap = await getDoc(docRef)
@@ -390,6 +442,10 @@ export async function getCommunity() {
  */
 export async function updateSnsData(snsData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'community', 'main')
     await updateDoc(docRef, {
       sns: snsData,
@@ -406,6 +462,10 @@ export async function updateSnsData(snsData: any) {
  */
 export async function updateCommunity(communityData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'community', 'main')
     await updateDoc(docRef, {
       ...communityData,
@@ -421,6 +481,10 @@ export async function updateCommunity(communityData: any) {
  * 홈 설정 정보 조회
  */
 export async function getHomeConfig() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     // homeConfig와 siteInfo의 mainServices를 함께 가져오기
     const [homeConfigSnap, siteInfoSnap] = await Promise.all([
@@ -468,6 +532,10 @@ export async function getHomeConfig() {
  */
 export async function updateHomeConfig(updates: Partial<any>) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const batch = writeBatch(db)
     
     // mainServices 데이터가 있다면 siteInfo와 homeConfig 모두 업데이트
@@ -517,6 +585,10 @@ export async function updateHomeConfig(updates: Partial<any>) {
  */
 export async function updateProgramIconMappings(iconMappings: any[]) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'homeConfig', 'main')
     await updateDoc(docRef, {
       'sections.programGrid.iconMappings': iconMappings
@@ -533,6 +605,10 @@ export async function updateProgramIconMappings(iconMappings: any[]) {
  */
 export async function updateCategoryCardsConfig(config: { title: string; description?: string; enabled: boolean }) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'homeConfig', 'main')
     await updateDoc(docRef, {
       'sections.categoryCards': config
@@ -549,6 +625,10 @@ export async function updateCategoryCardsConfig(config: { title: string; descrip
  */
 export async function updateSectionVisibility(sectionName: string, enabled: boolean) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'homeConfig', 'main')
     await updateDoc(docRef, {
       [`sections.${sectionName}.enabled`]: enabled
@@ -564,6 +644,10 @@ export async function updateSectionVisibility(sectionName: string, enabled: bool
  * History 페이지용 데이터 조회
  */
 export async function getHistoryData() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfoData = await getAboutInfo()
     const siteInfoData = await getSiteInfo()
@@ -582,6 +666,10 @@ export async function getHistoryData() {
  * Location 페이지용 데이터 조회
  */
 export async function getLocationData() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const [aboutInfoData, siteInfoData] = await Promise.all([
       getAboutInfo(),
@@ -624,6 +712,10 @@ export async function getTeamCategory(categoryId: string) {
  * 교사진 데이터 조회
  */
 export async function getTeachers() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const teachersCategory = await getTeamCategory('teachers')
     return {
@@ -642,6 +734,10 @@ export async function getTeachers() {
  * 치료사진 데이터 조회
  */
 export async function getTherapists() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const therapistsCategory = await getTeamCategory('therapists')
     return {
@@ -661,6 +757,10 @@ export async function getTherapists() {
  */
 export async function updateTeamCategory(categoryId: string, categoryData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const teamCategories = await getTeam()
     const categoryIndex = teamCategories.findIndex((cat: any) => cat.id === categoryId)
     
@@ -715,6 +815,10 @@ export async function updateTeachers(teachersData: any) {
  * Hero 섹션 데이터 조회
  */
 export async function getHeroData() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const homeConfig = await getHomeConfig()
     // sections.hero 또는 기존 hero에서 데이터 가져오기
@@ -739,6 +843,10 @@ export async function getHeroData() {
  * ProgramGrid 섹션 데이터 조회
  */
 export async function getProgramsGridConfig() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const homeConfig = await getHomeConfig()
     // sections.programGrid 또는 기존 programs에서 데이터 가져오기
@@ -804,6 +912,10 @@ export async function getNoticeById(id: string): Promise<Article | null> {
  */
 export async function createNotice(noticeData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const now = new Date().toISOString()
     const notices = await getNotices()
     
@@ -840,6 +952,10 @@ export async function createNotice(noticeData: Omit<Article, 'id' | 'createdAt' 
  */
 export async function updateNotice(id: string, updates: Partial<Omit<Article, 'id' | 'createdAt'>>): Promise<void> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const communityData = await getCommunity()
     const allArticles = communityData?.news?.articles || []
     const articleIndex = allArticles.findIndex((article: Article) => article.id === id && article.category === 'notices')
@@ -881,6 +997,10 @@ export async function updateNotice(id: string, updates: Partial<Omit<Article, 'i
  */
 export async function deleteNotice(id: string): Promise<void> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const communityData = await getCommunity()
     const allArticles = communityData?.news?.articles || []
     const noticeToDelete = allArticles.find((article: Article) => article.id === id && article.category === 'notices')
@@ -969,6 +1089,10 @@ export async function createArticleWithReservedId(
   reservedId: string
 ): Promise<string> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const now = new Date().toISOString()
     
     const newArticle: Article = {
@@ -1000,6 +1124,10 @@ export async function createArticleWithReservedId(
  */
 export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const now = new Date().toISOString()
     const communityData = await getCommunity()
     const allArticles = communityData?.news?.articles || []
@@ -1036,6 +1164,10 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt
  */
 export async function updateArticle(id: string, updates: Partial<Omit<Article, 'id' | 'createdAt'>>): Promise<void> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const communityData = await getCommunity()
     const allArticles = communityData?.news?.articles || []
     const articleIndex = allArticles.findIndex((article: Article) => article.id === id)
@@ -1085,6 +1217,10 @@ export async function updateArticle(id: string, updates: Partial<Omit<Article, '
  */
 export async function deleteArticle(id: string): Promise<void> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const communityData = await getCommunity()
     const allArticles = communityData?.news?.articles || []
     const articleToDelete = allArticles.find((article: Article) => article.id === id)
@@ -1135,6 +1271,10 @@ export async function getArticleById(id: string): Promise<Article | null> {
  * 메인 서비스 정보 조회
  */
 export async function getMainServices() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const siteInfo = await getSiteInfo()
     return siteInfo.mainServices
@@ -1149,6 +1289,10 @@ export async function getMainServices() {
  */
 export async function updateDirectorInfo(directorData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'aboutInfo', 'main')
     await updateDoc(docRef, {
       director: directorData
@@ -1164,6 +1308,10 @@ export async function updateDirectorInfo(directorData: any) {
  */
 export async function updateHistoryInfo(historyData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'aboutInfo', 'main')
     await updateDoc(docRef, {
       history: historyData
@@ -1179,6 +1327,10 @@ export async function updateHistoryInfo(historyData: any) {
  */
 export async function updateAdvisorsInfo(advisorsData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'aboutInfo', 'main')
     await updateDoc(docRef, {
       advisors: advisorsData
@@ -1194,6 +1346,10 @@ export async function updateAdvisorsInfo(advisorsData: any) {
  */
 export async function updateLocationInfo(locationData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'aboutInfo', 'main')
     await updateDoc(docRef, {
       location: locationData
@@ -1208,6 +1364,10 @@ export async function updateLocationInfo(locationData: any) {
  * 센터 발자취 통계 정보 조회
  */
 export async function getHistoryStats() {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   try {
     const aboutInfo = await getAboutInfo()
     return aboutInfo.history?.stats
@@ -1222,6 +1382,10 @@ export async function getHistoryStats() {
  */
 export async function updateHistoryStats(statsData: any) {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, 'aboutInfo', 'main')
     await updateDoc(docRef, {
       'history.stats': statsData

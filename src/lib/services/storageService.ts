@@ -256,6 +256,11 @@ export async function uploadImage(
   options: UploadOptions = {}
 ): Promise<string> {
   try {
+    // Firebase Storage 초기화 확인
+    if (!storage) {
+      throw new Error('Firebase Storage가 초기화되지 않았습니다.')
+    }
+
     // 파일 타입 검증
     if (!file.type.startsWith('image/')) {
       throw new Error('이미지 파일만 업로드할 수 있습니다.')
@@ -330,6 +335,11 @@ export async function uploadImage(
  */
 export async function deleteImage(url: string): Promise<void> {
   try {
+    // Firebase Storage 초기화 확인
+    if (!storage) {
+      throw new Error('Firebase Storage가 초기화되지 않았습니다.')
+    }
+
     // URL에서 파일 경로 추출
     const baseUrl = `https://firebasestorage.googleapis.com/v0/b/${storage.app.options.storageBucket}/o/`
     if (!url.startsWith(baseUrl)) {
@@ -423,6 +433,11 @@ export function useImageUpload(category?: string) {
  */
 export async function deleteFolder(folderPath: string): Promise<void> {
   try {
+    // Firebase Storage 초기화 확인
+    if (!storage) {
+      throw new Error('Firebase Storage가 초기화되지 않았습니다.')
+    }
+
     console.log(`폴더 삭제 시작: ${folderPath}`)
     
     const folderRef = ref(storage, folderPath)

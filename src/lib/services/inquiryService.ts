@@ -34,6 +34,10 @@ const COLLECTION_NAME = 'inquiries'
 // 모든 문의 가져오기
 export async function getAllInquiries(): Promise<Inquiry[]> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const inquiriesRef = collection(db, COLLECTION_NAME)
     const q = query(inquiriesRef, orderBy('createdAt', 'desc'))
     const querySnapshot = await getDocs(q)
@@ -51,6 +55,10 @@ export async function getAllInquiries(): Promise<Inquiry[]> {
 // 상태별 문의 가져오기
 export async function getInquiriesByStatus(status: Inquiry['status']): Promise<Inquiry[]> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const inquiriesRef = collection(db, COLLECTION_NAME)
     const q = query(
       inquiriesRef, 
@@ -72,6 +80,10 @@ export async function getInquiriesByStatus(status: Inquiry['status']): Promise<I
 // 특정 문의 가져오기
 export async function getInquiry(id: string): Promise<Inquiry | null> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, COLLECTION_NAME, id)
     const docSnap = await getDoc(docRef)
     
@@ -92,6 +104,10 @@ export async function getInquiry(id: string): Promise<Inquiry | null> {
 // 새 문의 추가 (고객이 작성)
 export async function addInquiry(inquiryData: Omit<Inquiry, 'id' | 'status' | 'createdAt' | 'repliedAt'>): Promise<string> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const inquiriesRef = collection(db, COLLECTION_NAME)
     const docRef = await addDoc(inquiriesRef, {
       ...inquiryData,
@@ -111,6 +127,10 @@ export async function addInquiry(inquiryData: Omit<Inquiry, 'id' | 'status' | 'c
 // 문의 답변하기
 export async function replyToInquiry(id: string, replyContent: string, adminNote?: string): Promise<void> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, COLLECTION_NAME, id)
     await updateDoc(docRef, {
       status: 'replied',
@@ -129,6 +149,10 @@ export async function replyToInquiry(id: string, replyContent: string, adminNote
 // 문의 상태 변경
 export async function updateInquiryStatus(id: string, status: Inquiry['status']): Promise<void> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, COLLECTION_NAME, id)
     await updateDoc(docRef, {
       status,
@@ -145,6 +169,10 @@ export async function updateInquiryStatus(id: string, status: Inquiry['status'])
 // 문의 삭제
 export async function deleteInquiry(id: string): Promise<void> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const docRef = doc(db, COLLECTION_NAME, id)
     await deleteDoc(docRef)
     
@@ -158,6 +186,10 @@ export async function deleteInquiry(id: string): Promise<void> {
 // 미답변 문의 수 가져오기
 export async function getUnreadInquiriesCount(): Promise<number> {
   try {
+    if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
     const inquiriesRef = collection(db, COLLECTION_NAME)
     const q = query(inquiriesRef, where('status', '==', 'unread'))
     const querySnapshot = await getDocs(q)

@@ -122,6 +122,10 @@ const sampleNews = [
 export async function addSamplePrograms() {
   console.log('샘플 프로그램 데이터 추가 시작...')
   
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+  
   try {
     // 치료 프로그램 데이터를 programs/main 문서에 추가
     const therapyProgramsDoc = doc(db, 'programs', 'main')
@@ -175,6 +179,10 @@ export async function addSampleInquiries() {
 
 export async function addSampleNews() {
   console.log('샘플 뉴스 데이터 추가 시작...')
+  
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
   
   try {
     for (const news of sampleNews) {

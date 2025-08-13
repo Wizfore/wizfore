@@ -20,10 +20,10 @@ export const firebaseConfig = {
 
 
 // Initialize Firebase
-let app: FirebaseApp | null;
-let auth: Auth | null;
-let db: Firestore | null;
-let storage: FirebaseStorage | null;
+let app: FirebaseApp | null = null;
+let auth: Auth | null = null;
+let db: Firestore | null = null;
+let storage: FirebaseStorage | null = null;
 
 // 환경 변수 검증
 const isValidConfig = firebaseConfig.apiKey !== 'dummy-key' && 
