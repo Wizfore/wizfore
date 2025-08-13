@@ -6,7 +6,7 @@ import {
   arrayRemove,
   writeBatch
 } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getFirebaseDb } from '@/lib/firebase'
 import type { DefaultSiteData } from '@/types'
 import type { Article } from '@/types/community'
 import { deleteArticleImages } from './storageService'
@@ -36,6 +36,7 @@ type CategoryType = {
  */
 export async function getSiteInfo() {
   try {
+    const db = getFirebaseDb();
     if (!db) {
       throw new Error('Firebase not initialized')
     }
@@ -59,7 +60,7 @@ export async function getSiteInfo() {
  */
 export async function updateSiteInfo(updates: Partial<DefaultSiteData['siteInfo']>) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -76,7 +77,7 @@ export async function updateSiteInfo(updates: Partial<DefaultSiteData['siteInfo'
  */
 export async function getAboutInfo() {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -122,7 +123,7 @@ export async function getAboutSectionData(): Promise<{
  */
 export async function getPrograms() {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -196,7 +197,7 @@ export async function getAllProgramsFlattened() {
  */
 export async function updatePrograms(programsData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -217,7 +218,7 @@ export async function updatePrograms(programsData: any) {
  * 자문위원 정보 조회
  */
 export async function getAdvisors() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -234,7 +235,7 @@ export async function getAdvisors() {
  * 자문위원 소개 메시지 조회
  */
 export async function getAdvisorsAboutMessage() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -251,7 +252,7 @@ export async function getAdvisorsAboutMessage() {
  * 자문위원 히어로 메시지 조회
  */
 export async function getAdvisorsHero() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -268,7 +269,7 @@ export async function getAdvisorsHero() {
  * 히스토리 히어로 메시지 조회
  */
 export async function getHistoryHero() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -285,7 +286,7 @@ export async function getHistoryHero() {
  * 위치 히어로 메시지 조회
  */
 export async function getLocationHero() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -302,7 +303,7 @@ export async function getLocationHero() {
  * 위치 소개 메시지 조회
  */
 export async function getLocationAboutMessage() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -320,7 +321,7 @@ export async function getLocationAboutMessage() {
  */
 export async function getInquiryInfo() {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -341,7 +342,7 @@ export async function getInquiryInfo() {
  * 문의 히어로 메시지 조회
  */
 export async function getInquiryHero() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -358,7 +359,7 @@ export async function getInquiryHero() {
  * 문의 소개 메시지 조회
  */
 export async function getInquiryAboutMessage() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -395,7 +396,7 @@ export async function getInquiryCategories(): Promise<string[]> {
  */
 export async function getTeam() {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -418,7 +419,7 @@ export async function getTeam() {
  * 커뮤니티 정보 조회
  */
 export async function getCommunity() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -442,7 +443,7 @@ export async function getCommunity() {
  */
 export async function updateSnsData(snsData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -462,7 +463,7 @@ export async function updateSnsData(snsData: any) {
  */
 export async function updateCommunity(communityData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -481,7 +482,7 @@ export async function updateCommunity(communityData: any) {
  * 홈 설정 정보 조회
  */
 export async function getHomeConfig() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -532,7 +533,7 @@ export async function getHomeConfig() {
  */
 export async function updateHomeConfig(updates: Partial<any>) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -585,7 +586,7 @@ export async function updateHomeConfig(updates: Partial<any>) {
  */
 export async function updateProgramIconMappings(iconMappings: any[]) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -605,7 +606,7 @@ export async function updateProgramIconMappings(iconMappings: any[]) {
  */
 export async function updateCategoryCardsConfig(config: { title: string; description?: string; enabled: boolean }) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -625,7 +626,7 @@ export async function updateCategoryCardsConfig(config: { title: string; descrip
  */
 export async function updateSectionVisibility(sectionName: string, enabled: boolean) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -644,7 +645,7 @@ export async function updateSectionVisibility(sectionName: string, enabled: bool
  * History 페이지용 데이터 조회
  */
 export async function getHistoryData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -666,7 +667,7 @@ export async function getHistoryData() {
  * Location 페이지용 데이터 조회
  */
 export async function getLocationData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -712,7 +713,7 @@ export async function getTeamCategory(categoryId: string) {
  * 교사진 데이터 조회
  */
 export async function getTeachers() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -734,7 +735,7 @@ export async function getTeachers() {
  * 치료사진 데이터 조회
  */
 export async function getTherapists() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -757,7 +758,7 @@ export async function getTherapists() {
  */
 export async function updateTeamCategory(categoryId: string, categoryData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -815,7 +816,7 @@ export async function updateTeachers(teachersData: any) {
  * Hero 섹션 데이터 조회
  */
 export async function getHeroData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -843,7 +844,7 @@ export async function getHeroData() {
  * ProgramGrid 섹션 데이터 조회
  */
 export async function getProgramsGridConfig() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -912,7 +913,7 @@ export async function getNoticeById(id: string): Promise<Article | null> {
  */
 export async function createNotice(noticeData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -952,7 +953,7 @@ export async function createNotice(noticeData: Omit<Article, 'id' | 'createdAt' 
  */
 export async function updateNotice(id: string, updates: Partial<Omit<Article, 'id' | 'createdAt'>>): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -997,7 +998,7 @@ export async function updateNotice(id: string, updates: Partial<Omit<Article, 'i
  */
 export async function deleteNotice(id: string): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1089,7 +1090,7 @@ export async function createArticleWithReservedId(
   reservedId: string
 ): Promise<string> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1124,7 +1125,7 @@ export async function createArticleWithReservedId(
  */
 export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1164,7 +1165,7 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'createdAt
  */
 export async function updateArticle(id: string, updates: Partial<Omit<Article, 'id' | 'createdAt'>>): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1217,7 +1218,7 @@ export async function updateArticle(id: string, updates: Partial<Omit<Article, '
  */
 export async function deleteArticle(id: string): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1271,7 +1272,7 @@ export async function getArticleById(id: string): Promise<Article | null> {
  * 메인 서비스 정보 조회
  */
 export async function getMainServices() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -1289,7 +1290,7 @@ export async function getMainServices() {
  */
 export async function updateDirectorInfo(directorData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1308,7 +1309,7 @@ export async function updateDirectorInfo(directorData: any) {
  */
 export async function updateHistoryInfo(historyData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1327,7 +1328,7 @@ export async function updateHistoryInfo(historyData: any) {
  */
 export async function updateAdvisorsInfo(advisorsData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1346,7 +1347,7 @@ export async function updateAdvisorsInfo(advisorsData: any) {
  */
 export async function updateLocationInfo(locationData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -1364,7 +1365,7 @@ export async function updateLocationInfo(locationData: any) {
  * 센터 발자취 통계 정보 조회
  */
 export async function getHistoryStats() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
 
@@ -1382,7 +1383,7 @@ export async function getHistoryStats() {
  */
 export async function updateHistoryStats(statsData: any) {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     

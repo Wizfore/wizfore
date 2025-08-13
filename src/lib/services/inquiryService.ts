@@ -12,7 +12,7 @@ import {
   serverTimestamp,
   Timestamp 
 } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getFirebaseDb } from '@/lib/firebase'
 
 // 문의 타입 정의
 export interface Inquiry {
@@ -34,7 +34,7 @@ const COLLECTION_NAME = 'inquiries'
 // 모든 문의 가져오기
 export async function getAllInquiries(): Promise<Inquiry[]> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -55,7 +55,7 @@ export async function getAllInquiries(): Promise<Inquiry[]> {
 // 상태별 문의 가져오기
 export async function getInquiriesByStatus(status: Inquiry['status']): Promise<Inquiry[]> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -80,7 +80,7 @@ export async function getInquiriesByStatus(status: Inquiry['status']): Promise<I
 // 특정 문의 가져오기
 export async function getInquiry(id: string): Promise<Inquiry | null> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -104,7 +104,7 @@ export async function getInquiry(id: string): Promise<Inquiry | null> {
 // 새 문의 추가 (고객이 작성)
 export async function addInquiry(inquiryData: Omit<Inquiry, 'id' | 'status' | 'createdAt' | 'repliedAt'>): Promise<string> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -127,7 +127,7 @@ export async function addInquiry(inquiryData: Omit<Inquiry, 'id' | 'status' | 'c
 // 문의 답변하기
 export async function replyToInquiry(id: string, replyContent: string, adminNote?: string): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -149,7 +149,7 @@ export async function replyToInquiry(id: string, replyContent: string, adminNote
 // 문의 상태 변경
 export async function updateInquiryStatus(id: string, status: Inquiry['status']): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -169,7 +169,7 @@ export async function updateInquiryStatus(id: string, status: Inquiry['status'])
 // 문의 삭제
 export async function deleteInquiry(id: string): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -186,7 +186,7 @@ export async function deleteInquiry(id: string): Promise<void> {
 // 미답변 문의 수 가져오기
 export async function getUnreadInquiriesCount(): Promise<number> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     

@@ -7,7 +7,7 @@ import {
   limit,
   writeBatch
 } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getFirebaseDb } from '@/lib/firebase'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'
 
 /**
@@ -20,7 +20,7 @@ import { defaultSiteData } from '@/lib/data/defaultSiteData'
  */
 export async function checkCollectionExists(collectionName: string): Promise<boolean> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
     }
     
@@ -83,7 +83,7 @@ function getCategoryCollections(categoryId: string): string[] {
  * 사이트 기본 정보 데이터 추가
  */
 async function addSiteInfoData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   
@@ -101,7 +101,7 @@ async function addSiteInfoData() {
  * 센터 소개 데이터 추가
  */
 async function addAboutInfoData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   
@@ -119,7 +119,7 @@ async function addAboutInfoData() {
  * 프로그램 데이터 추가
  */
 async function addProgramsData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   
@@ -138,7 +138,7 @@ async function addProgramsData() {
  * 팀(직원) 데이터 추가
  */
 async function addTeamData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   
@@ -156,7 +156,7 @@ async function addTeamData() {
  * 커뮤니티 데이터 추가
  */
 async function addCommunityData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   
@@ -174,7 +174,7 @@ async function addCommunityData() {
  * 홈 설정 데이터 추가
  */
 async function addHomeConfigData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   
@@ -192,7 +192,7 @@ async function addHomeConfigData() {
  * 문의 정보 데이터 추가
  */
 async function addInquiryData() {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   
@@ -264,7 +264,7 @@ export async function checkAllCategoriesDataStatus(): Promise<Record<string, boo
  * 컬렉션의 모든 문서 삭제
  */
 async function deleteCollection(collectionName: string): Promise<void> {
-  if (!db) {
+  const db = getFirebaseDb(); if (!db) {
     throw new Error('Firebase not initialized')
   }
   

@@ -7,7 +7,7 @@ import {
   limit,
   Timestamp 
 } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getFirebaseDb } from '@/lib/firebase'
 import { getUnreadInquiriesCount } from './inquiryService'
 
 // 대시보드 통계 타입
@@ -42,7 +42,7 @@ export interface RecentNews {
 // 대시보드 통계 데이터 가져오기
 export async function getDashboardStats(): Promise<DashboardStats> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firestore가 초기화되지 않았습니다.')
     }
     
@@ -90,7 +90,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 // 최근 문의 가져오기
 export async function getRecentInquiries(limitCount: number = 5): Promise<RecentInquiry[]> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firestore가 초기화되지 않았습니다.')
     }
     
@@ -123,7 +123,7 @@ export async function getRecentInquiries(limitCount: number = 5): Promise<Recent
 // 최근 게시글 가져오기
 export async function getRecentNews(limitCount: number = 5): Promise<RecentNews[]> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       throw new Error('Firestore가 초기화되지 않았습니다.')
     }
     

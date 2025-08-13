@@ -12,7 +12,7 @@ import {
   getDoc, 
   serverTimestamp 
 } from 'firebase/firestore'
-import { auth, db } from '@/lib/firebase'
+import { getFirebaseAuth, getFirebaseDb } from '@/lib/firebase'
 
 // 사용자 역할 타입
 export type UserRole = 'admin' | 'staff' | 'viewer'
@@ -45,7 +45,7 @@ export interface SignupRequest {
 // 이메일/비밀번호로 로그인
 export async function loginWithEmail({ email, password }: LoginRequest): Promise<UserProfile> {
   try {
-    if (!auth) {
+    const auth = getFirebaseAuth(); if (!auth) {
       throw new Error('인증 서비스가 초기화되지 않았습니다.')
     }
     
@@ -81,7 +81,7 @@ export async function loginWithEmail({ email, password }: LoginRequest): Promise
 // 로그아웃
 export async function logout(): Promise<void> {
   try {
-    if (!auth) {
+    const auth = getFirebaseAuth(); if (!auth) {
       throw new Error('인증 서비스가 초기화되지 않았습니다.')
     }
     
@@ -96,7 +96,7 @@ export async function logout(): Promise<void> {
 // 새 관리자 계정 생성 (기존 관리자만 가능)
 export async function createAdminUser({ email, password, displayName, role }: SignupRequest): Promise<UserProfile> {
   try {
-    if (!auth || !db) {
+    const auth = getFirebaseAuth(); const db = getFirebaseDb(); if (!auth || !db) {
       throw new Error('Firebase 서비스가 초기화되지 않았습니다.')
     }
     
@@ -135,7 +135,7 @@ export async function createAdminUser({ email, password, displayName, role }: Si
 // 사용자 프로필 가져오기
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       console.error('Firestore가 초기화되지 않았습니다.')
       return null
     }
@@ -157,7 +157,7 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
 // 마지막 로그인 시간 업데이트
 export async function updateLastLogin(uid: string): Promise<void> {
   try {
-    if (!db) {
+    const db = getFirebaseDb(); if (!db) {
       console.error('Firestore가 초기화되지 않았습니다.')
       return
     }
@@ -173,7 +173,7 @@ export async function updateLastLogin(uid: string): Promise<void> {
 
 // 인증 상태 변경 리스너
 export function onAuthStateChange(callback: (user: User | null) => void) {
-  if (!auth) {
+  const auth = getFirebaseAuth(); if (!auth) {
     console.error('Auth가 초기화되지 않았습니다.')
     return () => {}
   }
@@ -182,7 +182,7 @@ export function onAuthStateChange(callback: (user: User | null) => void) {
 
 // 현재 사용자 가져오기
 export function getCurrentUser(): User | null {
-  if (!auth) {
+  const auth = getFirebaseAuth(); if (!auth) {
     console.error('Auth가 초기화되지 않았습니다.')
     return null
   }

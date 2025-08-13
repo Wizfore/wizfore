@@ -1,5 +1,5 @@
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { getFirebaseDb } from '@/lib/firebase'
 import { FacilityCategory, FacilityImage } from '@/types'
 
 const COLLECTION_NAME = 'aboutInfo'
@@ -14,7 +14,7 @@ export const facilityService = {
    */
   async getFacilities() {
     try {
-      if (!db) {
+      const db = getFirebaseDb(); if (!db) {
         throw new Error('Firebase not initialized')
       }
       
@@ -55,7 +55,7 @@ export const facilityService = {
    */
   async getHeroData() {
     try {
-      if (!db) {
+      const db = getFirebaseDb(); if (!db) {
         throw new Error('Firebase not initialized')
       }
       
@@ -294,7 +294,7 @@ export const facilityService = {
     images: FacilityImage[] 
   }) {
     try {
-      if (!db) {
+      const db = getFirebaseDb(); if (!db) {
         throw new Error('Firebase not initialized')
       }
       

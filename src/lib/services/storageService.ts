@@ -10,7 +10,7 @@ import {
   UploadTaskSnapshot,
   listAll
 } from 'firebase/storage'
-import { storage } from '@/lib/firebase'
+import { getFirebaseStorage } from '@/lib/firebase'
 
 export interface UploadProgress {
   bytesTransferred: number
@@ -257,6 +257,7 @@ export async function uploadImage(
 ): Promise<string> {
   try {
     // Firebase Storage 초기화 확인
+    const storage = getFirebaseStorage();
     if (!storage) {
       throw new Error('Firebase Storage가 초기화되지 않았습니다.')
     }
@@ -336,6 +337,7 @@ export async function uploadImage(
 export async function deleteImage(url: string): Promise<void> {
   try {
     // Firebase Storage 초기화 확인
+    const storage = getFirebaseStorage();
     if (!storage) {
       throw new Error('Firebase Storage가 초기화되지 않았습니다.')
     }
@@ -434,6 +436,7 @@ export function useImageUpload(category?: string) {
 export async function deleteFolder(folderPath: string): Promise<void> {
   try {
     // Firebase Storage 초기화 확인
+    const storage = getFirebaseStorage();
     if (!storage) {
       throw new Error('Firebase Storage가 초기화되지 않았습니다.')
     }
