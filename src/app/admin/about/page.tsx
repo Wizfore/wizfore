@@ -324,6 +324,8 @@ export default function AboutPage() {
           <AdvisorsManagementTab 
             data={aboutData.advisors} 
             onUpdate={(advisorsData) => setAboutData(prev => ({ ...prev, advisors: advisorsData }))} 
+            onRegisterCallback={(callback) => registerTabCallback('advisors', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('advisors', callback)}
           />
         )
       case 'facilities':

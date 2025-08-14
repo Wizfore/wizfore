@@ -18,13 +18,15 @@ interface AdvisorsManagementTabProps {
   data: AdvisorsInfo
   onUpdate: (data: AdvisorsInfo) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
+  onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
-export default function AdvisorsManagementTab({ data, onUpdate, onUnsavedChanges }: AdvisorsManagementTabProps) {
+export default function AdvisorsManagementTab({ data, onUpdate, onUnsavedChanges, onRegisterCallback, onRegisterCleanupCallback }: AdvisorsManagementTabProps) {
   const [editingAdvisor, setEditingAdvisor] = useState<number | null>(null)
   
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const { trackUploadedImage, stopTrackingAllImages, trackDeletedImage, processDeletedImages, markAsSaved, performCleanup } = useImageCleanup()
 
   // 기본 이미지 옵션 정의
   const defaultImageOptions = [
@@ -115,27 +117,35 @@ export default function AdvisorsManagementTab({ data, onUpdate, onUnsavedChanges
     updateAdvisor(advisorIndex, field, items)
   }
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('Advisors 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('Advisors 탭: 이미지 정리 완료')
+  }, [performCleanup])
 
-  // 실제로 사용되지 않는 함수들은 제거하고, 필요시 사용
+  // 컴포넌트 마운트 시 콜백 등록
   React.useEffect(() => {
-    // 컴포넌트 언마운트 시 cleanup 실행을 위한 예시
-    return () => {
-      if (onUnsavedChanges) {
-        handleSaveSuccess() // 필요시 호출
-      }
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('Advisors 탭: 저장 성공 콜백 등록')
     }
-  }, [onUnsavedChanges, handleSaveSuccess])
+  }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('Advisors 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   return (
     <div className="space-y-6">
@@ -165,6 +175,7 @@ export default function AdvisorsManagementTab({ data, onUpdate, onUnsavedChanges
           folder="pages/about/advisors/hero"
           defaultImageUrl={data.hero?.defaultImageUrl}
           helper="Hero 섹션 배경으로 사용할 이미지를 업로드하세요"
+          onImageDelete={trackDeletedImage}
         />
       </AdminSection>
 
@@ -299,6 +310,7 @@ export default function AdvisorsManagementTab({ data, onUpdate, onUnsavedChanges
                       folder="pages/about/advisors"
                       defaultImageUrl={advisor.defaultImageUrl}
                       helper={`${advisor.position?.join(' ') || '자문위원'} 프로필 이미지를 업로드하세요`}
+                      onImageDelete={trackDeletedImage}
                     />
                   </div>
                 </div>
