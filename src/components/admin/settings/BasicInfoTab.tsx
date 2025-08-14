@@ -85,14 +85,6 @@ export function BasicInfoTab({ siteInfo, onUpdate }: BasicInfoTabProps) {
           />
         </AdminFormField>
       </div>
-      
-      <AdminTextarea
-        label="설립 목적"
-        value={siteInfo.purpose}
-        onChange={(value) => handleInputChange('purpose', value)}
-        rows={4}
-        placeholder="설립 목적을 입력하세요"
-      />
     </AdminSection>
   )
 }

@@ -114,7 +114,6 @@ export interface DefaultSiteData {
     name: string
     enName: string
     establishedDate: string
-    purpose: string
     contact: ContactInfo
     mainServices: MainServices
     faviconUrl?: string

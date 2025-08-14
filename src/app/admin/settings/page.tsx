@@ -31,7 +31,6 @@ export default function SettingsPage() {
     if (!data.name.trim()) errors.push('사이트명은 필수입니다.')
     if (!data.enName.trim()) errors.push('영문명은 필수입니다.')
     if (!data.establishedDate.trim()) errors.push('설립일은 필수입니다.')
-    if (!data.purpose.trim()) errors.push('설립 목적은 필수입니다.')
     if (!data.contact.address.trim()) errors.push('주소는 필수입니다.')
     if (!data.contact.phone.trim()) errors.push('전화번호는 필수입니다.')
     if (!data.contact.email.trim()) errors.push('이메일은 필수입니다.')
