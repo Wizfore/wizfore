@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Plus, Trash2, Edit2, BarChart3, Eye, EyeOff } from 'lucide-react'
 import { HistoryInfo, Milestone, StatsCard } from '@/types/about'
 import { Button } from '@/components/ui/button'
@@ -17,14 +17,16 @@ interface HistoryManagementTabProps {
   data: HistoryInfo
   onUpdate: (data: HistoryInfo) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
+  onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
-export default function HistoryManagementTab({ data, onUpdate, onUnsavedChanges }: HistoryManagementTabProps) {
+export default function HistoryManagementTab({ data, onUpdate, onUnsavedChanges, onRegisterCallback, onRegisterCleanupCallback }: HistoryManagementTabProps) {
   const [editingMilestone, setEditingMilestone] = useState<number | null>(null)
   const [editingStatsCard, setEditingStatsCard] = useState<string | null>(null)
   
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const { trackUploadedImage, stopTrackingAllImages, trackDeletedImage, processDeletedImages, markAsSaved, performCleanup } = useImageCleanup()
 
   // Hero 섹션 업데이트
   const updateHero = (field: string, value: string) => {
@@ -127,17 +129,35 @@ export default function HistoryManagementTab({ data, onUpdate, onUnsavedChanges 
 
 
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('History 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('History 탭: 이미지 정리 완료')
+  }, [performCleanup])
+
+  // 컴포넌트 마운트 시 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('History 탭: 저장 성공 콜백 등록')
+    }
+  }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('History 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   // 카드별 카운팅 안내 메시지
   const getCountingGuide = (cardId: string) => {
@@ -183,6 +203,7 @@ export default function HistoryManagementTab({ data, onUpdate, onUnsavedChanges 
           folder="pages/about/history/hero"
           defaultImageUrl={data.hero?.defaultImageUrl}
           helper="Hero 섹션 배경으로 사용할 이미지를 업로드하세요"
+          onImageDelete={trackDeletedImage}
         />
       </AdminSection>
 
@@ -256,6 +277,7 @@ export default function HistoryManagementTab({ data, onUpdate, onUnsavedChanges 
                         folder="pages/about/history/stats"
                         defaultImageUrl={card.defaultIconPath}
                         helper="통계 카드 아이콘 (16x16 권장)"
+                        onImageDelete={trackDeletedImage}
                       />
                     </div>
                     

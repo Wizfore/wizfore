@@ -315,6 +315,8 @@ export default function AboutPage() {
           <HistoryManagementTab 
             data={aboutData.history} 
             onUpdate={(historyData) => setAboutData(prev => ({ ...prev, history: historyData }))} 
+            onRegisterCallback={(callback) => registerTabCallback('history', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('history', callback)}
           />
         )
       case 'advisors':
