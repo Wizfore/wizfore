@@ -10,11 +10,12 @@ interface ImagesTabProps {
   siteInfo: SiteInfoData
   onUpdate: (data: SiteInfoData) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
+  onRegisterCallback?: (callback: () => void) => void
 }
 
-export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges }: ImagesTabProps) {
+export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges, onRegisterCallback }: ImagesTabProps) {
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const { trackUploadedImage, stopTrackingAllImages, trackDeletedImage, processDeletedImages, markAsSaved, performCleanup } = useImageCleanup()
 
   const handleImageChange = (field: keyof SiteInfoData, url: string) => {
     // 이미지 URL 업데이트 시 추적 시작
@@ -28,17 +29,27 @@ export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges }: ImagesTabPro
     })
   }
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('Images 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('Images 탭: 이미지 정리 완료')
+  }, [performCleanup])
+
+  // 컴포넌트 마운트 시 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('Images 탭: 저장 성공 콜백 등록')
+    }
+  }, [onRegisterCallback, handleSaveSuccess])
 
   return (
     <AdminSection 
@@ -60,6 +71,7 @@ export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges }: ImagesTabPro
             folder="site-assets/favicon"
             defaultImageUrl={siteInfo.defaultFaviconUrl}
             helper="브라우저 탭에 표시되는 작은 아이콘 이미지 (권장 크기: 16x16, 32x32px)"
+            onImageDelete={trackDeletedImage}
             required
           />
         </AdminCard>
@@ -78,6 +90,7 @@ export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges }: ImagesTabPro
             folder="site-assets/logo"
             defaultImageUrl={siteInfo.defaultHeaderLogoUrl}
             helper="웹사이트 상단에 표시되는 로고 이미지 (권장 높이: 40-60px)"
+            onImageDelete={trackDeletedImage}
             required
           />
         </AdminCard>

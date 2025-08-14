@@ -1,3 +1,4 @@
+import React from 'react'
 import type { TabComponentProps } from './HomeManagement'
 import { 
   AdminSection, 
@@ -8,9 +9,15 @@ import {
 } from '@/components/admin/ui'
 import { useImageCleanup } from '@/hooks/useImageCleanup'
 
-export function HeroTab({ data, setData, onUnsavedChanges }: TabComponentProps & { onUnsavedChanges?: (hasChanges: boolean) => void }) {
+interface HeroTabProps extends TabComponentProps {
+  onUnsavedChanges?: (hasChanges: boolean) => void
+  onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
+}
+
+export function HeroTab({ data, setData, onUnsavedChanges, onRegisterCallback, onRegisterCleanupCallback }: HeroTabProps) {
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const { trackUploadedImage, stopTrackingAllImages, trackDeletedImage, processDeletedImages, markAsSaved, performCleanup } = useImageCleanup()
   // 자동재생 설정 업데이트
   const updateAutoPlay = (autoPlay: boolean) => {
     setData(prev => {
@@ -46,17 +53,35 @@ export function HeroTab({ data, setData, onUnsavedChanges }: TabComponentProps &
     })
   }
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('Hero 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('Hero 탭: 이미지 정리 완료')
+  }, [performCleanup])
+
+  // 컴포넌트 마운트 시 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('Hero 탭: 저장 성공 콜백 등록')
+    }
+  }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('Hero 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   return (
     <div className="p-6 space-y-6">
@@ -136,6 +161,7 @@ export function HeroTab({ data, setData, onUnsavedChanges }: TabComponentProps &
                     folder={`pages/home/hero/slide-${slide.id}`}
                     defaultImageUrl={slide.defaultBackgroundImage}
                     helper="슬라이드 배경으로 사용할 이미지를 업로드하세요"
+                    onImageDelete={trackDeletedImage}
                   />
                 </div>
               </div>

@@ -33,6 +33,38 @@ export default function HomeManagement() {
   const [pendingTab, setPendingTab] = useState<HomeTab | null>(null)
   const [dialogSaving, setDialogSaving] = useState(false)
 
+  // 각 탭별 저장 성공 콜백 관리
+  const [tabCallbacks] = useState<{[key in HomeTab]?: () => void}>({})
+  const [tabCleanupCallbacks] = useState<{[key in HomeTab]?: () => Promise<void>}>({})
+
+  // 탭별 저장 성공 콜백 등록
+  const registerTabCallback = useCallback((tabKey: HomeTab, callback: () => void) => {
+    tabCallbacks[tabKey] = callback
+  }, [tabCallbacks])
+
+  // 탭별 정리 콜백 등록
+  const registerTabCleanupCallback = useCallback((tabKey: HomeTab, callback: () => Promise<void>) => {
+    tabCleanupCallbacks[tabKey] = callback
+  }, [tabCleanupCallbacks])
+
+  // 저장 성공 시 현재 활성 탭의 콜백 실행
+  const handleSaveSuccess = useCallback(async () => {
+    const callback = tabCallbacks[activeTab]
+    if (callback) {
+      await callback()
+      console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
+    }
+  }, [activeTab, tabCallbacks])
+
+  // 변경사항 폐기 시 현재 활성 탭의 정리 콜백 실행
+  const handleDiscardChanges = useCallback(async () => {
+    const cleanupCallback = tabCleanupCallbacks[activeTab]
+    if (cleanupCallback) {
+      await cleanupCallback()
+      console.log(`${activeTab} 탭 정리 콜백 실행`)
+    }
+  }, [activeTab, tabCleanupCallbacks])
+
   // fetchData 함수
   const fetchData = useCallback(async (): Promise<HomeConfig> => {
     try {
@@ -119,7 +151,8 @@ export default function HomeManagement() {
     fetchData,
     saveData,
     defaultData: defaultHomeConfig,
-    validate: validateHomeConfig
+    validate: validateHomeConfig,
+    onSaveSuccess: handleSaveSuccess
   })
 
   // 브라우저 이탈 경고 훅 사용
@@ -157,7 +190,10 @@ export default function HomeManagement() {
     }
   }
 
-  const handleDiscardAndSwitch = () => {
+  const handleDiscardAndSwitch = async () => {
+    // 현재 활성 탭의 정리 콜백 실행
+    await handleDiscardChanges()
+    
     handleReset()
     if (pendingTab) {
       setActiveTab(pendingTab)
@@ -235,7 +271,12 @@ export default function HomeManagement() {
 
       <div className="bg-white rounded-lg border">
         {activeTab === 'hero' && (
-          <HeroTab data={data} setData={setData} />
+          <HeroTab 
+            data={data} 
+            setData={setData} 
+            onRegisterCallback={(callback) => registerTabCallback('hero', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('hero', callback)}
+          />
         )}
 
         {activeTab === 'categories' && (

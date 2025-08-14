@@ -18,9 +18,10 @@ interface DirectorManagementTabProps {
   onSaveSuccess?: () => void
   onDiscardChanges?: () => Promise<void>
   onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
-export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges, onSaveSuccess, onDiscardChanges, onRegisterCallback }: DirectorManagementTabProps) {
+export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges, onSaveSuccess, onDiscardChanges, onRegisterCallback, onRegisterCleanupCallback }: DirectorManagementTabProps) {
   // 이미지 정리 훅
   const { trackUploadedImage, stopTrackingAllImages, trackDeletedImage, processDeletedImages, markAsSaved, performCleanup } = useImageCleanup()
   // 기본 정보 업데이트 함수
@@ -81,6 +82,14 @@ export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges
       console.log('Director 탭: 저장 성공 콜백 등록')
     }
   }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('Director 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   return (
     <div className="space-y-6">

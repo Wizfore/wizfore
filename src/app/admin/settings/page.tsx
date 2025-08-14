@@ -50,6 +50,23 @@ export default function SettingsPage() {
     return data
   }
 
+  // 각 탭별 저장 성공 콜백 관리
+  const [tabCallbacks] = useState<{[key in TabKey]?: () => void}>({})
+
+  // 탭별 저장 성공 콜백 등록
+  const registerTabCallback = useCallback((tabKey: TabKey, callback: () => void) => {
+    tabCallbacks[tabKey] = callback
+  }, [tabCallbacks])
+
+  // 저장 성공 시 현재 활성 탭의 콜백 실행
+  const handleSaveSuccess = useCallback(async () => {
+    const callback = tabCallbacks[activeTab]
+    if (callback) {
+      await callback()
+      console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
+    }
+  }, [activeTab, tabCallbacks])
+
   // fetchData 함수를 메모이제이션하여 불필요한 리렌더링 방지
   const fetchData = useCallback(async () => {
     return getSiteInfo() as Promise<SiteInfoData>
@@ -71,7 +88,8 @@ export default function SettingsPage() {
     saveData: updateSiteInfo,
     defaultData: defaultSiteData.siteInfo,
     validate: validateSiteInfo,
-    cleanData: cleanSiteInfo
+    cleanData: cleanSiteInfo,
+    onSaveSuccess: handleSaveSuccess
   })
 
   // 브라우저 이탈 경고 훅 사용
@@ -153,7 +171,7 @@ export default function SettingsPage() {
       case 'contact':
         return <ContactInfoTab siteInfo={siteInfo} onUpdate={setSiteInfo} />
       case 'images':
-        return <ImagesTab siteInfo={siteInfo} onUpdate={setSiteInfo} />
+        return <ImagesTab siteInfo={siteInfo} onUpdate={setSiteInfo} onRegisterCallback={(callback) => registerTabCallback('images', callback)} />
       default:
         return null
     }

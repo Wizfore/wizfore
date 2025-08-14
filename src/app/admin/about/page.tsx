@@ -77,11 +77,17 @@ export default function AboutPage() {
 
   // 각 탭별 저장 성공 콜백 관리
   const [tabCallbacks] = useState<{[key in AboutTab]?: () => void}>({})
+  const [tabCleanupCallbacks] = useState<{[key in AboutTab]?: () => Promise<void>}>({})
 
   // 탭별 저장 성공 콜백 등록
   const registerTabCallback = useCallback((tabKey: AboutTab, callback: () => void) => {
     tabCallbacks[tabKey] = callback
   }, [tabCallbacks])
+
+  // 탭별 정리 콜백 등록
+  const registerTabCleanupCallback = useCallback((tabKey: AboutTab, callback: () => Promise<void>) => {
+    tabCleanupCallbacks[tabKey] = callback
+  }, [tabCleanupCallbacks])
 
   // 저장 성공 시 현재 활성 탭의 콜백 실행
   const handleSaveSuccess = useCallback(async () => {
@@ -91,6 +97,15 @@ export default function AboutPage() {
       console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
     }
   }, [activeTab, tabCallbacks])
+
+  // 변경사항 폐기 시 현재 활성 탭의 정리 콜백 실행
+  const handleDiscardChanges = useCallback(async () => {
+    const cleanupCallback = tabCleanupCallbacks[activeTab]
+    if (cleanupCallback) {
+      await cleanupCallback()
+      console.log(`${activeTab} 탭 정리 콜백 실행`)
+    }
+  }, [activeTab, tabCleanupCallbacks])
 
   // useAdminForm 훅 사용
   const {
@@ -240,6 +255,9 @@ export default function AboutPage() {
   }
 
   const handleDialogDiscard = async () => {
+    // 현재 활성 탭의 정리 콜백 실행
+    await handleDiscardChanges()
+    
     // facility 데이터에 변경사항이 있으면 클린업 수행 (현재 탭과 관계없이)
     const originalFacilities = originalData?.facilities
     const currentFacilities = aboutData.facilities
@@ -289,6 +307,7 @@ export default function AboutPage() {
             data={aboutData.director} 
             onUpdate={(directorData) => setAboutData(prev => ({ ...prev, director: directorData }))} 
             onRegisterCallback={(callback) => registerTabCallback('director', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('director', callback)}
           />
         )
       case 'history':

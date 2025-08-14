@@ -6,7 +6,7 @@ interface UseAdminFormProps<T> {
   defaultData: T
   validate?: (data: T) => string[]
   cleanData?: (data: T) => T
-  onSaveSuccess?: () => void
+  onSaveSuccess?: () => void | Promise<void>
 }
 
 interface UseAdminFormReturn<T> {
@@ -92,8 +92,10 @@ export function useAdminForm<T>({
       setData(cleanedData)
       setSaveStatus('success')
       
-      // 저장 성공 콜백 호출
-      onSaveSuccess?.()
+      // 저장 성공 콜백 호출 (async 지원)
+      if (onSaveSuccess) {
+        await onSaveSuccess()
+      }
       
       setTimeout(() => setSaveStatus('idle'), 3000)
     } catch (err) {
