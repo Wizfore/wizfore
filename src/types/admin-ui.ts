@@ -147,6 +147,7 @@ export interface AdminImageUploadFieldProps {
   error?: string
   helper?: string
   className?: string
+  onImageDelete?: (imageUrl: string) => void
 }
 
 // 유틸리티 함수

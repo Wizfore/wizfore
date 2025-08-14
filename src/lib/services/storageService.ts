@@ -145,104 +145,31 @@ export function resizeForSiteAsset(
 /**
  * 고유한 파일명을 생성합니다.
  * @param originalName - 원본 파일명
- * @param category - 카테고리 (선택사항)
  * @returns 고유한 파일명
  */
-export function generateUniqueFileName(originalName: string, category?: string): string {
+export function generateUniqueFileName(originalName: string): string {
   const timestamp = Date.now()
   const random = Math.random().toString(36).substring(2, 8)
   const extension = originalName.split('.').pop()
   const baseName = originalName.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_')
   
-  // 커뮤니티 뉴스 기사의 경우 카테고리를 파일명에 포함하지 않음 (경로에서 관리)
-  if (category && category.startsWith('pages/community/news/')) {
-    return `${baseName}_${timestamp}_${random}.${extension}`
-  }
-  
-  // 시설 관련 이미지의 경우 카테고리를 파일명에 포함하지 않음 (경로에서 관리)
-  if (category && category.startsWith('pages/about/facilities/')) {
-    return `${baseName}_${timestamp}_${random}.${extension}`
-  }
-  
-  const prefix = category ? `${category}_` : ''
-  return `${prefix}${baseName}_${timestamp}_${random}.${extension}`
+  // 카테고리는 경로에서 관리하므로 파일명에는 포함하지 않음
+  return `${baseName}_${timestamp}_${random}.${extension}`
 }
 
 /**
  * 업로드 경로를 생성합니다.
- * @param category - 카테고리 (예: 'pages/about/director/hero', 'pages/community/news/{articleId}', 'site-assets/favicon')
+ * @param category - 카테고리 (예: 'pages/about/director/hero', 'site-assets/favicon')
  * @param fileName - 파일명
  * @returns Firebase Storage 경로
  */
 export function generateUploadPath(category: string, fileName: string): string {
-  // 사이트 에셋인 경우 날짜 구분 없이 저장
-  if (category.startsWith('site-assets/')) {
-    return `${category}/${fileName}`
-  }
+  // 입력된 카테고리를 정리
+  const cleanCategory = category.trim()
   
-  // 커뮤니티 뉴스 기사인 경우 articleId별로 저장
-  if (category.startsWith('pages/community/news/')) {
-    // category 형태: 'pages/community/news/{articleId}' 또는 'pages/community/news/1'
-    return `${category}/${fileName}`
-  }
-  
-  // 페이지별 콘텐츠인 경우 해당 경로에 저장
-  if (category.startsWith('pages/')) {
-    return `${category}/${fileName}`
-  }
-  
-  // 기존 호환성을 위한 legacy 경로 처리
-  const legacyMappings: Record<string, string> = {
-    // About 페이지 관련
-    'about-director-hero': 'pages/about/director/hero',
-    'about-director': 'pages/about/director',
-    'about-advisors-hero': 'pages/about/advisors/hero',
-    'about-advisors': 'pages/about/advisors',
-    'about-history-hero': 'pages/about/history/hero',
-    'about-history': 'pages/about/history',
-    'about-location-hero': 'pages/about/location/hero',
-    'about-location': 'pages/about/location',
-    'about-facilities-hero': 'pages/about/facilities/hero',
-    'about-facilities': 'pages/about/facilities',
-    
-    // Programs 페이지 관련
-    'programs-therapy-hero': 'pages/programs/therapy/hero',
-    'programs-therapy': 'pages/programs/therapy',
-    'programs-counseling-hero': 'pages/programs/counseling/hero',
-    'programs-counseling': 'pages/programs/counseling',
-    'programs-adult-day-hero': 'pages/programs/adult-day/hero',
-    'programs-adult-day': 'pages/programs/adult-day',
-    'programs-afterschool-hero': 'pages/programs/afterschool/hero',
-    'programs-afterschool': 'pages/programs/afterschool',
-    'programs-sports-hero': 'pages/programs/sports/hero',
-    'programs-sports': 'pages/programs/sports',
-    
-    // Team 페이지 관련
-    'team-therapists-hero': 'pages/team/therapists/hero',
-    'team-therapists': 'pages/team/therapists',
-    'team-teachers-hero': 'pages/team/teachers/hero',
-    'team-teachers': 'pages/team/teachers',
-    
-    // Community 페이지 관련
-    'community-hero': 'pages/community/news/hero',
-    'community': 'pages/community/news',
-    
-    // Contact 페이지 관련
-    'contact-hero': 'pages/contact/hero',
-    'contact': 'pages/contact',
-    
-    // Home 페이지 관련
-    'home-hero': 'pages/home/hero',
-    'home': 'pages/home'
-  }
-  
-  // Legacy 매핑이 있는 경우 새 경로로 변환
-  if (legacyMappings[category]) {
-    return `${legacyMappings[category]}/${fileName}`
-  }
-  
-  // 매핑되지 않은 legacy 카테고리는 기본 경로로 저장
-  return `legacy/${category}/${fileName}`
+  // 단순히 전달받은 경로 + 파일명으로 구성
+  // 컴포넌트에서 올바른 전체 경로를 전달해야 함
+  return `${cleanCategory}/${fileName}`
 }
 
 /**
@@ -282,8 +209,30 @@ export async function uploadImage(
     }
     
     // 파일명 생성
-    const fileName = generateUniqueFileName(file.name, options.category)
-    const uploadPath = generateUploadPath(options.category || 'general', fileName)
+    const fileName = generateUniqueFileName(file.name)
+    
+    // 카테고리 정리 및 검증
+    const cleanCategory = (options.category || 'general').trim()
+    if (cleanCategory.includes('//') || cleanCategory.includes('..')) {
+      throw new Error('유효하지 않은 카테고리 경로입니다.')
+    }
+    
+    const uploadPath = generateUploadPath(cleanCategory, fileName)
+    
+    // 경로 검증 (추가 안전장치)
+    if (uploadPath.includes('//') || uploadPath.includes('../') || uploadPath.includes('/./')) {
+      throw new Error(`비정상적인 업로드 경로가 감지되었습니다: ${uploadPath}`)
+    }
+    
+    // 디버깅을 위한 로그 (개발 환경에서만)
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔍 === 이미지 업로드 디버깅 정보 ===`)
+      console.log(`📁 원본 카테고리: ${options.category}`)
+      console.log(`📁 정리된 카테고리: ${cleanCategory}`)
+      console.log(`📄 파일명: ${fileName}`)
+      console.log(`📂 최종 업로드 경로: ${uploadPath}`)
+      console.log(`🔍 ================================`)
+    }
     
     // Storage 참조 생성
     const storageRef = ref(storage, uploadPath)

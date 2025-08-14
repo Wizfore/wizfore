@@ -34,7 +34,8 @@ export function AdminImageUploadField({
   required = false,
   error,
   helper,
-  className
+  className,
+  onImageDelete
 }: AdminImageUploadFieldProps) {
   return (
     <AdminFormField
@@ -49,6 +50,7 @@ export function AdminImageUploadField({
         onChange={onChange}
         folder={folder}
         defaultImageUrl={defaultImageUrl}
+        onImageDelete={onImageDelete}
       />
     </AdminFormField>
   )

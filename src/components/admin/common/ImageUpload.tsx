@@ -21,6 +21,7 @@ interface ImageUploadProps {
   role?: string
   gender?: 'male' | 'female'
   defaultImageUrl?: string
+  onImageDelete?: (imageUrl: string) => void // 이미지 삭제 시 호출되는 콜백
 }
 
 export function ImageUpload({
@@ -36,7 +37,8 @@ export function ImageUpload({
   previewSize = 'h-32 w-auto',
   role,
   gender,
-  defaultImageUrl
+  defaultImageUrl,
+  onImageDelete
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -102,7 +104,12 @@ export function ImageUpload({
     if (!value) return
 
     try {
-      await deleteImage(value)
+      // 이미지 삭제를 추적하기 위해 콜백 호출 (즉시 Storage에서 삭제하지 않음)
+      if (onImageDelete) {
+        onImageDelete(value)
+      }
+      
+      // UI에서만 제거 (Storage에서는 실제 저장 시에 삭제)
       onChange('')
       setSuccess(true)
       setTimeout(() => setSuccess(false), 3000)

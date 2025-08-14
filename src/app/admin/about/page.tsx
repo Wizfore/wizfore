@@ -75,6 +75,23 @@ export default function AboutPage() {
     }
   }, [])
 
+  // 각 탭별 저장 성공 콜백 관리
+  const [tabCallbacks] = useState<{[key in AboutTab]?: () => void}>({})
+
+  // 탭별 저장 성공 콜백 등록
+  const registerTabCallback = useCallback((tabKey: AboutTab, callback: () => void) => {
+    tabCallbacks[tabKey] = callback
+  }, [tabCallbacks])
+
+  // 저장 성공 시 현재 활성 탭의 콜백 실행
+  const handleSaveSuccess = useCallback(async () => {
+    const callback = tabCallbacks[activeTab]
+    if (callback) {
+      await callback()
+      console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
+    }
+  }, [activeTab, tabCallbacks])
+
   // useAdminForm 훅 사용
   const {
     data: aboutData,
@@ -102,7 +119,8 @@ export default function AboutPage() {
         updateLocationInfo(data.location)
       ])
     },
-    defaultData: DEFAULT_ABOUT_DATA
+    defaultData: DEFAULT_ABOUT_DATA,
+    onSaveSuccess: handleSaveSuccess
   })
 
   // 시설 데이터 새로고침 함수
@@ -270,6 +288,7 @@ export default function AboutPage() {
           <DirectorManagementTab 
             data={aboutData.director} 
             onUpdate={(directorData) => setAboutData(prev => ({ ...prev, director: directorData }))} 
+            onRegisterCallback={(callback) => registerTabCallback('director', callback)}
           />
         )
       case 'history':

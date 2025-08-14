@@ -6,6 +6,8 @@ import { deleteImage } from '@/lib/services/storageService'
  */
 export function useImageCleanup() {
   const uploadedImagesRef = useRef<Set<string>>(new Set())
+  const deletedImagesRef = useRef<Set<string>>(new Set()) // 삭제 예정인 이미지들
+  const isDataSavedRef = useRef<boolean>(false)
 
   /**
    * 업로드된 이미지 URL을 추적 목록에 추가
@@ -28,11 +30,31 @@ export function useImageCleanup() {
   }, [])
 
   /**
+   * 삭제 예정인 이미지 URL을 추적 목록에 추가
+   */
+  const trackDeletedImage = useCallback((imageUrl: string) => {
+    if (imageUrl && imageUrl.trim() !== '') {
+      deletedImagesRef.current.add(imageUrl)
+      console.log('이미지 삭제 추적 시작:', imageUrl)
+    }
+  }, [])
+
+  /**
    * 모든 추적 중인 이미지 정리 중단 (저장 성공 시 사용)
    */
   const stopTrackingAllImages = useCallback(() => {
     uploadedImagesRef.current.clear()
+    deletedImagesRef.current.clear()
+    isDataSavedRef.current = true
     console.log('모든 이미지 추적 중단')
+  }, [])
+  
+  /**
+   * 데이터가 저장되었음을 표시 (저장 성공 시 사용)
+   */
+  const markAsSaved = useCallback(() => {
+    isDataSavedRef.current = true
+    console.log('데이터 저장 완료 표시')
   }, [])
 
   /**
@@ -60,6 +82,17 @@ export function useImageCleanup() {
   }, [])
 
   /**
+   * 저장 성공 시 삭제 예정인 이미지들을 실제로 삭제
+   */
+  const processDeletedImages = useCallback(async () => {
+    if (deletedImagesRef.current.size > 0) {
+      console.log('저장 성공: 삭제 예정 이미지들 정리 시작')
+      await cleanupUploadedImages(deletedImagesRef.current)
+      deletedImagesRef.current.clear()
+    }
+  }, [cleanupUploadedImages])
+
+  /**
    * 수동으로 정리 작업 수행 (저장하지 않음 버튼 클릭 시 사용)
    */
   const performCleanup = useCallback(async () => {
@@ -67,14 +100,19 @@ export function useImageCleanup() {
       await cleanupUploadedImages(uploadedImagesRef.current)
       uploadedImagesRef.current.clear()
     }
+    // 삭제 예정 이미지들은 되돌리기이므로 정리하지 않음
+    deletedImagesRef.current.clear()
   }, [cleanupUploadedImages])
 
-  // 컴포넌트 언마운트 시 자동 정리
+  // 컴포넌트 언마운트 시 자동 정리 (저장되지 않은 경우에만)
   useEffect(() => {
     return () => {
-      if (uploadedImagesRef.current.size > 0) {
+      if (uploadedImagesRef.current.size > 0 && !isDataSavedRef.current) {
+        console.log('컴포넌트 언마운트: 저장되지 않은 이미지 정리 시작')
         // 비동기 작업이지만 컴포넌트가 언마운트되므로 Promise를 기다리지 않음
         cleanupUploadedImages(uploadedImagesRef.current).catch(console.warn)
+      } else if (isDataSavedRef.current) {
+        console.log('컴포넌트 언마운트: 데이터가 저장되어 이미지 정리 생략')
       }
     }
   }, [cleanupUploadedImages])
@@ -83,7 +121,11 @@ export function useImageCleanup() {
     trackUploadedImage,
     stopTrackingImage,
     stopTrackingAllImages,
+    trackDeletedImage,
+    processDeletedImages,
+    markAsSaved,
     performCleanup,
-    getTrackedImages: () => Array.from(uploadedImagesRef.current)
+    getTrackedImages: () => Array.from(uploadedImagesRef.current),
+    getDeletedImages: () => Array.from(deletedImagesRef.current)
   }
 }

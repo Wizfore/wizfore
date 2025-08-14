@@ -15,13 +15,21 @@ interface DirectorManagementTabProps {
   data: DirectorInfo
   onUpdate: (data: DirectorInfo) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
+  onSaveSuccess?: () => void
+  onDiscardChanges?: () => Promise<void>
+  onRegisterCallback?: (callback: () => void) => void
 }
 
-export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges }: DirectorManagementTabProps) {
+export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges, onSaveSuccess, onDiscardChanges, onRegisterCallback }: DirectorManagementTabProps) {
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const { trackUploadedImage, stopTrackingAllImages, trackDeletedImage, processDeletedImages, markAsSaved, performCleanup } = useImageCleanup()
   // 기본 정보 업데이트 함수
   const updateBasicInfo = (field: keyof DirectorInfo, value: string) => {
+    // 프로필 이미지 URL이 업데이트될 때 추적 시작
+    if (field === 'imageUrl' && typeof value === 'string' && value) {
+      trackUploadedImage(value)
+    }
+    
     onUpdate({
       ...data,
       [field]: value
@@ -52,26 +60,27 @@ export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges
     })
   }
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('Director 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('Director 탭: 이미지 정리 완료')
+  }, [performCleanup])
 
-  // 함수들이 실제로 사용되도록 컴포넌트 정리 로직에 추가
+  // 컴포넌트 마운트 시 콜백 등록
   React.useEffect(() => {
-    return () => {
-      if (onUnsavedChanges) {
-        handleSaveSuccess()
-      }
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('Director 탭: 저장 성공 콜백 등록')
     }
-  }, [onUnsavedChanges])
+  }, [onRegisterCallback, handleSaveSuccess])
 
   return (
     <div className="space-y-6">
@@ -102,6 +111,7 @@ export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges
             folder="pages/about/director/hero"
             defaultImageUrl={data.hero?.defaultImageUrl}
             helper="Hero 섹션 배경으로 사용할 이미지를 업로드하세요"
+            onImageDelete={trackDeletedImage}
           />
         </AdminSection>
       )}
@@ -173,6 +183,7 @@ export default function DirectorManagementTab({ data, onUpdate, onUnsavedChanges
             folder="pages/about/director"
             defaultImageUrl={data.defaultImageUrl}
             helper="센터장 프로필 이미지를 업로드하세요"
+            onImageDelete={trackDeletedImage}
           />
         </div>
       </AdminSection>

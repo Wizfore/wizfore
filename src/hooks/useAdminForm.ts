@@ -6,6 +6,7 @@ interface UseAdminFormProps<T> {
   defaultData: T
   validate?: (data: T) => string[]
   cleanData?: (data: T) => T
+  onSaveSuccess?: () => void
 }
 
 interface UseAdminFormReturn<T> {
@@ -26,7 +27,8 @@ export function useAdminForm<T>({
   saveData,
   defaultData,
   validate,
-  cleanData
+  cleanData,
+  onSaveSuccess
 }: UseAdminFormProps<T>): UseAdminFormReturn<T> {
   const [data, setData] = useState<T>(defaultData)
   const [originalData, setOriginalData] = useState<T>(defaultData)
@@ -89,6 +91,10 @@ export function useAdminForm<T>({
       setOriginalData(cleanedData)
       setData(cleanedData)
       setSaveStatus('success')
+      
+      // 저장 성공 콜백 호출
+      onSaveSuccess?.()
+      
       setTimeout(() => setSaveStatus('idle'), 3000)
     } catch (err) {
       console.error('Error saving data:', err)
