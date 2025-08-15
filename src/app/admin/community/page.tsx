@@ -38,6 +38,38 @@ export default function CommunityManagePage() {
   const [pendingTab, setPendingTab] = useState<CommunityTab | null>(null)
   const [dialogSaving, setDialogSaving] = useState(false)
 
+  // 각 탭별 저장 성공 콜백 관리
+  const [tabCallbacks] = useState<{[key in CommunityTab]?: () => void}>({})
+  const [tabCleanupCallbacks] = useState<{[key in CommunityTab]?: () => Promise<void>}>({})
+
+  // 탭별 저장 성공 콜백 등록
+  const registerTabCallback = useCallback((tabKey: CommunityTab, callback: () => void) => {
+    tabCallbacks[tabKey] = callback
+  }, [tabCallbacks])
+
+  // 탭별 정리 콜백 등록
+  const registerTabCleanupCallback = useCallback((tabKey: CommunityTab, callback: () => Promise<void>) => {
+    tabCleanupCallbacks[tabKey] = callback
+  }, [tabCleanupCallbacks])
+
+  // 저장 성공 시 현재 활성 탭의 콜백 실행
+  const handleSaveSuccess = useCallback(async () => {
+    const callback = tabCallbacks[activeTab]
+    if (callback) {
+      await callback()
+      console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
+    }
+  }, [activeTab, tabCallbacks])
+
+  // 변경사항 폐기 시 현재 활성 탭의 정리 콜백 실행
+  const handleDiscardChanges = useCallback(async () => {
+    const cleanupCallback = tabCleanupCallbacks[activeTab]
+    if (cleanupCallback) {
+      await cleanupCallback()
+      console.log(`${activeTab} 탭 정리 콜백 실행`)
+    }
+  }, [activeTab, tabCleanupCallbacks])
+
   // fetchData 함수
   const fetchData = useCallback(async (): Promise<CommunityData> => {
     try {
@@ -96,7 +128,8 @@ export default function CommunityManagePage() {
     saveData: async (data: CommunityData) => {
       await updateCommunity(data)
     },
-    defaultData: DEFAULT_COMMUNITY_DATA
+    defaultData: DEFAULT_COMMUNITY_DATA,
+    onSaveSuccess: handleSaveSuccess
   })
 
   // 커스텀 hasChanges 로직: 게시글 배열 변경은 제외하고 설정 변경만 감지
@@ -149,8 +182,8 @@ export default function CommunityManagePage() {
 
   // 탭 전환 핸들러
   const handleTabChange = (nextTab: CommunityTab) => {
-    // SNS 탭에서만 변경사항 확인
-    if (activeTab === 'sns' && hasChanges) {
+    // 변경사항이 있을 때 확인
+    if (hasChanges) {
       setPendingTab(nextTab)
       setShowUnsavedDialog(true)
     } else {
@@ -175,7 +208,10 @@ export default function CommunityManagePage() {
     }
   }
 
-  const handleDialogDiscard = () => {
+  const handleDialogDiscard = async () => {
+    // 현재 활성 탭의 정리 콜백 실행
+    await handleDiscardChanges()
+    
     handleReset()
     setShowUnsavedDialog(false)
     if (pendingTab) {
@@ -225,7 +261,9 @@ export default function CommunityManagePage() {
                 console.log('setCommunityData 호출 (게시글 실시간 변경), 새 커뮤니티 데이터:', newData)
                 return newData
               })
-            }} 
+            }}
+            onRegisterCallback={(callback) => registerTabCallback('news', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('news', callback)}
           />
         )
       case 'sns':
@@ -239,7 +277,9 @@ export default function CommunityManagePage() {
                 console.log('setCommunityData 호출, 새 커뮤니티 데이터:', newData)
                 return newData
               })
-            }} 
+            }}
+            onRegisterCallback={(callback) => registerTabCallback('sns', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('sns', callback)}
           />
         )
       default:
@@ -252,19 +292,19 @@ export default function CommunityManagePage() {
       <AdminPageHeader
         title="커뮤니티 관리"
         description="센터소식과 SNS 콘텐츠를 관리하고 운영할 수 있습니다"
-        error={activeTab === 'sns' ? error : undefined}
-        saveStatus={activeTab === 'sns' ? saveStatus : undefined}
-        hasChanges={activeTab === 'sns' ? hasChanges : false}
-        saving={activeTab === 'sns' ? saving : false}
-        onSave={activeTab === 'sns' ? handleSave : undefined}
-        onReset={activeTab === 'sns' ? handleReset : undefined}
+        error={error}
+        saveStatus={saveStatus}
+        hasChanges={hasChanges}
+        saving={saving}
+        onSave={handleSave}
+        onReset={handleReset}
       />
 
       <AdminTabsWithUnsavedChanges
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={handleTabChange}
-        hasChanges={activeTab === 'sns' ? hasChanges : false}
+        hasChanges={hasChanges}
         showUnsavedDialog={showUnsavedDialog}
         onDialogSave={handleDialogSave}
         onDialogDiscard={handleDialogDiscard}

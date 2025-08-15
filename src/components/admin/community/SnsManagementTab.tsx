@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Instagram, Youtube, Facebook, Globe } from 'lucide-react'
 import type { SnsInfo } from '@/types/community'
 import { 
@@ -15,13 +16,28 @@ interface SnsManagementTabProps {
   data: SnsInfo
   onUpdate: (data: SnsInfo) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
+  onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
-export default function SnsManagementTab({ data: snsData, onUpdate, onUnsavedChanges }: SnsManagementTabProps) {
+export default function SnsManagementTab({ 
+  data: snsData, 
+  onUpdate, 
+  onUnsavedChanges,
+  onRegisterCallback,
+  onRegisterCleanupCallback
+}: SnsManagementTabProps) {
   console.log('SnsManagementTab 렌더링, 받은 데이터:', snsData)
 
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const {
+    trackUploadedImage,
+    stopTrackingAllImages,
+    trackDeletedImage,
+    processDeletedImages,
+    markAsSaved,
+    performCleanup,
+  } = useImageCleanup()
 
   const updateField = (path: string, value: string) => {
     // 이미지 URL 업데이트 시 추적 시작
@@ -49,17 +65,35 @@ export default function SnsManagementTab({ data: snsData, onUpdate, onUnsavedCha
     onUpdate(newData)
   }
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('SNS 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('SNS 탭: 이미지 정리 완료')
+  }, [performCleanup])
+
+  // 컴포넌트 마운트 시 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('SNS 탭: 저장 성공 콜백 등록')
+    }
+  }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('SNS 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   return (
     <div className="space-y-6">
@@ -90,9 +124,10 @@ export default function SnsManagementTab({ data: snsData, onUpdate, onUnsavedCha
           label="배경 이미지"
           value={snsData.hero?.imageUrl || ''}
           onChange={(url) => updateField('hero.imageUrl', url)}
-          folder="pages/community/news/hero"
+          folder="pages/community/sns/hero"
           defaultImageUrl={snsData.hero?.defaultImageUrl}
           helper="히어로 섹션 배경으로 사용할 이미지를 업로드하세요"
+          onImageDelete={trackDeletedImage}
         />
       </AdminSection>
 

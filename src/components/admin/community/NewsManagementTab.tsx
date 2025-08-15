@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, Edit, Trash2, Filter, Search, Tag, ChevronDown, ChevronUp, Info } from 'lucide-react'
 import { Article, NewsInfo } from '@/types/community'
@@ -9,6 +9,13 @@ import { deleteArticle, updateCommunity } from '@/lib/services/dataService'
 import { getCategoryFilterOptions, getCategoryBadgeStyle, getCategoryOptions, getCategoryLabelSync } from '@/lib/utils/categoryUtils'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { 
+  AdminSection, 
+  AdminInput, 
+  AdminTextarea, 
+  AdminImageUploadField
+} from '@/components/admin/ui'
+import { useImageCleanup } from '@/hooks/useImageCleanup'
 
 const statusOptions = [
   { value: 'all', label: '전체' },
@@ -21,9 +28,17 @@ interface NewsManagementTabProps {
   data: NewsInfo
   onUpdate: (data: NewsInfo) => void // 설정 변경용 (카테고리 관리)
   onArticleChange?: (data: NewsInfo) => void // 게시글 CRUD용 (실시간 변경)
+  onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
-export default function NewsManagementTab({ data, onUpdate, onArticleChange }: NewsManagementTabProps) {
+export default function NewsManagementTab({ 
+  data, 
+  onUpdate, 
+  onArticleChange,
+  onRegisterCallback,
+  onRegisterCleanupCallback
+}: NewsManagementTabProps) {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
@@ -41,6 +56,73 @@ export default function NewsManagementTab({ data, onUpdate, onArticleChange }: N
   const [originalCategories, setOriginalCategories] = useState<CategoryItem[]>([])
   const [editingCategory, setEditingCategory] = useState<string | null>(null)
   const [newCategory, setNewCategory] = useState({ english: '', korean: '' })
+
+  // 이미지 정리 훅
+  const {
+    trackUploadedImage,
+    stopTrackingAllImages,
+    trackDeletedImage,
+    processDeletedImages,
+    markAsSaved,
+    performCleanup,
+  } = useImageCleanup()
+
+  // 필드 업데이트 함수 (SnsManagementTab 패턴 적용)
+  const updateField = (path: string, value: string) => {
+    // 이미지 URL 업데이트 시 추적 시작
+    if (path.endsWith('.imageUrl') && value) {
+      trackUploadedImage(value)
+    }
+    console.log(`필드 업데이트: ${path} = "${value}"`)
+    
+    const keys = path.split('.')
+    const newData = JSON.parse(JSON.stringify(data)) // 깊은 복사
+    let current: any = newData
+    
+    // 중첩 객체 경로 생성
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]] || typeof current[keys[i]] !== 'object') {
+        current[keys[i]] = {}
+      }
+      current = current[keys[i]]
+    }
+    
+    // 최종 값 설정
+    current[keys[keys.length - 1]] = value
+    
+    console.log('업데이트된 데이터:', newData)
+    onUpdate(newData)
+  }
+
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
+    stopTrackingAllImages()
+    markAsSaved()
+    console.log('News 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
+
+  // 저장하지 않음 선택 시 업로드된 이미지 정리
+  const handleDiscardChanges = React.useCallback(async () => {
+    await performCleanup()
+    console.log('News 탭: 이미지 정리 완료')
+  }, [performCleanup])
+
+  // 컴포넌트 마운트 시 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('News 탭: 저장 성공 콜백 등록')
+    }
+  }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('News 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   // 카테고리 옵션 로딩
   useEffect(() => {
@@ -431,6 +513,54 @@ export default function NewsManagementTab({ data, onUpdate, onArticleChange }: N
         <h2 className="text-xl font-semibold text-gray-900">게시글 관리</h2>
         <p className="text-sm text-gray-600">공지사항, 협약, 소식 등을 관리할 수 있습니다.</p>
       </div>
+
+      {/* Hero 섹션 설정 */}
+      <AdminSection title="Hero 섹션" description="뉴스 페이지의 히어로 섹션을 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data.hero?.title || ''}
+          onChange={(value) => updateField('hero.title', value)}
+          placeholder="뉴스 페이지 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="설명"
+          value={data.hero?.description || ''}
+          onChange={(value) => updateField('hero.description', value)}
+          rows={3}
+          placeholder="뉴스 페이지 설명"
+        />
+        
+        <AdminImageUploadField
+          label="배경 이미지"
+          value={data.hero?.imageUrl || ''}
+          onChange={(url) => updateField('hero.imageUrl', url)}
+          folder="pages/community/news/hero"
+          defaultImageUrl={data.hero?.defaultImageUrl}
+          helper="히어로 섹션 배경으로 사용할 이미지를 업로드하세요"
+          onImageDelete={trackDeletedImage}
+        />
+      </AdminSection>
+
+      {/* About 메시지 설정 */}
+      <AdminSection title="소개 메시지" description="뉴스 페이지의 소개 메시지를 관리합니다.">
+        <AdminInput
+          label="제목"
+          value={data.aboutMessage?.title || ''}
+          onChange={(value) => updateField('aboutMessage.title', value)}
+          placeholder="소개 섹션 제목"
+          required
+        />
+        
+        <AdminTextarea
+          label="설명"
+          value={data.aboutMessage?.description || ''}
+          onChange={(value) => updateField('aboutMessage.description', value)}
+          rows={3}
+          placeholder="소개 섹션 설명"
+        />
+      </AdminSection>
 
       {/* 카테고리 관리 섹션 */}
       <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
