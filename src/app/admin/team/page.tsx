@@ -35,6 +35,38 @@ export default function TeamManagementPage() {
   const [pendingTab, setPendingTab] = useState<TeamTab | null>(null)
   const [dialogSaving, setDialogSaving] = useState(false)
 
+  // 각 탭별 저장 성공 콜백 관리
+  const [tabCallbacks] = useState<{[key in TeamTab]?: () => void}>({})
+  const [tabCleanupCallbacks] = useState<{[key in TeamTab]?: () => Promise<void>}>({})
+
+  // 탭별 저장 성공 콜백 등록
+  const registerTabCallback = useCallback((tabKey: TeamTab, callback: () => void) => {
+    tabCallbacks[tabKey] = callback
+  }, [tabCallbacks])
+
+  // 탭별 정리 콜백 등록
+  const registerTabCleanupCallback = useCallback((tabKey: TeamTab, callback: () => Promise<void>) => {
+    tabCleanupCallbacks[tabKey] = callback
+  }, [tabCleanupCallbacks])
+
+  // 저장 성공 시 현재 활성 탭의 콜백 실행
+  const handleSaveSuccess = useCallback(async () => {
+    const callback = tabCallbacks[activeTab]
+    if (callback) {
+      await callback()
+      console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
+    }
+  }, [activeTab, tabCallbacks])
+
+  // 변경사항 폐기 시 현재 활성 탭의 정리 콜백 실행
+  const handleDiscardChanges = useCallback(async () => {
+    const cleanupCallback = tabCleanupCallbacks[activeTab]
+    if (cleanupCallback) {
+      await cleanupCallback()
+      console.log(`${activeTab} 탭 정리 콜백 실행`)
+    }
+  }, [activeTab, tabCleanupCallbacks])
+
   // fetchData 함수를 메모이제이션하여 불필요한 리렌더링 방지
   const fetchData = useCallback(async (): Promise<TeamData> => {
     const [therapistsData, teachersData] = await Promise.all([
@@ -78,7 +110,8 @@ export default function TeamManagementPage() {
         await updateTeachers(data.teachers)
       }
     },
-    defaultData: DEFAULT_TEAM_DATA
+    defaultData: DEFAULT_TEAM_DATA,
+    onSaveSuccess: handleSaveSuccess
   })
 
   // 브라우저 이탈 경고 훅 사용
@@ -132,7 +165,10 @@ export default function TeamManagementPage() {
     }
   }
 
-  const handleDialogDiscard = () => {
+  const handleDialogDiscard = async () => {
+    // 현재 활성 탭의 정리 콜백 실행
+    await handleDiscardChanges()
+    
     handleReset()
     setShowUnsavedDialog(false)
     if (pendingTab) {
@@ -165,14 +201,18 @@ export default function TeamManagementPage() {
         return (
           <TherapistsManagementTab 
             data={teamData.therapists} 
-            onUpdate={(therapistsData) => setTeamData(prev => ({ ...prev, therapists: therapistsData }))} 
+            onUpdate={(therapistsData) => setTeamData(prev => ({ ...prev, therapists: therapistsData }))}
+            onRegisterCallback={(callback) => registerTabCallback('therapists', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('therapists', callback)}
           />
         )
       case 'teachers':
         return (
           <TeachersManagementTab 
             data={teamData.teachers} 
-            onUpdate={(teachersData) => setTeamData(prev => ({ ...prev, teachers: teachersData }))} 
+            onUpdate={(teachersData) => setTeamData(prev => ({ ...prev, teachers: teachersData }))}
+            onRegisterCallback={(callback) => registerTabCallback('teachers', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('teachers', callback)}
           />
         )
       default:

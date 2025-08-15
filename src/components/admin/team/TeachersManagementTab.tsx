@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Plus, Trash2, Edit2, User, ArrowUp, ArrowDown, Star, Target, GraduationCap, Award, FileText, Hash } from 'lucide-react'
 import { TeamCategory, TeamMember, TeamFeature } from '@/types/expert'
 import { Button } from '@/components/ui/button'
@@ -19,14 +19,29 @@ interface TeachersManagementTabProps {
   data: TeamCategory
   onUpdate: (data: TeamCategory) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
+  onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
-export default function TeachersManagementTab({ data: teachersData, onUpdate, onUnsavedChanges }: TeachersManagementTabProps) {
+export default function TeachersManagementTab({ 
+  data: teachersData, 
+  onUpdate, 
+  onUnsavedChanges,
+  onRegisterCallback,
+  onRegisterCleanupCallback
+}: TeachersManagementTabProps) {
   const [editingMember, setEditingMember] = useState<number | null>(null)
   const [editingFeature, setEditingFeature] = useState<string | null>(null)
   
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const {
+    trackUploadedImage,
+    stopTrackingAllImages,
+    trackDeletedImage,
+    processDeletedImages,
+    markAsSaved,
+    performCleanup,
+  } = useImageCleanup()
 
   // SnsManagementTab 패턴 적용: 깊은 복사를 사용한 필드 업데이트
   const updateField = (path: string, value: string) => {
@@ -136,17 +151,35 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate, on
 
 
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('Teachers 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('Teachers 탭: 이미지 정리 완료')
+  }, [performCleanup])
+
+  // 컴포넌트 마운트 시 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('Teachers 탭: 저장 성공 콜백 등록')
+    }
+  }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('Teachers 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   return (
     <div className="space-y-6">
@@ -175,6 +208,7 @@ export default function TeachersManagementTab({ data: teachersData, onUpdate, on
           folder="pages/team/teachers/hero"
           defaultImageUrl={teachersData.hero?.defaultImageUrl}
           helper="히어로 섹션 배경으로 사용할 이미지를 업로드하세요"
+          onImageDelete={trackDeletedImage}
         />
       </AdminSection>
 

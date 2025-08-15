@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Plus, Edit, Trash2, Trophy, FileText, Target, ArrowUp, ArrowDown, Hash } from 'lucide-react'
 import type { ProgramCategory, ProgramDetail } from '@/types/program'
 import { Button } from '@/components/ui/button'
@@ -18,17 +18,28 @@ interface SportsManagementTabProps {
   data: ProgramCategory
   onUpdate: (data: ProgramCategory) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
+  onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
 export function SportsManagementTab({
   data,
   onUpdate,
-  onUnsavedChanges
+  onUnsavedChanges,
+  onRegisterCallback,
+  onRegisterCleanupCallback
 }: SportsManagementTabProps) {
   const [editingProgram, setEditingProgram] = useState<number | null>(null)
   
   // 이미지 정리 훅
-  const { trackUploadedImage, stopTrackingAllImages, performCleanup } = useImageCleanup()
+  const {
+    trackUploadedImage,
+    stopTrackingAllImages,
+    trackDeletedImage,
+    processDeletedImages,
+    markAsSaved,
+    performCleanup,
+  } = useImageCleanup()
   const [showAddForm, setShowAddForm] = useState(false)
   const [newProgram, setNewProgram] = useState<Omit<ProgramDetail, 'order'>>({
     title: '',
@@ -144,17 +155,35 @@ export function SportsManagementTab({
 
   // AdminArrayField로 대체됨
 
-  // 저장 성공 시 모든 이미지 추적 중단
-  const handleSaveSuccess = () => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = React.useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
     stopTrackingAllImages()
-    onUnsavedChanges?.(false)
-  }
+    markAsSaved()
+    console.log('Sports 탭: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved])
 
   // 저장하지 않음 선택 시 업로드된 이미지 정리
-  const handleDiscardChanges = async () => {
+  const handleDiscardChanges = React.useCallback(async () => {
     await performCleanup()
-    onUnsavedChanges?.(false)
-  }
+    console.log('Sports 탭: 이미지 정리 완료')
+  }, [performCleanup])
+
+  // 컴포넌트 마운트 시 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCallback) {
+      onRegisterCallback(handleSaveSuccess)
+      console.log('Sports 탭: 저장 성공 콜백 등록')
+    }
+  }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('Sports 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   return (
     <div className="space-y-6">
@@ -183,6 +212,7 @@ export function SportsManagementTab({
           folder="pages/programs/sports/hero"
           defaultImageUrl={data.hero?.defaultImageUrl}
           helper="히어로 섹션 배경으로 사용할 이미지를 업로드하세요"
+          onImageDelete={trackDeletedImage}
         />
       </AdminSection>
 
@@ -313,6 +343,15 @@ export function SportsManagementTab({
                         onChange={(value) => updateProgram(index, 'title', value)}
                         placeholder="프로그램명"
                         required
+                      />
+                      
+                      <AdminImageUploadField
+                        label="프로그램 이미지 (선택사항)"
+                        value={program.image}
+                        onChange={(url) => updateProgram(index, 'image', url)}
+                        folder={`pages/programs/sports/program-${index + 1}`}
+                        helper="프로그램을 대표하는 이미지를 업로드하세요"
+                        onImageDelete={trackDeletedImage}
                       />
                     </div>
 

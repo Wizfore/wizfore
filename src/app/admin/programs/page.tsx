@@ -57,6 +57,38 @@ export default function ProgramsManagementPage() {
   const [pendingTab, setPendingTab] = useState<ProgramTab | null>(null)
   const [dialogSaving, setDialogSaving] = useState(false)
 
+  // 각 탭별 저장 성공 콜백 관리
+  const [tabCallbacks] = useState<{[key in ProgramTab]?: () => void}>({})
+  const [tabCleanupCallbacks] = useState<{[key in ProgramTab]?: () => Promise<void>}>({})
+
+  // 탭별 저장 성공 콜백 등록
+  const registerTabCallback = useCallback((tabKey: ProgramTab, callback: () => void) => {
+    tabCallbacks[tabKey] = callback
+  }, [tabCallbacks])
+
+  // 탭별 정리 콜백 등록
+  const registerTabCleanupCallback = useCallback((tabKey: ProgramTab, callback: () => Promise<void>) => {
+    tabCleanupCallbacks[tabKey] = callback
+  }, [tabCleanupCallbacks])
+
+  // 저장 성공 시 현재 활성 탭의 콜백 실행
+  const handleSaveSuccess = useCallback(async () => {
+    const callback = tabCallbacks[activeTab]
+    if (callback) {
+      await callback()
+      console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
+    }
+  }, [activeTab, tabCallbacks])
+
+  // 변경사항 폐기 시 현재 활성 탭의 정리 콜백 실행
+  const handleDiscardChanges = useCallback(async () => {
+    const cleanupCallback = tabCleanupCallbacks[activeTab]
+    if (cleanupCallback) {
+      await cleanupCallback()
+      console.log(`${activeTab} 탭 정리 콜백 실행`)
+    }
+  }, [activeTab, tabCleanupCallbacks])
+
   // fetchData 함수
   const fetchData = useCallback(async (): Promise<ProgramsData> => {
     try {
@@ -107,7 +139,8 @@ export default function ProgramsManagementPage() {
   } = useAdminForm({
     fetchData,
     saveData,
-    defaultData: DEFAULT_PROGRAMS_DATA
+    defaultData: DEFAULT_PROGRAMS_DATA,
+    onSaveSuccess: handleSaveSuccess
   })
 
   // 브라우저 이탈 경고 훅 사용
@@ -175,7 +208,10 @@ export default function ProgramsManagementPage() {
     }
   }
 
-  const handleDialogDiscard = () => {
+  const handleDialogDiscard = async () => {
+    // 현재 활성 탭의 정리 콜백 실행
+    await handleDiscardChanges()
+    
     handleReset()
     if (pendingTab) {
       setActiveTab(pendingTab)
@@ -220,6 +256,8 @@ export default function ProgramsManagementPage() {
           <TherapyManagementTab
             data={currentData}
             onUpdate={updateCurrentTabData}
+            onRegisterCallback={(callback) => registerTabCallback('therapy', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('therapy', callback)}
           />
         )
       
@@ -228,6 +266,8 @@ export default function ProgramsManagementPage() {
           <CounselingManagementTab
             data={currentData}
             onUpdate={updateCurrentTabData}
+            onRegisterCallback={(callback) => registerTabCallback('counseling', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('counseling', callback)}
           />
         )
       
@@ -236,6 +276,8 @@ export default function ProgramsManagementPage() {
           <AfterschoolManagementTab
             data={currentData}
             onUpdate={updateCurrentTabData}
+            onRegisterCallback={(callback) => registerTabCallback('afterschool', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('afterschool', callback)}
           />
         )
       
@@ -244,6 +286,8 @@ export default function ProgramsManagementPage() {
           <SportsManagementTab
             data={currentData}
             onUpdate={updateCurrentTabData}
+            onRegisterCallback={(callback) => registerTabCallback('sports', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('sports', callback)}
           />
         )
       
@@ -252,6 +296,8 @@ export default function ProgramsManagementPage() {
           <AdultDayManagementTab
             data={currentData}
             onUpdate={updateCurrentTabData}
+            onRegisterCallback={(callback) => registerTabCallback('adult-day', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('adult-day', callback)}
           />
         )
       
