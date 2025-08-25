@@ -11,9 +11,10 @@ interface ImagesTabProps {
   onUpdate: (data: SiteInfoData) => void
   onUnsavedChanges?: (hasChanges: boolean) => void
   onRegisterCallback?: (callback: () => void) => void
+  onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
 
-export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges, onRegisterCallback }: ImagesTabProps) {
+export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges, onRegisterCallback, onRegisterCleanupCallback }: ImagesTabProps) {
   // 이미지 정리 훅
   const { trackUploadedImage, stopTrackingAllImages, trackDeletedImage, processDeletedImages, markAsSaved, performCleanup } = useImageCleanup()
 
@@ -50,6 +51,14 @@ export function ImagesTab({ siteInfo, onUpdate, onUnsavedChanges, onRegisterCall
       console.log('Images 탭: 저장 성공 콜백 등록')
     }
   }, [onRegisterCallback, handleSaveSuccess])
+
+  // 컴포넌트 마운트 시 정리 콜백 등록
+  React.useEffect(() => {
+    if (onRegisterCleanupCallback) {
+      onRegisterCleanupCallback(handleDiscardChanges)
+      console.log('Images 탭: 정리 콜백 등록')
+    }
+  }, [onRegisterCleanupCallback, handleDiscardChanges])
 
   return (
     <AdminSection 

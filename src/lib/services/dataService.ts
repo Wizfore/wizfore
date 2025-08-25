@@ -7,7 +7,7 @@ import {
   writeBatch
 } from 'firebase/firestore'
 import { getFirebaseDb } from '@/lib/firebase'
-import type { DefaultSiteData, CommunityData, TeamCategory, DirectorInfo, HistoryInfo, AdvisorsInfo, LocationInfo, ProgramCategory } from '@/types'
+import type { DefaultSiteData, CommunityData, TeamCategory, DirectorInfo, HistoryInfo, AdvisorsInfo, LocationInfo, ProgramCategory, InquiryInfo } from '@/types'
 import type { Article } from '@/types/community'
 import { deleteArticleImages } from './storageService'
 
@@ -474,6 +474,26 @@ export async function updateCommunity(communityData: Partial<CommunityData>) {
     })
   } catch (error) {
     console.error('Error updating community data:', error)
+    throw error
+  }
+}
+
+/**
+ * 문의 정보 업데이트
+ */
+export async function updateInquiry(inquiryData: InquiryInfo) {
+  try {
+    const db = getFirebaseDb(); if (!db) {
+      throw new Error('Firebase not initialized')
+    }
+    
+    const docRef = doc(db, 'inquiry', 'main')
+    await updateDoc(docRef, {
+      ...inquiryData,
+      updatedAt: new Date().toISOString()
+    })
+  } catch (error) {
+    console.error('Error updating inquiry data:', error)
     throw error
   }
 }

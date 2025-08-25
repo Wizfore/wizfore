@@ -52,11 +52,17 @@ export default function SettingsPage() {
 
   // 각 탭별 저장 성공 콜백 관리
   const [tabCallbacks] = useState<{[key in TabKey]?: () => void}>({})
+  const [tabCleanupCallbacks] = useState<{[key in TabKey]?: () => Promise<void>}>({})
 
   // 탭별 저장 성공 콜백 등록
   const registerTabCallback = useCallback((tabKey: TabKey, callback: () => void) => {
     tabCallbacks[tabKey] = callback
   }, [tabCallbacks])
+
+  // 탭별 정리 콜백 등록
+  const registerTabCleanupCallback = useCallback((tabKey: TabKey, callback: () => Promise<void>) => {
+    tabCleanupCallbacks[tabKey] = callback
+  }, [tabCleanupCallbacks])
 
   // 저장 성공 시 현재 활성 탭의 콜백 실행
   const handleSaveSuccess = useCallback(async () => {
@@ -66,6 +72,15 @@ export default function SettingsPage() {
       console.log(`${activeTab} 탭 저장 성공 콜백 실행`)
     }
   }, [activeTab, tabCallbacks])
+
+  // 변경사항 폐기 시 현재 활성 탭의 정리 콜백 실행
+  const handleDiscardChanges = useCallback(async () => {
+    const cleanupCallback = tabCleanupCallbacks[activeTab]
+    if (cleanupCallback) {
+      await cleanupCallback()
+      console.log(`${activeTab} 탭 정리 콜백 실행`)
+    }
+  }, [activeTab, tabCleanupCallbacks])
 
   // fetchData 함수를 메모이제이션하여 불필요한 리렌더링 방지
   const fetchData = useCallback(async () => {
@@ -130,7 +145,10 @@ export default function SettingsPage() {
     }
   }
 
-  const handleDialogDiscard = () => {
+  const handleDialogDiscard = async () => {
+    // 현재 활성 탭의 정리 콜백 실행
+    await handleDiscardChanges()
+    
     handleReset()
     setShowUnsavedDialog(false)
     if (pendingTab) {
@@ -171,7 +189,14 @@ export default function SettingsPage() {
       case 'contact':
         return <ContactInfoTab siteInfo={siteInfo} onUpdate={setSiteInfo} />
       case 'images':
-        return <ImagesTab siteInfo={siteInfo} onUpdate={setSiteInfo} onRegisterCallback={(callback) => registerTabCallback('images', callback)} />
+        return (
+          <ImagesTab 
+            siteInfo={siteInfo} 
+            onUpdate={setSiteInfo} 
+            onRegisterCallback={(callback) => registerTabCallback('images', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('images', callback)}
+          />
+        )
       default:
         return null
     }

@@ -1,407 +1,215 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { 
-  Search, 
-  Filter, 
-  Trash2, 
-  RefreshCw,
-  Clock,
-  CheckCircle,
-  Calendar,
-  User,
-  Mail,
-  Phone,
-  MessageSquare
-} from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  getAllInquiries, 
-  updateInquiryStatus, 
-  deleteInquiry,
-  type Inquiry 
-} from '@/lib/services/inquiryService'
-import InquiryDetailModal from '@/components/admin/contact/InquiryDetailModal'
-import InquiryStatusBadge from '@/components/admin/contact/InquiryStatusBadge'
-import toast from 'react-hot-toast'
+import React, { useState, useCallback } from 'react'
+import { MessageSquare, Settings, Loader2 } from 'lucide-react'
+import { getInquiryInfo, updateInquiry } from '@/lib/services/dataService'
+import { useAdminForm } from '@/hooks/useAdminForm'
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning'
+import { useNavigation } from '@/contexts/NavigationContext'
+import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabsWithUnsavedChanges'
+import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
+import { TabItem } from '@/components/admin/common/AdminTabs'
+import InquiryListTab from '@/components/admin/contact/InquiryListTab'
+import InquiryManagementTab from '@/components/admin/community/InquiryManagementTab'
+import type { InquiryInfo } from '@/types/about'
 
-type FilterStatus = 'all' | 'unread' | 'replied' | 'resolved'
+type ContactTab = 'list' | 'settings'
 
-export default function InquiriesPage() {
-  const [inquiries, setInquiries] = useState<Inquiry[]>([])
-  const [filteredInquiries, setFilteredInquiries] = useState<Inquiry[]>([])
-  const [loading, setLoading] = useState(true)
-  const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+const DEFAULT_INQUIRY_DATA: InquiryInfo = {
+  hero: { title: '', description: '', imageUrl: '' },
+  aboutMessage: { title: '', description: '' },
+  categories: []
+}
 
-  const fetchInquiries = async () => {
+export default function ContactPage() {
+  const [activeTab, setActiveTab] = useState<ContactTab>('list')
+  const [showUnsavedDialog, setShowUnsavedDialog] = useState(false)
+  const [pendingTab, setPendingTab] = useState<ContactTab | null>(null)
+  const [dialogSaving, setDialogSaving] = useState(false)
+
+  // 각 탭별 저장 성공 콜백 관리 (settings 탭만 필요)
+  const [tabCallbacks] = useState<{[key in ContactTab]?: () => void}>({})
+  const [tabCleanupCallbacks] = useState<{[key in ContactTab]?: () => Promise<void>}>({})
+
+  // 탭별 저장 성공 콜백 등록
+  const registerTabCallback = useCallback((tabKey: ContactTab, callback: () => void) => {
+    tabCallbacks[tabKey] = callback
+  }, [tabCallbacks])
+
+  // 탭별 정리 콜백 등록
+  const registerTabCleanupCallback = useCallback((tabKey: ContactTab, callback: () => Promise<void>) => {
+    tabCleanupCallbacks[tabKey] = callback
+  }, [tabCleanupCallbacks])
+
+  // 저장 성공 시 현재 활성 탭의 콜백 실행
+  const handleSaveSuccess = useCallback(async () => {
+    const callback = tabCallbacks[activeTab]
+    if (callback) {
+      await callback()
+    }
+  }, [activeTab, tabCallbacks])
+
+  // 변경사항 폐기 시 현재 활성 탭의 정리 콜백 실행
+  const handleDiscardChanges = useCallback(async () => {
+    const cleanupCallback = tabCleanupCallbacks[activeTab]
+    if (cleanupCallback) {
+      await cleanupCallback()
+    }
+  }, [activeTab, tabCleanupCallbacks])
+
+  // fetchData 함수
+  const fetchData = useCallback(async (): Promise<InquiryInfo> => {
     try {
-      setLoading(true)
-      const data = await getAllInquiries()
-      setInquiries(data)
+      return await getInquiryInfo()
     } catch (error) {
-      console.error('문의 목록 조회 오류:', error)
-      toast.error('문의 목록을 불러오는데 실패했습니다.')
-    } finally {
-      setLoading(false)
+      return DEFAULT_INQUIRY_DATA
     }
-  }
-
-  const filterInquiries = useCallback(() => {
-    let filtered = inquiries
-
-    // 상태별 필터링
-    if (filterStatus !== 'all') {
-      filtered = filtered.filter(inquiry => inquiry.status === filterStatus)
-    }
-
-    // 검색어 필터링
-    if (searchTerm) {
-      filtered = filtered.filter(inquiry =>
-        inquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inquiry.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inquiry.message.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    }
-
-    setFilteredInquiries(filtered)
-    setCurrentPage(1)
-  }, [inquiries, filterStatus, searchTerm])
-
-  useEffect(() => {
-    fetchInquiries()
   }, [])
 
-  useEffect(() => {
-    filterInquiries()
-  }, [filterInquiries])
+  // useAdminForm 훅 (settings 탭만 사용)
+  const {
+    data: inquiryData,
+    setData: setInquiryData,
+    loading,
+    saving,
+    saveStatus,
+    error,
+    hasChanges,
+    handleSave,
+    handleReset
+  } = useAdminForm({
+    fetchData,
+    saveData: updateInquiry,
+    defaultData: DEFAULT_INQUIRY_DATA,
+    onSaveSuccess: handleSaveSuccess
+  })
 
-  const handleStatusChange = async (id: string, newStatus: Inquiry['status']) => {
-    try {
-      await updateInquiryStatus(id, newStatus)
-      setInquiries(prev => prev.map(inquiry => 
-        inquiry.id === id ? { ...inquiry, status: newStatus } : inquiry
-      ))
-      toast.success('상태가 변경되었습니다.')
-    } catch (error) {
-      console.error('상태 변경 오류:', error)
-      toast.error('상태 변경에 실패했습니다.')
+  // 브라우저 이탈 경고 훅 사용 (settings 탭에서만)
+  useUnsavedChangesWarning(hasChanges && activeTab === 'settings')
+  
+  // 네비게이션 컨텍스트와 동기화
+  const { setHasUnsavedChanges } = useNavigation()
+  
+  React.useEffect(() => {
+    setHasUnsavedChanges(hasChanges && activeTab === 'settings')
+  }, [hasChanges, activeTab, setHasUnsavedChanges])
+
+  // 탭 정의
+  const tabs: TabItem<ContactTab>[] = [
+    {
+      key: 'list' as const,
+      label: '문의 목록',
+      icon: MessageSquare
+    },
+    {
+      key: 'settings' as const,
+      label: '문의 설정',
+      icon: Settings
+    }
+  ]
+
+  // 탭 전환 핸들러
+  const handleTabChange = (nextTab: ContactTab) => {
+    // settings 탭에서 변경사항이 있을 때만 확인
+    if (hasChanges && activeTab === 'settings') {
+      setPendingTab(nextTab)
+      setShowUnsavedDialog(true)
+    } else {
+      setActiveTab(nextTab)
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('정말로 이 문의를 삭제하시겠습니까?')) return
-
+  // 다이얼로그 핸들러
+  const handleDialogSave = async () => {
     try {
-      await deleteInquiry(id)
-      setInquiries(prev => prev.filter(inquiry => inquiry.id !== id))
-      toast.success('문의가 삭제되었습니다.')
+      setDialogSaving(true)
+      await handleSave()
+      setShowUnsavedDialog(false)
+      if (pendingTab) {
+        setActiveTab(pendingTab)
+        setPendingTab(null)
+      }
     } catch (error) {
-      console.error('문의 삭제 오류:', error)
-      toast.error('문의 삭제에 실패했습니다.')
+      console.error('저장 실패:', error)
+    } finally {
+      setDialogSaving(false)
     }
   }
 
-  const handleViewDetails = (inquiry: Inquiry) => {
-    setSelectedInquiry(inquiry)
-    setIsModalOpen(true)
+  const handleDialogDiscard = async () => {
+    // 현재 활성 탭의 정리 콜백 실행
+    await handleDiscardChanges()
+    
+    handleReset()
+    setShowUnsavedDialog(false)
+    if (pendingTab) {
+      setActiveTab(pendingTab)
+      setPendingTab(null)
+    }
   }
 
-  const formatDate = (timestamp: { toDate?: () => Date } | Date | string | null) => {
-    if (!timestamp) return '-'
-    const date = (timestamp as { toDate?: () => Date })?.toDate ? (timestamp as { toDate: () => Date }).toDate() : new Date(timestamp as string | Date)
-    return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+  const handleDialogCancel = () => {
+    setShowUnsavedDialog(false)
+    setPendingTab(null)
   }
 
-  // 페이지네이션
-  const totalPages = Math.ceil(filteredInquiries.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const currentInquiries = filteredInquiries.slice(startIndex, endIndex)
-
-  const statusStats = {
-    total: inquiries.length,
-    unread: inquiries.filter(i => i.status === 'unread').length,
-    replied: inquiries.filter(i => i.status === 'replied').length,
-    resolved: inquiries.filter(i => i.status === 'resolved').length
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="flex items-center space-x-2">
-          <RefreshCw className="w-6 h-6 animate-spin" />
-          <span>문의 목록을 불러오는 중...</span>
-        </div>
-      </div>
-    )
+  // 탭 콘텐츠 렌더링
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'list':
+        return <InquiryListTab />
+      case 'settings':
+        if (loading) {
+          return (
+            <div className="flex items-center justify-center h-96">
+              <div className="flex items-center space-x-2">
+                <Loader2 className="w-6 h-6 animate-spin" />
+                <span>설정을 불러오는 중...</span>
+              </div>
+            </div>
+          )
+        }
+        return (
+          <InquiryManagementTab 
+            data={inquiryData} 
+            onUpdate={setInquiryData}
+            onRegisterCallback={(callback) => registerTabCallback('settings', callback)}
+            onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('settings', callback)}
+          />
+        )
+      default:
+        return null
+    }
   }
 
   return (
     <div className="space-y-6">
-      {/* 헤더 */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">문의 관리</h1>
-          <p className="text-gray-600">고객 문의를 확인하고 관리하세요</p>
-        </div>
-        <button
-          onClick={fetchInquiries}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          <RefreshCw className="w-4 h-4" />
-          <span>새로고침</span>
-        </button>
+      <AdminPageHeader
+        title="1:1 문의 관리"
+        description="고객 문의를 확인하고 관리하며, 문의 페이지 설정을 관리합니다"
+        error={activeTab === 'settings' ? error : null}
+        saveStatus={activeTab === 'settings' ? saveStatus : null}
+        hasChanges={activeTab === 'settings' ? hasChanges : false}
+        saving={activeTab === 'settings' ? saving : false}
+        onSave={activeTab === 'settings' ? handleSave : undefined}
+        onReset={activeTab === 'settings' ? handleReset : undefined}
+      />
+
+      <AdminTabsWithUnsavedChanges
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        hasChanges={hasChanges && activeTab === 'settings'}
+        showUnsavedDialog={showUnsavedDialog}
+        onDialogSave={handleDialogSave}
+        onDialogDiscard={handleDialogDiscard}
+        onDialogCancel={handleDialogCancel}
+        saving={dialogSaving}
+      />
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        {renderTabContent()}
       </div>
-
-      {/* 통계 카드 */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">전체 문의</p>
-              <p className="text-2xl font-bold text-gray-900">{statusStats.total}</p>
-            </div>
-            <MessageSquare className="w-8 h-8 text-gray-400" />
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">대기</p>
-              <p className="text-2xl font-bold text-red-600">{statusStats.unread}</p>
-            </div>
-            <Clock className="w-8 h-8 text-red-400" />
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">처리중</p>
-              <p className="text-2xl font-bold text-yellow-600">{statusStats.replied}</p>
-            </div>
-            <CheckCircle className="w-8 h-8 text-yellow-400" />
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">완료</p>
-              <p className="text-2xl font-bold text-green-600">{statusStats.resolved}</p>
-            </div>
-            <CheckCircle className="w-8 h-8 text-green-400" />
-          </div>
-        </div>
-      </div>
-
-      {/* 검색 및 필터 */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="이름, 이메일, 분류, 내용으로 검색..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Filter className="w-4 h-4 text-gray-400" />
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">전체 상태</option>
-              <option value="unread">대기</option>
-              <option value="replied">처리중</option>
-              <option value="resolved">완료</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* 문의 목록 테이블 */}
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  문의자 정보
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  분류
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  내용
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  상태
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  작성일
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  작업
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {currentInquiries.map((inquiry) => (
-                <motion.tr
-                  key={inquiry.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  onClick={() => handleViewDetails(inquiry)}
-                  className="hover:bg-gray-50 transition-colors cursor-pointer"
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                          <User className="w-5 h-5 text-blue-600" />
-                        </div>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{inquiry.name}</div>
-                        <div className="text-sm text-gray-500 flex items-center space-x-2">
-                          <Mail className="w-3 h-3" />
-                          <span>{inquiry.email}</span>
-                        </div>
-                        <div className="text-sm text-gray-500 flex items-center space-x-2">
-                          <Phone className="w-3 h-3" />
-                          <span>{inquiry.phone}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                      {inquiry.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900 max-w-xs truncate">
-                      {inquiry.message}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <InquiryStatusBadge status={inquiry.status} />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="w-3 h-3" />
-                      <span>{formatDate(inquiry.createdAt || null)}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center space-x-2">
-                      <select
-                        value={inquiry.status}
-                        onChange={(e) => {
-                          e.stopPropagation()
-                          if (inquiry.id) {
-                            handleStatusChange(inquiry.id, e.target.value as Inquiry['status'])
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="unread">대기</option>
-                        <option value="replied">처리중</option>
-                        <option value="resolved">완료</option>
-                      </select>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          if (inquiry.id) {
-                            handleDelete(inquiry.id)
-                          }
-                        }}
-                        className="text-red-600 hover:text-red-900 transition-colors"
-                        title="삭제"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* 페이지네이션 */}
-        {totalPages > 1 && (
-          <div className="px-6 py-4 bg-gray-50 border-t">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-700">
-                전체 {filteredInquiries.length}개 중 {startIndex + 1}-{Math.min(endIndex, filteredInquiries.length)}개 표시
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                  className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  이전
-                </button>
-                <span className="px-3 py-1 text-sm bg-blue-500 text-white rounded">
-                  {currentPage} / {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  다음
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* 빈 상태 */}
-      {filteredInquiries.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">문의가 없습니다</h3>
-          <p className="text-gray-500">
-            {searchTerm || filterStatus !== 'all' 
-              ? '검색 조건에 맞는 문의를 찾을 수 없습니다.' 
-              : '아직 접수된 문의가 없습니다.'}
-          </p>
-        </div>
-      )}
-
-      {/* 상세 모달 */}
-      <AnimatePresence>
-        {isModalOpen && selectedInquiry && (
-          <InquiryDetailModal
-            inquiry={selectedInquiry}
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onStatusChange={handleStatusChange}
-            onDelete={handleDelete}
-          />
-        )}
-      </AnimatePresence>
     </div>
   )
 }

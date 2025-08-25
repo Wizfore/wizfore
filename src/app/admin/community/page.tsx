@@ -74,7 +74,6 @@ export default function CommunityManagePage() {
   const fetchData = useCallback(async (): Promise<CommunityData> => {
     try {
       const communityData = await getCommunity()
-      console.log('원본 커뮤니티 데이터:', communityData)
       
       // 데이터 구조 정규화
       const snsData = communityData?.sns || {}
@@ -100,14 +99,11 @@ export default function CommunityManagePage() {
         articles: newsData.articles || []
       }
       
-      console.log('정규화된 커뮤니티 데이터:', { sns: normalizedSnsData, news: normalizedNewsData })
-      
       return {
         sns: normalizedSnsData,
         news: normalizedNewsData
       }
     } catch (error) {
-      console.error('커뮤니티 데이터 로딩 실패:', error)
       return DEFAULT_COMMUNITY_DATA
     }
   }, [])
@@ -125,9 +121,7 @@ export default function CommunityManagePage() {
     handleReset
   } = useAdminForm({
     fetchData,
-    saveData: async (data: CommunityData) => {
-      await updateCommunity(data)
-    },
+    saveData: updateCommunity,
     defaultData: DEFAULT_COMMUNITY_DATA,
     onSaveSuccess: handleSaveSuccess
   })
@@ -245,20 +239,16 @@ export default function CommunityManagePage() {
           <NewsManagementTab 
             data={communityData.news} 
             onUpdate={(newsData: NewsInfo) => {
-              console.log('News onUpdate 호출됨 (설정 변경), 새 데이터:', newsData)
               setCommunityData(prev => {
                 const newData = { ...prev, news: newsData }
-                console.log('setCommunityData 호출 (설정 변경), 새 커뮤니티 데이터:', newData)
                 return newData
               })
             }}
             onArticleChange={(newsData: NewsInfo) => {
-              console.log('News onArticleChange 호출됨 (게시글 실시간 변경), 새 데이터:', newsData)
               // 게시글 실시간 변경은 단순히 현재 데이터만 업데이트
               // 변경사항 경고는 카테고리 등 설정 변경에만 적용
               setCommunityData(prev => {
                 const newData = { ...prev, news: newsData }
-                console.log('setCommunityData 호출 (게시글 실시간 변경), 새 커뮤니티 데이터:', newData)
                 return newData
               })
             }}
@@ -271,10 +261,8 @@ export default function CommunityManagePage() {
           <SnsManagementTab 
             data={communityData.sns} 
             onUpdate={(snsData: SnsInfo) => {
-              console.log('SNS onUpdate 호출됨, 새 데이터:', snsData)
               setCommunityData(prev => {
                 const newData = { ...prev, sns: snsData }
-                console.log('setCommunityData 호출, 새 커뮤니티 데이터:', newData)
                 return newData
               })
             }}
