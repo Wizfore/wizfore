@@ -298,7 +298,7 @@ export default function TherapistsManagementTab({
       {/* 치료사 관리 */}
       <AdminSection 
         title={`치료사 관리 (${therapistsData.members.length}명)`}
-        description="치료·상담사진을 관리합니다."
+        description="치료·상담사의 정보를 관리합니다."
         headerActions={
           <Button onClick={addMember}>
             <Plus className="w-4 h-4 mr-2" />
