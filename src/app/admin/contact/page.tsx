@@ -10,7 +10,7 @@ import { AdminTabsWithUnsavedChanges } from '@/components/admin/common/AdminTabs
 import { AdminPageHeader } from '@/components/admin/common/AdminPageHeader'
 import { TabItem } from '@/components/admin/common/AdminTabs'
 import InquiryListTab from '@/components/admin/contact/InquiryListTab'
-import InquiryManagementTab from '@/components/admin/community/InquiryManagementTab'
+import InquiryManagementTab from '@/components/admin/contact/InquiryManagementTab'
 import type { InquiryInfo } from '@/types/about'
 
 type ContactTab = 'list' | 'settings'

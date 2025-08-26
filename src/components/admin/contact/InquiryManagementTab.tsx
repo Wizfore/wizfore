@@ -31,6 +31,8 @@ export default function InquiryManagementTab({
   const [initialData, setInitialData] = useState<InquiryInfo>(JSON.parse(JSON.stringify(data)))
 
   const {
+    trackUploadedImage,
+    stopTrackingAllImages,
     trackDeletedImage,
     processDeletedImages,
     markAsSaved,
@@ -48,10 +50,11 @@ export default function InquiryManagementTab({
   }, [hasChanges, onUnsavedChanges])
 
   const updateField = (path: string, value: string | string[]) => {
-    if (path.includes('imageUrl') && typeof value === 'string') {
-      processDeletedImages(inquiryData.hero?.imageUrl || '', value)
+    // 이미지 URL이 업데이트될 때 추적 시작
+    if (path.includes('imageUrl') && typeof value === 'string' && value) {
+      trackUploadedImage(value)
     }
-
+    
     const keys = path.split('.')
     const newData = { ...inquiryData }
     
@@ -84,8 +87,10 @@ export default function InquiryManagementTab({
     updateField('categories', newCategories)
   }
 
-  // 저장 성공 시 초기 데이터 업데이트하여 변경사항 초기화
-  const handleSaveSuccess = useCallback(() => {
+  // 저장 성공 시 모든 이미지 추적 중단 및 삭제 예정 이미지 처리
+  const handleSaveSuccess = useCallback(async () => {
+    await processDeletedImages() // 삭제 예정인 이미지들을 실제로 삭제
+    stopTrackingAllImages()
     markAsSaved()
     // 현재 데이터를 새로운 초기 데이터로 설정
     setInitialData(JSON.parse(JSON.stringify(inquiryData)))
@@ -93,7 +98,8 @@ export default function InquiryManagementTab({
     if (onUnsavedChanges) {
       onUnsavedChanges(false)
     }
-  }, [markAsSaved, inquiryData, onUnsavedChanges])
+    console.log('InquiryManagementTab: 삭제 예정 이미지 처리 완료, 이미지 추적 중단 및 저장 완료 표시')
+  }, [processDeletedImages, stopTrackingAllImages, markAsSaved, inquiryData, onUnsavedChanges])
 
   useEffect(() => {
     if (onRegisterCallback) {
