@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import React, { useState, useCallback, useMemo } from 'react'
 import { Newspaper, Share, Loader2 } from 'lucide-react'
 import { getCommunity, updateCommunity } from '@/lib/services/dataService'

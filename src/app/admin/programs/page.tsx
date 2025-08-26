@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import React, { useState, useCallback } from 'react'
 import { Activity, Brain, Users, Trophy, Calendar, Loader2 } from 'lucide-react'
 import { getPrograms, updatePrograms } from '@/lib/services/dataService'

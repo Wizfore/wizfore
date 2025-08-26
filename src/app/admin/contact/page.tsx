@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import React, { useState, useCallback } from 'react'
 import { MessageSquare, Settings, Loader2 } from 'lucide-react'
 import { getInquiryInfo, updateInquiry } from '@/lib/services/dataService'

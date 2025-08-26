@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import React, { useState, useCallback } from 'react'
 import { getSiteInfo, updateSiteInfo } from '@/lib/services/dataService'
 import { defaultSiteData } from '@/lib/data/defaultSiteData'

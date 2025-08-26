@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic'
+
 import React, { useState, useCallback } from "react";
 import { User, Calendar, Users, MapPin, Camera, Loader2 } from "lucide-react";
 import { getAboutInfo } from "@/lib/services/dataService";

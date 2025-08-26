@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useState } from 'react'
 import { Database, Plus, Trash2, RefreshCw, AlertTriangle, Users, Key } from 'lucide-react'
 import { 
