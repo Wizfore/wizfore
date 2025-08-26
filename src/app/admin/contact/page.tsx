@@ -30,6 +30,9 @@ export default function ContactPage() {
   // 각 탭별 저장 성공 콜백 관리 (settings 탭만 필요)
   const [tabCallbacks] = useState<{[key in ContactTab]?: () => void}>({})
   const [tabCleanupCallbacks] = useState<{[key in ContactTab]?: () => Promise<void>}>({})
+  
+  // settings 탭의 변경사항 상태 (InquiryManagementTab에서 관리)
+  const [settingsHasChanges, setSettingsHasChanges] = useState(false)
 
   // 탭별 저장 성공 콜백 등록
   const registerTabCallback = useCallback((tabKey: ContactTab, callback: () => void) => {
@@ -84,15 +87,18 @@ export default function ContactPage() {
     onSaveSuccess: handleSaveSuccess
   })
 
+  // 전체 변경사항 상태 (useAdminForm의 hasChanges + settings 탭의 변경사항)
+  const totalHasChanges = activeTab === 'settings' ? (hasChanges || settingsHasChanges) : false
+
   // 브라우저 이탈 경고 훅 사용 (settings 탭에서만)
-  useUnsavedChangesWarning(hasChanges && activeTab === 'settings')
+  useUnsavedChangesWarning(totalHasChanges)
   
   // 네비게이션 컨텍스트와 동기화
   const { setHasUnsavedChanges } = useNavigation()
   
   React.useEffect(() => {
-    setHasUnsavedChanges(hasChanges && activeTab === 'settings')
-  }, [hasChanges, activeTab, setHasUnsavedChanges])
+    setHasUnsavedChanges(totalHasChanges)
+  }, [totalHasChanges, setHasUnsavedChanges])
 
   // 탭 정의
   const tabs: TabItem<ContactTab>[] = [
@@ -111,7 +117,7 @@ export default function ContactPage() {
   // 탭 전환 핸들러
   const handleTabChange = (nextTab: ContactTab) => {
     // settings 탭에서 변경사항이 있을 때만 확인
-    if (hasChanges && activeTab === 'settings') {
+    if (totalHasChanges) {
       setPendingTab(nextTab)
       setShowUnsavedDialog(true)
     } else {
@@ -173,6 +179,7 @@ export default function ContactPage() {
           <InquiryManagementTab 
             data={inquiryData} 
             onUpdate={setInquiryData}
+            onUnsavedChanges={setSettingsHasChanges}
             onRegisterCallback={(callback) => registerTabCallback('settings', callback)}
             onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('settings', callback)}
           />
@@ -189,7 +196,7 @@ export default function ContactPage() {
         description="고객 문의를 확인하고 관리하며, 문의 페이지 설정을 관리합니다"
         error={activeTab === 'settings' ? error : null}
         saveStatus={activeTab === 'settings' ? saveStatus : null}
-        hasChanges={activeTab === 'settings' ? hasChanges : false}
+        hasChanges={totalHasChanges}
         saving={activeTab === 'settings' ? saving : false}
         onSave={activeTab === 'settings' ? handleSave : undefined}
         onReset={activeTab === 'settings' ? handleReset : undefined}
@@ -199,7 +206,7 @@ export default function ContactPage() {
         tabs={tabs}
         activeTab={activeTab}
         onTabChange={handleTabChange}
-        hasChanges={hasChanges && activeTab === 'settings'}
+        hasChanges={totalHasChanges}
         showUnsavedDialog={showUnsavedDialog}
         onDialogSave={handleDialogSave}
         onDialogDiscard={handleDialogDiscard}

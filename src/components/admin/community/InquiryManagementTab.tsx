@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { InquiryInfo } from '@/types/about'
 import { 
   AdminSection, 
@@ -15,6 +15,7 @@ import { Plus, Trash2 } from 'lucide-react'
 interface InquiryManagementTabProps {
   data: InquiryInfo
   onUpdate: (data: InquiryInfo) => void
+  onUnsavedChanges?: (hasChanges: boolean) => void
   onRegisterCallback?: (callback: () => void) => void
   onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
 }
@@ -22,10 +23,12 @@ interface InquiryManagementTabProps {
 export default function InquiryManagementTab({ 
   data, 
   onUpdate,
+  onUnsavedChanges,
   onRegisterCallback,
   onRegisterCleanupCallback
 }: InquiryManagementTabProps) {
   const [inquiryData, setInquiryData] = useState<InquiryInfo>(data)
+  const [initialData, setInitialData] = useState<InquiryInfo>(JSON.parse(JSON.stringify(data)))
 
   const {
     trackDeletedImage,
@@ -33,6 +36,16 @@ export default function InquiryManagementTab({
     markAsSaved,
     performCleanup,
   } = useImageCleanup()
+
+  // 변경사항 감지
+  const hasChanges = JSON.stringify(inquiryData) !== JSON.stringify(initialData)
+
+  // 변경사항을 부모에게 알림
+  useEffect(() => {
+    if (onUnsavedChanges) {
+      onUnsavedChanges(hasChanges)
+    }
+  }, [hasChanges, onUnsavedChanges])
 
   const updateField = (path: string, value: string | string[]) => {
     if (path.includes('imageUrl') && typeof value === 'string') {
@@ -71,13 +84,22 @@ export default function InquiryManagementTab({
     updateField('categories', newCategories)
   }
 
+  // 저장 성공 시 초기 데이터 업데이트하여 변경사항 초기화
+  const handleSaveSuccess = useCallback(() => {
+    markAsSaved()
+    // 현재 데이터를 새로운 초기 데이터로 설정
+    setInitialData(JSON.parse(JSON.stringify(inquiryData)))
+    // 변경사항 상태 초기화
+    if (onUnsavedChanges) {
+      onUnsavedChanges(false)
+    }
+  }, [markAsSaved, inquiryData, onUnsavedChanges])
+
   useEffect(() => {
     if (onRegisterCallback) {
-      onRegisterCallback(() => {
-        markAsSaved()
-      })
+      onRegisterCallback(handleSaveSuccess)
     }
-  }, [onRegisterCallback, markAsSaved])
+  }, [onRegisterCallback, handleSaveSuccess])
 
   useEffect(() => {
     if (onRegisterCleanupCallback) {
