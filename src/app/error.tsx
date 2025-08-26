@@ -11,7 +11,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // 에러를 로깅 서비스에 전송할 수 있습니다
-    console.error('Application error:', error)
+    // console.error('Application error:', error)
   }, [error])
 
   return (

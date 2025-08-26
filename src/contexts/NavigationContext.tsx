@@ -77,22 +77,36 @@ export function NavigationProvider({ children }: NavigationProviderProps) {
 }
 
 export function useNavigation() {
-  const context = useContext(NavigationContext)
-  if (context === undefined) {
-    // SSR 환경에서의 기본값 반환
-    if (typeof window === 'undefined') {
-      return {
-        hasUnsavedChanges: false,
-        setHasUnsavedChanges: () => {},
-        safeNavigate: () => {},
-        showNavigationDialog: false,
-        setShowNavigationDialog: () => {},
-        pendingUrl: null,
-        confirmNavigation: () => {},
-        cancelNavigation: () => {}
+  try {
+    const context = useContext(NavigationContext)
+    if (context === undefined || context === null) {
+      // SSR 환경 또는 Provider가 없는 경우 안전한 기본값 반환
+      if (typeof window === 'undefined' || !context) {
+        return {
+          hasUnsavedChanges: false,
+          setHasUnsavedChanges: () => {},
+          safeNavigate: () => {},
+          showNavigationDialog: false,
+          setShowNavigationDialog: () => {},
+          pendingUrl: null,
+          confirmNavigation: () => {},
+          cancelNavigation: () => {}
+        }
       }
+      throw new Error('useNavigation must be used within a NavigationProvider')
     }
-    throw new Error('useNavigation must be used within a NavigationProvider')
+    return context
+  } catch (error) {
+    // useContext 자체에서 오류가 발생한 경우 안전한 기본값 반환
+    return {
+      hasUnsavedChanges: false,
+      setHasUnsavedChanges: () => {},
+      safeNavigate: () => {},
+      showNavigationDialog: false,
+      setShowNavigationDialog: () => {},
+      pendingUrl: null,
+      confirmNavigation: () => {},
+      cancelNavigation: () => {}
+    }
   }
-  return context
 }

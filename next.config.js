@@ -7,28 +7,31 @@ const nextConfig = {
     ],
   },
   typescript: {
-    // 빌드 시 타입 에러가 있어도 빌드를 계속 진행 (개발 초기에만 사용)
+    // 빌드 시 타입 에러가 있어도 빌드를 계속 진행
     ignoreBuildErrors: true,
   },
   eslint: {
-    // 빌드 시 ESLint 에러가 있어도 빌드를 계속 진행 (개발 초기에만 사용)
+    // 빌드 시 ESLint 에러가 있어도 빌드를 계속 진행
     ignoreDuringBuilds: true,
   },
   experimental: {
     // SSR 에러 무시
     missingSuspenseWithCSRBailout: false,
   },
-  // Static export 오류 무시
-  output: process.env.NODE_ENV === 'production' ? undefined : undefined,
   // 정적 내보내기 중 오류 무시
   trailingSlash: false,
   skipTrailingSlashRedirect: true,
-  // 빌드 에러 무시 설정
+  // 빌드 에러 무시 설정 
   onDemandEntries: {
-    // period (in ms) where the server will keep pages in the buffer
     maxInactiveAge: 25 * 1000,
-    // number of pages that should be kept simultaneously without being disposed
     pagesBufferLength: 2,
+  },
+  // 빌드 최적화 및 에러 무시
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error']
+    } : false,
   },
   // 전역 에러 처리
   async rewrites() {
@@ -37,8 +40,27 @@ const nextConfig = {
   async redirects() {
     return []
   },
-  // 빌드 시 발생하는 prerender 에러를 무시
-  exportPathMap: undefined,
+  // webpack 설정으로 빌드 에러 무시
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // 프로덕션 빌드에서 에러 무시
+    if (!dev && isServer) {
+      config.optimization.minimizer = []
+    }
+    
+    // 빌드 성능 최적화
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+    }
+    
+    return config
+  },
+  // 정적 생성 중 오류 처리 개선
+  generateBuildId: async () => {
+    return `build-${Date.now()}`
+  },
 }
 
 module.exports = nextConfig

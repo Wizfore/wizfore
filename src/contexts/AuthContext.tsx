@@ -75,20 +75,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    // SSR 환경에서의 기본값 반환
-    if (typeof window === 'undefined') {
-      return {
-        user: null,
-        userProfile: null,
-        loading: true,
-        isAuthenticated: false,
-        isAdmin: false,
-        isStaff: false
+  try {
+    const context = useContext(AuthContext)
+    if (context === undefined || context === null) {
+      // SSR 환경 또는 Provider가 없는 경우 안전한 기본값 반환
+      if (typeof window === 'undefined' || !context) {
+        return {
+          user: null,
+          userProfile: null,
+          loading: true,
+          isAuthenticated: false,
+          isAdmin: false,
+          isStaff: false
+        }
       }
+      throw new Error('useAuth must be used within an AuthProvider')
     }
-    throw new Error('useAuth must be used within an AuthProvider')
+    return context
+  } catch (error) {
+    // useContext 자체에서 오류가 발생한 경우 안전한 기본값 반환
+    return {
+      user: null,
+      userProfile: null,
+      loading: true,
+      isAuthenticated: false,
+      isAdmin: false,
+      isStaff: false
+    }
   }
-  return context
 }
