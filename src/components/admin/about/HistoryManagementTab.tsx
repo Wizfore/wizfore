@@ -274,7 +274,7 @@ export default function HistoryManagementTab({ data, onUpdate, onUnsavedChanges,
                         label="아이콘 이미지"
                         value={card.iconPath}
                         onChange={(url) => updateStatsCard(card.id, 'iconPath', url)}
-                        folder="pages/about/history/stats"
+                        folder={`pages/about/history/stats/${card.id}`}
                         defaultImageUrl={card.defaultIconPath}
                         helper="통계 카드 아이콘 (16x16 권장)"
                         onImageDelete={trackDeletedImage}
