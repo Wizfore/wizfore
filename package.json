@@ -44,7 +44,6 @@
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.51.0",
     "react-hot-toast": "^2.5.2",
-    "sed": "^0.0.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "tiptap-extension-resize-image": "^1.2.2",

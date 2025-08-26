@@ -15,7 +15,6 @@ export function useImageCleanup() {
   const trackUploadedImage = useCallback((imageUrl: string) => {
     if (imageUrl && imageUrl.trim() !== '') {
       uploadedImagesRef.current.add(imageUrl)
-      console.log('이미지 추적 시작:', imageUrl)
     }
   }, [])
 
@@ -25,7 +24,6 @@ export function useImageCleanup() {
   const stopTrackingImage = useCallback((imageUrl: string) => {
     if (imageUrl && imageUrl.trim() !== '') {
       uploadedImagesRef.current.delete(imageUrl)
-      console.log('이미지 추적 중단:', imageUrl)
     }
   }, [])
 
@@ -35,7 +33,6 @@ export function useImageCleanup() {
   const trackDeletedImage = useCallback((imageUrl: string) => {
     if (imageUrl && imageUrl.trim() !== '') {
       deletedImagesRef.current.add(imageUrl)
-      console.log('이미지 삭제 추적 시작:', imageUrl)
     }
   }, [])
 
@@ -46,7 +43,6 @@ export function useImageCleanup() {
     uploadedImagesRef.current.clear()
     deletedImagesRef.current.clear()
     isDataSavedRef.current = true
-    console.log('모든 이미지 추적 중단')
   }, [])
   
   /**
@@ -54,7 +50,6 @@ export function useImageCleanup() {
    */
   const markAsSaved = useCallback(() => {
     isDataSavedRef.current = true
-    console.log('데이터 저장 완료 표시')
   }, [])
 
   /**
@@ -67,18 +62,13 @@ export function useImageCleanup() {
       return
     }
 
-    console.log('이미지 정리 시작:', imageUrls)
-    
     for (const imageUrl of imageUrls) {
       try {
         await deleteImage(imageUrl)
-        console.log('정리된 이미지:', imageUrl)
       } catch (error) {
-        console.warn('이미지 정리 실패:', imageUrl, error)
+        // 이미지 정리 실패 시 무시
       }
     }
-    
-    console.log(`${imageUrls.length}개 이미지 정리 완료`)
   }, [])
 
   /**
@@ -86,7 +76,6 @@ export function useImageCleanup() {
    */
   const processDeletedImages = useCallback(async () => {
     if (deletedImagesRef.current.size > 0) {
-      console.log('저장 성공: 삭제 예정 이미지들 정리 시작')
       await cleanupUploadedImages(deletedImagesRef.current)
       deletedImagesRef.current.clear()
     }
@@ -108,11 +97,8 @@ export function useImageCleanup() {
   useEffect(() => {
     return () => {
       if (uploadedImagesRef.current.size > 0 && !isDataSavedRef.current) {
-        console.log('컴포넌트 언마운트: 저장되지 않은 이미지 정리 시작')
         // 비동기 작업이지만 컴포넌트가 언마운트되므로 Promise를 기다리지 않음
-        cleanupUploadedImages(uploadedImagesRef.current).catch(console.warn)
-      } else if (isDataSavedRef.current) {
-        console.log('컴포넌트 언마운트: 데이터가 저장되어 이미지 정리 생략')
+        cleanupUploadedImages(uploadedImagesRef.current).catch(() => {})
       }
     }
   }, [cleanupUploadedImages])

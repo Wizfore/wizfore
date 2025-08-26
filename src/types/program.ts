@@ -59,7 +59,7 @@ export interface ProgramDetail {
   id?: string // 관리용 필드
   title: string
   target?: string[]
-  goal: string[]
+  goal?: string[]
   content?: string[]
   types?: string[]
   order: number

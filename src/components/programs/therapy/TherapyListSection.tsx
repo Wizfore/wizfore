@@ -1,16 +1,8 @@
 import ProgramListSection from '@/components/programs/common/ProgramListSection'
-
-interface Program {
-  title: string
-  goal?: string | string[]
-  content?: string[]
-  target?: string | string[]
-  types?: string[]
-  order: number
-}
+import type { ProgramDetail } from '@/types'
 
 interface TherapyListSectionProps {
-  programs: Program[]
+  programs: ProgramDetail[]
 }
 
 export default function TherapyListSection({ programs }: TherapyListSectionProps) {

@@ -5,17 +5,10 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import ProgramCard from '@/components/programs/ProgramCard'
 
-interface Program {
-  title: string
-  goal?: string | string[]
-  content?: string[]
-  target?: string | string[]
-  types?: string[]
-  order: number
-}
+import type { ProgramDetail } from '@/types'
 
 interface ProgramListSectionProps {
-  programs: Program[]
+  programs: ProgramDetail[]
   programType: 'therapy' | 'adult-day' | 'afterschool' | 'counseling' | 'sports'
 }
 
