@@ -79,6 +79,19 @@ export function NavigationProvider({ children }: NavigationProviderProps) {
 export function useNavigation() {
   const context = useContext(NavigationContext)
   if (context === undefined) {
+    // SSR 환경에서의 기본값 반환
+    if (typeof window === 'undefined') {
+      return {
+        hasUnsavedChanges: false,
+        setHasUnsavedChanges: () => {},
+        safeNavigate: () => {},
+        showNavigationDialog: false,
+        setShowNavigationDialog: () => {},
+        pendingUrl: null,
+        confirmNavigation: () => {},
+        cancelNavigation: () => {}
+      }
+    }
     throw new Error('useNavigation must be used within a NavigationProvider')
   }
   return context

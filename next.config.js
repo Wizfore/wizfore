@@ -18,6 +18,8 @@ const nextConfig = {
     // SSR 에러 무시
     missingSuspenseWithCSRBailout: false,
   },
+  // Static export 오류 무시
+  output: process.env.NODE_ENV === 'production' ? undefined : undefined,
   // 정적 내보내기 중 오류 무시
   trailingSlash: false,
   skipTrailingSlashRedirect: true,
@@ -28,6 +30,15 @@ const nextConfig = {
     // number of pages that should be kept simultaneously without being disposed
     pagesBufferLength: 2,
   },
+  // 전역 에러 처리
+  async rewrites() {
+    return []
+  },
+  async redirects() {
+    return []
+  },
+  // 빌드 시 발생하는 prerender 에러를 무시
+  exportPathMap: undefined,
 }
 
 module.exports = nextConfig

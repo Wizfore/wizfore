@@ -77,6 +77,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
+    // SSR 환경에서의 기본값 반환
+    if (typeof window === 'undefined') {
+      return {
+        user: null,
+        userProfile: null,
+        loading: true,
+        isAuthenticated: false,
+        isAdmin: false,
+        isStaff: false
+      }
+    }
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context

@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import HeroSection from '@/components/home/HeroSection'
 import CategoryCards from '@/components/home/CategoryCards'
 import AboutSection from '@/components/home/AboutSection'

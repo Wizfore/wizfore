@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import React, { useState, useEffect } from 'react'
 import { getInquiryHero, getInquiryAboutMessage, getInquiryCategories } from '@/lib/services/dataService'
 import { getImageWithFallback } from '@/lib/utils/imageUtils'
