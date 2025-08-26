@@ -319,7 +319,7 @@ export async function getLocationAboutMessage() {
 /**
  * 문의 정보 조회
  */
-export async function getInquiryInfo() {
+export async function getInquiryInfo(): Promise<InquiryInfo> {
   try {
     const db = getFirebaseDb(); if (!db) {
       throw new Error('Firebase not initialized')
@@ -329,7 +329,7 @@ export async function getInquiryInfo() {
     const docSnap = await getDoc(docRef)
     
     if (docSnap.exists()) {
-      return docSnap.data()
+      return docSnap.data() as InquiryInfo
     } else {
       throw new Error('Inquiry info not found in database')
     }

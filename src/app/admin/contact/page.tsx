@@ -30,6 +30,7 @@ export default function ContactPage() {
   // 각 탭별 저장 성공 콜백 관리 (settings 탭만 필요)
   const [tabCallbacks] = useState<{[key in ContactTab]?: () => void}>({})
   const [tabCleanupCallbacks] = useState<{[key in ContactTab]?: () => Promise<void>}>({})
+  const [tabResetCallbacks] = useState<{[key in ContactTab]?: () => void}>({})
   
   // settings 탭의 변경사항 상태 (InquiryManagementTab에서 관리)
   const [settingsHasChanges, setSettingsHasChanges] = useState(false)
@@ -43,6 +44,11 @@ export default function ContactPage() {
   const registerTabCleanupCallback = useCallback((tabKey: ContactTab, callback: () => Promise<void>) => {
     tabCleanupCallbacks[tabKey] = callback
   }, [tabCleanupCallbacks])
+
+  // 탭별 초기화 콜백 등록
+  const registerTabResetCallback = useCallback((tabKey: ContactTab, callback: () => void) => {
+    tabResetCallbacks[tabKey] = callback
+  }, [tabResetCallbacks])
 
   // 저장 성공 시 현재 활성 탭의 콜백 실행
   const handleSaveSuccess = useCallback(async () => {
@@ -146,6 +152,12 @@ export default function ContactPage() {
     // 현재 활성 탭의 정리 콜백 실행
     await handleDiscardChanges()
     
+    // 탭별 초기화 콜백 실행
+    const resetCallback = tabResetCallbacks[activeTab]
+    if (resetCallback) {
+      resetCallback()
+    }
+    
     handleReset()
     setShowUnsavedDialog(false)
     if (pendingTab) {
@@ -182,6 +194,7 @@ export default function ContactPage() {
             onUnsavedChanges={setSettingsHasChanges}
             onRegisterCallback={(callback) => registerTabCallback('settings', callback)}
             onRegisterCleanupCallback={(callback) => registerTabCleanupCallback('settings', callback)}
+            onRegisterResetCallback={(callback) => registerTabResetCallback('settings', callback)}
           />
         )
       default:
@@ -195,7 +208,7 @@ export default function ContactPage() {
         title="1:1 문의 관리"
         description="고객 문의를 확인하고 관리하며, 문의 페이지 설정을 관리합니다"
         error={activeTab === 'settings' ? error : null}
-        saveStatus={activeTab === 'settings' ? saveStatus : null}
+        saveStatus={activeTab === 'settings' ? (saveStatus as 'idle' | 'success' | 'error') : undefined}
         hasChanges={totalHasChanges}
         saving={activeTab === 'settings' ? saving : false}
         onSave={activeTab === 'settings' ? handleSave : undefined}

@@ -18,6 +18,7 @@ interface InquiryManagementTabProps {
   onUnsavedChanges?: (hasChanges: boolean) => void
   onRegisterCallback?: (callback: () => void) => void
   onRegisterCleanupCallback?: (callback: () => Promise<void>) => void
+  onRegisterResetCallback?: (callback: () => void) => void
 }
 
 export default function InquiryManagementTab({ 
@@ -25,7 +26,8 @@ export default function InquiryManagementTab({
   onUpdate,
   onUnsavedChanges,
   onRegisterCallback,
-  onRegisterCleanupCallback
+  onRegisterCleanupCallback,
+  onRegisterResetCallback
 }: InquiryManagementTabProps) {
   const [inquiryData, setInquiryData] = useState<InquiryInfo>(data)
   const [initialData, setInitialData] = useState<InquiryInfo>(JSON.parse(JSON.stringify(data)))
@@ -114,6 +116,19 @@ export default function InquiryManagementTab({
       })
     }
   }, [onRegisterCleanupCallback, performCleanup])
+
+  // 초기화 콜백 등록
+  const handleReset = useCallback(() => {
+    setInquiryData(JSON.parse(JSON.stringify(data)))
+    setInitialData(JSON.parse(JSON.stringify(data)))
+    console.log('InquiryManagementTab: 데이터 초기화 완료')
+  }, [data])
+
+  useEffect(() => {
+    if (onRegisterResetCallback) {
+      onRegisterResetCallback(handleReset)
+    }
+  }, [onRegisterResetCallback, handleReset])
 
   useEffect(() => {
     setInquiryData(data)
