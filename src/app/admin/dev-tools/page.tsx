@@ -4,16 +4,9 @@ export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
 import { Database, Plus, Trash2, RefreshCw, AlertTriangle, Users, Key } from 'lucide-react'
-import { 
-  addAllSampleData, 
-  addSamplePrograms, 
-  addSampleInquiries, 
-  addSampleNews 
-} from '@/lib/utils/sampleData'
 import {
   createAllDefaultAccounts,
-  createDefaultAdminAccount,
-  createDefaultStaffAccount
+  createDefaultAdminAccount
 } from '@/lib/utils/createDefaultAccounts'
 
 export default function DevToolsPage() {
@@ -28,52 +21,16 @@ export default function DevToolsPage() {
     setResults([])
   }
 
-  const handleAddSampleData = async (type: 'all' | 'programs' | 'inquiries' | 'news') => {
-    try {
-      setLoading(type)
-      
-      switch (type) {
-        case 'all':
-          await addAllSampleData()
-          addResult('✅ 모든 샘플 데이터가 성공적으로 추가되었습니다.')
-          break
-        case 'programs':
-          await addSamplePrograms()
-          addResult('✅ 샘플 프로그램 데이터가 추가되었습니다.')
-          break
-        case 'inquiries':
-          await addSampleInquiries()
-          addResult('✅ 샘플 문의 데이터가 추가되었습니다.')
-          break
-        case 'news':
-          await addSampleNews()
-          addResult('✅ 샘플 뉴스 데이터가 추가되었습니다.')
-          break
-      }
-    } catch (error) {
-      console.error('샘플 데이터 추가 오류:', error)
-      addResult(`❌ 오류 발생: ${error}`)
-    } finally {
-      setLoading(null)
-    }
-  }
 
-  const handleCreateAccounts = async (type: 'all' | 'admin' | 'staff') => {
+  const handleCreateAccounts = async (type: 'all' | 'admin') => {
     try {
       setLoading(`account-${type}`)
       
       switch (type) {
         case 'all':
-          await createAllDefaultAccounts()
-          addResult('✅ 모든 기본 계정이 성공적으로 생성되었습니다.')
-          break
         case 'admin':
           await createDefaultAdminAccount()
           addResult('✅ 관리자 계정이 생성되었습니다. (admin@wizfore.com / wizfore123)')
-          break
-        case 'staff':
-          await createDefaultStaffAccount()
-          addResult('✅ 직원 계정이 생성되었습니다. (staff@wizfore.com / wizfore123)')
           break
       }
     } catch (error) {
@@ -117,7 +74,7 @@ export default function DevToolsPage() {
           <h2 className="text-lg font-semibold text-gray-900">테스트 계정 생성</h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           {/* 모든 계정 생성 */}
           <button
             onClick={() => handleCreateAccounts('all')}
@@ -129,7 +86,7 @@ export default function DevToolsPage() {
             ) : (
               <Users className="w-5 h-5 text-green-600" />
             )}
-            <span className="font-medium text-green-700">모든 계정 생성</span>
+            <span className="font-medium text-green-700">관리자 계정 생성</span>
           </button>
 
           {/* 관리자 계정 생성 */}
@@ -145,20 +102,6 @@ export default function DevToolsPage() {
             )}
             <span className="font-medium text-red-700">관리자 계정</span>
           </button>
-
-          {/* 직원 계정 생성 */}
-          <button
-            onClick={() => handleCreateAccounts('staff')}
-            disabled={loading !== null}
-            className="flex items-center justify-center space-x-2 p-4 border-2 border-blue-200 rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading === 'account-staff' ? (
-              <RefreshCw className="w-5 h-5 animate-spin" />
-            ) : (
-              <Users className="w-5 h-5 text-blue-600" />
-            )}
-            <span className="font-medium text-blue-700">직원 계정</span>
-          </button>
         </div>
 
         {/* 계정 정보 안내 */}
@@ -169,79 +112,10 @@ export default function DevToolsPage() {
               <p className="font-medium">관리자 계정:</p>
               <p>이메일: admin@wizfore.com | 비밀번호: wizfore123</p>
             </div>
-            <div>
-              <p className="font-medium">직원 계정:</p>
-              <p>이메일: staff@wizfore.com | 비밀번호: wizfore123</p>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* 샘플 데이터 추가 도구 */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center space-x-2 mb-6">
-          <Database className="w-5 h-5 text-blue-600" />
-          <h2 className="text-lg font-semibold text-gray-900">샘플 데이터 추가</h2>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* 모든 샘플 데이터 추가 */}
-          <button
-            onClick={() => handleAddSampleData('all')}
-            disabled={loading !== null}
-            className="flex items-center justify-center space-x-2 p-4 border-2 border-blue-200 rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading === 'all' ? (
-              <RefreshCw className="w-5 h-5 animate-spin" />
-            ) : (
-              <Plus className="w-5 h-5 text-blue-600" />
-            )}
-            <span className="font-medium text-blue-700">모든 샘플 데이터 추가</span>
-          </button>
-
-          {/* 프로그램 샘플 데이터 */}
-          <button
-            onClick={() => handleAddSampleData('programs')}
-            disabled={loading !== null}
-            className="flex items-center justify-center space-x-2 p-4 border-2 border-green-200 rounded-lg hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading === 'programs' ? (
-              <RefreshCw className="w-5 h-5 animate-spin" />
-            ) : (
-              <Plus className="w-5 h-5 text-green-600" />
-            )}
-            <span className="font-medium text-green-700">프로그램 샘플 데이터</span>
-          </button>
-
-          {/* 문의 샘플 데이터 */}
-          <button
-            onClick={() => handleAddSampleData('inquiries')}
-            disabled={loading !== null}
-            className="flex items-center justify-center space-x-2 p-4 border-2 border-purple-200 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading === 'inquiries' ? (
-              <RefreshCw className="w-5 h-5 animate-spin" />
-            ) : (
-              <Plus className="w-5 h-5 text-purple-600" />
-            )}
-            <span className="font-medium text-purple-700">문의 샘플 데이터</span>
-          </button>
-
-          {/* 뉴스 샘플 데이터 */}
-          <button
-            onClick={() => handleAddSampleData('news')}
-            disabled={loading !== null}
-            className="flex items-center justify-center space-x-2 p-4 border-2 border-orange-200 rounded-lg hover:bg-orange-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading === 'news' ? (
-              <RefreshCw className="w-5 h-5 animate-spin" />
-            ) : (
-              <Plus className="w-5 h-5 text-orange-600" />
-            )}
-            <span className="font-medium text-orange-700">뉴스 샘플 데이터</span>
-          </button>
-        </div>
-      </div>
 
       {/* 실행 결과 */}
       {results.length > 0 && (

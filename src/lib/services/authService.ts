@@ -15,7 +15,7 @@ import {
 import { getFirebaseAuth, getFirebaseDb } from '@/lib/firebase'
 
 // 사용자 역할 타입
-export type UserRole = 'admin' | 'staff' | 'viewer'
+export type UserRole = 'admin'
 
 // 사용자 프로필 타입
 export interface UserProfile {
@@ -210,10 +210,4 @@ function getKoreanErrorMessage(errorCode: string): string {
 // 관리자 권한 확인
 export function hasAdminPermission(userProfile: UserProfile | null): boolean {
   return userProfile?.role === 'admin' && userProfile?.isActive === true
-}
-
-// 직원 이상 권한 확인
-export function hasStaffPermission(userProfile: UserProfile | null): boolean {
-  return userProfile?.isActive === true && 
-         (userProfile?.role === 'admin' || userProfile?.role === 'staff')
 }

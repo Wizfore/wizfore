@@ -120,7 +120,7 @@ inquiries/{id}        # 문의 정보
 
 ### 🔐 인증 및 권한
 - **Firebase Auth**: 이메일/비밀번호 인증
-- **역할 기반 권한**: admin(전체 관리), staff(콘텐츠 관리), viewer(조회만)
+- **역할 기반 권한**: admin(전체 관리)
 - **withAuth HOC**: 페이지별 권한 제어
 - **보안**: Firebase Security Rules 적용
 
@@ -197,6 +197,49 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 ```
+
+## 🔐 관리자 계정 생성
+
+### Firebase Console을 통한 계정 생성 (권장)
+
+1. **Firebase Console 접속**: https://console.firebase.google.com
+2. **프로젝트 선택**: 해당 Firebase 프로젝트 선택
+3. **Authentication 메뉴**: 왼쪽 사이드바에서 "Authentication" 클릭
+4. **Users 탭**: "Users" 탭 선택
+5. **Add user**: "Add user" 버튼 클릭
+6. **계정 정보 입력**:
+   - Email: `admin@wizfore.com` (또는 원하는 이메일)
+   - Password: 6자리 이상 강력한 비밀번호
+
+### 권한 설정 (필수)
+
+Firebase Auth에서 계정을 생성한 후, **반드시 Firestore에서 권한을 설정**해야 합니다:
+
+1. **Firestore Database 메뉴**: "Firestore Database" 클릭
+2. **users 컬렉션**: `users` 컬렉션 선택 (없으면 생성)
+3. **문서 추가**: 생성한 사용자의 UID를 문서 ID로 사용
+4. **권한 데이터 입력**:
+   ```javascript
+   {
+     uid: "생성된_사용자_UID",
+     email: "admin@wizfore.com",
+     displayName: "관리자",
+     role: "admin",
+     createdAt: "현재_시간",
+     lastLogin: "현재_시간", 
+     isActive: true
+   }
+   ```
+
+### 역할별 권한
+
+- **admin**: 전체 관리 권한 (모든 기능 접근)
+
+### 개발 도구를 이용한 방법
+
+관리자 로그인 후 `/admin/dev-tools` 페이지에서:
+- **기본 계정 정보**: 
+  - 관리자: `admin@wizfore.com / wizfore123`
 
 ## 🎯 핵심 기능 상세
 
