@@ -20,14 +20,38 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true)
   const [slides, setSlides] = useState<HeroSlide[]>([])
   const [loading, setLoading] = useState(!heroData)
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set())
+
+  // 이미지 프리로딩 함수
+  const preloadImage = (url: string): Promise<void> => {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.onload = () => {
+        setLoadedImages(prev => new Set([...Array.from(prev), url]))
+        resolve()
+      }
+      img.onerror = () => resolve() // 에러가 있어도 계속 진행
+      img.src = url
+    })
+  }
+
+  // 모든 슬라이드 이미지 프리로딩
+  const preloadAllImages = async (slidesToLoad: HeroSlide[]) => {
+    const imageUrls = slidesToLoad
+      .map(slide => getImageWithFallback(slide.backgroundImage, slide.defaultBackgroundImage))
+      .filter(Boolean) as string[]
+
+    await Promise.all(imageUrls.map(url => preloadImage(url)))
+  }
 
   useEffect(() => {
     const initializeHero = async () => {
+      let slidesToUse: HeroSlide[] = []
+      
       if (heroData) {
         // Props로 받은 데이터 사용
-        setSlides(heroData.slides)
+        slidesToUse = heroData.slides
         setIsAutoPlaying(heroData.autoPlay)
-        setLoading(false)
       } else {
         // 클라이언트에서 데이터 가져오기 (폴백)
         try {
@@ -35,21 +59,28 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
           // sections.hero 또는 기존 hero에서 데이터 가져오기
           const heroData = (homeConfig as any).sections?.hero || (homeConfig as any).hero
           const slides = heroData?.slides || []
-          const enabledSlides = slides
+          slidesToUse = slides
             .filter((slide: any) => slide.enabled)
             .sort((a: any, b: any) => a.order - b.order)
           
-          setSlides(enabledSlides)
           setIsAutoPlaying(heroData?.autoPlay ?? true)
         } catch (error) {
           console.error('Error fetching hero data, using fallback:', error)
           // DB 실패 시 기본 데이터 사용
-          setSlides(defaultHomeConfig.hero?.slides || [])
+          slidesToUse = defaultHomeConfig.hero?.slides || []
           setIsAutoPlaying(defaultHomeConfig.hero?.autoPlay ?? true)
-        } finally {
-          setLoading(false)
         }
       }
+
+      // 슬라이드 설정 후 이미지 프리로딩 시작
+      setSlides(slidesToUse)
+      
+      // 이미지 프리로딩 (백그라운드에서 실행)
+      if (slidesToUse.length > 0) {
+        preloadAllImages(slidesToUse)
+      }
+      
+      setLoading(false)
     }
 
     initializeHero()
@@ -99,17 +130,44 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
     currentSlideData?.defaultBackgroundImage
   )
 
+  // 현재 이미지가 로드되었는지 확인
+  const isCurrentImageLoaded = backgroundImageUrl ? loadedImages.has(backgroundImageUrl) : false
+
   return (
     <section className="relative h-[60vh] md:h-[70vh] lg:h-[calc(100vh-5rem)] overflow-hidden px-4 md:px-8 lg:px-16 pb-24 md:pb-32 lg:pb-40">
       <div className="absolute inset-x-4 md:inset-x-8 lg:inset-x-16 top-0 bottom-4 md:bottom-8 lg:bottom-16 rounded-[3rem] overflow-hidden border-2 border-white">
-            {backgroundImageUrl && (
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-in-out"
-                style={{
-                  backgroundImage: `url('${backgroundImageUrl}')`
-                }}
-              />
-            )}
+            {/* 배경 이미지 크로스페이드 애니메이션 */}
+            <AnimatePresence>
+              {slides.map((slide, index) => {
+                const slideImageUrl = getImageWithFallback(slide.backgroundImage, slide.defaultBackgroundImage)
+                const isSlideImageLoaded = slideImageUrl ? loadedImages.has(slideImageUrl) : false
+                const isActiveSlide = index === currentSlide
+                
+                return (
+                  <motion.div
+                    key={`bg-${index}`}
+                    initial={false}
+                    animate={{ 
+                      opacity: isActiveSlide && isSlideImageLoaded ? 1 : 0,
+                      scale: 1 
+                    }}
+                    transition={{ 
+                      duration: 0.8,
+                      ease: [0.25, 0.46, 0.45, 0.94]
+                    }}
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                      backgroundImage: isSlideImageLoaded ? `url('${slideImageUrl}')` : 'none',
+                      zIndex: isActiveSlide ? 2 : 1
+                    }}
+                  />
+                )
+              })}
+              
+              {/* 기본 배경 (항상 뒤에 있음) */}
+              <div className="absolute inset-0 bg-wizfore-light-beige" style={{ zIndex: 0 }} />
+            </AnimatePresence>
+            
             {/* 김포 스타일 부드러운 오버레이 */}
             <div className="absolute inset-0 bg-gradient-to-br from-gcf-primary/20 via-gcf-secondary/10 to-gcf-accent/20" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -122,8 +180,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ heroData }) => {
                     key={`text-${currentSlide}`}
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -30, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    exit={{ y: -15, opacity: 0 }}
+                    transition={{ 
+                      duration: 0.5, 
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                      delay: isCurrentImageLoaded ? 0.15 : 0 // 이미지가 로드된 경우만 지연
+                    }}
                     className="text-left"
                   >
                   <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-3 sm:mb-4 text-white font-bold drop-shadow-lg leading-tight">
