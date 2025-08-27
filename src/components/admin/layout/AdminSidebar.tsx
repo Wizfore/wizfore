@@ -74,16 +74,17 @@ const menuItems: MenuItem[] = [
     href: '/admin/contact',
     icon: HelpCircle
   },
-  {
-    title: '기본 데이터 추가',
-    href: '/admin/default-data',
-    icon: Upload
-  },
-  {
-    title: '개발자 도구',
-    href: '/admin/dev-tools',
-    icon: Database
-  }
+  // 개발용 도구들 - 필요시 주석 해제하여 사용
+  // {
+  //   title: '기본 데이터 추가',
+  //   href: '/admin/default-data',
+  //   icon: Upload
+  // },
+  // {
+  //   title: '개발자 도구',
+  //   href: '/admin/dev-tools',
+  //   icon: Database
+  // }
 ]
 
 export default function AdminSidebar() {
