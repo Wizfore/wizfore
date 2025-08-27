@@ -300,7 +300,11 @@ export default function NewsManagementTab({
   }
 
   const getCategoryBadgeLocal = (category: Article['category']) => {
-    const { className, label } = getCategoryBadgeStyle(category)
+    // 로컬 categories 배열에서 한국어명 찾기
+    const categoryItem = categories.find(cat => cat.english === category)
+    const label = categoryItem?.korean || category
+    
+    const { className } = getCategoryBadgeStyle(category)
     
     return (
       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${className}`}>
