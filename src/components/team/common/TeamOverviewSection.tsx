@@ -39,7 +39,7 @@ const TeamOverviewSection: React.FC<TeamOverviewSectionProps> = ({
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
           {features.sort((a, b) => a.order - b.order).map((feature, index) => {
             const IconComponent = getIconComponent(feature.iconName)
             return (
